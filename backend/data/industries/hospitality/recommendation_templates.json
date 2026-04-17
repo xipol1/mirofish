@@ -1,0 +1,177 @@
+{
+  "hosp_hidden_fees": {
+    "problem_signal": "agents flagging resort/parking/breakfast/tax as 'hidden' OR mention of 'surprise fee' in traces",
+    "severity_default": "high",
+    "actions": [
+      {
+        "action": "Display the all-in nightly rate (room + resort fee + taxes + mandatory charges) as the primary price on search results and room selection, with breakdown on hover. Keep the 'room rate' secondary.",
+        "effort": "medium",
+        "impact_range": [12, 22],
+        "tradeoff": "Higher headline price may reduce CTR on SEM ads; net revenue impact almost always positive due to lower cart abandonment at final step",
+        "applies_to_touchpoints": ["booking_flow"]
+      },
+      {
+        "action": "Move the resort fee disclosure from post-payment to the first step of the booking funnel with a clear 'included services' breakdown.",
+        "effort": "quick_fix",
+        "impact_range": [6, 14],
+        "tradeoff": "Minor copy work; legal may require sign-off on 'mandatory charge' language"
+      }
+    ]
+  },
+  "hosp_member_rate_not_auto_applied": {
+    "problem_signal": "loyalty_maximizer agents complain member rate not shown when logged in",
+    "severity_default": "high",
+    "actions": [
+      {
+        "action": "Auto-apply the member rate the moment a user logs in — no separate 'Show member rates' toggle required. Display the elite-tier name and benefits inline with the rate.",
+        "effort": "medium",
+        "impact_range": [3, 8],
+        "tradeoff": "Small engineering effort; risk of non-member sessions accidentally seeing member rate if auth fails — keep defensive server-side check"
+      },
+      {
+        "action": "Show 'You're saving €X as a {tier} member' banner on the booking page with points earned on this stay quantified.",
+        "effort": "quick_fix",
+        "impact_range": [2, 6],
+        "tradeoff": "None. Low risk, direct loyalty reinforcement."
+      }
+    ]
+  },
+  "hosp_family_room_clarity": {
+    "problem_signal": "family_vacationer agents flag connecting rooms / bed config / kids policy as unclear",
+    "severity_default": "high",
+    "actions": [
+      {
+        "action": "Add a 'Traveling with family?' filter on search results that surfaces connecting-room pairs, cribs, kids club age range, family bathroom, and bed config explicitly.",
+        "effort": "medium",
+        "impact_range": [10, 18],
+        "tradeoff": "Requires PMS integration to flag connecting rooms in inventory"
+      },
+      {
+        "action": "Show bed configuration icons (1 queen + 1 sofa bed vs 2 queens vs 1 king + rollaway) on every room card — not buried in details.",
+        "effort": "quick_fix",
+        "impact_range": [5, 10],
+        "tradeoff": "Minor design + taxonomy work"
+      }
+    ]
+  },
+  "hosp_mobile_booking_friction": {
+    "problem_signal": "agents abandoning on mobile; calendar/form friction; mobile conversion < 50% of desktop",
+    "severity_default": "high",
+    "actions": [
+      {
+        "action": "Replace the mobile date-picker with a native mobile calendar (iOS/Android) or a scrolling date strip. Keep it in-context rather than fullscreen takeover.",
+        "effort": "medium",
+        "impact_range": [15, 28],
+        "tradeoff": "Engineering effort; current implementation may be from template; breaking changes"
+      },
+      {
+        "action": "Reduce mobile checkout to 3 steps: dates+room, guest info, payment. Consolidate optional fields (marketing consent, dietary preferences) post-booking.",
+        "effort": "medium",
+        "impact_range": [12, 22],
+        "tradeoff": "Some marketing/operations info shifts post-booking; trade-off worth it"
+      }
+    ]
+  },
+  "hosp_rate_parity": {
+    "problem_signal": "budget_optimizer agents choose OTA over direct due to price gap",
+    "severity_default": "high",
+    "actions": [
+      {
+        "action": "Enforce direct-rate parity or advantage across all OTA partners. Implement automated rate-parity monitoring that alerts when OTA rate is cheaper.",
+        "effort": "major_change",
+        "impact_range": [15, 35],
+        "tradeoff": "Contract renegotiation with OTA partners; short-term OTA volume impact possible"
+      },
+      {
+        "action": "Add a 'Why book direct?' module next to the rate: no booking fees, free cancellation until X, room selection, loyalty points. Quantify each benefit in currency or value terms.",
+        "effort": "quick_fix",
+        "impact_range": [4, 9],
+        "tradeoff": "None — purely additive conversion tool"
+      }
+    ]
+  },
+  "hosp_luxury_brand_dilution": {
+    "problem_signal": "luxury_seeker agents note promotional banners or brand mixing cheapening premium positioning",
+    "severity_default": "medium",
+    "actions": [
+      {
+        "action": "Segment promotional banners by logged-in tier and inferred intent. Luxury/Platinum segments should never see mass-market promos.",
+        "effort": "medium",
+        "impact_range": [6, 12],
+        "tradeoff": "Personalization layer effort"
+      },
+      {
+        "action": "Create brand-exclusive landing experiences for Paradisus / Gran Meliá / ME that do not cross-promote mid-tier brands (Sol, TRYP).",
+        "effort": "major_change",
+        "impact_range": [10, 20],
+        "tradeoff": "Content effort; loses SEO consolidation"
+      }
+    ]
+  },
+  "hosp_wifi_workspace_disclosure": {
+    "problem_signal": "digital_nomad / business_traveler agents require wifi specifics and workspace",
+    "severity_default": "medium",
+    "actions": [
+      {
+        "action": "Publish actual wifi bandwidth (Mbps up/down) on each room type. Add 'remote work ready' badge for rooms with desk, ergonomic chair, and verified connection.",
+        "effort": "quick_fix",
+        "impact_range": [3, 8],
+        "tradeoff": "Requires actual testing + maintaining data; opens you up to reviews if performance drops"
+      }
+    ]
+  },
+  "hosp_cancellation_timezone_clarity": {
+    "problem_signal": "agents express anxiety about cancellation deadlines",
+    "severity_default": "medium",
+    "actions": [
+      {
+        "action": "Display cancellation deadline as 'Cancel free before Wed 12 June 18:00 Madrid time (19:00 your local time)' in booking confirmation and MyBookings.",
+        "effort": "quick_fix",
+        "impact_range": [2, 5],
+        "tradeoff": "Small engineering/content"
+      }
+    ]
+  },
+  "hosp_upsell_cadence": {
+    "problem_signal": "honeymooner/luxury_seeker agents overwhelmed by pre-stay upsell emails",
+    "severity_default": "medium",
+    "actions": [
+      {
+        "action": "Cap pre-stay emails to max 2 per booking + 1 arrival-day reminder. Consolidate all ancillary offers into a single 'Customize your stay' page linked from those emails.",
+        "effort": "medium",
+        "impact_range": [5, 10],
+        "tradeoff": "Short-term ancillary revenue dip possible; offset by higher NPS and repeat bookings"
+      },
+      {
+        "action": "Trigger premium guest celebration detection (honeymoon/anniversary/proposal) at booking and pipe to operations with a single handshake — not multiple separate offers.",
+        "effort": "medium",
+        "impact_range": [8, 16],
+        "tradeoff": "Requires operations process change; aligns with luxury brand standards"
+      }
+    ]
+  },
+  "hosp_portfolio_navigation": {
+    "problem_signal": "brand_aware agents confused by sub-brand overlap in search",
+    "severity_default": "medium",
+    "actions": [
+      {
+        "action": "Add a portfolio filter on search: 'Show luxury only (Gran Meliá, Paradisus, ME)', 'Business (INNSIDE)', 'Leisure (Sol)'. Apply at homepage destination search.",
+        "effort": "medium",
+        "impact_range": [4, 9],
+        "tradeoff": "Requires brand taxonomy sign-off from marketing"
+      }
+    ]
+  },
+  "hosp_accessibility_disclosure": {
+    "problem_signal": "agents requesting actual accessibility specs not present on booking page",
+    "severity_default": "medium",
+    "actions": [
+      {
+        "action": "Publish detailed accessible room specs: door width, roll-in shower, visual alarms, grab bars, turning radius, roll-under sink. One diagram per accessible room type.",
+        "effort": "medium",
+        "impact_range": [2, 5],
+        "tradeoff": "Accessibility content effort; improves ADA/EAA compliance posture"
+      }
+    ]
+  }
+}

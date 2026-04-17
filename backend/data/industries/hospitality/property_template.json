@@ -1,0 +1,113 @@
+{
+  "_description": "Schema of data the enterprise customer uploads (or we scrape) to describe a property. The narrative engine consumes this to generate realistic experiences.",
+
+  "property_schema": {
+    "identity": {
+      "name": "e.g. Gran Meliá Palacio de los Duques",
+      "brand": "Gran Meliá | Meliá | Sol | Paradisus | ME | INNSIDE | TRYP | Affiliated",
+      "tier": "luxury | upscale | upper-midscale | midscale | budget",
+      "category_stars": "1-5",
+      "location": { "city": "", "country": "", "neighborhood": "", "destination_type": "urban | resort | airport | beach | mountain | rural" },
+      "operator_type": "owned | managed | franchised",
+      "opening_year": 0,
+      "last_renovation_year": 0
+    },
+    "capacity": {
+      "total_rooms": 0,
+      "room_types": [
+        { "label": "Deluxe King", "size_m2": 32, "max_occupancy": 2, "count": 40, "base_rate_band_eur": [180, 320] }
+      ],
+      "suites_count": 0,
+      "meeting_space_m2": 0,
+      "pool_count": 0,
+      "spa": true,
+      "gym": true,
+      "business_center": true,
+      "restaurants_count": 0,
+      "bars_count": 0
+    },
+    "amenities": {
+      "wifi_advertised_mbps": 0,
+      "wifi_actual_measured_mbps": 0,
+      "parking": { "available": true, "rate_eur_per_day": 0, "valet": false },
+      "pets_allowed": true,
+      "pet_fee_eur_per_day": 0,
+      "kids_club": { "present": false, "ages_accepted": [4, 12], "free": false, "price_per_day_eur": 0 },
+      "spa_treatments_available": ["massage", "facial", "couples"],
+      "concierge_hours": "24/7 | business_hours | none",
+      "room_service_hours": "24/7 | 6:00-23:00 | limited"
+    },
+    "pricing_model": {
+      "typical_adr_eur": 0,
+      "rate_plans": [
+        { "code": "BAR", "label": "Best Available Rate", "breakfast_included": false, "cancellation": "24h_free" },
+        { "code": "AP", "label": "Advance Purchase", "discount_pct": 15, "non_refundable": true },
+        { "code": "BB", "label": "Bed & Breakfast", "breakfast_included": true, "premium_pct": 12 }
+      ],
+      "resort_fee_eur_per_night": 0,
+      "city_tax_eur_per_night": 0,
+      "currency": "EUR"
+    },
+    "menus_and_fnb": {
+      "restaurant_concepts": [
+        { "name": "Main Restaurant", "cuisine": "Mediterranean", "dinner_price_range_eur": [35, 90], "reservation_required": true }
+      ],
+      "breakfast": { "type": "buffet | a_la_carte | mixed", "price_eur": 0, "hours": "07:00-10:30" },
+      "signature_dishes": [],
+      "dietary_accommodation": { "vegetarian": true, "vegan": true, "gluten_free": true, "halal": false, "kosher": false }
+    },
+    "operations_and_sops": {
+      "checkin_time": "15:00",
+      "checkout_time": "12:00",
+      "early_checkin_policy": "subject_to_availability | guaranteed_fee_X | not_offered",
+      "late_checkout_policy": "courtesy_until_14 | fee_X_until_18 | not_offered",
+      "housekeeping": "daily | every_2_days | on_request | opt_out",
+      "brand_service_standards": [
+        "Address guest by name at check-in if known",
+        "Offer welcome drink within 2 minutes of arrival",
+        "Confirm WiFi access and provide password in writing"
+      ]
+    },
+    "loyalty": {
+      "program_name": "MeliáRewards | Bonvoy | Honors | None",
+      "tier_benefits": {
+        "silver": ["15% member rate", "free wifi", "points on stay"],
+        "gold": ["20% member rate", "late checkout 14:00", "complimentary breakfast if booked direct"],
+        "platinum": ["guaranteed late checkout 16:00", "room upgrade when available", "welcome amenity"],
+        "ambassador_diamond": ["guaranteed suite upgrade", "personal ambassador", "airport transfer included"]
+      }
+    },
+    "marketing": {
+      "primary_positioning": "e.g. Historic palace in Madrid's Opera district, combining heritage with modern luxury",
+      "target_guest_segments": ["luxury_leisure", "business_executive", "honeymoon"],
+      "known_weaknesses": ["small standard rooms", "limited pool", "street-facing rooms noisy"],
+      "known_strengths": ["rooftop views", "Michelin-star restaurant", "spa gallery"],
+      "brand_manual_url": null,
+      "photo_asset_urls": [],
+      "floor_plans_available": true
+    },
+    "assets": {
+      "photos": [],
+      "videos": [],
+      "documents": [
+        { "type": "brand_manual", "name": "Meliá Service Excellence.pdf", "storage_key": null },
+        { "type": "operational_sop", "name": "Check-in procedure.pdf", "storage_key": null }
+      ]
+    },
+    "historical_performance": {
+      "avg_tripadvisor_rating": 0,
+      "avg_google_rating": 0,
+      "avg_booking_rating": 0,
+      "review_volume_last_12m": 0,
+      "nps_reported": null,
+      "top_positive_themes": [],
+      "top_negative_themes": []
+    }
+  },
+
+  "ingestion_sources": {
+    "manual_upload": { "formats": ["json", "csv", "xlsx", "pdf"] },
+    "review_scrapers": ["tripadvisor", "booking_com", "google", "expedia", "trustpilot"],
+    "api_integrations_future": ["opera_pms", "sabre_synxis", "hotellabs_reviewpro"]
+  }
+}

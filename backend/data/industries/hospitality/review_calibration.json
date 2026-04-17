@@ -1,0 +1,196 @@
+{
+  "_description": "Meta-rules for predicting realistic review output per archetype. Used by review-predictor.js to generate realistic multilingual reviews of the simulated stay.",
+
+  "review_structure_by_platform": {
+    "tripadvisor": {
+      "typical_length_words": [120, 500],
+      "title_expected": true,
+      "star_rating_visible": true,
+      "trip_type_field": ["business", "leisure_couples", "leisure_family", "leisure_solo", "leisure_friends"],
+      "helpful_features": ["photo_uploads", "highlight_quote"],
+      "tone_biases": "long-form, narrative, mention of specific staff names and incidents"
+    },
+    "booking_com": {
+      "typical_length_words": [30, 200],
+      "pros_cons_format": true,
+      "score_scale": "1-10",
+      "post_stay_auto_prompt": true,
+      "tone_biases": "bullet-style, value-oriented, transactional"
+    },
+    "google": {
+      "typical_length_words": [40, 250],
+      "star_rating_1_5": true,
+      "photo_uploads": true,
+      "tone_biases": "short, direct, local-context, often mobile-typed"
+    },
+    "expedia": {
+      "typical_length_words": [50, 200],
+      "pros_cons_format": true,
+      "tone_biases": "booking-funnel-comparative"
+    },
+    "flyertalk": {
+      "typical_length_words": [400, 2000],
+      "format": "trip_report_threaded",
+      "tone_biases": "program-deep, benefit-comparative, detailed"
+    },
+    "reddit_r_hotels": {
+      "typical_length_words": [100, 500],
+      "tone_biases": "casual, honest, community-vetted"
+    }
+  },
+
+  "phrases_by_archetype_and_sentiment": {
+    "business_traveler_positive": [
+      "Check-in was under 3 minutes, exactly what I need.",
+      "Wifi held up for a 90-minute video call, no drops.",
+      "Room was spotless and quiet on the 14th floor.",
+      "Breakfast grab-and-go at 6am was a lifesaver.",
+      "Late checkout granted without issue — reliable for business travel."
+    ],
+    "business_traveler_negative": [
+      "Three people ahead of me at check-in, no queue management — took 14 minutes.",
+      "Hidden €28 daily resort fee not mentioned at booking.",
+      "HVAC cycled loudly every 20 minutes, couldn't sleep.",
+      "Wifi dropped during a client call, unacceptable.",
+      "Breakfast closes at 09:30 — useless for business travelers with 7am meetings."
+    ],
+    "family_vacationer_positive": [
+      "Kids club staff were amazing — our two boys didn't want to leave.",
+      "Connecting rooms confirmed at booking and ready on arrival.",
+      "Buffet had something for everyone, including my picky 5-year-old.",
+      "Pool was clean, lifeguards attentive, and shallow end for little ones.",
+      "Chef prepared a special allergy-safe meal for my daughter — genuinely cared."
+    ],
+    "family_vacationer_negative": [
+      "Connecting rooms not available despite being requested at booking.",
+      "Kids club was full by 10am — first-come first-served is terrible for planning.",
+      "Buffet repeated the exact same items all 7 days.",
+      "Pool chairs all reserved with towels by 9am — European chaos.",
+      "€45 daily resort fee for 'amenities' we already paid for — feels like bait-and-switch."
+    ],
+    "luxury_seeker_positive": [
+      "The concierge remembered our preferences from arrival and had our usual table ready on night 3.",
+      "Service at the Michelin-star restaurant rivaled anything in Paris.",
+      "Our suite overlooked the Mediterranean, and the turndown service included a handwritten note from the butler.",
+      "This is how luxury should feel — quiet confidence, not performative.",
+      "The spa treatment was world-class — therapist was intuitive and the product quality exceptional."
+    ],
+    "luxury_seeker_negative": [
+      "For €1,400 a night, I expected more than a generic 'Hello sir' at check-in.",
+      "The promotional 'weekend getaway from €89' banner on the Gran Meliá homepage cheapens the brand.",
+      "Room service menu was identical to the mid-tier property next door — chef, please differentiate.",
+      "Four Seasons sets a higher bar for the same price — this felt corporate-generic.",
+      "Staff clearly read from scripts. Where is the genuine hospitality?"
+    ],
+    "honeymooner_positive": [
+      "Walked into our room on arrival and found rose petals, champagne, and a handwritten note addressed to us.",
+      "The private beach dinner on our 5th night was unforgettable — staff disappeared tactfully after serving.",
+      "Couples spa treatment ended on a private terrace overlooking the ocean.",
+      "They remembered it was our honeymoon and surprised us with a cake on our last night.",
+      "Every detail felt intentional. We'll absolutely come back for our anniversary."
+    ],
+    "honeymooner_negative": [
+      "We told them three times this was our honeymoon. No acknowledgment, no upgrade, no welcome drink. Heartbreaking.",
+      "Balcony faced a dirty service area — 'ocean view' was a sliver through construction.",
+      "Pool was dominated by families with loud children — we booked an adults-only escape.",
+      "Room smelled like cleaning chemicals rather than anything romantic.",
+      "The 'honeymoon package' we paid €300 extra for amounted to a cheap bottle of cava."
+    ],
+    "digital_nomad_positive": [
+      "WiFi measured consistently at 180Mbps — good for Zoom, streaming, uploads.",
+      "Room had an actual ergonomic chair and a real desk, not a hotel-lobby armchair.",
+      "Monthly rate was transparent and matched the quoted price.",
+      "Staff respected 'Do Not Disturb' throughout my 3-week stay.",
+      "Laundry service was fairly priced and quick turnaround."
+    ],
+    "digital_nomad_negative": [
+      "Advertised 'high-speed wifi'. Measured 12Mbps during daytime — unusable for calls.",
+      "No real desk, just a bar-height counter with an uncomfortable stool.",
+      "Housekeeping bangs on door at 09:30 every day despite the DND sign.",
+      "Thin walls — every phone call from the next room audible.",
+      "Advertised 'long-stay friendly' but monthly rate was hidden behind nightly pricing."
+    ],
+    "budget_optimizer_positive": [
+      "Rate matched Booking.com exactly — no surprise fees at checkout.",
+      "Wifi was free and worked. Parking was free as promised.",
+      "Clean, functional room for the price. Nothing fancy but nothing broken.",
+      "Breakfast was actually included and had real food, not just cereal.",
+      "Checked all my charges at checkout — matched my booking to the cent."
+    ],
+    "budget_optimizer_negative": [
+      "€28 'resort fee' appeared on my bill that was never disclosed at booking — I'm disputing with my credit card.",
+      "City tax of €4.50/night added at check-in without warning.",
+      "Parking was €25/day, not the 'complimentary' shown in the ad.",
+      "Upsell pressure at every interaction — staff clearly incentivized on add-ons.",
+      "Booking.com rate was €12/night cheaper — never booking direct again."
+    ],
+    "loyalty_maximizer_positive": [
+      "Recognized by name as Platinum at check-in, upgrade to suite confirmed, welcome amenity in room.",
+      "Lounge access worked perfectly — food and beverage selection exceeded expectations.",
+      "Points posted to my account the morning after checkout.",
+      "Late checkout granted without asking — Meliá knows how to treat Platinum.",
+      "Personal touch from the duty manager on departure acknowledging my loyalty. This is why I stay 50+ nights a year."
+    ],
+    "loyalty_maximizer_negative": [
+      "Platinum tier — not acknowledged at check-in. Had to ask about upgrade eligibility.",
+      "'Suite upgrade unavailable' despite booking.com showing 12 suites available at same rate.",
+      "Member rate did not auto-apply — had to manually toggle on every search.",
+      "Bonus points promo was not applied; requires post-stay follow-up with support.",
+      "Lounge access denied — 'system didn't flag your tier'. Had to escalate."
+    ],
+    "event_attendee_positive": [
+      "Fast check-in despite a group of 20 arriving at the same time — well-organized.",
+      "Iron and ironing board in room was perfect condition — important for our corporate event.",
+      "Walking distance to IFEMA confirmed — took 7 minutes to the conference.",
+      "Late checkout granted so I could freshen up before my flight.",
+      "Hotel bar stayed open late — great for winding down after the event dinner."
+    ],
+    "event_attendee_negative": [
+      "Group code not recognized at check-in, took 15 minutes with colleagues waiting behind.",
+      "Iron was broken — had to find one at reception, delayed preparation.",
+      "Shuttle to venue was late — missed the opening keynote.",
+      "Walls too thin for quiet call prep before my speech.",
+      "Hotel gym closed at 20:00 — impossible for event attendees."
+    ]
+  },
+
+  "tag_themes": [
+    "cleanliness",
+    "service",
+    "location",
+    "value",
+    "food",
+    "wifi",
+    "noise",
+    "bed_comfort",
+    "amenities",
+    "spa",
+    "pool",
+    "breakfast",
+    "staff",
+    "check_in",
+    "check_out",
+    "parking",
+    "hidden_fees",
+    "loyalty_recognition",
+    "family_friendly",
+    "romantic",
+    "brand_consistency",
+    "room_size",
+    "view",
+    "kids_club",
+    "wifi_speed",
+    "cancellation"
+  ],
+
+  "language_patterns_by_source_origin": {
+    "spain": { "typical_language": "es", "secondary": "en" },
+    "latam": { "typical_language": "es", "secondary": "en" },
+    "uk": { "typical_language": "en" },
+    "usa": { "typical_language": "en" },
+    "france": { "typical_language": "fr", "secondary": "en" },
+    "germany": { "typical_language": "de", "secondary": "en" },
+    "italy": { "typical_language": "it", "secondary": "en" },
+    "brazil": { "typical_language": "pt" }
+  }
+}

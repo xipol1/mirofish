@@ -1,0 +1,25 @@
+node_modules/
+.next/
+.env
+.env.local
+*.log
+.DS_Store
+
+# Claude Code local settings (contains API tokens)
+.claude/settings.local.json
+.claude/scheduled_tasks.lock
+
+# Local data storage (evidence, sqlite, reports)
+backend/data/evidence/
+backend/data/reports/
+backend/data/*.db
+backend/data/*.db-wal
+backend/data/*.db-shm
+
+# Vercel
+.vercel
+
+# OS / editor
+Thumbs.db
+.idea/
+.vscode/

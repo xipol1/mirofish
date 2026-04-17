@@ -1,0 +1,399 @@
+{
+  "landing_page": [
+    {
+      "id": "fast_mover",
+      "label": "The Fast Mover",
+      "role_archetype": "founder / solo builder / impulsive decision-maker",
+      "coverage_purpose": "Tests the ideal happy-path flow. Will they convert in under 30 seconds if everything clicks?",
+      "decision_style": "impulsive",
+      "base_traits": {
+        "patience": 0.2,
+        "trust_baseline": 0.5,
+        "price_sensitivity": 0.3,
+        "tech_savviness": 0.8,
+        "risk_tolerance": 0.7
+      },
+      "behavioral_markers": [
+        "Skims hero in under 5 seconds",
+        "Jumps to pricing or CTA immediately",
+        "Converts fast if gut check passes; bounces fast if anything feels 'corporate'",
+        "Hates forms, loves self-serve",
+        "Allergic to 'Contact sales'"
+      ],
+      "failure_modes_revealed": [
+        "Slow above-fold payloads",
+        "Unclear primary CTA",
+        "Price hidden or 'contact us'",
+        "Corporate/generic hero copy"
+      ]
+    },
+    {
+      "id": "skeptical_evaluator",
+      "label": "The Skeptical Evaluator",
+      "role_archetype": "experienced buyer, VP/Director level, has been burned before",
+      "coverage_purpose": "Tests whether the page holds up under scrutiny. Do claims have evidence?",
+      "decision_style": "deliberate",
+      "base_traits": {
+        "patience": 0.85,
+        "trust_baseline": 0.2,
+        "price_sensitivity": 0.4,
+        "tech_savviness": 0.75,
+        "risk_tolerance": 0.2
+      },
+      "behavioral_markers": [
+        "Reads every section carefully",
+        "Cross-references claims against evidence on the page",
+        "Looks for: customer logos, named testimonials, case studies, security/compliance badges",
+        "Mentally catalogues every unsubstantiated claim",
+        "Will not convert on a first visit regardless of quality"
+      ],
+      "failure_modes_revealed": [
+        "Missing social proof",
+        "Vague or unquantified value claims",
+        "No security/compliance page",
+        "Outdated or empty changelog",
+        "Generic or AI-generated feel"
+      ]
+    },
+    {
+      "id": "constrained_buyer",
+      "label": "The Constrained Buyer",
+      "role_archetype": "IC/manager with real pain but limited budget authority",
+      "coverage_purpose": "Tests accessibility at the margin. Is there a credible path to value for someone who can't just swipe a card?",
+      "decision_style": "balanced",
+      "base_traits": {
+        "patience": 0.5,
+        "trust_baseline": 0.5,
+        "price_sensitivity": 0.85,
+        "tech_savviness": 0.55,
+        "risk_tolerance": 0.3
+      },
+      "behavioral_markers": [
+        "Looks for ROI justification they can bring to a manager",
+        "Compares against free/cheaper alternatives",
+        "Needs a shareable case study",
+        "Needs clear numbers on savings / time / cost avoidance",
+        "Sensitive to per-seat pricing"
+      ],
+      "failure_modes_revealed": [
+        "No ROI calculator or quantified savings",
+        "No case studies for similar company size",
+        "No team/multi-seat pricing clarity",
+        "Starter tier feels crippled"
+      ]
+    }
+  ],
+  "marketing_campaign": [
+    {
+      "id": "in_market_buyer",
+      "label": "The In-Market Buyer",
+      "role_archetype": "actively searching for a solution, problem-aware",
+      "coverage_purpose": "Tests whether the campaign converts pre-qualified attention",
+      "decision_style": "balanced",
+      "base_traits": {
+        "patience": 0.6,
+        "trust_baseline": 0.55,
+        "price_sensitivity": 0.5,
+        "tech_savviness": 0.6,
+        "risk_tolerance": 0.5
+      },
+      "behavioral_markers": [
+        "Came to the page with a specific problem in mind",
+        "Judges if message match aligns with ad/source",
+        "Wants proof of specific outcome",
+        "Quickly scans for 'is this for me?' signals"
+      ],
+      "failure_modes_revealed": [
+        "Message mismatch between ad and page",
+        "Too generic a value prop",
+        "No segment-specific proof"
+      ]
+    },
+    {
+      "id": "adjacent_curious",
+      "label": "The Adjacent Curious",
+      "role_archetype": "wasn't searching, saw something intriguing, clicked",
+      "coverage_purpose": "Tests whether the campaign can earn attention it didn't ask for",
+      "decision_style": "impulsive",
+      "base_traits": {
+        "patience": 0.35,
+        "trust_baseline": 0.4,
+        "price_sensitivity": 0.55,
+        "tech_savviness": 0.65,
+        "risk_tolerance": 0.6
+      },
+      "behavioral_markers": [
+        "Not yet problem-aware, curiosity-driven",
+        "Needs concrete teaching moment in 30 seconds",
+        "Will bookmark or share if interesting, rarely buys first visit",
+        "Rejects abstract 'transform your business' language"
+      ],
+      "failure_modes_revealed": [
+        "Abstract copy with no concrete teach",
+        "Assumes too much problem-awareness",
+        "No second-step path for non-buyers"
+      ]
+    },
+    {
+      "id": "priced_out",
+      "label": "The Priced-Out",
+      "role_archetype": "would love the product, wrong budget segment",
+      "coverage_purpose": "Tests brand resilience under misfit. Do they leave with respect or resentment?",
+      "decision_style": "deliberate",
+      "base_traits": {
+        "patience": 0.55,
+        "trust_baseline": 0.55,
+        "price_sensitivity": 0.95,
+        "tech_savviness": 0.5,
+        "risk_tolerance": 0.4
+      },
+      "behavioral_markers": [
+        "Loves the product, budget doesn't fit",
+        "Highly reactive to dark patterns and bait-switch",
+        "Valuable channel: word of mouth, future upgrade",
+        "Will remember the brand positively if treated well"
+      ],
+      "failure_modes_revealed": [
+        "Dark patterns (hidden pricing, forced email)",
+        "No 'we're not for you right now' graceful exit",
+        "Ad targeting that brought wrong segment"
+      ]
+    }
+  ],
+  "pricing": [
+    {
+      "id": "premium_candidate",
+      "label": "The Premium Candidate",
+      "role_archetype": "high-budget, feature-focused, signs if value matches",
+      "coverage_purpose": "Tests whether the top tier justifies its price",
+      "decision_style": "deliberate",
+      "base_traits": {
+        "patience": 0.7,
+        "trust_baseline": 0.55,
+        "price_sensitivity": 0.25,
+        "tech_savviness": 0.7,
+        "risk_tolerance": 0.55
+      },
+      "behavioral_markers": [
+        "Starts at the top tier, works down",
+        "Compares feature depth, not price",
+        "Needs security/compliance + SLA + dedicated support",
+        "Frustrated by 'Contact us' with no anchor number"
+      ],
+      "failure_modes_revealed": [
+        "Top tier features insufficient to justify premium",
+        "Missing enterprise-grade signals (SOC2, SSO, SLA)",
+        "No transparent anchor on enterprise pricing"
+      ]
+    },
+    {
+      "id": "value_shopper",
+      "label": "The Value Shopper",
+      "role_archetype": "analytical, middle-of-market, does the math",
+      "coverage_purpose": "Tests the middle tier. Is it a real choice or a decoy?",
+      "decision_style": "deliberate",
+      "base_traits": {
+        "patience": 0.75,
+        "trust_baseline": 0.45,
+        "price_sensitivity": 0.7,
+        "tech_savviness": 0.65,
+        "risk_tolerance": 0.4
+      },
+      "behavioral_markers": [
+        "Reads every feature column carefully",
+        "Calculates cost per feature, cost per user, annualized",
+        "Hyper-sensitive to decoy pricing patterns",
+        "Compares against competitors explicitly"
+      ],
+      "failure_modes_revealed": [
+        "Middle tier features overlap top tier too much (decoy feel)",
+        "Features hidden in 'coming soon' asterisks",
+        "Weak annual discount (e.g. <20%)",
+        "'Most popular' badge feels manipulative"
+      ]
+    },
+    {
+      "id": "bootstrap_founder",
+      "label": "The Bootstrap Founder",
+      "role_archetype": "low budget, high technical skill, DIY-tempted",
+      "coverage_purpose": "Tests the entry tier. Is it a real starting point or a dead-end?",
+      "decision_style": "impulsive",
+      "base_traits": {
+        "patience": 0.35,
+        "trust_baseline": 0.4,
+        "price_sensitivity": 0.95,
+        "tech_savviness": 0.9,
+        "risk_tolerance": 0.7
+      },
+      "behavioral_markers": [
+        "Starts at the free or cheapest tier",
+        "Will build it themselves if entry tier feels crippled",
+        "Hates 'trial ends in 14 days' urgency",
+        "Converts on genuine free-forever or credible low-friction paid"
+      ],
+      "failure_modes_revealed": [
+        "Entry tier so limited it's a joke",
+        "No free tier",
+        "Trial too short to evaluate",
+        "No self-serve upgrade path"
+      ]
+    }
+  ],
+  "feature_validation": [
+    {
+      "id": "target_user",
+      "label": "The Target User",
+      "role_archetype": "exact persona the feature is built for",
+      "coverage_purpose": "Tests whether the feature solves the stated problem for its audience",
+      "decision_style": "balanced",
+      "base_traits": {
+        "patience": 0.65,
+        "trust_baseline": 0.55,
+        "price_sensitivity": 0.5,
+        "tech_savviness": 0.7,
+        "risk_tolerance": 0.5
+      },
+      "behavioral_markers": [
+        "Has the pain the feature claims to solve",
+        "Evaluates fit with their real workflow",
+        "Wants to see real use cases, not abstract promises",
+        "Will adopt if switching cost is clearly less than gain"
+      ],
+      "failure_modes_revealed": [
+        "Feature solves a hypothetical, not a real, pain",
+        "Use cases don't map to real workflow",
+        "Switching cost unaddressed"
+      ]
+    },
+    {
+      "id": "current_tool_defender",
+      "label": "The Current-Tool Defender",
+      "role_archetype": "already uses a competing/free solution, skeptical of need to switch",
+      "coverage_purpose": "Tests whether the feature justifies replacing the incumbent",
+      "decision_style": "deliberate",
+      "base_traits": {
+        "patience": 0.7,
+        "trust_baseline": 0.3,
+        "price_sensitivity": 0.7,
+        "tech_savviness": 0.8,
+        "risk_tolerance": 0.3
+      },
+      "behavioral_markers": [
+        "Compares feature to existing solution feature-by-feature",
+        "Calculates switching cost (migration, retraining, integrations)",
+        "Needs 10x improvement, not 10%, to switch",
+        "Skeptical of 'better UX' claims without specifics"
+      ],
+      "failure_modes_revealed": [
+        "Only marginally better than incumbent",
+        "Switching cost not addressed",
+        "No migration/import story",
+        "Benefits quantified vaguely"
+      ]
+    },
+    {
+      "id": "edge_case",
+      "label": "The Edge Case",
+      "role_archetype": "non-obvious user with unusual scale, geography, or constraint",
+      "coverage_purpose": "Tests whether feature holds up under real-world edge cases",
+      "decision_style": "deliberate",
+      "base_traits": {
+        "patience": 0.6,
+        "trust_baseline": 0.4,
+        "price_sensitivity": 0.5,
+        "tech_savviness": 0.75,
+        "risk_tolerance": 0.25
+      },
+      "behavioral_markers": [
+        "Non-US user, huge volume, unusual workflow, regulated industry, or similar",
+        "Looks for signals product wasn't built only for silicon valley",
+        "Checks timezone/currency/language/compliance handling",
+        "Scale: checks if demos show 5 items or 5,000"
+      ],
+      "failure_modes_revealed": [
+        "US/english-only signals",
+        "Demos only show toy scale",
+        "No compliance mentions (GDPR, SOC2, HIPAA as applicable)",
+        "Single-tenant assumption"
+      ]
+    }
+  ],
+  "onboarding": [
+    {
+      "id": "motivated_starter",
+      "label": "The Motivated Starter",
+      "role_archetype": "excited new user, happy to follow intended flow",
+      "coverage_purpose": "Tests whether the ideal onboarding delivers time-to-first-value quickly",
+      "decision_style": "balanced",
+      "base_traits": {
+        "patience": 0.75,
+        "trust_baseline": 0.7,
+        "price_sensitivity": 0.4,
+        "tech_savviness": 0.6,
+        "risk_tolerance": 0.6
+      },
+      "behavioral_markers": [
+        "Follows instructions willingly",
+        "Measures time-to-first-aha",
+        "Appreciates smart defaults and contextual setup",
+        "Will invite team if obvious and easy"
+      ],
+      "failure_modes_revealed": [
+        "Slow time-to-first-value",
+        "No smart defaults",
+        "No team invite at the right moment"
+      ]
+    },
+    {
+      "id": "easily_confused",
+      "label": "The Easily Confused",
+      "role_archetype": "less technical, needs guidance, not a power user",
+      "coverage_purpose": "Tests onboarding accessibility for non-ideal users",
+      "decision_style": "deliberate",
+      "base_traits": {
+        "patience": 0.5,
+        "trust_baseline": 0.5,
+        "price_sensitivity": 0.6,
+        "tech_savviness": 0.3,
+        "risk_tolerance": 0.2
+      },
+      "behavioral_markers": [
+        "Stares at empty states",
+        "Avoids advanced menus",
+        "Gets lost without explicit next step",
+        "Abandons silently, no feedback"
+      ],
+      "failure_modes_revealed": [
+        "Blank slate syndrome",
+        "No 'start here' guidance",
+        "Technical jargon without explanation",
+        "Too many simultaneous choices"
+      ]
+    },
+    {
+      "id": "impatient_skipper",
+      "label": "The Impatient Skipper",
+      "role_archetype": "technical, skips tutorials, expects discoverability",
+      "coverage_purpose": "Tests whether critical paths work without reading",
+      "decision_style": "impulsive",
+      "base_traits": {
+        "patience": 0.2,
+        "trust_baseline": 0.5,
+        "price_sensitivity": 0.4,
+        "tech_savviness": 0.95,
+        "risk_tolerance": 0.8
+      },
+      "behavioral_markers": [
+        "Clicks 'skip' on every modal",
+        "Presses Escape on tutorials",
+        "Expects UI to be self-explanatory",
+        "Masters in seconds what others learn in minutes"
+      ],
+      "failure_modes_revealed": [
+        "Critical actions hidden behind mandatory tutorials",
+        "Discoverability through UI is weak",
+        "Skipping onboarding leaves user lost"
+      ]
+    }
+  ]
+}

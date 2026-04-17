@@ -1,0 +1,748 @@
+{
+  "_description": "Per-archetype stay-behavior model: daily routines, spending patterns, sensation weights, memorable-moment triggers. Drives the narrative engine.",
+
+  "stage_order": [
+    "arrival",
+    "room_first_impression",
+    "evening_1",
+    "night_1",
+    "morning_routine",
+    "daytime_activity",
+    "lunch",
+    "afternoon_activity",
+    "dinner",
+    "evening_leisure",
+    "subsequent_nights",
+    "last_morning",
+    "checkout",
+    "post_stay"
+  ],
+
+  "archetypes": {
+    "business_traveler": {
+      "typical_stay_length_nights": [1, 3],
+      "daily_routine": {
+        "arrival": {
+          "typical_window": "19:00-23:00",
+          "emotion_entering": ["tired", "task-focused", "time-sensitive"],
+          "key_expectations": ["instant check-in", "quiet room", "fast wifi verification"],
+          "friction_tolerance_minutes_max": 8,
+          "upgrade_acceptance_probability_if_offered": 0.6
+        },
+        "room_first_impression": {
+          "must_have": ["working desk", "bedside outlets", "fast wifi", "quiet", "blackout curtains"],
+          "nice_to_have": ["espresso machine", "iron + ironing board", "laptop-safe surface"],
+          "dealbreakers": ["broken wifi", "noisy HVAC", "smell of smoke", "visible dirt"]
+        },
+        "evening_1": {
+          "dining_preference": { "hotel_restaurant": 0.25, "room_service": 0.40, "external_nearby": 0.25, "skip": 0.10 },
+          "avg_dinner_spend_eur": 38,
+          "typical_activities": ["work_email", "shower", "tv_news", "early_sleep"],
+          "bar_visit_probability": 0.15
+        },
+        "morning_routine": {
+          "wake_window": "06:00-07:30",
+          "breakfast_preference": { "hotel_buffet": 0.40, "to_go_grab": 0.30, "skip_coffee_only": 0.25, "external": 0.05 },
+          "breakfast_time_window_minutes": [15, 35],
+          "ready_to_leave_window": "07:30-08:30"
+        },
+        "daytime_activity": {
+          "in_hotel_presence_probability": 0.05,
+          "primary_activity": "external_meetings_or_office",
+          "return_time_window": "18:00-21:00"
+        },
+        "dinner": {
+          "day_2_plus": {
+            "hotel_restaurant": 0.30,
+            "room_service": 0.45,
+            "client_external": 0.20,
+            "skip": 0.05
+          }
+        },
+        "last_morning": {
+          "checkout_preference": { "express_mobile": 0.55, "front_desk_bill_review": 0.30, "auto_checkout": 0.15 },
+          "typical_time": "05:30-07:00",
+          "luggage_policy": "carry_on"
+        }
+      },
+      "daily_spending_eur_range": {
+        "included_breakfast": [0, 0],
+        "breakfast_paid": [16, 28],
+        "lunch": [0, 0],
+        "dinner": [25, 70],
+        "bar_drinks": [0, 25],
+        "room_service": [15, 55],
+        "spa": [0, 0],
+        "activities": [0, 0],
+        "laundry": [0, 40],
+        "parking": [0, 35],
+        "wifi_premium": [0, 15]
+      },
+      "avg_stay_total_ancillary_eur": 85,
+      "upsell_acceptance_probability": {
+        "late_checkout": 0.65,
+        "breakfast_addon": 0.50,
+        "premium_wifi": 0.30,
+        "room_upgrade_paid": 0.08,
+        "spa": 0.02,
+        "airport_transfer": 0.25
+      },
+      "sensation_weights": {
+        "speed": 0.25,
+        "service_quality": 0.12,
+        "comfort_physical": 0.16,
+        "cleanliness": 0.12,
+        "crowd": 0.05,
+        "culinary": 0.05,
+        "authenticity": 0.03,
+        "modernity": 0.08,
+        "amenity_usability": 0.06,
+        "safety": 0.05,
+        "personalization": 0.02,
+        "value": 0.01
+      },
+      "memorable_moment_triggers": {
+        "positive": ["recognition by name at check-in", "proactive late check-out offered", "instant wifi works flawlessly", "spotless quiet room", "upgrade without asking"],
+        "negative": ["long check-in queue", "hidden charges on bill", "noisy HVAC waking me up", "breakfast ends at 9:30 when I need 6:30", "wifi keeps dropping", "crowded elevator at peak"]
+      },
+      "review_behavior": {
+        "write_review_probability": 0.18,
+        "platform_preference": { "google": 0.45, "tripadvisor": 0.10, "booking.com": 0.40, "brand_survey": 0.05 },
+        "typical_length_words": [30, 120],
+        "tone": "terse, functional, fair, metric-heavy",
+        "will_mention_loyalty_tier_if_applicable": true
+      },
+      "social_media_probability": {
+        "linkedin_checkin_positive": 0.03,
+        "twitter_complaint": 0.02,
+        "instagram_post": 0.01
+      }
+    },
+
+    "family_vacationer": {
+      "typical_stay_length_nights": [5, 10],
+      "daily_routine": {
+        "arrival": {
+          "typical_window": "14:00-18:00",
+          "emotion_entering": ["exhausted", "travel-frazzled", "kids-anxious"],
+          "key_expectations": ["connecting rooms confirmed", "cribs present", "welcome amenity for kids", "fast access to room"],
+          "friction_tolerance_minutes_max": 15,
+          "kids_patience_decay_minutes": 20
+        },
+        "room_first_impression": {
+          "must_have": ["two real beds or connecting doors working", "safe for valuables", "minibar emptied of adult drinks if requested", "bathtub or safe shower", "darkenable room"],
+          "nice_to_have": ["kids amenity", "in-room fridge for milk/snacks", "childproof outlets"],
+          "dealbreakers": ["single bed for 4 people", "connecting door doesn't open", "dangerous balcony"]
+        },
+        "evening_1": {
+          "dining_preference": { "hotel_buffet": 0.50, "kids_menu_restaurant": 0.25, "room_service_kids": 0.15, "external_casual": 0.10 },
+          "avg_dinner_spend_eur": 95,
+          "kids_bedtime_target": "20:30-21:30",
+          "parents_post_kids_activity": { "hotel_bar": 0.20, "in_room_tv": 0.55, "terrace_drink": 0.25 }
+        },
+        "morning_routine": {
+          "wake_window": "07:30-09:30",
+          "breakfast_preference": { "hotel_buffet": 0.85, "room_service_family": 0.10, "external": 0.05 },
+          "breakfast_time_window_minutes": [45, 90],
+          "kids_behavior_at_breakfast": "varies — noisy eaters expected"
+        },
+        "daytime_activity": {
+          "primary_activities": ["pool", "kids_club", "beach_if_applicable", "excursion"],
+          "pool_hours_typical": "11:00-17:00",
+          "kids_club_enrollment_probability": 0.55,
+          "excursion_days_of_total": 0.35
+        },
+        "lunch": {
+          "in_hotel_probability": 0.65,
+          "avg_spend_family_eur": 55
+        },
+        "dinner": {
+          "day_2_plus": { "hotel_buffet_repeat": 0.55, "external_casual": 0.30, "fine_dining_couple_only": 0.05, "pizza_room_service": 0.10 }
+        },
+        "last_morning": {
+          "checkout_preference": { "front_desk": 0.70, "mobile_express": 0.20, "auto": 0.10 },
+          "typical_time": "10:00-11:30",
+          "pool_on_last_day": 0.40
+        }
+      },
+      "daily_spending_eur_range": {
+        "breakfast_paid": [30, 55],
+        "lunch": [35, 85],
+        "dinner": [70, 140],
+        "pool_bar": [20, 80],
+        "kids_club_paid": [0, 90],
+        "excursion": [0, 400],
+        "spa": [0, 180],
+        "activities_kids_extra": [20, 90],
+        "laundry": [0, 25],
+        "parking": [0, 30]
+      },
+      "avg_stay_total_ancillary_eur": 850,
+      "upsell_acceptance_probability": {
+        "early_check_in": 0.55,
+        "connecting_room_guarantee_paid": 0.45,
+        "kids_club_package": 0.35,
+        "excursion_package": 0.30,
+        "spa_parent_treatment": 0.12,
+        "all_inclusive_upgrade": 0.25
+      },
+      "sensation_weights": {
+        "comfort_physical": 0.17,
+        "cleanliness": 0.14,
+        "amenity_usability": 0.15,
+        "culinary": 0.12,
+        "service_quality": 0.12,
+        "safety": 0.10,
+        "value": 0.08,
+        "crowd": 0.05,
+        "speed": 0.03,
+        "personalization": 0.02,
+        "authenticity": 0.01,
+        "modernity": 0.01
+      },
+      "memorable_moment_triggers": {
+        "positive": ["connecting rooms ready on arrival", "kids welcome with gift/amenity", "swim-up bar with kids pool", "babysitter arranged within an hour", "chef accommodates kids allergies"],
+        "negative": ["connecting rooms not available", "kids club full / closed", "pool dirty or cold", "no high chairs at restaurant", "resort fee surprise", "kids menu boring / repetitive"]
+      },
+      "review_behavior": {
+        "write_review_probability": 0.42,
+        "platform_preference": { "tripadvisor": 0.50, "booking.com": 0.30, "google": 0.18, "facebook": 0.02 },
+        "typical_length_words": [150, 400],
+        "tone": "detailed, emotional, family-lens, review-other-families-as-audience",
+        "photo_attachment_probability": 0.55
+      },
+      "social_media_probability": {
+        "instagram_pool_photo": 0.40,
+        "facebook_family_album": 0.25,
+        "complaint_post_if_bad": 0.12
+      }
+    },
+
+    "luxury_seeker": {
+      "typical_stay_length_nights": [3, 7],
+      "daily_routine": {
+        "arrival": {
+          "typical_window": "any",
+          "emotion_entering": ["expectant", "brand-conscious", "observational"],
+          "key_expectations": ["recognition by name", "private / expedited check-in", "welcome amenity (champagne, tea)", "in-room introduction by butler or manager"],
+          "friction_tolerance_minutes_max": 3,
+          "luxury_signal_scrutiny_seconds_to_impression": 45
+        },
+        "room_first_impression": {
+          "must_have": ["premium linens", "high-end toiletries", "flawless cleanliness", "bespoke touches", "mini-bar curated", "silent HVAC"],
+          "dealbreakers_soft": ["generic toiletries", "plastic tags", "stock photos visible", "anything broken"],
+          "dealbreakers_hard": ["visible dirt", "previous-guest trace", "broken in-room tech", "rude first interaction"]
+        },
+        "evening_1": {
+          "dining_preference": { "hotel_fine_dining": 0.40, "concierge_recommended_external": 0.35, "bar_light_dinner": 0.15, "in_room_curated": 0.10 },
+          "avg_dinner_spend_eur_per_person": 180,
+          "wine_ordering": { "bottle": 0.55, "by_glass_premium": 0.35, "no_alcohol": 0.10 }
+        },
+        "morning_routine": {
+          "wake_window": "08:00-10:00",
+          "breakfast_preference": { "a_la_carte_room": 0.35, "a_la_carte_restaurant": 0.45, "club_lounge": 0.20 },
+          "breakfast_time_window_minutes": [60, 120],
+          "service_expectation": "name-use, preferences remembered from day 1"
+        },
+        "daytime_activity": {
+          "primary_activities": ["spa_treatment", "private_beach", "excursion_bespoke", "shopping", "sightseeing"],
+          "spa_visits_per_stay": 1.5,
+          "private_tour_probability": 0.35
+        },
+        "lunch": {
+          "hotel_signature_restaurant": 0.35,
+          "beach_club": 0.25,
+          "external_curated": 0.35,
+          "skip": 0.05,
+          "avg_spend_per_person_eur": 75
+        },
+        "dinner": {
+          "day_2_plus": { "hotel_signature_restaurant": 0.40, "external_reservation": 0.45, "in_room_chef": 0.10, "skip": 0.05 }
+        },
+        "evening_leisure": {
+          "typical": ["hotel_bar_cocktail", "spa_evening", "terrace", "cultural_event"],
+          "avg_bar_spend_eur": 60
+        },
+        "last_morning": {
+          "checkout_preference": { "front_desk_personal_farewell": 0.60, "app_express": 0.25, "auto": 0.15 },
+          "typical_time": "11:00-12:30",
+          "luggage_held_by_hotel_prob": 0.55
+        }
+      },
+      "daily_spending_eur_range": {
+        "breakfast_paid": [38, 75],
+        "lunch": [90, 250],
+        "dinner": [180, 500],
+        "bar": [40, 180],
+        "spa": [120, 450],
+        "activities": [80, 800],
+        "room_service": [45, 250],
+        "mini_bar": [25, 90],
+        "shopping_in_hotel": [0, 1200]
+      },
+      "avg_stay_total_ancillary_eur": 2200,
+      "upsell_acceptance_probability": {
+        "suite_upgrade_paid": 0.28,
+        "spa_package": 0.45,
+        "private_dining": 0.35,
+        "premium_excursion": 0.30,
+        "anniversary_amenity_pre_arrival": 0.50,
+        "airport_limo_transfer": 0.40
+      },
+      "sensation_weights": {
+        "service_quality": 0.22,
+        "personalization": 0.18,
+        "authenticity": 0.12,
+        "culinary": 0.12,
+        "aesthetic": 0.10,
+        "cleanliness": 0.08,
+        "amenity_usability": 0.06,
+        "comfort_physical": 0.05,
+        "modernity": 0.04,
+        "crowd": 0.02,
+        "safety": 0.01,
+        "value": 0.00
+      },
+      "memorable_moment_triggers": {
+        "positive": ["name recognition by staff on day 2", "anniversary amenity in room", "concierge remembers yesterday's conversation", "custom menu at restaurant", "butler proactively anticipates needs", "private beach cabana reserved unprompted"],
+        "negative": ["generic greeting despite Platinum status", "forgotten anniversary request", "chain-hotel-feeling amenity", "up-sell pressure at concierge", "noisy family group in adjacent suite", "any staff friction"]
+      },
+      "review_behavior": {
+        "write_review_probability": 0.55,
+        "platform_preference": { "tripadvisor_lux": 0.45, "google": 0.20, "luxury_travel_blog": 0.15, "travel_publication_comment": 0.10, "instagram_carousel": 0.10 },
+        "typical_length_words": [350, 900],
+        "tone": "connoisseur, brand-comparative (Four Seasons / Aman / Rosewood), detail-obsessed",
+        "will_name_staff_if_excellent_or_poor": true
+      },
+      "social_media_probability": {
+        "instagram_hero_shot": 0.60,
+        "travel_blog_post": 0.12,
+        "luxury_forum_post": 0.15
+      }
+    },
+
+    "honeymooner": {
+      "typical_stay_length_nights": [5, 12],
+      "daily_routine": {
+        "arrival": {
+          "typical_window": "14:00-19:00",
+          "emotion_entering": ["excited", "romantic", "emotionally-primed"],
+          "key_expectations": ["honeymoon acknowledgment", "room decorated", "welcome champagne", "suite upgrade if possible"],
+          "friction_tolerance_minutes_max": 10,
+          "emotional_disappointment_if_not_acknowledged": 0.8
+        },
+        "room_first_impression": {
+          "must_have": ["king bed", "romantic lighting", "balcony/view", "quiet", "welcome note"],
+          "nice_to_have": ["rose petals", "chocolate amenity", "bathroom with tub for two", "private plunge pool or jacuzzi"]
+        },
+        "evening_1": {
+          "dining_preference": { "hotel_fine_dining": 0.45, "private_beach_dinner": 0.25, "external_romantic_recommended": 0.20, "in_room": 0.10 },
+          "avg_dinner_spend_eur_per_person": 150,
+          "champagne_probability": 0.55
+        },
+        "morning_routine": {
+          "wake_window": "09:00-11:00",
+          "breakfast_preference": { "room_service_late": 0.55, "restaurant_leisure": 0.35, "skip_brunch_out": 0.10 },
+          "breakfast_time_window_minutes": [70, 150]
+        },
+        "daytime_activity": {
+          "primary_activities": ["couples_spa", "private_excursion", "beach_day", "pool_adults_only", "sightseeing"],
+          "couples_spa_probability_per_stay": 1.2,
+          "private_excursion_probability": 0.55
+        },
+        "dinner": {
+          "variety_seeking": true,
+          "pattern_days": ["hotel_fine", "external_romantic", "beach_private", "hotel_second_restaurant"]
+        },
+        "evening_leisure": {
+          "typical": ["bar_cocktail_terrace", "stargazing_private", "dancing", "in_room_intimacy"],
+          "avg_bar_spend_eur": 80
+        },
+        "last_morning": {
+          "checkout_preference": { "front_desk_with_thank_you": 0.55, "express": 0.30, "auto": 0.15 },
+          "typical_time": "10:30-12:00",
+          "final_breakfast_sentimental": 0.75
+        }
+      },
+      "daily_spending_eur_range": {
+        "breakfast_paid": [30, 65],
+        "lunch": [60, 180],
+        "dinner": [200, 600],
+        "bar": [40, 150],
+        "spa_couples": [0, 500],
+        "excursion": [0, 700],
+        "in_room_extras": [0, 300],
+        "photography": [0, 500]
+      },
+      "avg_stay_total_ancillary_eur": 1800,
+      "upsell_acceptance_probability": {
+        "suite_upgrade_honeymoon_paid": 0.45,
+        "private_dinner_package": 0.55,
+        "couples_spa_package": 0.65,
+        "photographer_package": 0.30,
+        "private_excursion": 0.50,
+        "anniversary_amenity": 0.70
+      },
+      "sensation_weights": {
+        "personalization": 0.16,
+        "aesthetic": 0.15,
+        "service_quality": 0.14,
+        "culinary": 0.12,
+        "authenticity": 0.10,
+        "comfort_physical": 0.10,
+        "crowd": 0.10,
+        "cleanliness": 0.06,
+        "amenity_usability": 0.03,
+        "modernity": 0.02,
+        "safety": 0.01,
+        "value": 0.01
+      },
+      "memorable_moment_triggers": {
+        "positive": ["Mr. & Mrs. card in room", "private dinner surprise by manager", "spa couples treatment ends with private terrace", "hotel remembers wedding anniversary for future stays", "photographer captures candid moment"],
+        "negative": ["no honeymoon recognition despite being told", "room smells of bleach instead of romance", "loud groups in next suite", "ignored during intimate dinner"]
+      },
+      "review_behavior": {
+        "write_review_probability": 0.60,
+        "platform_preference": { "tripadvisor": 0.45, "google": 0.15, "travel_blog_post": 0.20, "instagram_story_set": 0.15, "honeymoon_forum": 0.05 },
+        "typical_length_words": [300, 800],
+        "tone": "romantic, detailed, often emotional, story-arc narrative"
+      },
+      "social_media_probability": {
+        "instagram_couple_post": 0.75,
+        "facebook_album": 0.45,
+        "tiktok_video": 0.20
+      }
+    },
+
+    "digital_nomad": {
+      "typical_stay_length_nights": [7, 28],
+      "daily_routine": {
+        "arrival": {
+          "typical_window": "varied",
+          "emotion_entering": ["pragmatic", "wifi-anxious", "comparison-tracking"],
+          "key_expectations": ["wifi test immediately", "desk verification", "quiet floor", "monthly rate clarity"]
+        },
+        "room_first_impression": {
+          "must_have": ["real desk (not armchair)", "ergonomic chair or at least proper chair", "fast wifi with backup", "natural light", "kettle/coffee"],
+          "dealbreakers": ["wifi < 25mbps", "no desk", "housekeeping every day", "no daylight"]
+        },
+        "evening_1": {
+          "dining_preference": { "external_delivery": 0.40, "hotel_casual": 0.20, "nearby_walking": 0.30, "skip": 0.10 },
+          "avg_dinner_spend_eur": 22
+        },
+        "morning_routine": {
+          "wake_window": "07:00-09:30",
+          "breakfast_preference": { "hotel_light": 0.25, "local_cafe": 0.45, "in_room_coffee_skip": 0.30 },
+          "breakfast_time_window_minutes": [10, 40]
+        },
+        "daytime_activity": {
+          "primary_activity": "remote_work_in_room",
+          "in_room_presence_probability_during_workday": 0.80,
+          "coworking_external": 0.10,
+          "calls_per_day": [3, 9]
+        },
+        "lunch": {
+          "pattern": { "delivery_in_room": 0.50, "hotel_lobby_cafe": 0.20, "local_walking": 0.30 },
+          "avg_spend_eur": 16
+        },
+        "afternoon_activity": {
+          "gym_probability": 0.35,
+          "brief_walk_outside_probability": 0.50
+        },
+        "dinner": {
+          "pattern_exploration_then_routine": true,
+          "typical_cuisine_variety_by_stay_length": "increases"
+        },
+        "last_morning": {
+          "checkout_preference": { "express_mobile": 0.70, "front_desk_brief": 0.30 },
+          "typical_time": "10:30-12:00"
+        }
+      },
+      "daily_spending_eur_range": {
+        "breakfast": [0, 12],
+        "lunch": [10, 25],
+        "dinner": [15, 40],
+        "coffee_daytime": [5, 15],
+        "laundry": [0, 30],
+        "gym_paid": [0, 15],
+        "room_service": [0, 30]
+      },
+      "avg_stay_total_ancillary_eur_per_week": 180,
+      "upsell_acceptance_probability": {
+        "faster_wifi_paid": 0.45,
+        "workspace_upgrade": 0.30,
+        "weekly_housekeeping_only": 0.60,
+        "laundry_package": 0.40,
+        "monthly_rate_extension": 0.25
+      },
+      "sensation_weights": {
+        "amenity_usability": 0.22,
+        "comfort_physical": 0.18,
+        "value": 0.16,
+        "crowd": 0.08,
+        "cleanliness": 0.08,
+        "service_quality": 0.08,
+        "speed": 0.06,
+        "culinary": 0.05,
+        "authenticity": 0.04,
+        "modernity": 0.03,
+        "personalization": 0.01,
+        "safety": 0.01
+      },
+      "memorable_moment_triggers": {
+        "positive": ["wifi actually 200mbps as advertised", "quiet floor genuinely quiet", "laundry service saves day", "desk with second monitor port", "staff respects 'do not disturb'"],
+        "negative": ["wifi lies (advertised high-speed, actually crap)", "daily housekeeping ignores DND", "thin walls, every call overheard next door", "no real desk", "monthly rate hidden behind nightly"]
+      },
+      "review_behavior": {
+        "write_review_probability": 0.35,
+        "platform_preference": { "nomad_list": 0.35, "google": 0.30, "booking.com": 0.20, "reddit_r_digital_nomad": 0.10, "tripadvisor": 0.05 },
+        "typical_length_words": [150, 400],
+        "tone": "technical (wifi speeds, desk specs), no-nonsense, value-oriented",
+        "will_post_speedtest_screenshot_probability": 0.25
+      },
+      "social_media_probability": {
+        "nomad_list_checkin": 0.25,
+        "twitter_wifi_complaint": 0.10
+      }
+    },
+
+    "budget_optimizer": {
+      "typical_stay_length_nights": [2, 6],
+      "daily_routine": {
+        "arrival": {
+          "typical_window": "14:00-20:00",
+          "emotion_entering": ["price-alert", "suspicious-of-upsell", "total-cost-tracking"],
+          "key_expectations": ["no surprise fees at check-in", "honored OTA-matched rate", "room as described"],
+          "friction_tolerance_minutes_max": 12
+        },
+        "room_first_impression": {
+          "must_have": ["clean", "promised amenities present", "wifi works free", "safe"],
+          "tolerance_for_dated_decor": "high",
+          "dealbreakers": ["dirt", "broken anything", "not as advertised photos"]
+        },
+        "evening_1": {
+          "dining_preference": { "external_cheap": 0.60, "hotel_only_if_deal": 0.15, "supermarket_in_room": 0.20, "skip": 0.05 },
+          "avg_dinner_spend_eur": 18
+        },
+        "morning_routine": {
+          "breakfast_preference": { "hotel_if_included": 0.70, "external_cheap": 0.25, "skip": 0.05 },
+          "will_pay_for_breakfast_addon_only_if_under_eur": 15
+        },
+        "daytime_activity": {
+          "primary_activities": ["sightseeing_free", "beach_free", "city_walking"],
+          "paid_activities_probability": 0.25
+        },
+        "lunch": {
+          "hotel_probability": 0.10,
+          "external_cheap": 0.80,
+          "self_made": 0.10
+        },
+        "dinner": {
+          "external_cheap": 0.75,
+          "hotel_deal_only": 0.15,
+          "self_made": 0.10
+        },
+        "last_morning": {
+          "checkout_preference": { "front_desk_bill_review": 0.65, "mobile_express": 0.30, "auto": 0.05 },
+          "bill_dispute_probability_if_surprise_charge": 0.80
+        }
+      },
+      "daily_spending_eur_range": {
+        "breakfast_paid": [0, 12],
+        "lunch": [0, 0],
+        "dinner": [0, 0],
+        "snacks": [0, 15],
+        "parking": [0, 25]
+      },
+      "avg_stay_total_ancillary_eur": 40,
+      "upsell_acceptance_probability": {
+        "any_paid_upgrade": 0.05,
+        "breakfast_only_if_big_discount": 0.20,
+        "spa": 0.01,
+        "room_upgrade_paid": 0.03
+      },
+      "sensation_weights": {
+        "value": 0.30,
+        "cleanliness": 0.18,
+        "safety": 0.12,
+        "amenity_usability": 0.10,
+        "comfort_physical": 0.10,
+        "service_quality": 0.08,
+        "culinary": 0.05,
+        "crowd": 0.04,
+        "modernity": 0.01,
+        "authenticity": 0.01,
+        "personalization": 0.01,
+        "speed": 0.00
+      },
+      "memorable_moment_triggers": {
+        "positive": ["total cost matches booking exactly", "free upgrade without strings", "actually free parking as advertised", "generous included breakfast", "clean room despite budget tier"],
+        "negative": ["surprise resort fee at check-in", "parking was advertised free, actually paid", "rate parity violation — OTA cheaper", "hidden city tax", "upsell pressure at every touchpoint"]
+      },
+      "review_behavior": {
+        "write_review_probability": 0.48,
+        "platform_preference": { "booking.com": 0.55, "google": 0.25, "tripadvisor": 0.15, "expedia": 0.05 },
+        "typical_length_words": [80, 250],
+        "tone": "value-math-oriented, comparison-referenced, will itemize any surprise fees",
+        "will_downrate_for_fees": true
+      },
+      "social_media_probability": {
+        "twitter_fee_complaint": 0.15
+      }
+    },
+
+    "loyalty_maximizer": {
+      "typical_stay_length_nights": [2, 5],
+      "daily_routine": {
+        "arrival": {
+          "typical_window": "any",
+          "emotion_entering": ["benefit-tracking", "status-aware", "program-knowledgeable"],
+          "key_expectations": ["tier recognition verbal + visual", "upgrade eligibility checked", "lounge access if applicable", "welcome amenity per status"],
+          "disappointment_if_no_recognition": 0.9
+        },
+        "room_first_impression": {
+          "must_have": ["upgrade appropriate for status", "welcome amenity matching tier", "bonus points confirmed", "lounge access materials in room"]
+        },
+        "evening_1": {
+          "dining_preference": { "lounge_if_available": 0.60, "hotel_restaurant_points_earn": 0.20, "external": 0.15, "room_service": 0.05 },
+          "lounge_max_visits_per_day": 3
+        },
+        "morning_routine": {
+          "breakfast_preference": { "lounge": 0.70, "hotel_if_included_tier": 0.25, "skip": 0.05 }
+        },
+        "daytime_activity": {
+          "primary_activities": ["work_or_business", "local", "hotel_amenities"]
+        },
+        "evening_leisure": {
+          "lounge_cocktail_probability": 0.55
+        },
+        "last_morning": {
+          "checkout_preference": { "express": 0.55, "front_desk_loyalty_thank_you": 0.40, "auto": 0.05 },
+          "will_verify_points_earned_same_day": 0.80
+        }
+      },
+      "daily_spending_eur_range": {
+        "breakfast_paid_extra": [0, 10],
+        "lunch": [0, 45],
+        "dinner": [15, 85],
+        "lounge_tipping": [5, 25],
+        "spa": [0, 120],
+        "activities": [0, 80]
+      },
+      "avg_stay_total_ancillary_eur": 200,
+      "upsell_acceptance_probability": {
+        "suite_upgrade_points_redemption": 0.55,
+        "spa": 0.20,
+        "late_checkout": 0.80,
+        "paid_upgrade_cash": 0.10,
+        "bonus_points_promo": 0.75
+      },
+      "sensation_weights": {
+        "personalization": 0.22,
+        "service_quality": 0.17,
+        "speed": 0.10,
+        "value": 0.10,
+        "amenity_usability": 0.10,
+        "comfort_physical": 0.10,
+        "cleanliness": 0.08,
+        "authenticity": 0.05,
+        "crowd": 0.03,
+        "modernity": 0.03,
+        "culinary": 0.01,
+        "safety": 0.01
+      },
+      "memorable_moment_triggers": {
+        "positive": ["Platinum greeting by name at check-in", "suite upgrade realized", "free late checkout without asking", "points posted next day", "special amenity mentioning loyalty tier"],
+        "negative": ["elite tier not acknowledged", "upgrade 'unavailable' when clearly available", "points error requires calling post-stay", "member rate not auto-applied", "lounge access denied despite tier"]
+      },
+      "review_behavior": {
+        "write_review_probability": 0.55,
+        "platform_preference": { "flyertalk": 0.35, "program_survey": 0.25, "google": 0.20, "reddit_r_awardtravel": 0.15, "tripadvisor": 0.05 },
+        "typical_length_words": [200, 500],
+        "tone": "insider, program-comparative, benefit-specific, names-staff-who-delivered"
+      },
+      "social_media_probability": {
+        "flyertalk_trip_report": 0.20,
+        "reddit_award_post": 0.15
+      }
+    },
+
+    "event_attendee": {
+      "typical_stay_length_nights": [1, 4],
+      "daily_routine": {
+        "arrival": {
+          "typical_window": "varied, often late",
+          "emotion_entering": ["rushed", "event-focused", "location-dependent"],
+          "key_expectations": ["group rate honored", "proximity to venue confirmed", "reliable wifi for event prep"],
+          "friction_tolerance_minutes_max": 10
+        },
+        "room_first_impression": {
+          "must_have": ["iron + ironing board", "decent mirror", "quiet", "working lighting for getting ready"],
+          "nice_to_have": ["shoe shine", "garment steamer", "good shower pressure"]
+        },
+        "evening_1": {
+          "dining_preference": { "event_catering": 0.60, "late_hotel_bar": 0.20, "nearby_late_food": 0.15, "room_service": 0.05 }
+        },
+        "morning_routine": {
+          "wake_window": "06:30-08:30",
+          "breakfast_preference": { "hotel_grab_go": 0.55, "event_venue": 0.35, "skip": 0.10 }
+        },
+        "daytime_activity": {
+          "primary_activity": "at_event_venue",
+          "in_hotel_probability_during_event": 0.05
+        },
+        "dinner": {
+          "pattern": { "event_dinner_external": 0.55, "hotel_with_colleagues": 0.25, "room_service_late": 0.20 },
+          "late_night_bar_probability": 0.40
+        },
+        "last_morning": {
+          "checkout_preference": { "express": 0.40, "late_checkout_if_flight_evening": 0.30, "luggage_hold": 0.30 },
+          "typical_time": "10:00-12:00"
+        }
+      },
+      "daily_spending_eur_range": {
+        "breakfast": [0, 15],
+        "lunch": [0, 0],
+        "dinner": [40, 120],
+        "late_bar": [15, 80],
+        "room_service_late": [0, 55]
+      },
+      "avg_stay_total_ancillary_eur": 180,
+      "upsell_acceptance_probability": {
+        "late_checkout": 0.85,
+        "luggage_hold": 0.95,
+        "shoe_shine": 0.30,
+        "airport_transfer": 0.35,
+        "room_service_late_night": 0.45
+      },
+      "sensation_weights": {
+        "speed": 0.20,
+        "comfort_physical": 0.15,
+        "amenity_usability": 0.15,
+        "cleanliness": 0.10,
+        "service_quality": 0.10,
+        "crowd": 0.08,
+        "value": 0.08,
+        "modernity": 0.05,
+        "culinary": 0.03,
+        "authenticity": 0.03,
+        "personalization": 0.02,
+        "safety": 0.01
+      },
+      "memorable_moment_triggers": {
+        "positive": ["fast check-in under 3 min", "iron at ready in room", "shuttle on time to venue", "late checkout granted", "quiet floor"],
+        "negative": ["group code not honored", "slow check-in with 6 colleagues behind me", "noisy floor disrupts before-speech prep", "shuttle missed"]
+      },
+      "review_behavior": {
+        "write_review_probability": 0.28,
+        "platform_preference": { "google": 0.45, "linkedin_checkin": 0.10, "tripadvisor": 0.30, "booking.com": 0.15 },
+        "typical_length_words": [60, 180],
+        "tone": "logistical, event-context, efficient"
+      },
+      "social_media_probability": {
+        "linkedin_event_post": 0.20,
+        "twitter_event_photo": 0.10
+      }
+    }
+  }
+}

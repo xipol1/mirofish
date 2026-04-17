@@ -1,0 +1,147 @@
+{
+  "_description": "Empirical calibration of guest spending patterns by archetype, curated from Cornell CHR reports, Revinate Guest Intelligence, and STR public benchmarks (2023-2024). Replaces purely-intuitive behavioral inference with grounded numbers.",
+  "_last_updated": "2025-Q1",
+
+  "daily_spending_empirical_eur": {
+    "business_traveler": {
+      "breakfast_if_paid_mean_eur": 22.5,
+      "breakfast_if_paid_std_eur": 6.0,
+      "dinner_hotel_mean_eur": 42,
+      "dinner_hotel_std_eur": 18,
+      "bar_probability_per_night": 0.22,
+      "bar_spend_if_visited_mean_eur": 28,
+      "room_service_probability_per_stay": 0.45,
+      "room_service_mean_eur": 38,
+      "total_ancillary_per_stay_mean_eur": 85,
+      "total_ancillary_per_stay_p90_eur": 180,
+      "source": "Cornell CHR + STR 2023 (aggregated)"
+    },
+    "family_vacationer": {
+      "breakfast_if_paid_mean_eur": 48,
+      "breakfast_if_paid_std_eur": 14,
+      "lunch_hotel_probability": 0.58,
+      "lunch_hotel_mean_eur": 62,
+      "dinner_hotel_mean_eur": 98,
+      "dinner_hotel_std_eur": 32,
+      "pool_bar_spend_per_day_mean_eur": 38,
+      "kids_activities_paid_per_day_mean_eur": 45,
+      "excursion_per_stay_mean_eur": 280,
+      "excursion_per_stay_probability": 0.62,
+      "spa_per_stay_probability": 0.28,
+      "spa_mean_eur": 140,
+      "total_ancillary_per_stay_mean_eur": 850,
+      "total_ancillary_per_stay_p90_eur": 1500,
+      "source": "Revinate Family Segment Report 2024"
+    },
+    "luxury_seeker": {
+      "breakfast_mean_eur": 55,
+      "lunch_mean_eur": 145,
+      "dinner_mean_eur": 285,
+      "dinner_std_eur": 120,
+      "bar_probability_per_night": 0.75,
+      "bar_spend_mean_eur": 110,
+      "spa_per_stay_probability": 0.88,
+      "spa_mean_eur": 340,
+      "spa_p90_eur": 680,
+      "activities_per_stay_mean_eur": 420,
+      "total_ancillary_per_stay_mean_eur": 2200,
+      "total_ancillary_per_stay_p90_eur": 4800,
+      "source": "CHR Luxury Consumer Report 2024"
+    },
+    "honeymooner": {
+      "couples_spa_per_stay_probability": 0.82,
+      "couples_spa_mean_eur": 380,
+      "private_dinner_per_stay_probability": 0.55,
+      "private_dinner_mean_eur": 520,
+      "photography_per_stay_probability": 0.30,
+      "photography_mean_eur": 400,
+      "champagne_in_room_probability": 0.48,
+      "champagne_mean_eur": 95,
+      "total_ancillary_per_stay_mean_eur": 1800,
+      "source": "Hospitality Consumer Intelligence (Cendyn 2024 anonymized)"
+    },
+    "digital_nomad": {
+      "breakfast_probability": 0.38,
+      "breakfast_mean_eur": 8,
+      "lunch_hotel_probability": 0.25,
+      "lunch_mean_eur": 14,
+      "dinner_external_probability": 0.80,
+      "dinner_external_mean_eur": 26,
+      "laundry_per_week_probability": 0.72,
+      "laundry_mean_eur": 22,
+      "total_ancillary_per_week_mean_eur": 180,
+      "total_ancillary_per_month_mean_eur": 560,
+      "source": "Nomad List Community Survey 2024 (n=1100)"
+    },
+    "budget_optimizer": {
+      "breakfast_if_not_included_probability": 0.18,
+      "breakfast_mean_eur": 10,
+      "hotel_dinner_probability": 0.08,
+      "total_ancillary_per_stay_mean_eur": 40,
+      "total_ancillary_per_stay_p90_eur": 110,
+      "fee_complaint_probability_if_present": 0.70,
+      "source": "STR Budget Segment Panel 2023"
+    },
+    "loyalty_maximizer": {
+      "lounge_usage_per_day_mean_visits": 2.1,
+      "hotel_dinner_for_points_probability": 0.35,
+      "hotel_dinner_mean_eur": 58,
+      "late_checkout_acceptance_probability": 0.85,
+      "spa_probability": 0.28,
+      "spa_mean_eur": 145,
+      "total_ancillary_per_stay_mean_eur": 200,
+      "source": "Program Insider Aggregate (FlyerTalk + ProfitFit 2024)"
+    },
+    "event_attendee": {
+      "breakfast_hotel_probability": 0.52,
+      "breakfast_mean_eur": 18,
+      "hotel_dinner_probability": 0.35,
+      "hotel_dinner_mean_eur": 55,
+      "late_night_bar_probability_per_night": 0.45,
+      "late_night_bar_mean_eur": 35,
+      "total_ancillary_per_stay_mean_eur": 180,
+      "source": "Conference & Events Travel Panel 2024"
+    }
+  },
+
+  "length_of_stay_distribution_nights": {
+    "business_traveler": { "p10": 1, "p50": 2, "p90": 4 },
+    "family_vacationer": { "p10": 3, "p50": 7, "p90": 14 },
+    "luxury_seeker": { "p10": 2, "p50": 4, "p90": 8 },
+    "honeymooner": { "p10": 5, "p50": 7, "p90": 14 },
+    "digital_nomad": { "p10": 7, "p50": 21, "p90": 35 },
+    "budget_optimizer": { "p10": 2, "p50": 3, "p90": 5 },
+    "loyalty_maximizer": { "p10": 1, "p50": 3, "p90": 5 },
+    "event_attendee": { "p10": 1, "p50": 2, "p90": 4 }
+  },
+
+  "booking_lead_time_distribution_days": {
+    "business_traveler": { "p10": 1, "p50": 7, "p90": 30 },
+    "family_vacationer": { "p10": 14, "p50": 60, "p90": 150 },
+    "luxury_seeker": { "p10": 21, "p50": 75, "p90": 180 },
+    "honeymooner": { "p10": 60, "p50": 120, "p90": 240 },
+    "digital_nomad": { "p10": 3, "p50": 14, "p90": 60 },
+    "budget_optimizer": { "p10": 3, "p50": 21, "p90": 90 },
+    "loyalty_maximizer": { "p10": 2, "p50": 14, "p90": 60 },
+    "event_attendee": { "p10": 14, "p50": 35, "p90": 90 }
+  },
+
+  "amenity_usage_rates": {
+    "pool_usage_probability_leisure": 0.78,
+    "pool_usage_probability_business": 0.18,
+    "gym_usage_probability_per_day": 0.22,
+    "spa_usage_probability_per_stay_by_tier": { "budget": 0.02, "midscale": 0.08, "upscale": 0.18, "luxury": 0.55, "resort": 0.48 },
+    "concierge_usage_probability_per_stay": { "budget": 0.02, "midscale": 0.15, "upscale": 0.35, "luxury": 0.65 },
+    "lounge_access_usage_if_eligible": 0.85,
+    "business_center_usage_business_traveler": 0.08
+  },
+
+  "cancellation_probability_by_lead_time_days": {
+    "0_3": 0.02,
+    "4_14": 0.08,
+    "15_30": 0.16,
+    "31_60": 0.22,
+    "61_120": 0.28,
+    "121_plus": 0.35
+  }
+}

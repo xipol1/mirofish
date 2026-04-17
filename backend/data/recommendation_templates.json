@@ -1,0 +1,212 @@
+{
+  "trust_gap_no_social_proof": {
+    "problem_signal": "trust_score < 0.5 AND missing_signals includes 'social_proof'",
+    "severity_default": "high",
+    "actions": [
+      {
+        "action": "Add 3 recognizable customer logos above the fold, ideally from the target segment ({vertical}, {company_size} company size)",
+        "effort": "quick_fix",
+        "impact_range": [12, 20],
+        "tradeoff": "Requires permission from the customers; generic or unrelated logos can REDUCE trust"
+      },
+      {
+        "action": "Add a named testimonial (with real name, role, and company) from a {company_size} {vertical} customer that directly addresses the top objection: '{top_objection}'",
+        "effort": "medium",
+        "impact_range": [15, 25],
+        "tradeoff": "Requires authentic customer; fake-looking testimonials decrease trust below baseline"
+      },
+      {
+        "action": "Add a case study card above the pricing section showing quantified outcome for a comparable customer (e.g. 'Cut onboarding time by 43% for a 50-person SaaS team')",
+        "effort": "medium",
+        "impact_range": [10, 18],
+        "tradeoff": "Requires real data; higher effort to produce"
+      }
+    ]
+  },
+  "trust_gap_no_security_compliance": {
+    "problem_signal": "audience_vector.buying_stage in ['evaluating','ready'] AND missing_signals includes 'security_compliance' AND vertical in ['saas','fintech','healthcare']",
+    "severity_default": "high",
+    "actions": [
+      {
+        "action": "Add SOC 2 / GDPR / HIPAA (as applicable) badge in the footer and a dedicated /security page accessible in 2 clicks from home",
+        "effort": "medium",
+        "impact_range": [8, 15],
+        "tradeoff": "Cannot display badges without actual compliance; fake badges create legal risk"
+      },
+      {
+        "action": "Link to your changelog / security page from the footer of the pricing page — enterprise buyers check these reflexively",
+        "effort": "quick_fix",
+        "impact_range": [5, 10],
+        "tradeoff": "None if the pages exist; if they don't, don't link"
+      }
+    ]
+  },
+  "pricing_paralysis": {
+    "problem_signal": "friction_density.pricing > 1.5 OR patterns include 'tier_choice_confusion'",
+    "severity_default": "high",
+    "actions": [
+      {
+        "action": "Reduce pricing from {current_tier_count} tiers to 2 (Starter + Business). Eliminate the middle tier — data shows users treating it as a decoy",
+        "effort": "medium",
+        "impact_range": [8, 14],
+        "tradeoff": "Loses anchoring effect of 3-tier psychology; some users read 3 tiers as 'legitimate enterprise'"
+      },
+      {
+        "action": "Add a 'Which tier is right for me?' 3-question quiz above the pricing table, showing a recommended tier dynamically",
+        "effort": "major_change",
+        "impact_range": [12, 22],
+        "tradeoff": "Development effort; if too clever, reduces trust"
+      },
+      {
+        "action": "Sharpen the differentiation between tiers: replace overlapping features with exclusive, named benefits per tier. Use specific limits ('up to 100 users') instead of vague words ('enterprise-ready')",
+        "effort": "quick_fix",
+        "impact_range": [5, 12],
+        "tradeoff": "None; this is a copy exercise"
+      }
+    ]
+  },
+  "pricing_hidden_or_contact_sales": {
+    "problem_signal": "scenario.pricing.visible == false OR pricing.tiers includes 'Contact us' only",
+    "severity_default": "high",
+    "actions": [
+      {
+        "action": "Publish an anchor number for the top/enterprise tier, even if it says 'Starting at $X / year'. Hidden pricing causes 40-60% of your target segment to bounce without engaging",
+        "effort": "quick_fix",
+        "impact_range": [18, 28],
+        "tradeoff": "Loses negotiation leverage in enterprise sales; competitors can see your floor"
+      }
+    ]
+  },
+  "clarity_gap_hero": {
+    "problem_signal": "attention_decay.hero < 0.7 OR patterns include 'generic_hero'",
+    "severity_default": "medium",
+    "actions": [
+      {
+        "action": "Rewrite hero headline from '{current_headline}' to one that names the exact pain and quantifies the outcome (e.g. 'Cut support ticket time by 60% for teams of 10-50'). Replace abstract transformation language",
+        "effort": "quick_fix",
+        "impact_range": [10, 18],
+        "tradeoff": "Narrower headline can reduce reach to adjacent segments"
+      },
+      {
+        "action": "Replace hero video/illustration with a product screenshot showing the actual UI solving the headline pain",
+        "effort": "quick_fix",
+        "impact_range": [8, 15],
+        "tradeoff": "Loses 'brand' feel; some teams see this as too utilitarian"
+      }
+    ]
+  },
+  "clarity_gap_features_generic": {
+    "problem_signal": "patterns include 'vague_value_props' OR friction_density.features > 1.0",
+    "severity_default": "medium",
+    "actions": [
+      {
+        "action": "Replace each feature card's abstract benefit ('Powerful analytics') with a concrete, quantified outcome ('See which of your 40 landing pages converts 3x above average in 8 seconds')",
+        "effort": "quick_fix",
+        "impact_range": [8, 14],
+        "tradeoff": "None if claims are real; risky if claims don't hold up"
+      },
+      {
+        "action": "Add a screenshot or animated GIF next to each feature showing the actual UI in context",
+        "effort": "medium",
+        "impact_range": [10, 18],
+        "tradeoff": "Outdated UI in screenshots undermines trust; must maintain"
+      }
+    ]
+  },
+  "cta_friction": {
+    "problem_signal": "attention_decay.cta < 0.5 OR patterns include 'cta_unclear'",
+    "severity_default": "medium",
+    "actions": [
+      {
+        "action": "Change primary CTA from '{current_cta}' to an action-specific verb + outcome (e.g. 'Start a free 14-day trial' or 'See pricing'). Remove 'Get started' — it's the lowest-converting CTA phrase in SaaS",
+        "effort": "quick_fix",
+        "impact_range": [6, 12],
+        "tradeoff": "Narrows funnel — users who wanted to 'explore' may leave"
+      },
+      {
+        "action": "Add a sticky header CTA that remains visible on scroll. Target users who decide after seeing evidence below the fold",
+        "effort": "medium",
+        "impact_range": [5, 10],
+        "tradeoff": "Can feel pushy; test on mobile carefully"
+      }
+    ]
+  },
+  "onboarding_forced_friction": {
+    "problem_signal": "patterns include 'forced_setup' OR patterns include 'credit_card_required_trial'",
+    "severity_default": "medium",
+    "actions": [
+      {
+        "action": "Remove credit card requirement from free trial. Enterprise-gated products keep card, product-led do not. If your target is SMB/PLG, this is a ~30% conversion tax",
+        "effort": "medium",
+        "impact_range": [20, 35],
+        "tradeoff": "Higher churn during trial; requires upgrade prompts"
+      },
+      {
+        "action": "Shorten first-run setup from {current_steps} steps to max 3. Defer integrations and team invites until after first aha-moment",
+        "effort": "major_change",
+        "impact_range": [15, 25],
+        "tradeoff": "Users arrive at less-configured state; may increase support load"
+      }
+    ]
+  },
+  "objection_unhandled": {
+    "problem_signal": "objection_coverage < 0.6",
+    "severity_default": "medium",
+    "actions": [
+      {
+        "action": "Add a focused FAQ section addressing the top 3 unresolved objections: {top_objections}. Each FAQ answer should be quantified and specific",
+        "effort": "quick_fix",
+        "impact_range": [8, 15],
+        "tradeoff": "Long FAQ sections can dilute focus; keep to 5-7 max"
+      },
+      {
+        "action": "Add an in-line objection-handler after the pricing section: 'Worried about {top_objection}? Here's how we handle that.' with a 2-sentence credible answer",
+        "effort": "medium",
+        "impact_range": [10, 18],
+        "tradeoff": "None; inline objection-handling is higher-converting than FAQ"
+      }
+    ]
+  },
+  "message_mismatch_ad_to_page": {
+    "problem_signal": "task_type == 'marketing_campaign' AND segment_divergence.adjacent_curious.confusion > 0.6",
+    "severity_default": "high",
+    "actions": [
+      {
+        "action": "The landing page headline and hero image must exactly mirror the ad promise. If ad says 'Cut invoice time by 80%', landing page hero must say the same — not 'Transform your finance stack'",
+        "effort": "quick_fix",
+        "impact_range": [15, 30],
+        "tradeoff": "Multiple ad variants require multiple landing pages"
+      }
+    ]
+  },
+  "segment_mismatch": {
+    "problem_signal": "segment_divergence shows priced_out > 0.5",
+    "severity_default": "medium",
+    "actions": [
+      {
+        "action": "Your traffic appears to include a segment that's priced out. Either tighten ad targeting to filter this segment, OR add a graceful low-tier option that captures them as leads",
+        "effort": "medium",
+        "impact_range": [8, 15],
+        "tradeoff": "Entry tier may cannibalize paid conversions; test carefully"
+      }
+    ]
+  },
+  "feature_switching_cost_unaddressed": {
+    "problem_signal": "task_type == 'feature_validation' AND patterns include 'switching_cost_concern'",
+    "severity_default": "high",
+    "actions": [
+      {
+        "action": "Add a dedicated 'Migrating from {competitor}?' section showing: data import, team migration steps, and a 1-click import tool (or concierge migration service)",
+        "effort": "major_change",
+        "impact_range": [18, 30],
+        "tradeoff": "Significant engineering investment; worth it for product-led growth"
+      },
+      {
+        "action": "Add a direct comparison table: {competitor} vs. {your_product}, with specific feature-level comparisons, not vague 'more modern UX'",
+        "effort": "medium",
+        "impact_range": [10, 18],
+        "tradeoff": "Legal sensitivity around direct competitor claims; keep factual"
+      }
+    ]
+  }
+}

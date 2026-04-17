@@ -1,0 +1,402 @@
+[
+  {
+    "id": "saas-pricing-001",
+    "archetype_affinity": ["bootstrap_founder", "value_shopper", "constrained_buyer"],
+    "vertical": "saas",
+    "role": "founder",
+    "pain_quote": "Every SaaS promises to save me 10 hours/week but charges $99/user/mo. I'd pay half if the middle tier wasn't obviously crippled to force me into Pro.",
+    "language_markers": ["blunt", "frustrated", "math-literate", "skeptical of marketing"],
+    "concerns": ["feature gating", "per-seat pricing", "opacity", "middle tier devalued"],
+    "source_type": "reddit_r_saas"
+  },
+  {
+    "id": "saas-pricing-002",
+    "archetype_affinity": ["skeptical_evaluator", "premium_candidate"],
+    "vertical": "saas",
+    "role": "VP Product",
+    "pain_quote": "I need to see a live product demo or sandbox before I commit any budget. No video, no chatbot. I've been burned too many times by sales-qualified signups.",
+    "language_markers": ["professional", "wary", "process-oriented"],
+    "concerns": ["sales friction", "opaque onboarding", "time-to-value unclear"],
+    "source_type": "indiehackers"
+  },
+  {
+    "id": "saas-trust-001",
+    "archetype_affinity": ["skeptical_evaluator", "constrained_buyer"],
+    "vertical": "saas",
+    "role": "Head of Engineering",
+    "pain_quote": "If you don't have at least 3 recognizable customer logos or a SOC2 badge, I'm closing the tab. Enterprise buyers in 2025 don't gamble on no-name vendors.",
+    "language_markers": ["direct", "compliance-aware", "risk-averse"],
+    "concerns": ["security/compliance", "vendor risk", "no social proof"],
+    "source_type": "linkedin_public_post"
+  },
+  {
+    "id": "saas-onboarding-001",
+    "archetype_affinity": ["motivated_starter", "easily_confused"],
+    "vertical": "saas",
+    "role": "Marketing Manager",
+    "pain_quote": "Signed up, had to watch a 12-minute video and connect 3 integrations before I could even try the core feature. I bounced. Let me taste the product first.",
+    "language_markers": ["impatient", "feedback-oriented"],
+    "concerns": ["long time-to-first-value", "forced tutorials", "integration lock-in"],
+    "source_type": "reddit_r_marketing"
+  },
+  {
+    "id": "saas-features-001",
+    "archetype_affinity": ["current_tool_defender", "target_user"],
+    "vertical": "saas",
+    "role": "Product Manager",
+    "pain_quote": "If this doesn't import from Notion/Linear/Jira on day one, I don't care what your feature list says. Migration cost is the whole decision for me.",
+    "language_markers": ["pragmatic", "cost-aware"],
+    "concerns": ["migration cost", "data portability", "integration"],
+    "source_type": "reddit_r_product_management"
+  },
+  {
+    "id": "marketing-campaign-001",
+    "archetype_affinity": ["in_market_buyer", "adjacent_curious"],
+    "vertical": "b2b_marketing",
+    "role": "Growth Lead",
+    "pain_quote": "Ads that lead me to a generic homepage are instant back-button. Match the ad promise on the landing page or I assume you're lying.",
+    "language_markers": ["experience-led", "performance-marketing"],
+    "concerns": ["message match", "ad-to-page coherence", "trust erosion"],
+    "source_type": "twitter_thread"
+  },
+  {
+    "id": "marketing-campaign-002",
+    "archetype_affinity": ["priced_out", "adjacent_curious"],
+    "vertical": "b2c",
+    "role": "Consumer",
+    "pain_quote": "The ad showed a $29 product. The landing page asked for email, then redirected me to a $299 course. This is bait-and-switch and I'm reporting it.",
+    "language_markers": ["irritated", "distrustful", "consumer-rights aware"],
+    "concerns": ["pricing deception", "forced email capture", "dark patterns"],
+    "source_type": "reddit_r_ads"
+  },
+  {
+    "id": "ecommerce-trust-001",
+    "archetype_affinity": ["skeptical_evaluator", "constrained_buyer"],
+    "vertical": "ecommerce",
+    "role": "Buyer",
+    "pain_quote": "No return policy visible? No shipping timeframe? No reviews? I'm out. I'll buy the same thing on Amazon for 10% more just for the peace of mind.",
+    "language_markers": ["defensive", "risk-averse", "time-poor"],
+    "concerns": ["return policy unclear", "shipping anxiety", "no reviews"],
+    "source_type": "g2_review_style"
+  },
+  {
+    "id": "saas-feature-validation-001",
+    "archetype_affinity": ["target_user", "edge_case"],
+    "vertical": "saas",
+    "role": "Ops Manager",
+    "pain_quote": "I have 8,000 rows and the demo shows 20. Will this actually scale to my use case or is it toy software dressed up?",
+    "language_markers": ["scale-aware", "wary of demos"],
+    "concerns": ["real-world scale", "demo vs reality gap", "performance"],
+    "source_type": "hn_thread"
+  },
+  {
+    "id": "saas-feature-validation-002",
+    "archetype_affinity": ["current_tool_defender"],
+    "vertical": "saas",
+    "role": "Senior Engineer",
+    "pain_quote": "We already have a spreadsheet that does this. Convince me why a $200/mo tool beats free Excel I already pay Microsoft for.",
+    "language_markers": ["pragmatic", "cost-justification"],
+    "concerns": ["justify over free", "IT sprawl", "adoption cost"],
+    "source_type": "reddit_r_devops"
+  },
+  {
+    "id": "saas-pricing-003",
+    "archetype_affinity": ["premium_candidate"],
+    "vertical": "saas",
+    "role": "Director of Sales",
+    "pain_quote": "Don't make me contact sales. If your highest tier is 'Let's talk', I assume it's $50K/year and I'm out. Put a number, even if it's high.",
+    "language_markers": ["time-poor", "transparency-oriented"],
+    "concerns": ["opaque enterprise pricing", "contact-sales friction", "budget planning"],
+    "source_type": "linkedin_public_post"
+  },
+  {
+    "id": "saas-pricing-004",
+    "archetype_affinity": ["fast_mover", "bootstrap_founder"],
+    "vertical": "saas",
+    "role": "Solo founder",
+    "pain_quote": "I want to sign up, pay with card, and be using it in 90 seconds. Any form of 'Book a demo' is a signal you're not built for me.",
+    "language_markers": ["impulsive", "self-serve-loving", "impatient"],
+    "concerns": ["friction to start", "sales-led vs product-led"],
+    "source_type": "indiehackers"
+  },
+  {
+    "id": "marketing-campaign-003",
+    "archetype_affinity": ["in_market_buyer"],
+    "vertical": "saas",
+    "role": "Head of Marketing",
+    "pain_quote": "Stop with the hero videos. I want to see the actual product UI within 3 seconds of landing. Videos are corporate insecurity.",
+    "language_markers": ["direct", "visual-first", "impatient"],
+    "concerns": ["video vs product shot", "brand fluff", "substance"],
+    "source_type": "twitter_thread"
+  },
+  {
+    "id": "saas-onboarding-002",
+    "archetype_affinity": ["impatient_skipper"],
+    "vertical": "saas",
+    "role": "Contractor",
+    "pain_quote": "I skip every 'welcome' modal. If your onboarding depends on me reading them, your onboarding is broken.",
+    "language_markers": ["task-focused", "tutorial-hostile"],
+    "concerns": ["forced tutorials", "discoverability through action"],
+    "source_type": "hn_thread"
+  },
+  {
+    "id": "saas-onboarding-003",
+    "archetype_affinity": ["motivated_starter"],
+    "vertical": "saas",
+    "role": "Team Lead",
+    "pain_quote": "Best onboarding I had this year: tool asked 3 questions, pre-populated my workspace with sample data matching my answers, and I was productive in 2 minutes.",
+    "language_markers": ["appreciative", "detail-oriented"],
+    "concerns": ["contextual setup", "smart defaults", "sample data"],
+    "source_type": "indiehackers"
+  },
+  {
+    "id": "saas-pricing-005",
+    "archetype_affinity": ["value_shopper", "constrained_buyer"],
+    "vertical": "saas",
+    "role": "Finance Controller",
+    "pain_quote": "The 'most popular' badge is manipulative when the tier above costs 3x. I do my own math, show me the real breakdown.",
+    "language_markers": ["analytical", "distrustful of design tricks"],
+    "concerns": ["pricing page psychology", "authentic comparison", "anchoring abuse"],
+    "source_type": "linkedin_public_post"
+  },
+  {
+    "id": "saas-trust-002",
+    "archetype_affinity": ["skeptical_evaluator"],
+    "vertical": "saas",
+    "role": "Security Officer",
+    "pain_quote": "If your pricing page links to 'Enterprise' but your security page is a 404 or says 'coming soon', you're not enterprise. Full stop.",
+    "language_markers": ["compliance-aware", "process-driven"],
+    "concerns": ["enterprise claims unsupported", "security theater"],
+    "source_type": "reddit_r_security"
+  },
+  {
+    "id": "b2c-landing-001",
+    "archetype_affinity": ["in_market_buyer", "priced_out"],
+    "vertical": "b2c",
+    "role": "Consumer",
+    "pain_quote": "If I can't find the price in 5 seconds I assume it's expensive and leave. Hidden pricing = luxury pricing = not for me.",
+    "language_markers": ["time-poor", "price-primed"],
+    "concerns": ["pricing visibility", "above-fold placement"],
+    "source_type": "reddit_r_frugal"
+  },
+  {
+    "id": "saas-feature-validation-003",
+    "archetype_affinity": ["target_user"],
+    "vertical": "saas",
+    "role": "Support Lead",
+    "pain_quote": "I don't need 47 features. I need the 3 I use every day to be fast, reliable, and not buried under settings menus.",
+    "language_markers": ["pragmatic", "depth-over-breadth"],
+    "concerns": ["feature bloat", "daily driver reliability"],
+    "source_type": "hn_thread"
+  },
+  {
+    "id": "saas-pricing-006",
+    "archetype_affinity": ["bootstrap_founder"],
+    "vertical": "saas",
+    "role": "Solo founder",
+    "pain_quote": "I'll take a worse product with transparent pricing over a great product with 'Contact us'. Trust compounds.",
+    "language_markers": ["transparency-first", "trust-focused"],
+    "concerns": ["transparency as trust signal"],
+    "source_type": "twitter_thread"
+  },
+  {
+    "id": "marketing-campaign-004",
+    "archetype_affinity": ["adjacent_curious"],
+    "vertical": "b2b_marketing",
+    "role": "CMO",
+    "pain_quote": "Campaigns that say 'Transform your business' don't mean anything. Give me one concrete, quantified outcome or I tune out.",
+    "language_markers": ["tactical", "outcome-oriented"],
+    "concerns": ["vague value props", "abstract transformation language"],
+    "source_type": "linkedin_public_post"
+  },
+  {
+    "id": "saas-trust-003",
+    "archetype_affinity": ["skeptical_evaluator"],
+    "vertical": "saas",
+    "role": "Procurement Lead",
+    "pain_quote": "Your 'trusted by 10,000 companies' is meaningless if I can't name 3 of them. Specificity > volume.",
+    "language_markers": ["enterprise-procurement", "evidence-seeking"],
+    "concerns": ["vanity metrics", "named social proof"],
+    "source_type": "reddit_r_procurement"
+  },
+  {
+    "id": "saas-onboarding-004",
+    "archetype_affinity": ["easily_confused"],
+    "vertical": "saas",
+    "role": "Non-technical PM",
+    "pain_quote": "I hit 'Sign up' and got dropped into an empty dashboard with no arrows, no hints, no 'start here'. I stared at it for 30 seconds and left.",
+    "language_markers": ["non-technical", "guidance-seeking"],
+    "concerns": ["blank slate syndrome", "empty states"],
+    "source_type": "hn_thread"
+  },
+  {
+    "id": "ecommerce-landing-001",
+    "archetype_affinity": ["in_market_buyer", "priced_out"],
+    "vertical": "ecommerce",
+    "role": "Shopper",
+    "pain_quote": "If shipping cost isn't shown before I enter my address, I leave. I've been stung too many times by 'free shipping' surcharged at checkout.",
+    "language_markers": ["defensive", "e-com savvy"],
+    "concerns": ["surprise shipping cost", "price transparency"],
+    "source_type": "reddit_r_shopping"
+  },
+  {
+    "id": "saas-feature-validation-004",
+    "archetype_affinity": ["edge_case"],
+    "vertical": "saas",
+    "role": "Agency owner",
+    "pain_quote": "Works great for 5 clients. What about 150? Your demos and testimonials all show tiny accounts. Show me the multi-tenant story.",
+    "language_markers": ["scale-skeptical", "agency-perspective"],
+    "concerns": ["multi-tenant", "scale edge cases", "real-world capacity"],
+    "source_type": "reddit_r_agency"
+  },
+  {
+    "id": "saas-pricing-007",
+    "archetype_affinity": ["value_shopper"],
+    "vertical": "saas",
+    "role": "Department head",
+    "pain_quote": "Annual discount of 17% isn't a deal. That's just monthly masquerading. Real annual pricing should be 20-30% off or don't bother.",
+    "language_markers": ["analytical", "discount-savvy"],
+    "concerns": ["weak annual discount", "perceived as pressure tactic"],
+    "source_type": "linkedin_public_post"
+  },
+  {
+    "id": "saas-trust-004",
+    "archetype_affinity": ["skeptical_evaluator"],
+    "vertical": "saas",
+    "role": "CTO",
+    "pain_quote": "Your changelog is the single best trust signal. If it's empty or last updated 8 months ago, you're dying or dead.",
+    "language_markers": ["engineering-led", "signal-reader"],
+    "concerns": ["product velocity signals", "abandonment fear"],
+    "source_type": "hn_thread"
+  },
+  {
+    "id": "saas-feature-validation-005",
+    "archetype_affinity": ["current_tool_defender"],
+    "vertical": "saas",
+    "role": "Enterprise buyer",
+    "pain_quote": "Our team already uses [competitor]. You need to tell me WHY I should pay the switching cost, in specific terms, not 'better UX'.",
+    "language_markers": ["switching-cost aware", "competitive-minded"],
+    "concerns": ["switching cost justification", "direct competitor comparison"],
+    "source_type": "g2_review_style"
+  },
+  {
+    "id": "b2c-marketing-001",
+    "archetype_affinity": ["in_market_buyer"],
+    "vertical": "b2c",
+    "role": "Consumer",
+    "pain_quote": "Testimonials from 'Sarah M., happy customer' are fake to me. Give me a name, a face, a linked profile, or don't bother.",
+    "language_markers": ["authenticity-focused", "pattern-aware"],
+    "concerns": ["generic testimonials", "authenticity signals"],
+    "source_type": "reddit_r_ads"
+  },
+  {
+    "id": "saas-onboarding-005",
+    "archetype_affinity": ["motivated_starter", "impatient_skipper"],
+    "vertical": "saas",
+    "role": "Data Analyst",
+    "pain_quote": "The best feature during trial is the 'reset to demo data' button. Let me break things without fear of losing my work.",
+    "language_markers": ["exploratory", "appreciative of design"],
+    "concerns": ["fear of commitment", "reset safety net"],
+    "source_type": "hn_thread"
+  },
+  {
+    "id": "marketing-campaign-005",
+    "archetype_affinity": ["priced_out"],
+    "vertical": "b2b_marketing",
+    "role": "SMB owner",
+    "pain_quote": "Great campaign. Website is for enterprise. Pricing is 5x my budget. I'll remember you fondly and never come back. Segment your traffic.",
+    "language_markers": ["rueful", "segment-aware"],
+    "concerns": ["wrong-segment targeting", "funnel leakage"],
+    "source_type": "twitter_thread"
+  },
+  {
+    "id": "saas-pricing-008",
+    "archetype_affinity": ["premium_candidate", "value_shopper"],
+    "vertical": "saas",
+    "role": "VP Operations",
+    "pain_quote": "Usage-based pricing without a calculator is a red flag. I need to know my bill BEFORE I sign up, not after a surprise $12K month.",
+    "language_markers": ["risk-averse", "cost-control"],
+    "concerns": ["usage-pricing unpredictability", "bill shock fear"],
+    "source_type": "reddit_r_saas"
+  },
+  {
+    "id": "saas-features-002",
+    "archetype_affinity": ["target_user", "current_tool_defender"],
+    "vertical": "saas",
+    "role": "Designer",
+    "pain_quote": "If your tool requires me to leave Figma/Slack/my actual workflow, adoption is dead. Integrate where I live or lose.",
+    "language_markers": ["workflow-native", "integration-demanding"],
+    "concerns": ["workflow disruption", "context-switch cost"],
+    "source_type": "indiehackers"
+  },
+  {
+    "id": "saas-trust-005",
+    "archetype_affinity": ["constrained_buyer"],
+    "vertical": "saas",
+    "role": "Non-profit director",
+    "pain_quote": "A non-profit discount hidden behind 'contact us' is performative. Just say 50% off if you mean it, or say nothing.",
+    "language_markers": ["mission-driven", "performative-detector"],
+    "concerns": ["discount opacity", "performative inclusion"],
+    "source_type": "reddit_r_nonprofit"
+  },
+  {
+    "id": "saas-feature-validation-006",
+    "archetype_affinity": ["edge_case"],
+    "vertical": "saas",
+    "role": "International user",
+    "pain_quote": "Works great if you're in the US. Timezone bugs, currency in $ only, no GDPR mention. I'll wait or go local.",
+    "language_markers": ["non-US", "geographic-aware"],
+    "concerns": ["US-centric product", "compliance gaps", "currency/locale"],
+    "source_type": "reddit_r_eu_tech"
+  },
+  {
+    "id": "marketing-campaign-006",
+    "archetype_affinity": ["in_market_buyer", "adjacent_curious"],
+    "vertical": "b2b_marketing",
+    "role": "Marketing Director",
+    "pain_quote": "The best campaigns teach me something specific in 30 seconds. 'Learn how we grew X by Y' works. 'Transform your strategy' doesn't.",
+    "language_markers": ["learning-oriented", "specificity-seeker"],
+    "concerns": ["value in-ad", "teach-first marketing"],
+    "source_type": "linkedin_public_post"
+  },
+  {
+    "id": "saas-pricing-009",
+    "archetype_affinity": ["fast_mover"],
+    "vertical": "saas",
+    "role": "Agency owner",
+    "pain_quote": "I love a free trial. I hate a credit-card-required trial. That's not a trial, that's a cancel-before-billing stress test.",
+    "language_markers": ["adversarial-to-dark-patterns"],
+    "concerns": ["card-required trials", "dark patterns", "cancellation friction"],
+    "source_type": "reddit_r_saas"
+  },
+  {
+    "id": "saas-onboarding-006",
+    "archetype_affinity": ["motivated_starter"],
+    "vertical": "saas",
+    "role": "Team admin",
+    "pain_quote": "Inviting teammates in the first 5 minutes is the ONLY retention lever. If I can't invite, I won't, and the account dies.",
+    "language_markers": ["collaboration-native"],
+    "concerns": ["team invitation friction", "retention via network"],
+    "source_type": "indiehackers"
+  },
+  {
+    "id": "saas-feature-validation-007",
+    "archetype_affinity": ["target_user"],
+    "vertical": "saas",
+    "role": "Power user",
+    "pain_quote": "Keyboard shortcuts and an API are non-negotiable. If your product is mouse-only, you're not serious about power users.",
+    "language_markers": ["power-user", "efficiency-focused"],
+    "concerns": ["keyboard-first", "API availability"],
+    "source_type": "hn_thread"
+  },
+  {
+    "id": "saas-trust-006",
+    "archetype_affinity": ["skeptical_evaluator"],
+    "vertical": "saas",
+    "role": "Enterprise IT",
+    "pain_quote": "Pricing, security, and compliance pages should be reachable in 2 clicks from homepage. If they're buried, you're hiding something.",
+    "language_markers": ["navigation-aware", "enterprise-compliant"],
+    "concerns": ["page architecture", "hidden critical info"],
+    "source_type": "linkedin_public_post"
+  }
+]

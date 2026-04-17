@@ -1,0 +1,130 @@
+{
+  "_description": "12-dimension sensation model. Each stay-stage produces measurements on these dimensions. Archetypes weight them differently (see stay_behaviors.json). The narrative engine updates these per-stage and aggregates them into the predicted review + NPS.",
+
+  "dimensions": {
+    "comfort_physical": {
+      "label": "Physical Comfort",
+      "description": "Temperature, bed feel, mattress, pillow, noise level, air quality, light control, seating.",
+      "measurable_signals": ["HVAC noise db", "mattress type", "pillow options", "soundproofing", "blackout curtains", "room temperature stability"],
+      "typical_triggers_positive": ["silent HVAC", "mattress firmness right", "blackout works", "pillow options offered"],
+      "typical_triggers_negative": ["HVAC cycling loud", "noise from hallway", "bed squeaks", "room too hot/cold", "thin walls"]
+    },
+    "cleanliness": {
+      "label": "Cleanliness",
+      "description": "Visible dirt, freshness, bathroom standard, linens, previous-guest trace detection.",
+      "measurable_signals": ["hair detection", "dust on surfaces", "bathroom grime", "stained linens", "smell freshness", "floor cleanliness"],
+      "typical_triggers_positive": ["spotless at first glance", "fresh linen smell", "polished bathroom", "sparkling floor"],
+      "typical_triggers_negative": ["previous-guest hair", "dust on bedside", "stained towels", "musty smell", "sticky floor"]
+    },
+    "service_quality": {
+      "label": "Service Quality",
+      "description": "Staff attentiveness, friendliness, problem-solving, language, anticipation of needs.",
+      "measurable_signals": ["greeting eye contact", "name use", "response time to request", "tone of voice", "proactive vs reactive"],
+      "typical_triggers_positive": ["name used unprompted", "problem solved within 5 min", "proactive info offered", "genuine warmth"],
+      "typical_triggers_negative": ["indifferent tone", "refused without explanation", "staff speaks over guest", "slow response (>10 min)"]
+    },
+    "speed": {
+      "label": "Speed / Waiting Time",
+      "description": "Queue lengths, response times, transaction durations.",
+      "measurable_signals": ["check-in duration", "elevator wait", "restaurant seating wait", "room-service delivery time", "bill processing"],
+      "typical_triggers_positive": ["check-in under 3 min", "elevator arrives under 60s", "room service within 30 min", "express checkout 60 seconds"],
+      "typical_triggers_negative": ["check-in queue >8 min", "elevator broken / slow", "room service over 45 min", "front desk slow at checkout"]
+    },
+    "personalization": {
+      "label": "Personalization",
+      "description": "Recognition, preference memory, custom touches that acknowledge the guest as an individual.",
+      "measurable_signals": ["name used", "preferences remembered day 2", "occasion acknowledged", "previous-stay memory", "tier/status recognition"],
+      "typical_triggers_positive": ["welcome note with correct name", "anniversary acknowledged", "dietary preferences remembered at breakfast", "upgrade for loyalty tier"],
+      "typical_triggers_negative": ["treated as transaction", "no recognition despite Platinum", "occasion forgotten", "repeated 'Sir/Madam' generic"]
+    },
+    "value": {
+      "label": "Value Perception",
+      "description": "Did the guest feel the money spent matched the experience received? (independent of price — €100/night can be perceived as great or poor value).",
+      "measurable_signals": ["total spend vs expectation", "unexpected fees", "what's included vs extra", "competitor comparison"],
+      "typical_triggers_positive": ["free breakfast actually good", "wifi free and fast", "included amenities rich", "upgrade gratis"],
+      "typical_triggers_negative": ["surprise resort fee", "wifi paywall for basic", "towel charge at pool", "rate parity violation"]
+    },
+    "authenticity": {
+      "label": "Authenticity",
+      "description": "Does the property feel genuine, local, distinctive — or chain-corporate and interchangeable?",
+      "measurable_signals": ["local art", "staff stories", "local food", "distinctive architecture", "generic vs brand-signature"],
+      "typical_triggers_positive": ["local art in room", "staff shares neighborhood tip", "regional breakfast option", "property-specific scent"],
+      "typical_triggers_negative": ["stock photos in brochure", "generic music loop", "chain-standard decor", "staff reads from script"]
+    },
+    "modernity": {
+      "label": "Modernity",
+      "description": "Current technology, design, amenities — feels 2025 vs 2005.",
+      "measurable_signals": ["mobile check-in working", "smart tv with casting", "USB-C outlets", "app control of room", "high-res mirror"],
+      "typical_triggers_positive": ["app check-in works perfectly", "smart TV streaming with guest account", "USB-C by bed"],
+      "typical_triggers_negative": ["only old plug sockets", "tv with ancient UI", "room key magnetic stripe dying", "no mobile check-in option"]
+    },
+    "amenity_usability": {
+      "label": "Amenity Usability",
+      "description": "Amenities exist AND are usable — pool functional, spa bookable, gym equipped, wifi fast.",
+      "measurable_signals": ["pool cleanliness", "gym equipment working", "spa booking process", "wifi Mbps", "business center"],
+      "typical_triggers_positive": ["pool clean and not crowded", "gym has modern equipment", "wifi 200Mbps measured", "spa booked in app"],
+      "typical_triggers_negative": ["pool closed for maintenance with no notice", "gym locked / limited hours", "wifi 5Mbps during peak", "spa unreachable"]
+    },
+    "crowd": {
+      "label": "Crowding / Serenity",
+      "description": "How busy the shared spaces feel — affects premium guests strongly.",
+      "measurable_signals": ["restaurant capacity utilization", "pool chair availability", "elevator congestion", "lobby noise"],
+      "typical_triggers_positive": ["pool chair always available", "quiet restaurant atmosphere", "elevator arrives empty"],
+      "typical_triggers_negative": ["pool fully booked by 10am", "wait list for all restaurants", "crowded elevator", "loud families in quiet zones"]
+    },
+    "culinary": {
+      "label": "Culinary Experience",
+      "description": "Food quality, presentation, variety, dietary accommodation.",
+      "measurable_signals": ["menu variety", "ingredient quality", "presentation standard", "dietary flex", "portion sizes"],
+      "typical_triggers_positive": ["local ingredients visible", "chef accommodates gluten-free gracefully", "breakfast eggs cooked-to-order", "wine list curated"],
+      "typical_triggers_negative": ["reheated food", "same buffet day 1 and day 4", "no real vegetarian option", "thin coffee"]
+    },
+    "safety": {
+      "label": "Safety",
+      "description": "Physical safety, security, accessibility, emergency preparedness.",
+      "measurable_signals": ["key-card locks working", "safe in room", "fire exits visible", "emergency instructions present"],
+      "typical_triggers_positive": ["in-room safe works", "clear fire exit map", "secure parking", "stroller access"],
+      "typical_triggers_negative": ["broken safe", "door doesn't fully close", "no fire map", "dark parking garage", "accessibility broken"]
+    },
+    "aesthetic": {
+      "label": "Aesthetic / Design",
+      "description": "Visual appeal of spaces — lobby, room, restaurants, grounds.",
+      "measurable_signals": ["design coherence", "photographable moments", "color palette", "material quality feel"],
+      "typical_triggers_positive": ["lobby instagrammable", "room lighting sets romantic mood", "pool area designed beautifully"],
+      "typical_triggers_negative": ["90s carpet still present", "mismatched furniture", "stained ceiling tiles", "harsh fluorescent lighting"]
+    }
+  },
+
+  "default_starting_values": {
+    "comfort_physical": 60,
+    "cleanliness": 65,
+    "service_quality": 55,
+    "speed": 55,
+    "personalization": 40,
+    "value": 55,
+    "authenticity": 50,
+    "modernity": 55,
+    "amenity_usability": 60,
+    "crowd": 60,
+    "culinary": 55,
+    "safety": 70,
+    "aesthetic": 60
+  },
+
+  "nps_calculation": {
+    "formula": "weighted_avg_final_sensations * archetype_importance - penalty_negative_moments + bonus_positive_moments",
+    "thresholds": {
+      "promoter_above": 75,
+      "passive_range": [55, 75],
+      "detractor_below": 55
+    }
+  },
+
+  "star_rating_bucket": {
+    "5_star_above_score": 82,
+    "4_star_range": [65, 82],
+    "3_star_range": [48, 65],
+    "2_star_range": [30, 48],
+    "1_star_below": 30
+  }
+}

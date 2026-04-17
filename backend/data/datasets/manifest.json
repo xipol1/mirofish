@@ -1,0 +1,105 @@
+{
+  "_description": "Registry of external datasets integrated into Synthetic Users for enriching agent behavior and review prediction.",
+  "_version": 1,
+
+  "datasets": {
+    "tripadvisor_reviews": {
+      "label": "TripAdvisor Hotel Reviews (Kaggle)",
+      "canonical_source": "https://www.kaggle.com/datasets/andrewmvd/trip-advisor-hotel-reviews",
+      "alternate_sources": [
+        "https://www.kaggle.com/datasets/jiashenliu/515k-hotel-reviews-data-in-europe",
+        "https://www.kaggle.com/datasets/arnabchaki/tripadvisor-reviews-2023"
+      ],
+      "purpose": "Review phrase bank; calibrates property-specific pain/delight language; enriches review-predictor output",
+      "local_path": "backend/data/datasets/tripadvisor_reviews/",
+      "expected_files": ["tripadvisor_hotel_reviews.csv", "515K_Hotel_Reviews.csv"],
+      "standard_schema_version": "reviews_v1",
+      "sample_present": true,
+      "sample_size": 30,
+      "wire_into": ["review-predictor", "pain-library-augmentation"]
+    },
+
+    "goemotions": {
+      "label": "GoEmotions (Google Research)",
+      "canonical_source": "https://github.com/google-research/google-research/tree/master/goemotions",
+      "paper": "Demszky et al., ACL 2020",
+      "purpose": "27-emotion classifier vocabulary; emotion-tag each stay moment; calibrate sensation→emotion mapping",
+      "local_path": "backend/data/datasets/goemotions/",
+      "expected_files": ["goemotions_1.csv", "goemotions_2.csv", "goemotions_3.csv", "emotions.txt"],
+      "standard_schema_version": "emotions_v1",
+      "sample_present": true,
+      "sample_size": 54,
+      "wire_into": ["narrative-engine:emotion-tagging", "moment-classifier"]
+    },
+
+    "airbnb_listings": {
+      "label": "Inside Airbnb (open data) — listings",
+      "canonical_source": "http://insideairbnb.com/get-the-data/",
+      "purpose": "Pricing benchmarks by city/neighborhood; amenity calibration; property spec validation",
+      "local_path": "backend/data/datasets/airbnb_listings/",
+      "expected_files": ["madrid_listings.csv", "barcelona_listings.csv", "paris_listings.csv", "rome_listings.csv"],
+      "standard_schema_version": "listings_v1",
+      "sample_present": true,
+      "sample_size": 40,
+      "wire_into": ["property-ingestion:pricing-benchmarks"]
+    },
+
+    "booking_hotels": {
+      "label": "Hotel Booking Demand (Kaggle)",
+      "canonical_source": "https://www.kaggle.com/datasets/jessemostipak/hotel-booking-demand",
+      "alternate_sources": [
+        "https://www.kaggle.com/datasets/mojtaba142/hotel-booking"
+      ],
+      "purpose": "Booking-pattern calibration: lead time, length-of-stay, cancellation patterns, ADR distribution by segment",
+      "local_path": "backend/data/datasets/booking_hotels/",
+      "expected_files": ["hotel_bookings.csv"],
+      "standard_schema_version": "bookings_v1",
+      "sample_present": true,
+      "sample_size": 50,
+      "wire_into": ["stay-behaviors:length-calibration", "audience-decomposer:trip-type-inference"]
+    },
+
+    "behavioral_studies": {
+      "label": "Hotel guest behavior — curated studies + synthetic patterns",
+      "canonical_source": "aggregated from academic and industry studies",
+      "references": [
+        "Cornell Center for Hospitality Research — guest expense patterns",
+        "Revinate Guest Intelligence Report (publicly cited numbers)",
+        "STR Global benchmarks (public summary)",
+        "Cendyn hotel CRM benchmarks (public)"
+      ],
+      "purpose": "Empirical calibration of per-archetype daily spending, dining preferences, amenity usage frequencies",
+      "local_path": "backend/data/datasets/behavioral_studies/",
+      "expected_files": ["expense_patterns_by_archetype.json", "amenity_usage_rates.json", "archetype_demographics.json"],
+      "standard_schema_version": "behavioral_v1",
+      "sample_present": true,
+      "sample_size": 12,
+      "wire_into": ["stay-behaviors:spend-calibration", "narrative-engine:realism-anchoring"]
+    }
+  },
+
+  "standard_schemas": {
+    "reviews_v1": {
+      "fields": ["id", "source", "hotel_name", "hotel_tier", "city", "country", "rating", "rating_scale", "title", "body", "trip_type", "language", "reviewer_origin", "stay_month", "themes", "sentiment_score"]
+    },
+    "emotions_v1": {
+      "fields": ["text", "emotion_labels", "emotion_scores", "source_origin"]
+    },
+    "listings_v1": {
+      "fields": ["id", "name", "city", "neighborhood", "room_type", "price_per_night_eur", "amenities", "min_nights", "max_nights", "review_score", "number_of_reviews"]
+    },
+    "bookings_v1": {
+      "fields": ["hotel_category", "lead_time_days", "stays_in_weekend_nights", "stays_in_weekday_nights", "adults", "children", "babies", "meal_plan", "country_origin", "market_segment", "distribution_channel", "is_repeated_guest", "adr_eur", "deposit_type", "cancellation_flag"]
+    },
+    "behavioral_v1": {
+      "fields": ["archetype_id", "metric", "value", "unit", "source_study", "sample_size", "year"]
+    }
+  },
+
+  "installation": {
+    "automated_script": "scripts/download_datasets.sh",
+    "kaggle_cli_required": true,
+    "kaggle_auth_instructions": "Set KAGGLE_USERNAME and KAGGLE_KEY env vars (get from kaggle.com/settings)",
+    "approximate_total_size_mb": 850
+  }
+}

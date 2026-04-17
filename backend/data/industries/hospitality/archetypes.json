@@ -1,0 +1,343 @@
+{
+  "landing_page": [
+    {
+      "id": "business_traveler",
+      "label": "The Business Traveler",
+      "role_archetype": "frequent corporate traveler, efficiency-obsessed, platinum-oriented",
+      "coverage_purpose": "Tests high-frequency direct-booking flow with time-sensitive friction tolerance",
+      "decision_style": "impulsive",
+      "base_traits": {
+        "patience": 0.3,
+        "trust_baseline": 0.55,
+        "price_sensitivity": 0.35,
+        "tech_savviness": 0.8,
+        "risk_tolerance": 0.5
+      },
+      "behavioral_markers": [
+        "Arrives pre-qualified; booking in <3 min is the expectation",
+        "Hates corporate rate validation friction",
+        "Searches specifically: 'INNSIDE Madrid' not 'Madrid hotels'",
+        "Hyper-sensitive to hidden fees (resort, parking) that break corporate expense policy",
+        "Will abandon direct and book via Amex GBT / Concur if friction exceeds 90 seconds",
+        "Loyalty recognition at booking step is expected"
+      ],
+      "failure_modes_revealed": [
+        "Corporate rate not clearly visible",
+        "Mandatory 2-factor auth on every visit",
+        "Unclear 'breakfast included' rate plans",
+        "Resort fee disclosed only after payment",
+        "Slow search results or loading spinners >4s"
+      ]
+    },
+    {
+      "id": "family_vacationer",
+      "label": "The Family Vacationer",
+      "role_archetype": "2 adults + 1-3 kids booking summer/half-term holiday, leisure-focused",
+      "coverage_purpose": "Tests family-specific needs: connecting rooms, kids amenities, all-inclusive clarity",
+      "decision_style": "deliberate",
+      "base_traits": {
+        "patience": 0.65,
+        "trust_baseline": 0.45,
+        "price_sensitivity": 0.75,
+        "tech_savviness": 0.55,
+        "risk_tolerance": 0.3
+      },
+      "behavioral_markers": [
+        "Spends 15-30 minutes researching across multiple properties",
+        "Reads photos of pools, kids clubs, family rooms obsessively",
+        "Compulsively checks for 'kids eat free', connecting rooms, cots",
+        "Needs to see real family photos (not stock) to trust the property",
+        "Abandons if 'all-inclusive' scope is unclear (drinks? snacks? activities?)",
+        "Reads 20+ reviews before booking; filters by 'traveled with family'"
+      ],
+      "failure_modes_revealed": [
+        "No filter for 'family-friendly' rooms",
+        "Kids club hours / ages not disclosed on booking page",
+        "All-inclusive inclusions buried in T&Cs",
+        "No connecting room option visible",
+        "Crib/cot availability unclear",
+        "No family pool / adults-only clarity"
+      ]
+    },
+    {
+      "id": "luxury_seeker",
+      "label": "The Luxury Seeker",
+      "role_archetype": "high-net-worth couple or solo, brand-conscious, expects premium service consistently",
+      "coverage_purpose": "Tests whether premium positioning holds across the funnel",
+      "decision_style": "deliberate",
+      "base_traits": {
+        "patience": 0.7,
+        "trust_baseline": 0.35,
+        "price_sensitivity": 0.1,
+        "tech_savviness": 0.6,
+        "risk_tolerance": 0.3
+      },
+      "behavioral_markers": [
+        "Evaluates brand consistency: Gran Meliá vs Meliá vs Sol must feel distinct",
+        "Notices and is offended by stock photos, generic copy, crowded website",
+        "Expects concierge contact option / white-glove service signals",
+        "Sensitive to any cheap-looking element: dated buttons, promo badges",
+        "Compares to Four Seasons / Aman / Belmond reflexively",
+        "Will pay more for guaranteed bed type, high floor, view"
+      ],
+      "failure_modes_revealed": [
+        "Promotional banners cheapen premium brand feel",
+        "Rate comparisons with budget tier cannibalize luxury positioning",
+        "No concierge/VIP contact pre-booking option",
+        "Stock photos or inconsistent room photos",
+        "Generic descriptions indistinguishable from mid-tier brand"
+      ]
+    },
+    {
+      "id": "honeymooner",
+      "label": "The Honeymooner / Milestone Couple",
+      "role_archetype": "couple booking once-in-lifetime experience (honeymoon, anniversary, proposal)",
+      "coverage_purpose": "Tests emotional / romantic product positioning and upsell acceptance",
+      "decision_style": "balanced",
+      "base_traits": {
+        "patience": 0.75,
+        "trust_baseline": 0.5,
+        "price_sensitivity": 0.4,
+        "tech_savviness": 0.65,
+        "risk_tolerance": 0.55
+      },
+      "behavioral_markers": [
+        "Actively seeks 'romantic package', 'honeymoon offer', 'anniversary suite'",
+        "Reads reviews specifically from couples / honeymooners",
+        "Willing to upsell: suite upgrade, private dinner, spa couples' treatment",
+        "Emotional language signals matter: 'unforgettable', 'intimate', 'breathtaking'",
+        "Sensitive to family-focused imagery clashing with romance (kids in pool photos)",
+        "Wants adults-only floors/amenities, late dinner options"
+      ],
+      "failure_modes_revealed": [
+        "No distinct honeymoon/romance package visible",
+        "Property imagery mixes kids and couples (romance broken)",
+        "No adults-only options clearly marked",
+        "Upsell timing wrong (only at checkout, not pre-arrival)"
+      ]
+    },
+    {
+      "id": "digital_nomad",
+      "label": "The Digital Nomad / Long-Stay",
+      "role_archetype": "remote worker staying 2-8 weeks, needs productivity and flexibility",
+      "coverage_purpose": "Tests long-stay product, workspace, weekly/monthly rates",
+      "decision_style": "balanced",
+      "base_traits": {
+        "patience": 0.5,
+        "trust_baseline": 0.5,
+        "price_sensitivity": 0.65,
+        "tech_savviness": 0.9,
+        "risk_tolerance": 0.55
+      },
+      "behavioral_markers": [
+        "Searches for 'desk in room', 'fast wifi', 'monthly rate', 'co-working'",
+        "Runs wifi speedtests on reviews; cross-references with Nomad List",
+        "Budget-aware; compares to Airbnb Plus and serviced apartments",
+        "Needs flexibility on check-in/out (12 or 14 night adjustments)",
+        "Reads recent reviews (last 60 days) to assess real conditions",
+        "Laptop-first: mobile-only flows that hide info enrage them"
+      ],
+      "failure_modes_revealed": [
+        "No monthly / weekly rate visible",
+        "Wifi speed not disclosed (or marketing speak instead of numbers)",
+        "No mention of workspace in room details",
+        "Cancellation flexibility unclear for long stays",
+        "No laundry amenity visible"
+      ]
+    },
+    {
+      "id": "budget_optimizer",
+      "label": "The Budget Optimizer",
+      "role_archetype": "price-sensitive leisure traveler, comparison shopper across OTAs and direct",
+      "coverage_purpose": "Tests price transparency, OTA rate parity, and value perception",
+      "decision_style": "deliberate",
+      "base_traits": {
+        "patience": 0.65,
+        "trust_baseline": 0.4,
+        "price_sensitivity": 0.95,
+        "tech_savviness": 0.75,
+        "risk_tolerance": 0.35
+      },
+      "behavioral_markers": [
+        "Always opens at least 3 tabs: direct + Booking.com + Expedia",
+        "Calculates true total (resort fees, taxes, parking, breakfast) per night",
+        "Will abandon direct if €5/night more than OTA",
+        "Scrolls reviews looking for 'surprise fees' complaints",
+        "Sorts by price ascending then re-reads top 3",
+        "Will redeem loyalty points if it saves €20+"
+      ],
+      "failure_modes_revealed": [
+        "Direct rate higher than OTA (rate parity failure)",
+        "Resort/parking/breakfast fees not in nightly rate displayed",
+        "'Best price guarantee' claim not enforced or unclear",
+        "No loyalty benefit visible pre-booking",
+        "Tax/fee calculation hidden until checkout step"
+      ]
+    },
+    {
+      "id": "loyalty_maximizer",
+      "label": "The Loyalty Maximizer",
+      "role_archetype": "elite MeliáRewards / Bonvoy / Honors member, benefit-seeking, status-sensitive",
+      "coverage_purpose": "Tests whether elite recognition and benefits land at every touchpoint",
+      "decision_style": "deliberate",
+      "base_traits": {
+        "patience": 0.55,
+        "trust_baseline": 0.45,
+        "price_sensitivity": 0.3,
+        "tech_savviness": 0.75,
+        "risk_tolerance": 0.4
+      },
+      "behavioral_markers": [
+        "Logs in before anything to see member rates and benefits",
+        "Scrutinizes 'Member-only' rates for real discount (not 1%)",
+        "Expects: bonus points display, free breakfast if applicable, upgrade eligibility",
+        "Will call customer service if recognition fails on booking page",
+        "Compares cost in points vs cash for high-value stays",
+        "Knows the program rules better than some call-center agents"
+      ],
+      "failure_modes_revealed": [
+        "Logged-in state not reflected in rates shown",
+        "Tier benefits not explicitly listed during booking",
+        "No clear 'points earned on this stay' estimate",
+        "Member rate discount trivial or deceptive",
+        "No points-cash toggle at booking"
+      ]
+    },
+    {
+      "id": "event_attendee",
+      "label": "The Event Attendee",
+      "role_archetype": "booking for conference / wedding / sports event; location and dates non-negotiable",
+      "coverage_purpose": "Tests group rates, location specificity, and constrained-date flexibility",
+      "decision_style": "impulsive",
+      "base_traits": {
+        "patience": 0.4,
+        "trust_baseline": 0.5,
+        "price_sensitivity": 0.55,
+        "tech_savviness": 0.65,
+        "risk_tolerance": 0.5
+      },
+      "behavioral_markers": [
+        "Searches by exact dates with venue name",
+        "Sensitive to distance from venue (walking / taxi / shuttle)",
+        "Looks for 'group booking code' or wedding block field",
+        "Wants late checkout / early checkin on event day",
+        "Will pay premium for proximity; abandons if distance > 15 min",
+        "Reads check-in/check-out times carefully"
+      ],
+      "failure_modes_revealed": [
+        "No walking distance / transport info to major venues",
+        "No group code / block rate field",
+        "Unclear shuttle or transport options",
+        "Inflexible check-in/out times"
+      ]
+    }
+  ],
+  "pricing": [
+    {
+      "id": "budget_optimizer",
+      "_inherit_from": "landing_page.budget_optimizer"
+    },
+    {
+      "id": "loyalty_maximizer",
+      "_inherit_from": "landing_page.loyalty_maximizer"
+    },
+    {
+      "id": "luxury_seeker",
+      "_inherit_from": "landing_page.luxury_seeker"
+    }
+  ],
+  "onboarding": [
+    {
+      "id": "loyalty_enrollment_first_timer",
+      "label": "The First-Time Enroller",
+      "role_archetype": "just booked, prompted to join MeliáRewards",
+      "coverage_purpose": "Tests whether loyalty enrollment friction is below abandonment threshold",
+      "decision_style": "impulsive",
+      "base_traits": {
+        "patience": 0.35,
+        "trust_baseline": 0.5,
+        "price_sensitivity": 0.6,
+        "tech_savviness": 0.65,
+        "risk_tolerance": 0.55
+      },
+      "behavioral_markers": [
+        "Will sign up if friction is <60 seconds",
+        "Wants immediate visible benefit (10% off next stay, bonus points)",
+        "Abandons if asked for phone / address / preferences before confirming signup",
+        "Doesn't read T&Cs; checks box if present"
+      ],
+      "failure_modes_revealed": [
+        "Too many required fields at signup",
+        "No immediate benefit shown",
+        "Terms & conditions blocking primary CTA"
+      ]
+    }
+  ],
+  "feature_validation": [
+    {
+      "id": "business_traveler",
+      "_inherit_from": "landing_page.business_traveler"
+    },
+    {
+      "id": "loyalty_maximizer",
+      "_inherit_from": "landing_page.loyalty_maximizer"
+    },
+    {
+      "id": "luxury_seeker",
+      "_inherit_from": "landing_page.luxury_seeker"
+    }
+  ],
+  "marketing_campaign": [
+    {
+      "id": "in_market_traveler",
+      "label": "The In-Market Traveler",
+      "role_archetype": "actively planning a trip, triggered by campaign",
+      "coverage_purpose": "Tests campaign pre-qualified attention",
+      "decision_style": "balanced",
+      "base_traits": {
+        "patience": 0.55,
+        "trust_baseline": 0.5,
+        "price_sensitivity": 0.6,
+        "tech_savviness": 0.65,
+        "risk_tolerance": 0.5
+      },
+      "behavioral_markers": [
+        "Reads headline first, dates second, price third",
+        "Ad-to-landing message match is critical (dest/dates/price must align)",
+        "Sensitive to bait-and-switch (ad says €80, landing shows €180)"
+      ],
+      "failure_modes_revealed": [
+        "Ad-landing price mismatch",
+        "No apparent continuity between ad creative and landing",
+        "Generic homepage instead of dedicated campaign LP"
+      ]
+    },
+    {
+      "id": "browsing_dreamer",
+      "label": "The Browsing Dreamer",
+      "role_archetype": "not in-market but inspired by campaign",
+      "coverage_purpose": "Tests brand attention and demand generation",
+      "decision_style": "impulsive",
+      "base_traits": {
+        "patience": 0.3,
+        "trust_baseline": 0.55,
+        "price_sensitivity": 0.55,
+        "tech_savviness": 0.6,
+        "risk_tolerance": 0.5
+      },
+      "behavioral_markers": [
+        "Doesn't want to book now; saves for later or signs up for emails",
+        "Responds to inspirational / lifestyle imagery",
+        "Will share on social if compelling"
+      ],
+      "failure_modes_revealed": [
+        "No 'save for later' / email signup option",
+        "Only hard-sell CTAs; no soft conversion path"
+      ]
+    },
+    {
+      "id": "budget_optimizer",
+      "_inherit_from": "landing_page.budget_optimizer"
+    }
+  ]
+}

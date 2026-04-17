@@ -1,0 +1,91 @@
+{
+  "industry": "hospitality",
+  "core_kpis": {
+    "booking_conversion_rate": {
+      "label": "Booking conversion rate",
+      "formula": "bookings / unique_visitors",
+      "unit": "percent",
+      "benchmark_industry": 2.4,
+      "benchmark_meaning": "Direct-booking sites average 2.4% in EU hotels (Adara 2024)",
+      "target_range": [3.0, 5.5]
+    },
+    "average_booking_value": {
+      "label": "Average booking value (ABV)",
+      "formula": "total_booking_revenue / bookings",
+      "unit": "EUR",
+      "notes": "Includes room + ancillaries (F&B, spa, airport transfer)"
+    },
+    "ancillary_attach_rate": {
+      "label": "Ancillary attach rate",
+      "formula": "bookings_with_upsell / total_bookings",
+      "unit": "percent",
+      "benchmark_industry": 11.0,
+      "target_range": [15.0, 28.0]
+    },
+    "cancellation_probability": {
+      "label": "Cancellation risk",
+      "unit": "percent",
+      "notes": "Predicted likelihood guest cancels before arrival"
+    },
+    "direct_vs_ota_preference": {
+      "label": "Direct vs OTA lean",
+      "unit": "percent",
+      "notes": "% of agents who would book direct vs defect to OTA"
+    },
+    "loyalty_enrollment_rate": {
+      "label": "Loyalty enrollment rate",
+      "formula": "new_enrollments / guests_prompted",
+      "unit": "percent",
+      "benchmark_industry": 8.0,
+      "target_range": [15.0, 35.0]
+    },
+    "predicted_nps": {
+      "label": "Predicted Net Promoter Score",
+      "unit": "score_-100_to_100",
+      "notes": "Probability-weighted prediction from simulated post-stay agent sentiment"
+    },
+    "review_sentiment_score": {
+      "label": "Review sentiment prediction",
+      "unit": "float_-1_to_1",
+      "notes": "Predicted average TripAdvisor/Google review sentiment"
+    },
+    "repeat_booking_likelihood": {
+      "label": "Repeat booking likelihood",
+      "unit": "percent"
+    },
+    "complaint_probability": {
+      "label": "Complaint probability",
+      "unit": "percent",
+      "notes": "Likelihood a guest raises a formal complaint on-stay"
+    },
+    "mobile_vs_desktop_conversion": {
+      "label": "Mobile conversion gap",
+      "formula": "mobile_cr / desktop_cr",
+      "unit": "ratio",
+      "benchmark_industry": 0.42,
+      "benchmark_meaning": "Mobile converts ~42% of desktop rate in hospitality; anything closer to 1.0 is competitive"
+    }
+  },
+  "secondary_kpis": {
+    "time_to_booking_decision_seconds": { "label": "Time-to-booking (from page-view to purchase)", "unit": "seconds" },
+    "rate_plan_comparisons_per_session": { "label": "Rate plan toggles before purchase", "unit": "count" },
+    "photos_viewed_per_session": { "label": "Photos viewed during research", "unit": "count" },
+    "reviews_read_per_session": { "label": "Reviews scrolled during research", "unit": "count" },
+    "abandoned_stages": { "label": "Booking flow stages where agents bailed", "unit": "step_names" }
+  },
+  "revenue_impact_multipliers": {
+    "booking_conversion_1pct_improvement": {
+      "description": "1 percentage point of conversion improvement at scale",
+      "formula": "annual_room_nights * ABV * 0.01",
+      "example": "For a brand with 2M annual room nights and €165 ABV, +1pp conversion = €3.3M annual revenue"
+    },
+    "cancellation_1pct_reduction": {
+      "description": "1 percentage point lower cancellation = captured revenue",
+      "formula": "bookings * ABV * cancellation_recovery_rate * 0.01"
+    },
+    "ancillary_attach_5pp_improvement": {
+      "description": "Additional 5pp of ancillary attach at €40 avg add-on",
+      "formula": "bookings * 40 * 0.05"
+    }
+  }
+}

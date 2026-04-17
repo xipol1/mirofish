@@ -1,0 +1,128 @@
+{
+  "slug": "hospitality",
+  "label": "Hospitality & Hotels",
+  "description": "Hotels, resorts, serviced apartments, vacation rentals. Guest journeys from discovery through post-stay reviews.",
+  "sub_verticals": ["luxury", "business_hotels", "resorts", "all_inclusive", "boutique", "budget", "serviced_apartments", "vacation_rentals"],
+  "representative_brands": ["Meliá", "Marriott", "Hilton", "IHG", "Accor", "Hyatt", "Four Seasons", "Airbnb"],
+
+  "touchpoints": {
+    "discover_web": {
+      "channel": "web",
+      "engine": "playwright",
+      "description": "Guest searches on Google / OTAs and finds the hotel listing"
+    },
+    "research_brand_site": {
+      "channel": "web",
+      "engine": "playwright",
+      "description": "Guest visits melia.com / hilton.com to evaluate before booking"
+    },
+    "compare_ota": {
+      "channel": "web",
+      "engine": "playwright",
+      "description": "Guest compares direct vs Booking.com / Expedia / Agoda"
+    },
+    "booking_flow": {
+      "channel": "web_or_app",
+      "engine": "playwright_or_app",
+      "description": "Dates, rooms, rate plan selection, guest info, payment"
+    },
+    "booking_confirmation": {
+      "channel": "email",
+      "engine": "email",
+      "description": "Confirmation email with reservation details"
+    },
+    "pre_stay_upsell": {
+      "channel": "email_app",
+      "engine": "email_app",
+      "description": "Upgrade offers, early check-in, add-ons (spa, F&B, airport transfer)"
+    },
+    "mobile_checkin": {
+      "channel": "mobile_app",
+      "engine": "app",
+      "description": "Digital check-in via app (room selection, ID verification)"
+    },
+    "arrival_checkin": {
+      "channel": "physical",
+      "engine": "narrative",
+      "description": "Physical arrival at hotel, front desk interaction"
+    },
+    "room_experience": {
+      "channel": "physical",
+      "engine": "narrative",
+      "description": "Room quality, amenities, cleanliness, noise, view"
+    },
+    "fnb_breakfast": {
+      "channel": "physical",
+      "engine": "narrative",
+      "description": "Breakfast buffet experience"
+    },
+    "fnb_restaurant": {
+      "channel": "physical",
+      "engine": "narrative",
+      "description": "Hotel restaurant dinner / lunch"
+    },
+    "spa_experience": {
+      "channel": "physical",
+      "engine": "narrative",
+      "description": "Spa booking and service experience"
+    },
+    "concierge_request": {
+      "channel": "chat_voice_physical",
+      "engine": "multi",
+      "description": "Guest requests information / recommendations / problem solving"
+    },
+    "loyalty_enrollment": {
+      "channel": "web_app",
+      "engine": "playwright_or_app",
+      "description": "MeliáRewards / Bonvoy / Honors sign-up"
+    },
+    "checkout": {
+      "channel": "physical_or_app",
+      "engine": "narrative_or_app",
+      "description": "Bill review, express checkout, departure"
+    },
+    "post_stay_review": {
+      "channel": "email_social",
+      "engine": "email_social",
+      "description": "Post-stay survey, TripAdvisor/Google review"
+    },
+    "rebooking": {
+      "channel": "email_web",
+      "engine": "email_playwright",
+      "description": "Promotional email, return visit trigger"
+    }
+  },
+
+  "journey_templates": {
+    "full_guest_journey": {
+      "description": "Complete end-to-end stay journey",
+      "touchpoints": [
+        "discover_web", "research_brand_site", "compare_ota", "booking_flow",
+        "booking_confirmation", "pre_stay_upsell", "arrival_checkin",
+        "room_experience", "fnb_breakfast", "checkout", "post_stay_review"
+      ]
+    },
+    "booking_funnel_only": {
+      "description": "Web-based booking conversion test (MERP scope)",
+      "touchpoints": ["discover_web", "research_brand_site", "booking_flow", "booking_confirmation"]
+    },
+    "loyalty_experience": {
+      "description": "Loyalty member experience from recognition to redemption",
+      "touchpoints": ["loyalty_enrollment", "booking_flow", "arrival_checkin", "room_experience", "checkout"]
+    },
+    "upsell_funnel": {
+      "description": "Pre-stay + arrival upsell effectiveness",
+      "touchpoints": ["booking_confirmation", "pre_stay_upsell", "arrival_checkin"]
+    }
+  },
+
+  "segmentation_dimensions": {
+    "trip_purpose": ["business", "leisure_couple", "leisure_family", "event", "bleisure", "remote_work"],
+    "booking_lead_time": ["same_day", "week_ahead", "month_ahead", "quarter_ahead"],
+    "length_of_stay": ["1_night", "2_3_nights", "week", "long_stay"],
+    "loyalty_tier": ["none", "silver", "gold", "platinum", "diamond"],
+    "price_tier": ["budget", "mid", "upscale", "luxury"],
+    "geography_origin": ["domestic", "regional", "international_short_haul", "international_long_haul"],
+    "device": ["desktop", "mobile_web", "mobile_app"]
+  }
+}

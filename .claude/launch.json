@@ -1,0 +1,16 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "frontend",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["next", "dev", "-p", "5002"],
+      "port": 5002,
+      "autoPort": false,
+      "cwd": "frontend",
+      "env": {
+        "NEXT_TELEMETRY_DISABLED": "1"
+      }
+    }
+  ]
+}

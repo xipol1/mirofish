@@ -1,0 +1,85 @@
+version: '3.9'
+
+# ─────────────────────────────────────────────────────────────
+# Synthetic Users Enterprise — local stack
+#
+# Usage:
+#   docker compose up -d          # start pg, redis, minio
+#   docker compose down           # stop and remove
+#
+# Then set in backend/.env:
+#   DATABASE_URL=postgresql://postgres:postgres@localhost:5432/synthetic_users
+#   REDIS_URL=redis://localhost:6379
+#   S3_ENDPOINT=http://localhost:9000
+#   S3_BUCKET=synthetic-users-evidence
+#   S3_ACCESS_KEY_ID=minioadmin
+#   S3_SECRET_ACCESS_KEY=minioadmin
+#   S3_FORCE_PATH_STYLE=true
+# ─────────────────────────────────────────────────────────────
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: synthetic_users
+    ports:
+      - "5432:5432"
+    volumes:
+      - synthuser_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - synthuser_redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  minio:
+    image: minio/minio:latest
+    restart: unless-stopped
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    command: server /data --console-address ":9001"
+    volumes:
+      - synthuser_miniodata:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  minio-setup:
+    image: minio/mc:latest
+    depends_on:
+      minio:
+        condition: service_healthy
+    entrypoint: >
+      /bin/sh -c "
+      mc alias set local http://minio:9000 minioadmin minioadmin;
+      mc mb --ignore-existing local/synthetic-users-evidence;
+      mc anonymous set none local/synthetic-users-evidence;
+      echo 'MinIO bucket ready';
+      "
+
+volumes:
+  synthuser_pgdata:
+  synthuser_redisdata:
+  synthuser_miniodata:
