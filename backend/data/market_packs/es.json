@@ -1,0 +1,141 @@
+{
+  "pack_version": "0.1.0",
+  "market_id": "es",
+  "label": "Spain (domestic)",
+  "iso_country_code": "ES",
+  "currency_iso": "EUR",
+  "sources": [
+    "FAMILITUR Encuesta de Turismo de Residentes 2024 (INE)",
+    "EGATUR 2024",
+    "AENA domestic traffic Palma / Menorca 2024",
+    "Estudio Observatorio Turismo INE 2024",
+    "Atrapalo + eDreams Spain consumer behavior report 2024",
+    "Cornell Hospitality Quarterly 2023 — Spanish domestic tourism",
+    "Hosteltur trade press industry reports"
+  ],
+  "last_updated": "2026-04-18",
+  "cultural_cluster_mapping": "latin_spain_italy",
+
+  "booking_window_distribution_days": {
+    "last_minute_0_3": 0.18,
+    "short_4_14": 0.28,
+    "medium_15_45": 0.30,
+    "long_46_90": 0.15,
+    "very_long_91_plus": 0.09
+  },
+
+  "channel_share_pct": {
+    "booking_com": 35,
+    "direct_web": 23,
+    "atrapalo_edreams": 11,
+    "direct_app": 9,
+    "travel_agency": 6,
+    "expedia_group": 5,
+    "loyalty_redemption": 4,
+    "meta": 3,
+    "corporate": 2,
+    "group_mice": 2
+  },
+
+  "price_sensitivity": {
+    "elasticity_coefficient": -1.45,
+    "walk_away_threshold_pct_above_comp_set": 15,
+    "deal_trigger_threshold_pct_below_comp_set": 11,
+    "sensitivity_segment_override": {
+      "luxury_seeker": -0.7,
+      "business_traveler": -1.05,
+      "budget_optimizer": -2.15
+    }
+  },
+
+  "cancellation_patterns": {
+    "refundable_rate_preference_pct": 62,
+    "nonrefundable_rate_preference_pct": 38,
+    "cancellation_rate_refundable_pct": 26,
+    "cancellation_rate_nonrefundable_pct": 4,
+    "typical_cancellation_window_hours_before_arrival": 48
+  },
+
+  "device_share_pct": {
+    "mobile": 65,
+    "desktop": 25,
+    "tablet": 10
+  },
+
+  "typical_length_of_stay_nights_by_segment": {
+    "leisure_solo": 2.8,
+    "leisure_couples": 3.6,
+    "leisure_family": 5.2,
+    "business": 1.9,
+    "remote_work": 6.5,
+    "event": 2.1
+  },
+
+  "destination_origin_airport_distribution_pct": {
+    "MAD": 34,
+    "BCN": 22,
+    "VLC": 10,
+    "SVQ": 8,
+    "BIO": 6,
+    "MLG": 5,
+    "AGP_other_andalusia": 4,
+    "ferry_from_barcelona": 8,
+    "other": 3
+  },
+
+  "segment_mix_outbound_to_mediterranean_pct": {
+    "leisure_couples": 32,
+    "leisure_family": 35,
+    "leisure_solo": 13,
+    "business": 9,
+    "remote_work": 5,
+    "event": 4,
+    "honeymoon_milestone": 2
+  },
+
+  "review_platform_usage_pct": {
+    "booking_com": 44,
+    "google": 28,
+    "tripadvisor": 15,
+    "atrapalo": 8,
+    "instagram": 5
+  },
+  "review_writing_probability_pct": 32,
+  "complaint_escalation_pattern": "verbal_immediate_emotional",
+
+  "loyalty_tier_penetration_pct": 24,
+
+  "average_spend_per_night_ancillary_eur": {
+    "economy_property": 28,
+    "upscale_property": 72,
+    "luxury_property": 135,
+    "ultra_luxury_property": 255
+  },
+
+  "key_behavioral_traits": [
+    "Warm human interaction prioritized over strict efficiency",
+    "Culinary quality (regional authenticity) is a primary value driver",
+    "Flexibility with schedules — late dinners, late check-ins expected",
+    "Family-friendly attitude valued; kids welcomed in public spaces",
+    "Social atmosphere in bars and restaurants appreciated, not avoided",
+    "Shorter booking windows — last-minute + short is 46% combined",
+    "Mobile-first booking — 65% share",
+    "Mediterranean diet expectations even at international hotels",
+    "Strong preference for direct-brand booking vs OTA when price is parity",
+    "Verbal complaints at the front desk — expect immediate resolution"
+  ],
+
+  "preferred_property_types": [
+    "city_boutique", "beach_resort", "rural_casona", "design_led_boutique", "all_inclusive_family"
+  ],
+
+  "seasonal_peaks_menorca": ["August", "Semana_Santa", "Puente_Mayo", "Puente_Pilar_Octubre"],
+
+  "payment_preferences": {
+    "credit_card": 42,
+    "debit_card": 34,
+    "bizum": 10,
+    "paypal": 8,
+    "bank_transfer": 6
+  }
+}

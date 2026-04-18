@@ -1,0 +1,345 @@
+{
+  "backtest_version": "2.0",
+  "backtest_date": "2026-04-18T09:52:15.518Z",
+  "property": "Villa Le Blanc Gran Meliá",
+  "sim_source": "sim_v2_result.json",
+  "real_corpus_source": "villa_le_blanc_real_corpus_2026_04.json",
+  "sim_n": 50,
+  "real_corpus_sources": {
+    "tripadvisor": 305,
+    "booking_com": 267,
+    "expedia_sampled": "yes",
+    "professional_reviews": 3,
+    "total_reviews": 572
+  },
+  "theme_catalog_size": 25,
+  "real_themes_catalogued": 22,
+  "rating_comparison": {
+    "real_avg_stars": 4.65,
+    "sim_avg_stars": 2.8,
+    "gap": -1.85
+  },
+  "subcategory_comparison": [
+    {
+      "category": "location",
+      "real_5": 4.9,
+      "real_100": 98,
+      "sim_100": 84,
+      "gap": -14,
+      "within_tolerance": false
+    },
+    {
+      "category": "rooms",
+      "real_5": 4.9,
+      "real_100": 98,
+      "sim_100": 60,
+      "gap": -38,
+      "within_tolerance": false
+    },
+    {
+      "category": "sleep_quality",
+      "real_5": 4.9,
+      "real_100": 98,
+      "sim_100": 60,
+      "gap": -38,
+      "within_tolerance": false
+    },
+    {
+      "category": "cleanliness",
+      "real_5": 4.9,
+      "real_100": 98,
+      "sim_100": 88,
+      "gap": -10,
+      "within_tolerance": false
+    },
+    {
+      "category": "service",
+      "real_5": 4.7,
+      "real_100": 94,
+      "sim_100": 78,
+      "gap": -16,
+      "within_tolerance": false
+    },
+    {
+      "category": "value",
+      "real_5": 4.5,
+      "real_100": 90,
+      "sim_100": 43,
+      "gap": -47,
+      "within_tolerance": false
+    }
+  ],
+  "subcategory_accuracy_pct": 0,
+  "global_theme_detection": {
+    "tp": 19,
+    "fp": 3,
+    "fn": 3,
+    "precision": 86.4,
+    "recall": 86.4,
+    "f1": 86.4
+  },
+  "positive_theme_coverage": [
+    {
+      "theme": "location",
+      "real_class": "very_high",
+      "real_pct": 68,
+      "sim_pct": 68,
+      "gap_pp": 0,
+      "status": "✓"
+    },
+    {
+      "theme": "design_aesthetic",
+      "real_class": "very_high",
+      "real_pct": 62,
+      "sim_pct": 50,
+      "gap_pp": -12,
+      "status": "✓"
+    },
+    {
+      "theme": "staff_warmth",
+      "real_class": "very_high",
+      "real_pct": 58,
+      "sim_pct": 100,
+      "gap_pp": 42,
+      "status": "OVER"
+    },
+    {
+      "theme": "breakfast",
+      "real_class": "high",
+      "real_pct": 42,
+      "sim_pct": 58,
+      "gap_pp": 16,
+      "status": "OVER"
+    },
+    {
+      "theme": "sustainability",
+      "real_class": "high",
+      "real_pct": 32,
+      "sim_pct": 16,
+      "gap_pp": -16,
+      "status": "UNDER"
+    },
+    {
+      "theme": "dining_variety",
+      "real_class": "high",
+      "real_pct": 30,
+      "sim_pct": 6,
+      "gap_pp": -24,
+      "status": "UNDER"
+    },
+    {
+      "theme": "spa",
+      "real_class": "medium_high",
+      "real_pct": 28,
+      "sim_pct": 58,
+      "gap_pp": 30,
+      "status": "OVER"
+    },
+    {
+      "theme": "pools",
+      "real_class": "medium_high",
+      "real_pct": 26,
+      "sim_pct": 14,
+      "gap_pp": -12,
+      "status": "✓"
+    },
+    {
+      "theme": "rooms_comfort",
+      "real_class": "medium_high",
+      "real_pct": 24,
+      "sim_pct": 100,
+      "gap_pp": 76,
+      "status": "OVER"
+    },
+    {
+      "theme": "kids_club",
+      "real_class": "medium",
+      "real_pct": 14,
+      "sim_pct": 12,
+      "gap_pp": -2,
+      "status": "✓"
+    },
+    {
+      "theme": "experiences_activities",
+      "real_class": "medium",
+      "real_pct": 12,
+      "sim_pct": 0,
+      "gap_pp": -12,
+      "status": "✓"
+    }
+  ],
+  "negative_theme_coverage": [
+    {
+      "theme": "value_price_concern",
+      "real_class": "high",
+      "real_pct": 34,
+      "sim_pct": 52,
+      "gap_pp": 18,
+      "status": "OVER"
+    },
+    {
+      "theme": "fb_slow_service",
+      "real_class": "high",
+      "real_pct": 32,
+      "sim_pct": 42,
+      "gap_pp": 10,
+      "status": "✓"
+    },
+    {
+      "theme": "menu_variety",
+      "real_class": "medium_high",
+      "real_pct": 22,
+      "sim_pct": 10,
+      "gap_pp": -12,
+      "status": "✓"
+    },
+    {
+      "theme": "food_quality_inconsistency",
+      "real_class": "medium",
+      "real_pct": 14,
+      "sim_pct": 10,
+      "gap_pp": -4,
+      "status": "✓"
+    },
+    {
+      "theme": "night_noise",
+      "real_class": "medium",
+      "real_pct": 12,
+      "sim_pct": 36,
+      "gap_pp": 24,
+      "status": "OVER"
+    },
+    {
+      "theme": "staff_inconsistency",
+      "real_class": "medium",
+      "real_pct": 11,
+      "sim_pct": 2,
+      "gap_pp": -9,
+      "status": "✓"
+    },
+    {
+      "theme": "bar_wait_times",
+      "real_class": "medium",
+      "real_pct": 14,
+      "sim_pct": 40,
+      "gap_pp": 26,
+      "status": "OVER"
+    },
+    {
+      "theme": "kids_vs_couples_tension",
+      "real_class": "medium",
+      "real_pct": 10,
+      "sim_pct": 0,
+      "gap_pp": -10,
+      "status": "✓"
+    },
+    {
+      "theme": "wellness_facilities_limited",
+      "real_class": "low",
+      "real_pct": 8,
+      "sim_pct": 32,
+      "gap_pp": 24,
+      "status": "OVER"
+    },
+    {
+      "theme": "nightlife_limited",
+      "real_class": "low",
+      "real_pct": 6,
+      "sim_pct": 0,
+      "gap_pp": -6,
+      "status": "✓"
+    },
+    {
+      "theme": "operational_drift",
+      "real_class": "low",
+      "real_pct": 5,
+      "sim_pct": 2,
+      "gap_pp": -3,
+      "status": "✓"
+    }
+  ],
+  "segment_f1": {
+    "couples": {
+      "n_sim": 12,
+      "n_real_themes": 7,
+      "n_sim_themes": 19,
+      "tp": 5,
+      "fp": 14,
+      "fn": 2,
+      "precision": 26.3,
+      "recall": 71.4,
+      "f1": 38.5
+    },
+    "families": {
+      "n_sim": 7,
+      "n_real_themes": 6,
+      "n_sim_themes": 19,
+      "tp": 5,
+      "fp": 14,
+      "fn": 1,
+      "precision": 26.3,
+      "recall": 83.3,
+      "f1": 40
+    },
+    "solo_or_friends": {
+      "n_sim": 12,
+      "n_real_themes": 8,
+      "n_sim_themes": 17,
+      "tp": 5,
+      "fp": 12,
+      "fn": 3,
+      "precision": 29.4,
+      "recall": 62.5,
+      "f1": 40
+    },
+    "business": {
+      "n_sim": 19,
+      "n_real_themes": 3,
+      "n_sim_themes": 18,
+      "tp": 3,
+      "fp": 15,
+      "fn": 0,
+      "precision": 16.7,
+      "recall": 100,
+      "f1": 28.6
+    }
+  },
+  "segment_sentiment": {
+    "couples": {
+      "pos": 214,
+      "neg": 102,
+      "ratio": 2.1
+    },
+    "families": {
+      "pos": 105,
+      "neg": 72,
+      "ratio": 1.5
+    },
+    "solo_or_friends": {
+      "pos": 77,
+      "neg": 80,
+      "ratio": 1
+    },
+    "business": {
+      "pos": 141,
+      "neg": 117,
+      "ratio": 1.2
+    }
+  },
+  "composite_v2": {
+    "rating_fidelity_pct": 26,
+    "theme_f1_pct": 86.4,
+    "subcategory_accuracy_pct": 0,
+    "segment_f1_avg_pct": 36.8,
+    "sentiment_ratio_pct": 45.1,
+    "weighted_composite": 42.4,
+    "weights": {
+      "rating": 0.25,
+      "theme_f1": 0.3,
+      "subcategory": 0.2,
+      "segment_f1": 0.15,
+      "sentiment": 0.1
+    }
+  },
+  "interpretation": "LOW — significant divergence"
+}

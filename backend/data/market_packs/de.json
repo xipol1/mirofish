@@ -1,0 +1,143 @@
+{
+  "pack_version": "0.1.0",
+  "market_id": "de",
+  "label": "Germany / DACH",
+  "iso_country_code": "DE",
+  "currency_iso": "EUR",
+  "sources": [
+    "FRONTUR 2024 (TourSpain / INE)",
+    "EGATUR 2024",
+    "FUR Reiseanalyse 2024 (German travel research)",
+    "Destatis Outbound Tourism 2024",
+    "Eurostat Tourism Statistics 2024",
+    "AENA Mallorca & Menorca German traffic",
+    "Cornell Hospitality Quarterly 2023 — German booking behaviors",
+    "Hofstede Cultural Dimensions (Germany)",
+    "HolidayCheck + Trustpilot DE sentiment corpus"
+  ],
+  "last_updated": "2026-04-18",
+  "cultural_cluster_mapping": "german_dach",
+
+  "booking_window_distribution_days": {
+    "last_minute_0_3": 0.04,
+    "short_4_14": 0.12,
+    "medium_15_45": 0.32,
+    "long_46_90": 0.31,
+    "very_long_91_plus": 0.21
+  },
+
+  "channel_share_pct": {
+    "booking_com": 44,
+    "direct_web": 21,
+    "holidaycheck_check24": 12,
+    "travel_agency": 8,
+    "direct_app": 5,
+    "expedia_group": 4,
+    "meta": 3,
+    "loyalty_redemption": 2,
+    "corporate": 1
+  },
+
+  "price_sensitivity": {
+    "elasticity_coefficient": -1.05,
+    "walk_away_threshold_pct_above_comp_set": 13,
+    "deal_trigger_threshold_pct_below_comp_set": 9,
+    "sensitivity_segment_override": {
+      "luxury_seeker": -0.55,
+      "business_traveler": -0.85,
+      "budget_optimizer": -1.65
+    }
+  },
+
+  "cancellation_patterns": {
+    "refundable_rate_preference_pct": 55,
+    "nonrefundable_rate_preference_pct": 45,
+    "cancellation_rate_refundable_pct": 15,
+    "cancellation_rate_nonrefundable_pct": 2,
+    "typical_cancellation_window_hours_before_arrival": 96
+  },
+
+  "device_share_pct": {
+    "mobile": 48,
+    "desktop": 42,
+    "tablet": 10
+  },
+
+  "typical_length_of_stay_nights_by_segment": {
+    "leisure_solo": 4.2,
+    "leisure_couples": 7.3,
+    "leisure_family": 11.5,
+    "business": 2.7,
+    "remote_work": 9.8,
+    "event": 3.1
+  },
+
+  "destination_origin_airport_distribution_pct": {
+    "FRA": 22,
+    "MUC": 18,
+    "DUS": 14,
+    "BER": 13,
+    "HAM": 10,
+    "STR": 7,
+    "CGN": 6,
+    "VIE": 5,
+    "ZRH": 3,
+    "other": 2
+  },
+
+  "segment_mix_outbound_to_mediterranean_pct": {
+    "leisure_couples": 34,
+    "leisure_family": 38,
+    "leisure_solo": 9,
+    "business": 5,
+    "remote_work": 6,
+    "event": 3,
+    "honeymoon_milestone": 5
+  },
+
+  "review_platform_usage_pct": {
+    "booking_com": 42,
+    "holidaycheck": 28,
+    "tripadvisor": 15,
+    "google": 13,
+    "instagram": 2
+  },
+  "review_writing_probability_pct": 48,
+  "complaint_escalation_pattern": "direct_written_detailed",
+
+  "loyalty_tier_penetration_pct": 22,
+
+  "average_spend_per_night_ancillary_eur": {
+    "economy_property": 38,
+    "upscale_property": 95,
+    "luxury_property": 175,
+    "ultra_luxury_property": 295
+  },
+
+  "key_behavioral_traits": [
+    "Punctuality of all services (check-in, restaurant, spa) is non-negotiable",
+    "Cleanliness standards extremely strict — visible dust or hair = trip-defining complaint",
+    "Rule clarity expected: what's included, what isn't, printed or digitally accessible",
+    "Efficient processes preferred over small-talk delay",
+    "Quiet, rule-abiding environment highly valued",
+    "Longer booking windows than other markets — they plan ahead",
+    "Longer stays than average (esp. families) — 2-3 week bookings common",
+    "Detailed written reviews with bullet-point critiques",
+    "Lower tolerance for chaos or improvisation; defined SOPs appreciated",
+    "HolidayCheck and Booking.com dominate pre-trip research"
+  ],
+
+  "preferred_property_types": [
+    "all_inclusive_resort", "family_resort", "wellness_resort", "design_led_boutique"
+  ],
+
+  "seasonal_peaks_menorca": ["July", "August", "September", "Easter"],
+
+  "payment_preferences": {
+    "credit_card": 38,
+    "sepa_direct_debit": 28,
+    "paypal": 18,
+    "klarna": 10,
+    "bank_transfer": 6
+  }
+}

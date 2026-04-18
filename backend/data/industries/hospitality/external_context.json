@@ -1,0 +1,132 @@
+{
+  "_description": "External context that shapes the stay: weather, occupancy, season, local events. Applied per-stage in the narrative engine.",
+
+  "weather_types": {
+    "sunny_calm": {
+      "label": "Sunny, calm, ideal",
+      "sensation_modifiers": { "aesthetic": 5, "amenity_usability": 5, "comfort_physical": 2, "crowd": -3 },
+      "activity_enabled": ["pool", "beach", "outdoor_dining", "excursion", "watersports"],
+      "narrative_hint": "Clear blue sky, calm sea, 26-30°C, gentle breeze. Guests can use the full outdoor program."
+    },
+    "sunny_heatwave": {
+      "label": "Sunny but extremely hot (>35°C)",
+      "sensation_modifiers": { "comfort_physical": -10, "amenity_usability": -5, "aesthetic": 2 },
+      "activity_enabled": ["pool", "spa", "indoor_lunch"],
+      "activity_limited": ["beach_midday", "gym", "outdoor_dining"],
+      "narrative_hint": "Heatwave. 37-40°C. AC pushed to limit. Pool crowded, beach unusable between 11-17h. Water consumption high."
+    },
+    "overcast": {
+      "label": "Overcast, mild, no rain",
+      "sensation_modifiers": { "aesthetic": -3, "amenity_usability": 0 },
+      "activity_enabled": ["pool_heated", "beach_light", "all_indoor"],
+      "narrative_hint": "Grey skies, 20-22°C. Pool heated; beach walkable but not sunbathing weather."
+    },
+    "rainy_light": {
+      "label": "Light rain intermittent",
+      "sensation_modifiers": { "aesthetic": -5, "amenity_usability": -8, "crowd": 3 },
+      "activity_enabled": ["spa", "indoor_dining", "gym", "reading"],
+      "activity_limited": ["pool", "beach", "outdoor_dining", "excursion"],
+      "narrative_hint": "Intermittent rain forces indoor activities. Lobby and restaurants crowded. Kids club overflowing. Guests visibly frustrated."
+    },
+    "rainy_storm": {
+      "label": "Heavy storm / thunderstorm",
+      "sensation_modifiers": { "aesthetic": -10, "amenity_usability": -15, "safety": -3, "crowd": 5 },
+      "activity_enabled": ["spa", "gym", "indoor_dining"],
+      "activity_disabled": ["pool", "beach", "outdoor_dining", "excursion", "watersports"],
+      "narrative_hint": "Thunderstorm, high winds. Pool closed, beach closed, terrace dining moved inside. Half the property tries to use the spa at once."
+    },
+    "windy": {
+      "label": "Very windy",
+      "sensation_modifiers": { "aesthetic": -3, "amenity_usability": -5, "comfort_physical": -3 },
+      "activity_limited": ["beach", "pool_chairs", "outdoor_dining"],
+      "narrative_hint": "Strong winds. Beach umbrellas constantly blowing. Pool chairs need weighting. Terrace dining uncomfortable."
+    },
+    "cold_snap": {
+      "label": "Unexpectedly cold (<15°C)",
+      "sensation_modifiers": { "comfort_physical": -5, "amenity_usability": -8, "aesthetic": -2 },
+      "activity_enabled": ["spa", "indoor_dining", "gym"],
+      "narrative_hint": "Cold front. Pool empty. Guests layered in sweaters. Spa heavily booked. Staff apologetic."
+    }
+  },
+
+  "seasons": {
+    "high": {
+      "label": "High season (peak summer)",
+      "month_examples": ["July", "August", "December_holidays"],
+      "typical_occupancy_pct": 95,
+      "typical_price_vs_annual_avg_pct": 140,
+      "sensation_modifiers": { "crowd": -10, "amenity_usability": -5, "speed": -5, "service_quality": -3 },
+      "narrative_hint": "Property near capacity. Pool chairs scarce by 10 AM. Restaurants fully booked. Staff visibly stretched. Kids club at limit."
+    },
+    "mid": {
+      "label": "Mid / shoulder season",
+      "month_examples": ["May", "June", "September", "October"],
+      "typical_occupancy_pct": 72,
+      "typical_price_vs_annual_avg_pct": 100,
+      "sensation_modifiers": {},
+      "narrative_hint": "Comfortable occupancy. Pool available. Restaurants need reservation but not urgent. Staff attentive."
+    },
+    "low": {
+      "label": "Low season",
+      "month_examples": ["November", "February", "March"],
+      "typical_occupancy_pct": 42,
+      "typical_price_vs_annual_avg_pct": 65,
+      "sensation_modifiers": { "crowd": 8, "service_quality": 3, "personalization": 3, "aesthetic": -2 },
+      "narrative_hint": "Low occupancy. Pool/beach nearly empty. Some F&B outlets closed. Staff relaxed but experience feels off-season."
+    },
+    "holiday_surge": {
+      "label": "Holiday surge (Easter, Christmas, NYE)",
+      "typical_occupancy_pct": 98,
+      "typical_price_vs_annual_avg_pct": 180,
+      "sensation_modifiers": { "crowd": -12, "amenity_usability": -8, "speed": -7, "service_quality": -5, "value": -5 },
+      "narrative_hint": "Near-sold-out with families and groups. Festive programming. Queues everywhere. Pricing at peak. Expectations elevated."
+    }
+  },
+
+  "local_events": {
+    "none": { "label": "No notable local event", "sensation_modifiers": {} },
+    "music_festival_nearby": {
+      "label": "Music festival nearby (10-30 km)",
+      "sensation_modifiers": { "crowd": -5, "comfort_physical": -3 },
+      "narrative_hint": "Festival crowds passing through property. Nightclub pulses audible on windy nights. Some younger guests excited."
+    },
+    "wedding_on_property": {
+      "label": "Wedding taking place on the property",
+      "sensation_modifiers": { "crowd": -5, "amenity_usability": -5, "aesthetic": 3, "service_quality": -3 },
+      "narrative_hint": "Private wedding in main restaurant evening X. Section cordoned off. Some guest confusion and service stretched."
+    },
+    "property_renovation_partial": {
+      "label": "Partial renovation during stay",
+      "sensation_modifiers": { "aesthetic": -8, "comfort_physical": -5, "amenity_usability": -8 },
+      "narrative_hint": "One wing or amenity under renovation. Construction noise 9-17h weekdays. Not fully disclosed at booking."
+    },
+    "regional_holiday": {
+      "label": "Local regional holiday",
+      "sensation_modifiers": { "crowd": -3, "authenticity": 5 },
+      "narrative_hint": "Regional festivity visible in the town. Staff in traditional dress one night. Dining options limited offsite."
+    },
+    "heatwave_regional": {
+      "label": "Regional heatwave advisory",
+      "sensation_modifiers": { "comfort_physical": -8, "amenity_usability": -3 },
+      "narrative_hint": "News coverage of heatwave. Pool extremely crowded. AC units maxed out."
+    },
+    "influencer_stay_concurrent": {
+      "label": "Known influencer staying concurrently",
+      "sensation_modifiers": { "service_quality": -2, "aesthetic": 3 },
+      "narrative_hint": "Mid-tier influencer doing a stay. Staff slightly preoccupied with their requests. Photo shoots at pool at golden hour."
+    },
+    "regional_transport_strike": {
+      "label": "Airport / rail strike in region",
+      "sensation_modifiers": { "safety": -3, "speed": -5 },
+      "narrative_hint": "Strike disrupts arrivals/departures. Some guests arrive stressed or late. Hotel improvises extended late check-in."
+    }
+  },
+
+  "occupancy_buckets": {
+    "very_low": { "pct_max": 35, "sensation_modifiers": { "crowd": 10, "speed": 5, "personalization": 5, "service_quality": 3 } },
+    "low": { "pct_max": 55, "sensation_modifiers": { "crowd": 5, "speed": 3, "personalization": 2 } },
+    "medium": { "pct_max": 75, "sensation_modifiers": {} },
+    "high": { "pct_max": 90, "sensation_modifiers": { "crowd": -5, "speed": -3 } },
+    "near_full": { "pct_max": 100, "sensation_modifiers": { "crowd": -10, "speed": -7, "amenity_usability": -5, "service_quality": -3 } }
+  }
+}

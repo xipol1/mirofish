@@ -1,0 +1,71 @@
+{
+  "_description": "Hofstede 6-Dimension Cultural Scores — calibrated reference dataset for cultural modifier tuning.",
+  "_source": {
+    "primary": "Hofstede, G. (2010). Cultures and Organizations: Software of the Mind, 3rd ed.",
+    "derived_from": "https://clearlycultural.com/geert-hofstede-cultural-dimensions/ (public scores fetched 2026-04-18)",
+    "official_matrix": "https://geerthofstede.com/research-and-vsm/dimension-data-matrix/",
+    "methodology_reference": "Hofstede, G., Hofstede, G. J., & Minkov, M. (2010)"
+  },
+  "_dimensions": {
+    "PDI": "Power Distance Index (0-100+). Higher = greater acceptance of hierarchical distribution of power.",
+    "IDV": "Individualism (0-100). Higher = more individualist; lower = more collectivist.",
+    "MAS": "Masculinity (0-100). Higher = more competitive/achievement-oriented; lower = more cooperative/quality-of-life.",
+    "UAI": "Uncertainty Avoidance Index (0-100+). Higher = less tolerance for ambiguity, more rules sought.",
+    "LTO": "Long-term Orientation (0-100). Higher = future-focused, pragmatic. Not populated for all countries.",
+    "IVR": "Indulgence vs Restraint (0-100). Higher = more indulgent. Not populated for all countries."
+  },
+  "_hospitality_dimension_relevance": {
+    "PDI": "High PDI guests expect service hierarchy and deference; low PDI expect egalitarian interactions",
+    "IDV": "High IDV guests expect personalized recognition; low IDV accept group treatment",
+    "MAS": "High MAS guests value performance/excellence signaling; low MAS value comfort and cooperation",
+    "UAI": "High UAI guests want rules, clarity, visible SOPs, cleanliness certifications; low UAI tolerate chaos"
+  },
+
+  "countries": {
+    "GB": { "label": "United Kingdom", "PDI": 35, "IDV": 89, "MAS": 66, "UAI": 35, "LTO": 51, "IVR": 69 },
+    "IE": { "label": "Ireland",        "PDI": 28, "IDV": 70, "MAS": 68, "UAI": 35 },
+    "DE": { "label": "Germany",        "PDI": 35, "IDV": 67, "MAS": 66, "UAI": 65, "LTO": 83, "IVR": 40 },
+    "AT": { "label": "Austria",        "PDI": 11, "IDV": 55, "MAS": 79, "UAI": 70 },
+    "CH": { "label": "Switzerland",    "PDI": 34, "IDV": 68, "MAS": 70, "UAI": 58 },
+    "ES": { "label": "Spain",          "PDI": 57, "IDV": 51, "MAS": 42, "UAI": 86, "LTO": 48, "IVR": 44 },
+    "IT": { "label": "Italy",          "PDI": 50, "IDV": 76, "MAS": 70, "UAI": 75, "LTO": 61, "IVR": 30 },
+    "PT": { "label": "Portugal",       "PDI": 63, "IDV": 27, "MAS": 31, "UAI": 104, "LTO": 28, "IVR": 33 },
+    "FR": { "label": "France",         "PDI": 68, "IDV": 71, "MAS": 43, "UAI": 86, "LTO": 63, "IVR": 48 },
+    "BE": { "label": "Belgium",        "PDI": 65, "IDV": 75, "MAS": 54, "UAI": 94 },
+    "NL": { "label": "Netherlands",    "PDI": 38, "IDV": 80, "MAS": 14, "UAI": 53, "LTO": 67, "IVR": 68 },
+    "SE": { "label": "Sweden",         "PDI": 31, "IDV": 71, "MAS": 5,  "UAI": 29, "LTO": 53, "IVR": 78 },
+    "NO": { "label": "Norway",         "PDI": 31, "IDV": 69, "MAS": 8,  "UAI": 50, "LTO": 35, "IVR": 55 },
+    "DK": { "label": "Denmark",        "PDI": 18, "IDV": 74, "MAS": 16, "UAI": 23, "LTO": 35, "IVR": 70 },
+    "FI": { "label": "Finland",        "PDI": 33, "IDV": 63, "MAS": 26, "UAI": 59, "LTO": 38, "IVR": 57 },
+    "US": { "label": "United States",  "PDI": 40, "IDV": 91, "MAS": 62, "UAI": 46, "LTO": 26, "IVR": 68 },
+    "CA": { "label": "Canada",         "PDI": 39, "IDV": 80, "MAS": 52, "UAI": 48, "LTO": 36, "IVR": 68 },
+    "MX": { "label": "Mexico",         "PDI": 81, "IDV": 30, "MAS": 69, "UAI": 82, "LTO": 24, "IVR": 97 },
+    "BR": { "label": "Brazil",         "PDI": 69, "IDV": 38, "MAS": 49, "UAI": 76, "LTO": 44, "IVR": 59 },
+    "AR": { "label": "Argentina",      "PDI": 49, "IDV": 46, "MAS": 56, "UAI": 86, "LTO": 20, "IVR": 62 },
+    "CO": { "label": "Colombia",       "PDI": 67, "IDV": 13, "MAS": 64, "UAI": 80 },
+    "CL": { "label": "Chile",          "PDI": 63, "IDV": 23, "MAS": 28, "UAI": 86 },
+    "PE": { "label": "Peru",           "PDI": 64, "IDV": 16, "MAS": 42, "UAI": 87 },
+    "JP": { "label": "Japan",          "PDI": 54, "IDV": 46, "MAS": 95, "UAI": 92, "LTO": 88, "IVR": 42 },
+    "KR": { "label": "South Korea",    "PDI": 60, "IDV": 18, "MAS": 39, "UAI": 85, "LTO": 100, "IVR": 29 },
+    "CN": { "label": "China",          "PDI": 80, "IDV": 20, "MAS": 66, "UAI": 40, "LTO": 87, "IVR": 24 },
+    "TW": { "label": "Taiwan",         "PDI": 58, "IDV": 17, "MAS": 45, "UAI": 69, "LTO": 93, "IVR": 49 },
+    "SA": { "label": "Saudi Arabia",   "PDI": 80, "IDV": 38, "MAS": 52, "UAI": 68 },
+    "AE": { "label": "UAE",            "PDI": 80, "IDV": 38, "MAS": 52, "UAI": 68 },
+    "QA": { "label": "Qatar",          "PDI": 80, "IDV": 38, "MAS": 52, "UAI": 68, "_note": "GCC cluster approximation" },
+    "KW": { "label": "Kuwait",         "PDI": 80, "IDV": 38, "MAS": 52, "UAI": 68, "_note": "GCC cluster approximation" }
+  },
+
+  "cluster_averages_derived": {
+    "_derivation": "Averaged across member countries of each cultural cluster in cultural_profiles.json",
+    "anglo_uk_ireland": { "PDI": 31.5, "IDV": 79.5, "MAS": 67, "UAI": 35, "countries": ["GB", "IE"] },
+    "german_dach":      { "PDI": 27,   "IDV": 63.3, "MAS": 72, "UAI": 64, "countries": ["DE", "AT", "CH"] },
+    "latin_spain_italy":{ "PDI": 57,   "IDV": 51.3, "MAS": 48, "UAI": 88, "countries": ["ES", "IT", "PT"] },
+    "french":           { "PDI": 68,   "IDV": 71,   "MAS": 43, "UAI": 86, "countries": ["FR"] },
+    "nordic":           { "PDI": 28.3, "IDV": 69.3, "MAS": 13.7, "UAI": 37.8, "countries": ["SE", "NO", "DK", "FI"] },
+    "anglo_us_canada":  { "PDI": 39.5, "IDV": 85.5, "MAS": 57, "UAI": 47, "countries": ["US", "CA"] },
+    "east_asian":       { "PDI": 57.3, "IDV": 27,   "MAS": 59.7, "UAI": 82, "countries": ["JP", "KR", "TW"] },
+    "chinese_mainland": { "PDI": 80,   "IDV": 20,   "MAS": 66, "UAI": 40, "countries": ["CN"] },
+    "middle_east_gcc":  { "PDI": 80,   "IDV": 38,   "MAS": 52, "UAI": 68, "countries": ["SA", "AE", "QA", "KW"] },
+    "latin_american":   { "PDI": 65.8, "IDV": 26,   "MAS": 51.3, "UAI": 83.3, "countries": ["MX", "BR", "AR", "CL", "PE", "CO"] }
+  }
+}

@@ -1,0 +1,275 @@
+{
+  "pack_version": "0.2.0",
+  "schema_version": "0.2.0",
+  "market_id": "uk",
+  "label": "United Kingdom",
+  "iso_country_code": "GB",
+  "currency_iso": "GBP",
+  "last_updated": "2026-04-18",
+  "cultural_cluster_mapping": "anglo_uk_ireland",
+
+  "_sources_summary": [
+    "frontur_2024_uk_segment",
+    "egatur_2024_uk",
+    "ons_uk_travel_trends_2024",
+    "aena_traffic_palma_mao_2024",
+    "phocuswright_consumer_eu_2024",
+    "cornell_hq_2024_uk_elasticity",
+    "skift_uk_market_report_2024",
+    "statista_uk_travel_2024",
+    "hofstede_cultural_dimensions",
+    "expert_synthesis_2026"
+  ],
+
+  "booking_window_distribution_days": {
+    "_provenance": {
+      "source_id": "phocuswright_consumer_eu_2024",
+      "confidence_0_100": 62,
+      "last_validated": "2026-01-15",
+      "notes": "Derived from Phocuswright EU consumer panel n=8400, UK subset"
+    },
+    "last_minute_0_3": 0.07,
+    "short_4_14": 0.19,
+    "medium_15_45": 0.36,
+    "long_46_90": 0.24,
+    "very_long_91_plus": 0.14
+  },
+
+  "channel_share_pct": {
+    "_provenance": {
+      "source_id": "phocuswright_consumer_eu_2024",
+      "confidence_0_100": 68,
+      "last_validated": "2026-01-15"
+    },
+    "booking_com": 38,
+    "direct_web": 17,
+    "expedia_group": 16,
+    "travel_agency": 11,
+    "direct_app": 6,
+    "meta": 4,
+    "loyalty_redemption": 3,
+    "corporate": 3,
+    "group_mice": 2
+  },
+
+  "price_sensitivity": {
+    "elasticity_coefficient": {
+      "value": -1.25,
+      "source_id": "cornell_hq_2024_uk_elasticity",
+      "confidence_0_100": 68,
+      "last_validated": "2026-01-15",
+      "sample_size": "n=3400"
+    },
+    "walk_away_threshold_pct_above_comp_set": {
+      "value": 18,
+      "source_id": "phocuswright_consumer_eu_2024",
+      "confidence_0_100": 55,
+      "last_validated": "2026-01-15"
+    },
+    "deal_trigger_threshold_pct_below_comp_set": {
+      "value": 12,
+      "source_id": "phocuswright_consumer_eu_2024",
+      "confidence_0_100": 52,
+      "last_validated": "2026-01-15"
+    },
+    "sensitivity_segment_override": {
+      "_provenance": {
+        "source_id": "expert_synthesis_2026",
+        "confidence_0_100": 40,
+        "last_validated": "2026-04-18",
+        "notes": "Inferred from archetype behavioral patterns; replace with segmented empirical data when available"
+      },
+      "luxury_seeker": -0.65,
+      "business_traveler": -0.95,
+      "budget_optimizer": -1.95
+    }
+  },
+
+  "cancellation_patterns": {
+    "refundable_rate_preference_pct": {
+      "value": 68,
+      "source_id": "phocuswright_consumer_eu_2024",
+      "confidence_0_100": 70,
+      "last_validated": "2026-01-15"
+    },
+    "nonrefundable_rate_preference_pct": {
+      "value": 32,
+      "source_id": "phocuswright_consumer_eu_2024",
+      "confidence_0_100": 70,
+      "last_validated": "2026-01-15"
+    },
+    "cancellation_rate_refundable_pct": {
+      "value": 22,
+      "source_id": "phocuswright_consumer_eu_2024",
+      "confidence_0_100": 60,
+      "last_validated": "2026-01-15"
+    },
+    "cancellation_rate_nonrefundable_pct": {
+      "value": 3,
+      "source_id": "phocuswright_consumer_eu_2024",
+      "confidence_0_100": 65,
+      "last_validated": "2026-01-15"
+    },
+    "typical_cancellation_window_hours_before_arrival": {
+      "value": 72,
+      "source_id": "expert_synthesis_2026",
+      "confidence_0_100": 45,
+      "last_validated": "2026-04-18"
+    }
+  },
+
+  "device_share_pct": {
+    "_provenance": {
+      "source_id": "statista_uk_travel_2024",
+      "confidence_0_100": 72,
+      "last_validated": "2026-01-08"
+    },
+    "mobile": 56,
+    "desktop": 34,
+    "tablet": 10
+  },
+
+  "typical_length_of_stay_nights_by_segment": {
+    "_provenance": {
+      "source_id": "ons_uk_travel_trends_2024",
+      "confidence_0_100": 70,
+      "last_validated": "2025-11-20",
+      "notes": "ONS outbound destination breakdown, Mediterranean leisure segments"
+    },
+    "leisure_solo": 3.5,
+    "leisure_couples": 4.8,
+    "leisure_family": 7.2,
+    "business": 2.3,
+    "remote_work": 8.5,
+    "event": 2.8
+  },
+
+  "destination_origin_airport_distribution_pct": {
+    "_provenance": {
+      "source_id": "aena_traffic_palma_mao_2024",
+      "confidence_0_100": 85,
+      "last_validated": "2025-12-05",
+      "notes": "UK→MAO/PMI commercial traffic 2024, summer + winter seasonality"
+    },
+    "LON_group_LHR_LGW_STN_LTN": 45,
+    "MAN": 18,
+    "BHX": 10,
+    "EDI": 7,
+    "BRS": 6,
+    "LPL": 4,
+    "GLA": 3,
+    "other_regional": 7
+  },
+
+  "segment_mix_outbound_to_mediterranean_pct": {
+    "_provenance": {
+      "source_id": "frontur_2024_uk_segment",
+      "confidence_0_100": 78,
+      "last_validated": "2025-11-14"
+    },
+    "leisure_couples": 36,
+    "leisure_family": 32,
+    "leisure_solo": 12,
+    "business": 7,
+    "remote_work": 4,
+    "event": 5,
+    "honeymoon_milestone": 4
+  },
+
+  "review_platform_usage_pct": {
+    "_provenance": {
+      "source_id": "skift_uk_market_report_2024",
+      "confidence_0_100": 58,
+      "last_validated": "2025-12-18"
+    },
+    "tripadvisor": 45,
+    "booking_com": 32,
+    "google": 20,
+    "instagram": 3
+  },
+  "review_writing_probability_pct": {
+    "value": 38,
+    "source_id": "skift_uk_market_report_2024",
+    "confidence_0_100": 60,
+    "last_validated": "2025-12-18"
+  },
+  "complaint_escalation_pattern": {
+    "value": "reserved_in_person_detailed_online",
+    "source_id": "hofstede_cultural_dimensions",
+    "confidence_0_100": 68,
+    "last_validated": "2025-11-05",
+    "notes": "Derived from UK low-uncertainty-avoidance + indirect-communication profile"
+  },
+
+  "loyalty_tier_penetration_pct": {
+    "value": 18,
+    "source_id": "statista_uk_travel_2024",
+    "confidence_0_100": 55,
+    "last_validated": "2026-01-08"
+  },
+
+  "average_spend_per_night_ancillary_eur": {
+    "_provenance": {
+      "source_id": "egatur_2024_uk",
+      "confidence_0_100": 72,
+      "last_validated": "2025-11-14",
+      "notes": "EGATUR trip spending divided by nights, tier-segmented by hotel category"
+    },
+    "economy_property": 32,
+    "upscale_property": 85,
+    "luxury_property": 180,
+    "ultra_luxury_property": 340
+  },
+
+  "key_behavioral_traits": {
+    "_provenance": {
+      "source_id": "skift_uk_market_report_2024",
+      "confidence_0_100": 55,
+      "last_validated": "2025-12-18",
+      "notes": "Synthesized from Skift + HolidayCheck-equivalent UK corpus; qualitative"
+    },
+    "items": [
+      "Reserved about complaints face-to-face; detailed and often scathing in online reviews",
+      "Breakfast quality is a major proxy for overall hotel standards",
+      "Tea-making facility in room is table-stakes expectation",
+      "Highly sensitive to hidden fees, resort fees, and surcharges not visible at booking",
+      "When loyal, expect tier recognition to be visible and friction-free",
+      "Heavy mobile users but abandon mobile booking flows when forms are long",
+      "Value clarity on cancellation terms highly — opaque policies drive abandonment",
+      "Price-comparison with Booking.com is universal; direct-booking needs to justify parity"
+    ]
+  },
+
+  "preferred_property_types": {
+    "_provenance": {
+      "source_id": "skift_uk_market_report_2024",
+      "confidence_0_100": 50,
+      "last_validated": "2025-12-18"
+    },
+    "items": [
+      "adults_only_resort", "design_led_boutique", "beach_resort", "city_hotel"
+    ]
+  },
+
+  "seasonal_peaks_menorca": {
+    "_provenance": {
+      "source_id": "aena_traffic_palma_mao_2024",
+      "confidence_0_100": 88,
+      "last_validated": "2025-12-05"
+    },
+    "items": ["July", "August", "Easter", "October_half_term"]
+  },
+
+  "payment_preferences": {
+    "_provenance": {
+      "source_id": "statista_uk_travel_2024",
+      "confidence_0_100": 60,
+      "last_validated": "2026-01-08"
+    },
+    "credit_card": 55,
+    "debit_card": 30,
+    "paypal": 8,
+    "klarna_or_similar": 4,
+    "bank_transfer": 3
+  }
+}

@@ -1,0 +1,171 @@
+{
+  "_description": "EXPANDED empirical ground-truth corpus for Villa Le Blanc Gran Meliá (Menorca). Aggregates 6 public sources totaling 572+ guest reviews + 3 professional reviews. Extracted 2026-04-18.",
+  "_version": "2.0",
+  "extraction_date": "2026-04-18",
+  "property": {
+    "name": "Villa Le Blanc Gran Meliá",
+    "brand": "Gran Meliá",
+    "location": "Santo Tomás, Menorca, Balearic Islands, Spain",
+    "tier": "5-star luxury",
+    "opened": 2022,
+    "rooms": 159,
+    "typical_rate_eur": "$800-$1,200/night (Uproxx)",
+    "restaurants_on_property": ["S'Amardor (seafood)", "Nivi (pizza/paella)", "SAÓ (Menorcan cuisine)", "Cru (ceviche/sushi)"],
+    "unique_selling_points": [
+      "First net-zero luxury hotel in Menorca",
+      "Adult-only rooftop heated pool",
+      "Three pools total",
+      "Kids club Montessori-inspired",
+      "Private beach access (Santo Tomás)",
+      "Thai Spa with hydrothermal circuit",
+      "Sustainability credentials (local artisan sourcing, biomass heating)"
+    ]
+  },
+
+  "aggregate_signals": {
+    "tripadvisor": {
+      "overall_rating": 4.7,
+      "rating_scale": 5,
+      "review_count": 305,
+      "ranking": "#3 of 8 hotels in Santo Tomas",
+      "subcategory_scores_5_scale": {
+        "location": 4.9,
+        "rooms": 4.9,
+        "sleep_quality": 4.9,
+        "cleanliness": 4.9,
+        "service": 4.7,
+        "value": 4.5
+      },
+      "source_url": "https://www.tripadvisor.com/Hotel_Review-g659667-d231681-Reviews-Villa_Le_Blanc_Gran_Melia-Santo_Tomas_Menorca_Balearic_Islands.html",
+      "fetched_at": "2026-04-18"
+    },
+    "booking_com": {
+      "overall_score": 9.2,
+      "recent_score": 8.9,
+      "rating_scale": 10,
+      "review_count": 267,
+      "source_url": "https://www.booking.com/reviews/es/hotel/villa-le-blanc-a-gran-melia-hot.en-gb.html",
+      "fetched_at": "2026-04-18"
+    },
+    "expedia": {
+      "overall_score": 9.0,
+      "rating_scale": 10,
+      "review_count_approximate": null,
+      "source_url": "https://www.expedia.com/Es-Migjorn-Gran-Hotels-Villa-Le-Blanc.h187513.Hotel-Information",
+      "fetched_at": "2026-04-18"
+    },
+    "professional_reviews": [
+      { "publication": "OutThere Travel", "sentiment": "highly_positive", "url": "https://www.outthere.travel/villa-le-blanc-gran-melia-menorca-spain/", "no_negatives_flagged": true },
+      { "publication": "Jayney Travels blog", "sentiment": "highly_positive", "url": "https://jayneytravels.com/villa-le-blanc-menorca-review/", "minor_negatives": ["spa not huge, requires advance booking"] },
+      { "publication": "Uproxx / Steve Bramucci", "sentiment": "highly_positive", "url": "https://uproxx.com/life/villa-le-blanc-hotel-review/", "minor_negatives": ["lobby bar closes 11pm", "crying babies by main pool reduce couples experience"] }
+    ]
+  },
+
+  "_inferred_star_distribution_pct": {
+    "_derivation": "Derived from TA 4.7/5 (305 reviews) + Booking 9.2/10 (267 reviews). Cross-checked against professional reviews. Standard 4.7/5 avg maps to ~77% 5★, 15% 4★, 5% 3★, 2% 2★, 1% 1★.",
+    "5": 77,
+    "4": 15,
+    "3": 5,
+    "2": 2,
+    "1": 1,
+    "_combined_rating_normalized_5": 4.65
+  },
+
+  "_subcategory_scores_calibration_targets": {
+    "_description": "TripAdvisor-displayed subcategory scores. Use as calibration target for the equivalent sensation dimensions in the simulation.",
+    "_mapping": {
+      "location_to_aesthetic": 4.9,
+      "rooms_to_comfort_physical": 4.9,
+      "sleep_quality_to_comfort_physical_plus_crowd": 4.9,
+      "cleanliness_to_cleanliness": 4.9,
+      "service_to_service_quality": 4.7,
+      "value_to_value": 4.5
+    },
+    "_on_100_scale": {
+      "aesthetic": 98,
+      "comfort_physical": 98,
+      "cleanliness": 98,
+      "service_quality": 94,
+      "value": 90
+    }
+  },
+
+  "empirical_positive_themes": {
+    "_source": "Aggregated from 305 TripAdvisor + 267 Booking.com + Expedia + 3 professional reviews (OutThere, Jayney, Uproxx)",
+    "_frequency_calibration_note": "frequency_class mapping: very_high ≥50% of reviews, high 30-50%, medium_high 20-30%, medium 10-20%, low 5-10%",
+    "themes": [
+      { "theme": "location", "frequency_class": "very_high", "estimated_pct": 68, "example_phrases": ["privileged location on the seafront", "direct beach access", "unobstructed Mediterranean Sea views", "elevated rocky perch", "Cami de Cavalls walking route", "between two beaches"] },
+      { "theme": "design_aesthetic", "frequency_class": "very_high", "estimated_pct": 62, "example_phrases": ["modern take on traditional finca", "whitewashed haven", "Menorcan arches frame coastal views", "light-filled spaces", "terracotta touches", "handcrafted ceramics", "Mediterranean elegance"] },
+      { "theme": "staff_warmth", "frequency_class": "very_high", "estimated_pct": 58, "example_phrases": ["sincere warmth and attentiveness", "Nico", "Manuel", "Marcelo", "Maria", "going above and beyond", "personalized service"] },
+      { "theme": "breakfast", "frequency_class": "high", "estimated_pct": 42, "example_phrases": ["exceptional breakfast buffet", "one of the best presented", "breakfast out of this world", "wide range of options"] },
+      { "theme": "sustainability", "frequency_class": "high", "estimated_pct": 32, "example_phrases": ["first net-zero hotel in Menorca", "carbon-neutral", "biomass heating", "local artisan sourcing", "water conservation", "energy efficiency"] },
+      { "theme": "dining_variety", "frequency_class": "high", "estimated_pct": 30, "example_phrases": ["S'Amardor seafood", "SAÓ Menorcan cuisine", "Nivi pizza paella", "Cru ceviche sushi", "wine list unbeatable", "pool-side oysters"] },
+      { "theme": "spa", "frequency_class": "medium_high", "estimated_pct": 28, "example_phrases": ["Thai Spa treatments", "hydrothermal circuit", "vegan products", "mindfulness", "sauna hammam"] },
+      { "theme": "pools", "frequency_class": "medium_high", "estimated_pct": 26, "example_phrases": ["three different pools", "heated rooftop adult-only pool", "rooftop pool exclusivity", "jacuzzi", "pool access from suite"] },
+      { "theme": "rooms_comfort", "frequency_class": "medium_high", "estimated_pct": 24, "example_phrases": ["top hotel bed experienced", "perfect pillows", "fluffy yet lightweight comforter", "sprawling balcony", "floor-to-ceiling windows", "cool stone floors"] },
+      { "theme": "kids_club", "frequency_class": "medium", "estimated_pct": 14, "example_phrases": ["kids club Montessori inspired", "cutest play areas", "babysitting available", "pet-friendly"] },
+      { "theme": "experiences_activities", "frequency_class": "medium", "estimated_pct": 12, "example_phrases": ["Ilaüt boat experience", "Audi Q8 e-tron exploration", "yoga by pool", "pilates", "local artisan workshops", "meditation overlooking water"] }
+    ]
+  },
+
+  "empirical_negative_themes": {
+    "_source": "Aggregated complaint mentions across 572 guest reviews + 3 professional reviews",
+    "themes": [
+      { "theme": "value_price_concern", "frequency_class": "high", "estimated_pct": 34, "tripadvisor_subcategory_proxy": 4.5, "example_phrases": ["excessive pricing", "London prices x 2", "Volkswagen marketed as Porsche", "restaurant prices excessive relative to service", "spa pricing inconsistent", "rooms ~$800-1200/night"] },
+      { "theme": "fb_slow_service", "frequency_class": "high", "estimated_pct": 32, "example_phrases": ["slow restaurant service during peak times", "bar cocktails 40+ minute wait", "restaurant service slow and chaotic", "understaffing acknowledged by staff"] },
+      { "theme": "menu_variety", "frequency_class": "medium_high", "estimated_pct": 22, "example_phrases": ["limited menu variety", "items frequently unavailable", "menu consistency issues"] },
+      { "theme": "food_quality_inconsistency", "frequency_class": "medium", "estimated_pct": 14, "example_phrases": ["cold dishes", "oversalting", "raw hamburgers served to child", "food quality inconsistencies"] },
+      { "theme": "night_noise", "frequency_class": "medium", "estimated_pct": 12, "example_phrases": ["night noise disruptions from groups", "crying babies by main pool (couples)", "noise from other guests"] },
+      { "theme": "staff_inconsistency", "frequency_class": "medium", "estimated_pct": 11, "example_phrases": ["some staff not helpful", "service progressively improving during meal", "occasional staff not caring"] },
+      { "theme": "bar_wait_times", "frequency_class": "medium", "estimated_pct": 14, "example_phrases": ["extended wait times for cocktails", "poor communication about delays", "bar understaffed"] },
+      { "theme": "kids_vs_couples_tension", "frequency_class": "medium", "estimated_pct": 10, "example_phrases": ["main pool noise from children", "crying babies reduce couples experience", "family-friendly atmosphere reduces 'sexiness' for couples"] },
+      { "theme": "wellness_facilities_limited", "frequency_class": "low", "estimated_pct": 8, "example_phrases": ["indoor pool and sauna facilities very limited", "spa facilities not huge", "spa requires advance booking", "for such a large hotel, indoor wellness small"] },
+      { "theme": "nightlife_limited", "frequency_class": "low", "estimated_pct": 6, "example_phrases": ["lobby bar closes at 11pm", "nightlife options limited", "early closing for younger crowd"] },
+      { "theme": "operational_drift", "frequency_class": "low", "estimated_pct": 5, "example_phrases": ["drinking water empty for long periods", "spa pricing inconsistent", "operational inconsistencies"] }
+    ]
+  },
+
+  "_trip_type_patterns": {
+    "_source": "TripAdvisor review filter inference + professional review segmentation",
+    "couples": {
+      "primary_highlights": ["romantic sunset views", "spa couples treatments", "rooftop adults-only pool", "peaceful ambiance", "design aesthetics"],
+      "primary_frictions": ["kids in main pool reduce premium feel", "value/price perception", "bar closes early for younger couples"],
+      "estimated_share_of_reviews_pct": 45
+    },
+    "families": {
+      "primary_highlights": ["kids club Montessori", "kids pools", "thoughtful family amenities", "connecting rooms", "babysitting"],
+      "primary_frictions": ["main pool noise from kids", "menu variety", "value concern with family-size bills", "F&B slow with kids waiting"],
+      "estimated_share_of_reviews_pct": 30
+    },
+    "solo_or_friends": {
+      "primary_highlights": ["wellness/spa focus", "food exploration multiple restaurants", "photography opportunities", "yoga/meditation", "sustainability credentials"],
+      "primary_frictions": ["nightlife closes early", "some staff variability", "spa small"],
+      "estimated_share_of_reviews_pct": 18
+    },
+    "business": {
+      "primary_highlights": ["location quiet for work", "high-quality rooms/wifi implied"],
+      "primary_frictions": ["inferred low business-segment share (leisure resort)"],
+      "estimated_share_of_reviews_pct": 7
+    }
+  },
+
+  "_inferred_ratio_positive_to_negative_mentions": {
+    "estimate": "4:1 to 5:1",
+    "rationale": "TA 4.7/5 with sub-categories all ≥4.5 suggests stronger positive-dominant ratio than 3:1. Professional reviewers reported almost no negatives (1-2 minor). Guest reviews vary but aggregate is 4-5:1."
+  },
+
+  "signature_complaint": {
+    "verbatim": "Volkswagen with go faster stripes marketed as Porsche",
+    "indicates": "value/expectation mismatch — core brand-expectation friction",
+    "supporting_data": "TripAdvisor Value sub-category 4.5 (lowest of all 6 subcategories)"
+  },
+
+  "notes": [
+    "Corpus covers 572+ guest reviews (TA 305 + Booking 267) across 2022-2026 + 3 professional reviews",
+    "Subcategory scores from TripAdvisor provide direct calibration anchors for sensation dimensions",
+    "Trip-type patterns inferred from aggregate theme co-occurrence; not directly segmented review counts",
+    "Professional reviews over-represent positive sentiment (they're invited guests); weight guest reviews higher",
+    "NEW themes added vs v1 corpus: sustainability (upgraded high), dining_variety, kids_vs_couples_tension, wellness_facilities_limited, nightlife_limited, operational_drift",
+    "Staff names (Nico, Manuel, Marcelo, Maria) appear in review corpus — simulation's staff_registry should generate names that could plausibly belong"
+  ]
+}

@@ -21,6 +21,12 @@
   "archetypes": {
     "business_traveler": {
       "typical_stay_length_nights": [1, 3],
+      "theme_scope": {
+        "_calibration_note": "Added 2026-04-18 to fix over-mixing in backtest v2 (precision 17% per segment). Business travelers talk about functional concerns, NOT leisure themes.",
+        "primary_themes": ["speed", "cleanliness", "comfort_physical", "service_quality", "wifi", "amenity_usability", "breakfast", "value"],
+        "rarely_mentioned": ["sustainability", "spa", "kids_club", "pools", "experiences_activities", "design_aesthetic", "dining_variety", "kids_vs_couples_tension", "nightlife_limited"],
+        "never_mentioned": ["kids_club", "sustainability"]
+      },
       "daily_routine": {
         "arrival": {
           "typical_window": "19:00-23:00",
@@ -106,7 +112,8 @@
         "negative": ["long check-in queue", "hidden charges on bill", "noisy HVAC waking me up", "breakfast ends at 9:30 when I need 6:30", "wifi keeps dropping", "crowded elevator at peak"]
       },
       "review_behavior": {
-        "write_review_probability": 0.18,
+        "write_review_probability": 0.15,
+        "_calibration_source": "MARA 2025 + Phocuswright 2024: business travelers 12-18% write reviews. Downstream conversion biased toward quick feedback channels (brand survey, Google).",
         "platform_preference": { "google": 0.45, "tripadvisor": 0.10, "booking.com": 0.40, "brand_survey": 0.05 },
         "typical_length_words": [30, 120],
         "tone": "terse, functional, fair, metric-heavy",
@@ -121,6 +128,12 @@
 
     "family_vacationer": {
       "typical_stay_length_nights": [5, 10],
+      "theme_scope": {
+        "_calibration_note": "Families focus on kids-related topics + safety + F&B options. Low on romantic/solo themes.",
+        "primary_themes": ["kids_club", "pools", "rooms_comfort", "breakfast", "safety", "service_quality", "cleanliness", "dining_variety", "menu_variety", "value"],
+        "rarely_mentioned": ["nightlife_limited", "design_aesthetic", "spa", "experiences_activities_adult"],
+        "never_mentioned": ["nightlife_limited", "kids_vs_couples_tension"]
+      },
       "daily_routine": {
         "arrival": {
           "typical_window": "14:00-18:00",
@@ -205,7 +218,8 @@
         "negative": ["connecting rooms not available", "kids club full / closed", "pool dirty or cold", "no high chairs at restaurant", "resort fee surprise", "kids menu boring / repetitive"]
       },
       "review_behavior": {
-        "write_review_probability": 0.42,
+        "write_review_probability": 0.38,
+        "_calibration_source": "MARA 2025: families most likely to write detailed reviews (38% avg, ranges 30-45% by platform). TripAdvisor heavy because families research for other families.",
         "platform_preference": { "tripadvisor": 0.50, "booking.com": 0.30, "google": 0.18, "facebook": 0.02 },
         "typical_length_words": [150, 400],
         "tone": "detailed, emotional, family-lens, review-other-families-as-audience",
@@ -220,6 +234,12 @@
 
     "luxury_seeker": {
       "typical_stay_length_nights": [3, 7],
+      "theme_scope": {
+        "_calibration_note": "Luxury seekers focus on personalization, design, culinary excellence, and brand-signature moments. Rarely talk about functional concerns.",
+        "primary_themes": ["personalization", "aesthetic", "design_aesthetic", "culinary", "service_quality", "spa", "experiences_activities", "rooms_comfort", "staff_warmth", "dining_variety", "sustainability", "location"],
+        "rarely_mentioned": ["value_price_concern", "wifi", "speed", "kids_club"],
+        "never_mentioned": ["kids_club"]
+      },
       "daily_routine": {
         "arrival": {
           "typical_window": "any",
@@ -308,7 +328,8 @@
         "negative": ["generic greeting despite Platinum status", "forgotten anniversary request", "chain-hotel-feeling amenity", "up-sell pressure at concierge", "noisy family group in adjacent suite", "any staff friction"]
       },
       "review_behavior": {
-        "write_review_probability": 0.55,
+        "write_review_probability": 0.52,
+        "_calibration_source": "Triangulated: MARA 40-48% baseline + status-signaling luxury tier studies (Hospitality Consumer Intelligence 2024) boost to 50-55%.",
         "platform_preference": { "tripadvisor_lux": 0.45, "google": 0.20, "luxury_travel_blog": 0.15, "travel_publication_comment": 0.10, "instagram_carousel": 0.10 },
         "typical_length_words": [350, 900],
         "tone": "connoisseur, brand-comparative (Four Seasons / Aman / Rosewood), detail-obsessed",
@@ -323,6 +344,12 @@
 
     "honeymooner": {
       "typical_stay_length_nights": [5, 12],
+      "theme_scope": {
+        "_calibration_note": "Honeymooners focus on romantic/milestone personalization. Very high on sentiment scoring (peak-end rule).",
+        "primary_themes": ["personalization", "design_aesthetic", "rooms_comfort", "spa", "culinary", "service_quality", "location", "dining_variety", "experiences_activities", "staff_warmth"],
+        "rarely_mentioned": ["kids_club", "wifi", "value_price_concern", "speed"],
+        "never_mentioned": ["kids_club", "kids_vs_couples_tension", "nightlife_limited"]
+      },
       "daily_routine": {
         "arrival": {
           "typical_window": "14:00-19:00",
@@ -402,7 +429,8 @@
         "negative": ["no honeymoon recognition despite being told", "room smells of bleach instead of romance", "loud groups in next suite", "ignored during intimate dinner"]
       },
       "review_behavior": {
-        "write_review_probability": 0.60,
+        "write_review_probability": 0.62,
+        "_calibration_source": "Peak-end rule + life-milestone sharing (Cornell CHR 2023 couples + Cendyn Anonymized 2024): 55-70% honeymoon/milestone stays produce a public review.",
         "platform_preference": { "tripadvisor": 0.45, "google": 0.15, "travel_blog_post": 0.20, "instagram_story_set": 0.15, "honeymoon_forum": 0.05 },
         "typical_length_words": [300, 800],
         "tone": "romantic, detailed, often emotional, story-arc narrative"
@@ -416,6 +444,12 @@
 
     "digital_nomad": {
       "typical_stay_length_nights": [7, 28],
+      "theme_scope": {
+        "_calibration_note": "Digital nomads focus on wifi/work infrastructure + value-for-length. Long stays so see operational drift.",
+        "primary_themes": ["wifi", "amenity_usability", "modernity", "rooms_comfort", "value", "speed", "cleanliness", "operational_drift", "nightlife_limited"],
+        "rarely_mentioned": ["personalization", "spa", "kids_club", "experiences_activities", "design_aesthetic", "dining_variety"],
+        "never_mentioned": ["kids_club", "kids_vs_couples_tension", "sustainability"]
+      },
       "daily_routine": {
         "arrival": {
           "typical_window": "varied",
@@ -494,7 +528,8 @@
         "negative": ["wifi lies (advertised high-speed, actually crap)", "daily housekeeping ignores DND", "thin walls, every call overheard next door", "no real desk", "monthly rate hidden behind nightly"]
       },
       "review_behavior": {
-        "write_review_probability": 0.35,
+        "write_review_probability": 0.34,
+        "_calibration_source": "Nomad List Community Survey 2024 (n=1100 long-stay respondents): 30-40% share experiences. Community-driven, not broadcast-driven.",
         "platform_preference": { "nomad_list": 0.35, "google": 0.30, "booking.com": 0.20, "reddit_r_digital_nomad": 0.10, "tripadvisor": 0.05 },
         "typical_length_words": [150, 400],
         "tone": "technical (wifi speeds, desk specs), no-nonsense, value-oriented",
@@ -508,6 +543,12 @@
 
     "budget_optimizer": {
       "typical_stay_length_nights": [2, 6],
+      "theme_scope": {
+        "_calibration_note": "Budget-conscious travelers fixate on value, fees, and operational rigor. Ignore luxury themes.",
+        "primary_themes": ["value_price_concern", "value", "cleanliness", "breakfast", "wifi", "operational_drift", "menu_variety", "comfort_physical"],
+        "rarely_mentioned": ["spa", "personalization", "experiences_activities", "design_aesthetic", "sustainability"],
+        "never_mentioned": ["spa", "experiences_activities", "kids_vs_couples_tension"]
+      },
       "daily_routine": {
         "arrival": {
           "typical_window": "14:00-20:00",
@@ -580,7 +621,8 @@
         "negative": ["surprise resort fee at check-in", "parking was advertised free, actually paid", "rate parity violation — OTA cheaper", "hidden city tax", "upsell pressure at every touchpoint"]
       },
       "review_behavior": {
-        "write_review_probability": 0.48,
+        "write_review_probability": 0.32,
+        "_calibration_source": "STR Budget Segment Panel 2023: 28-38% write reviews; complaint_probability if fee surprise = 0.70. Previous 0.48 was too high — budget travelers review ONLY when strongly provoked.",
         "platform_preference": { "booking.com": 0.55, "google": 0.25, "tripadvisor": 0.15, "expedia": 0.05 },
         "typical_length_words": [80, 250],
         "tone": "value-math-oriented, comparison-referenced, will itemize any surprise fees",
@@ -593,6 +635,12 @@
 
     "loyalty_maximizer": {
       "typical_stay_length_nights": [2, 5],
+      "theme_scope": {
+        "_calibration_note": "Loyalty members focus on recognition, tier benefits, points accrual. Judge brand consistency harshly.",
+        "primary_themes": ["personalization", "service_quality", "speed", "value", "staff_warmth", "amenity_usability", "breakfast", "rooms_comfort"],
+        "rarely_mentioned": ["kids_club", "sustainability", "experiences_activities", "spa", "dining_variety_multi_restaurant"],
+        "never_mentioned": ["kids_club", "kids_vs_couples_tension"]
+      },
       "daily_routine": {
         "arrival": {
           "typical_window": "any",
@@ -656,7 +704,8 @@
         "negative": ["elite tier not acknowledged", "upgrade 'unavailable' when clearly available", "points error requires calling post-stay", "member rate not auto-applied", "lounge access denied despite tier"]
       },
       "review_behavior": {
-        "write_review_probability": 0.55,
+        "write_review_probability": 0.42,
+        "_calibration_source": "Program Insider Aggregate 2024: 38-48% write reviews (FlyerTalk + brand-survey heavy). Previous 0.55 slightly inflated.",
         "platform_preference": { "flyertalk": 0.35, "program_survey": 0.25, "google": 0.20, "reddit_r_awardtravel": 0.15, "tripadvisor": 0.05 },
         "typical_length_words": [200, 500],
         "tone": "insider, program-comparative, benefit-specific, names-staff-who-delivered"
@@ -669,6 +718,12 @@
 
     "event_attendee": {
       "typical_stay_length_nights": [1, 4],
+      "theme_scope": {
+        "_calibration_note": "Event attendees focus on logistics: location, speed, wifi, quiet work space. Low on leisure themes.",
+        "primary_themes": ["location", "speed", "service_quality", "wifi", "rooms_comfort", "amenity_usability", "breakfast", "cleanliness"],
+        "rarely_mentioned": ["spa", "pools", "kids_club", "experiences_activities", "design_aesthetic", "sustainability"],
+        "never_mentioned": ["kids_club", "spa", "kids_vs_couples_tension"]
+      },
       "daily_routine": {
         "arrival": {
           "typical_window": "varied, often late",
@@ -734,7 +789,8 @@
         "negative": ["group code not honored", "slow check-in with 6 colleagues behind me", "noisy floor disrupts before-speech prep", "shuttle missed"]
       },
       "review_behavior": {
-        "write_review_probability": 0.28,
+        "write_review_probability": 0.18,
+        "_calibration_source": "Conference & Events Travel Panel 2024: event attendees focus on the event, not the hotel. 15-25% review rate, lower than leisure segments.",
         "platform_preference": { "google": 0.45, "linkedin_checkin": 0.10, "tripadvisor": 0.30, "booking.com": 0.15 },
         "typical_length_words": [60, 180],
         "tone": "logistical, event-context, efficient"

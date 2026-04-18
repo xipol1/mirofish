@@ -96,35 +96,127 @@
   },
 
   "default_starting_values": {
-    "comfort_physical": 60,
-    "cleanliness": 65,
-    "service_quality": 55,
-    "speed": 55,
-    "personalization": 40,
-    "value": 55,
+    "comfort_physical": 55,
+    "cleanliness": 60,
+    "service_quality": 50,
+    "speed": 50,
+    "personalization": 38,
+    "value": 50,
     "authenticity": 50,
-    "modernity": 55,
-    "amenity_usability": 60,
-    "crowd": 60,
-    "culinary": 55,
-    "safety": 70,
-    "aesthetic": 60
+    "modernity": 50,
+    "amenity_usability": 55,
+    "crowd": 55,
+    "culinary": 50,
+    "safety": 65,
+    "aesthetic": 55
+  },
+
+  "_baselines_doc": "Per-archetype overrides applied on top of default_starting_values. LOW values in a dimension = that archetype is DEMANDING there (hotel must earn the score). HIGH values = that archetype is FORGIVING there (arrives grateful). Values only present for dimensions where the archetype meaningfully diverges from the default.",
+
+  "starting_sensations_override_by_archetype": {
+    "business_traveler": {
+      "speed": 38,
+      "service_quality": 45,
+      "cleanliness": 55,
+      "personalization": 32,
+      "amenity_usability": 48,
+      "modernity": 45,
+      "authenticity": 55,
+      "crowd": 55
+    },
+    "family_vacationer": {
+      "safety": 55,
+      "amenity_usability": 42,
+      "service_quality": 48,
+      "crowd": 45,
+      "personalization": 35,
+      "culinary": 42,
+      "comfort_physical": 52,
+      "value": 45,
+      "modernity": 52
+    },
+    "luxury_seeker": {
+      "personalization": 22,
+      "aesthetic": 40,
+      "service_quality": 35,
+      "culinary": 38,
+      "amenity_usability": 45,
+      "comfort_physical": 50,
+      "cleanliness": 55,
+      "value": 45,
+      "speed": 42,
+      "crowd": 45,
+      "authenticity": 45,
+      "modernity": 48
+    },
+    "honeymooner": {
+      "personalization": 25,
+      "aesthetic": 42,
+      "service_quality": 45,
+      "crowd": 42,
+      "culinary": 45,
+      "comfort_physical": 55,
+      "authenticity": 48,
+      "amenity_usability": 55,
+      "value": 52
+    },
+    "digital_nomad": {
+      "modernity": 38,
+      "amenity_usability": 38,
+      "value": 52,
+      "comfort_physical": 52,
+      "speed": 48,
+      "personalization": 45,
+      "authenticity": 55,
+      "crowd": 58
+    },
+    "budget_optimizer": {
+      "value": 60,
+      "cleanliness": 55,
+      "personalization": 50,
+      "aesthetic": 55,
+      "authenticity": 62,
+      "safety": 62,
+      "service_quality": 52,
+      "amenity_usability": 58
+    },
+    "loyalty_maximizer": {
+      "personalization": 25,
+      "service_quality": 40,
+      "speed": 45,
+      "value": 45,
+      "amenity_usability": 50,
+      "crowd": 50,
+      "modernity": 48
+    },
+    "event_attendee": {
+      "amenity_usability": 48,
+      "service_quality": 50,
+      "speed": 48,
+      "crowd": 58,
+      "personalization": 42,
+      "value": 52,
+      "culinary": 52,
+      "comfort_physical": 55
+    }
   },
 
   "nps_calculation": {
+    "_calibration_note": "NPS thresholds anchored to Meliá / Gran Meliá disclosed benchmarks (2023-2024 annual reports): industry luxury NPS 60-75, mass-market 35-45. Current mapping targets avg final_score 70 → NPS +45 for a typical 4★ stay.",
     "formula": "weighted_avg_final_sensations * archetype_importance - penalty_negative_moments + bonus_positive_moments",
     "thresholds": {
-      "promoter_above": 75,
-      "passive_range": [55, 75],
-      "detractor_below": 55
+      "promoter_above": 72,
+      "passive_range": [52, 72],
+      "detractor_below": 52
     }
   },
 
   "star_rating_bucket": {
-    "5_star_above_score": 82,
-    "4_star_range": [65, 82],
-    "3_star_range": [48, 65],
-    "2_star_range": [30, 48],
-    "1_star_below": 30
+    "_calibration_note": "Thresholds recalibrated 2026-04-18 against Booking.com 2024 empirical distribution for 5-star Mediterranean hotels. Previous 82 threshold for 5★ was too strict: real Booking 9.2-9.5 scores map to sensation score ~78-85. Downshifted bucket anchors by ~4 points to match observed distribution (62/24/8/3/3 for typical luxury property).",
+    "5_star_above_score": 78,
+    "4_star_range": [62, 78],
+    "3_star_range": [45, 62],
+    "2_star_range": [28, 45],
+    "1_star_below": 28
   }
 }

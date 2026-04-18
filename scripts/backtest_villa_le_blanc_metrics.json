@@ -1,0 +1,213 @@
+{
+  "backtest_version": "1.0",
+  "backtest_date": "2026-04-18T09:39:55.395Z",
+  "property": "Villa Le Blanc Gran Meliá",
+  "sim_source": "C:\\Users\\win\\Desktop\\Nueva carpeta (6)\\MiroFish-main\\scripts\\sim_v2_result.json",
+  "real_corpus_source": "C:\\Users\\win\\Desktop\\Nueva carpeta (6)\\MiroFish-main\\backend\\data\\validation\\villa_le_blanc_real_corpus_2026_04.json",
+  "sim_n": 50,
+  "real_corpus_n_tripadvisor": 305,
+  "real_corpus_n_booking": 267,
+  "rating_comparison": {
+    "real_avg_stars": 4.65,
+    "sim_avg_stars": 2.8,
+    "gap": -1.85,
+    "within_half_star_tolerance": false
+  },
+  "star_distribution_comparison": [
+    {
+      "star": "5",
+      "real_pct": 77,
+      "sim_pct": 6,
+      "gap_pp": -71
+    },
+    {
+      "star": "4",
+      "real_pct": 15,
+      "sim_pct": 30,
+      "gap_pp": 15
+    },
+    {
+      "star": "3",
+      "real_pct": 5,
+      "sim_pct": 26,
+      "gap_pp": 21
+    },
+    {
+      "star": "2",
+      "real_pct": 2,
+      "sim_pct": 14,
+      "gap_pp": 12
+    },
+    {
+      "star": "1",
+      "real_pct": 1,
+      "sim_pct": 24,
+      "gap_pp": 23
+    }
+  ],
+  "theme_detection": {
+    "true_positives": 16,
+    "false_positives": 3,
+    "false_negatives": 0,
+    "precision": 84.2,
+    "recall": 100,
+    "f1": 91.4,
+    "missed_real_themes": [],
+    "extra_sim_themes": [
+      "personalization",
+      "cleanliness",
+      "wifi"
+    ]
+  },
+  "positive_themes_comparison": [
+    {
+      "theme": "location",
+      "real_class": "very_high",
+      "real_pct": 55,
+      "sim_pct": 68,
+      "gap_pp": 13,
+      "status": "✓"
+    },
+    {
+      "theme": "design_aesthetic",
+      "real_class": "very_high",
+      "real_pct": 55,
+      "sim_pct": 50,
+      "gap_pp": -5,
+      "status": "✓"
+    },
+    {
+      "theme": "staff_warmth",
+      "real_class": "very_high",
+      "real_pct": 55,
+      "sim_pct": 100,
+      "gap_pp": 45,
+      "status": "OVER"
+    },
+    {
+      "theme": "breakfast",
+      "real_class": "high",
+      "real_pct": 30,
+      "sim_pct": 58,
+      "gap_pp": 28,
+      "status": "OVER"
+    },
+    {
+      "theme": "spa",
+      "real_class": "high",
+      "real_pct": 30,
+      "sim_pct": 58,
+      "gap_pp": 28,
+      "status": "OVER"
+    },
+    {
+      "theme": "pools",
+      "real_class": "high",
+      "real_pct": 30,
+      "sim_pct": 14,
+      "gap_pp": -16,
+      "status": "UNDER"
+    },
+    {
+      "theme": "rooms_comfort",
+      "real_class": "medium_high",
+      "real_pct": 20,
+      "sim_pct": 100,
+      "gap_pp": 80,
+      "status": "OVER"
+    },
+    {
+      "theme": "sustainability",
+      "real_class": "medium",
+      "real_pct": 10,
+      "sim_pct": 16,
+      "gap_pp": 6,
+      "status": "✓"
+    },
+    {
+      "theme": "kids_club",
+      "real_class": "medium",
+      "real_pct": 10,
+      "sim_pct": 12,
+      "gap_pp": 2,
+      "status": "✓"
+    }
+  ],
+  "negative_themes_comparison": [
+    {
+      "theme": "fb_slow_service",
+      "real_class": "high",
+      "real_pct": 30,
+      "sim_pct": 42,
+      "gap_pp": 12,
+      "status": "✓"
+    },
+    {
+      "theme": "menu_variety",
+      "real_class": "high",
+      "real_pct": 30,
+      "sim_pct": 10,
+      "gap_pp": -20,
+      "status": "UNDER"
+    },
+    {
+      "theme": "value_price_concern",
+      "real_class": "high",
+      "real_pct": 30,
+      "sim_pct": 50,
+      "gap_pp": 20,
+      "status": "OVER"
+    },
+    {
+      "theme": "food_quality_inconsistency",
+      "real_class": "medium",
+      "real_pct": 10,
+      "sim_pct": 4,
+      "gap_pp": -6,
+      "status": "✓"
+    },
+    {
+      "theme": "night_noise",
+      "real_class": "medium",
+      "real_pct": 10,
+      "sim_pct": 36,
+      "gap_pp": 26,
+      "status": "OVER"
+    },
+    {
+      "theme": "staff_inconsistency",
+      "real_class": "medium",
+      "real_pct": 10,
+      "sim_pct": 2,
+      "gap_pp": -8,
+      "status": "✓"
+    },
+    {
+      "theme": "bar_wait_times",
+      "real_class": "medium",
+      "real_pct": 10,
+      "sim_pct": 34,
+      "gap_pp": 24,
+      "status": "OVER"
+    }
+  ],
+  "sentiment_ratio_comparison": {
+    "real_estimated": "3:1 to 4:1 (typical luxury 5-star Mediterranean hotel)",
+    "sim_actual": "1.4:1",
+    "sim_positive_moments_total": 537,
+    "sim_negative_moments_total": 371,
+    "within_luxury_target_range": false
+  },
+  "composite_accuracy": {
+    "rating_fidelity_pct": 26,
+    "theme_f1_pct": 91.4,
+    "sentiment_ratio_pct": 69.2,
+    "weighted_composite": 67.4,
+    "weights": {
+      "rating": 0.3,
+      "theme_f1": 0.5,
+      "sentiment": 0.2
+    }
+  },
+  "interpretation": "MEDIUM — simulation is directionally correct but magnitudes drift"
+}

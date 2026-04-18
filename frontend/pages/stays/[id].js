@@ -1,6 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
+import AgentInterviewModal from '../../components/AgentInterviewModal';
+import AttributionBarChart from '../../components/AttributionBarChart';
+import CohortQueryPanel from '../../components/CohortQueryPanel';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || (typeof window !== 'undefined' && window.location.hostname !== 'localhost' ? '' : 'http://localhost:5001');
 
@@ -101,19 +104,45 @@ function RunningView({ progress }) {
 }
 
 function CompletedView({ result, selected, setSelected }) {
+  const router = useRouter();
+  const simulationId = router.query.id;
   const s = result.summary || {};
-  const stays = (result.stays || []).filter(x => x && !x.error);
+  const stays = (result.records || result.stays || []).filter(x => x && !x.error);
+  const [interviewSlot, setInterviewSlot] = useState(null);
+
+  const archetypeOptions = Array.from(new Set(stays.map(st => st.persona?.archetype_id || st.persona_full?.archetype_id || st.archetype_id).filter(Boolean)));
+
+  const ciSuffix = (ci) => {
+    if (!ci || ci.ci_low == null || ci.ci_high == null) return '';
+    const pm = Math.max(Math.abs((ci.ci_high ?? 0) - (ci.value ?? 0)), Math.abs((ci.value ?? 0) - (ci.ci_low ?? 0)));
+    return ` ± ${Math.round(pm * 10) / 10}`;
+  };
+
+  const downloadPlaybook = (fmt = 'md', lang = 'es') => {
+    const url = `${API_URL}/api/simulation/${simulationId}/playbook?format=${fmt}&language=${lang}`;
+    window.open(url, '_blank');
+  };
 
   return (
     <div className="space-y-8">
       {/* Top metrics */}
       <section className="grid md:grid-cols-5 gap-4">
         <Metric label="Stays" value={s.total_stays} color="white" />
-        <Metric label="Avg stars" value={s.avg_stars != null ? `${s.avg_stars}★` : '—'} color="amber" />
-        <Metric label="NPS" value={s.net_promoter_score != null ? s.net_promoter_score : '—'} color={s.net_promoter_score > 30 ? 'emerald' : s.net_promoter_score < 0 ? 'red' : 'violet'} />
-        <Metric label="Avg spend" value={s.avg_spend_eur ? `€${s.avg_spend_eur}` : '—'} color="violet" />
-        <Metric label="Would repeat" value={s.would_repeat_pct != null ? `${s.would_repeat_pct}%` : '—'} color="emerald" />
+        <Metric label="Avg stars" value={s.avg_stars != null ? `${s.avg_stars}★${ciSuffix(s.avg_stars_ci)}` : '—'} color="amber" />
+        <Metric label="NPS" value={s.net_promoter_score != null ? `${s.net_promoter_score}${ciSuffix(s.net_promoter_score_ci)}` : '—'} color={s.net_promoter_score > 30 ? 'emerald' : s.net_promoter_score < 0 ? 'red' : 'violet'} />
+        <Metric label="Avg spend" value={s.avg_spend_eur ? `€${s.avg_spend_eur}${ciSuffix(s.avg_spend_eur_ci)}` : '—'} color="violet" />
+        <Metric label="Would repeat" value={s.would_repeat_pct != null ? `${s.would_repeat_pct}%${ciSuffix(s.would_repeat_pct_ci)}` : '—'} color="emerald" />
       </section>
+
+      {/* Enterprise actions */}
+      <section className="flex flex-wrap gap-2">
+        <button onClick={() => downloadPlaybook('md', 'es')} className="text-xs bg-violet-500/10 hover:bg-violet-500/20 border border-violet-500/30 text-violet-200 rounded px-3 py-1.5">Download Playbook (.md ES)</button>
+        <button onClick={() => downloadPlaybook('html', 'es')} className="text-xs bg-violet-500/10 hover:bg-violet-500/20 border border-violet-500/30 text-violet-200 rounded px-3 py-1.5">Playbook (.html ES)</button>
+        <button onClick={() => downloadPlaybook('html', 'en')} className="text-xs bg-violet-500/10 hover:bg-violet-500/20 border border-violet-500/30 text-violet-200 rounded px-3 py-1.5">Playbook (.html EN)</button>
+        <button onClick={() => downloadPlaybook('docx', 'es')} className="text-xs bg-violet-500/10 hover:bg-violet-500/20 border border-violet-500/30 text-violet-200 rounded px-3 py-1.5">Playbook (.docx ES)</button>
+      </section>
+
+      <CohortQueryPanel simulationId={simulationId} archetypeOptions={archetypeOptions} />
 
       {/* Predicted top themes */}
       {s.top_predicted_themes?.length > 0 && (
@@ -154,45 +183,72 @@ function CompletedView({ result, selected, setSelected }) {
         <h3 className="text-xs font-semibold text-violet-400 uppercase tracking-widest mb-4">Individual stays ({stays.length})</h3>
         <div className="grid md:grid-cols-2 gap-3">
           {stays.map((stay, i) => (
-            <button key={i} onClick={() => setSelected(stay)} className="text-left bg-surface-800 hover:bg-white/5 border border-white/10 hover:border-violet-500/30 rounded-xl p-5 transition-all">
-              <div className="flex items-start justify-between mb-2">
-                <div>
-                  <div className="text-xs text-violet-400 uppercase tracking-wider">{stay.persona?.archetype_label}</div>
-                  <h4 className="text-white font-semibold">{stay.persona?.name}</h4>
+            <div key={i} className="bg-surface-800 border border-white/10 hover:border-violet-500/30 rounded-xl p-5 transition-all">
+              <button onClick={() => setSelected({ ...stay, _slot: i })} className="w-full text-left">
+                <div className="flex items-start justify-between mb-2">
+                  <div>
+                    <div className="text-xs text-violet-400 uppercase tracking-wider">{stay.persona?.archetype_label || stay.persona_full?.archetype_label}</div>
+                    <h4 className="text-white font-semibold">{stay.persona?.name || stay.persona_full?.name}</h4>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-lg font-bold text-amber-300">{stay.sensation_summary?.stars || '—'}★</div>
+                    <div className="text-xs text-gray-500">NPS {stay.sensation_summary?.nps ?? '—'}</div>
+                  </div>
                 </div>
-                <div className="text-right">
-                  <div className="text-lg font-bold text-amber-300">{stay.sensation_summary?.stars || '—'}★</div>
-                  <div className="text-xs text-gray-500">NPS {stay.sensation_summary?.nps ?? '—'}</div>
+                <div className="text-xs text-gray-400 grid grid-cols-3 gap-2 mt-2">
+                  <span>{stay.stay_length_nights}n</span>
+                  <span>€{stay.expense_summary?.total_spend_eur || 0}</span>
+                  <span>{stay.predicted_review?.will_write_review ? `→ ${stay.predicted_review.platform}` : 'no review'}</span>
                 </div>
+              </button>
+              <div className="mt-3 flex gap-2">
+                <button onClick={() => setInterviewSlot(i)} className="text-[11px] bg-violet-500/10 hover:bg-violet-500/20 border border-violet-500/30 text-violet-200 rounded px-2 py-1">
+                  Interview this guest
+                </button>
               </div>
-              <div className="text-xs text-gray-400 grid grid-cols-3 gap-2 mt-2">
-                <span>{stay.stay_length_nights}n</span>
-                <span>€{stay.expense_summary?.total_spend_eur || 0}</span>
-                <span>{stay.predicted_review?.will_write_review ? `→ ${stay.predicted_review.platform}` : 'no review'}</span>
-              </div>
-            </button>
+            </div>
           ))}
         </div>
       </section>
 
-      {selected && <StayDetail stay={selected} onClose={() => setSelected(null)} />}
+      {interviewSlot != null && (
+        <AgentInterviewModal
+          simulationId={simulationId}
+          slot={interviewSlot}
+          persona={stays[interviewSlot]?.persona_full || stays[interviewSlot]?.persona}
+          onClose={() => setInterviewSlot(null)}
+        />
+      )}
+
+      {selected && <StayDetail stay={selected} simulationId={simulationId} onClose={() => setSelected(null)} />}
     </div>
   );
 }
 
-function StayDetail({ stay, onClose }) {
+function StayDetail({ stay, simulationId, onClose }) {
   const pr = stay.predicted_review;
+  const [showAttr, setShowAttr] = useState(false);
+  const persona = stay.persona || stay.persona_full || {};
   return (
     <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50 overflow-y-auto" onClick={onClose}>
       <div className="bg-surface-800 border border-white/10 rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto p-6" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-start justify-between mb-4">
           <div>
-            <div className="text-xs text-violet-400 uppercase tracking-widest">{stay.persona?.archetype_label}</div>
-            <h2 className="text-xl font-bold text-white">{stay.persona?.name}</h2>
-            <div className="text-xs text-gray-500 mt-1">{stay.persona?.role} · {stay.stay_length_nights} nights · {stay.trip_purpose}</div>
+            <div className="text-xs text-violet-400 uppercase tracking-widest">{persona.archetype_label}</div>
+            <h2 className="text-xl font-bold text-white">{persona.name}</h2>
+            <div className="text-xs text-gray-500 mt-1">{persona.role} · {stay.stay_length_nights} nights · {stay.trip_purpose}</div>
           </div>
           <button onClick={onClose} className="text-gray-400 hover:text-white text-2xl">×</button>
         </div>
+
+        {stay._slot != null && simulationId && (
+          <div className="mb-4">
+            <button onClick={() => setShowAttr(v => !v)} className="text-xs bg-violet-500/10 hover:bg-violet-500/20 border border-violet-500/30 text-violet-200 rounded px-3 py-1.5">
+              {showAttr ? 'Hide' : 'Why did this rating happen?'}
+            </button>
+            {showAttr && <AttributionBarChart simulationId={simulationId} slot={stay._slot} />}
+          </div>
+        )}
 
         <div className="grid md:grid-cols-4 gap-3 mb-6">
           <Metric label="Stars" value={`${stay.sensation_summary?.stars || '—'}★`} color="amber" />

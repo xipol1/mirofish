@@ -4,6 +4,7 @@ const cors = require('cors');
 const simulationRoutes = require('./routes/simulation');
 const calibrationRoutes = require('./routes/calibration');
 const enterpriseRoutes = require('./routes/enterprise');
+const cybersecurityRoutes = require('./routes/cybersecurity');
 const db = require('./db/pg');
 
 const app = express();
@@ -15,6 +16,7 @@ app.use(express.json({ limit: '10mb' }));
 app.use('/api', simulationRoutes);
 app.use('/api', calibrationRoutes);
 app.use('/api', enterpriseRoutes);
+app.use('/api', cybersecurityRoutes);
 app.use('/api', require('./routes/properties'));
 
 // Run PG migrations on boot (no-op if DATABASE_URL unset)

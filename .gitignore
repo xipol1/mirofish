@@ -23,3 +23,5 @@ backend/data/*.db-shm
 Thumbs.db
 .idea/
 .vscode/
+
+.vercel

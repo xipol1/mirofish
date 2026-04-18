@@ -115,8 +115,8 @@ export default function Home() {
               <span className="font-semibold text-white text-lg tracking-tight">Synthetic Users</span>
             </div>
             <div className="hidden md:flex items-center gap-8 text-sm text-gray-400">
+              <a href="#suite" className="hover:text-white transition-colors">Suite</a>
               <a href="#how" className="hover:text-white transition-colors">How it works</a>
-              <a href="#use-cases" className="hover:text-white transition-colors">Use cases</a>
               <a href="#pricing" className="hover:text-white transition-colors">Pricing</a>
             </div>
             <button onClick={scrollToForm} className="bg-white text-black text-sm font-semibold px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors">
@@ -213,6 +213,71 @@ export default function Home() {
             <span className="flex items-center gap-2"><CheckCircle />No code required</span>
             <span className="flex items-center gap-2"><CheckCircle />25 diverse user profiles</span>
             <span className="flex items-center gap-2"><CheckCircle />Actionable recommendations</span>
+          </div>
+        </section>
+
+        {/* ─── SIMULATION SUITE ─── */}
+        <section id="suite" className="py-20 md:py-28 relative">
+          <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-gradient-to-b from-indigo-600/5 via-violet-600/5 to-red-600/5 blur-3xl pointer-events-none" />
+          <div className="max-w-6xl mx-auto px-6 relative">
+            <SectionLabel>Three ways to simulate</SectionLabel>
+            <h2 className="text-3xl md:text-4xl font-bold text-white text-center mb-4">One engine. Three products.</h2>
+            <p className="text-gray-500 text-center max-w-2xl mx-auto mb-14">
+              Validate copy. Test real browsers at enterprise scale. Or deploy 500 adversaries against your app. Pick what you need today.
+            </p>
+
+            <div className="grid lg:grid-cols-3 gap-5">
+              {/* Starter */}
+              <ProductCard
+                href="#simulate"
+                onClick={scrollToForm}
+                tag="Starter"
+                tagColor="violet"
+                title="Landing / pricing / feature validation"
+                pitch="Paste your content, describe your audience, get 25 diverse synthetic users reading it — with ranked, actionable recommendations."
+                stats={[
+                  { k: '25', v: 'synthetic users' },
+                  { k: '60s', v: 'to insight' },
+                  { k: '$0', v: 'to try' },
+                ]}
+                accentFrom="from-violet-500"
+                accentTo="to-indigo-600"
+                cta="Run a free simulation"
+              />
+              {/* Enterprise */}
+              <ProductCard
+                href="/enterprise"
+                tag="Enterprise"
+                tagColor="violet"
+                title="Pre-launch validation at scale"
+                pitch="Real Chromium browsers per agent — scroll, hover, click, get frustrated, abandon. Journey funnels, per-segment conversion, evidence-backed recs."
+                stats={[
+                  { k: '10-500', v: 'real agents' },
+                  { k: '12+', v: 'industry packs' },
+                  { k: 'PDF', v: 'report' },
+                ]}
+                accentFrom="from-indigo-500"
+                accentTo="to-purple-600"
+                cta="Open enterprise console"
+              />
+              {/* Cyber Swarm */}
+              <ProductCard
+                href="/cybersecurity"
+                tag="Cyber Swarm"
+                tagColor="red"
+                isNew
+                title="500 adversaries stress-testing your app"
+                pitch="Eight classes of attacker — script kiddies, bug bounty hunters, botnets, insiders, APTs, scanners, supply-chain, social engineers — OWASP Top 10 coverage with CVSS-scored findings."
+                stats={[
+                  { k: '500', v: 'adversary agents' },
+                  { k: 'OWASP', v: 'Top 10 covered' },
+                  { k: 'CVSS', v: 'scored findings' },
+                ]}
+                accentFrom="from-red-500"
+                accentTo="to-rose-600"
+                cta="Launch the swarm"
+              />
+            </div>
           </div>
         </section>
 
@@ -715,4 +780,43 @@ function IconDollar() {
 
 function IconLightning() {
   return <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" /></svg>;
+}
+
+function ProductCard({ href, onClick, tag, tagColor, isNew, title, pitch, stats, accentFrom, accentTo, cta }) {
+  const tagStyle = tagColor === 'red'
+    ? 'bg-red-500/10 text-red-300 border-red-500/20'
+    : 'bg-violet-500/10 text-violet-300 border-violet-500/20';
+  const Wrapper = ({ children }) => {
+    if (onClick) {
+      return <button type="button" onClick={onClick} className="group text-left block w-full">{children}</button>;
+    }
+    return <a href={href} className="group block">{children}</a>;
+  };
+  return (
+    <Wrapper>
+      <div className={`relative bg-[#0f0f18] border border-white/10 rounded-2xl p-6 h-full flex flex-col transition-all hover:border-white/20 hover:-translate-y-0.5`}>
+        <div className={`absolute -inset-px rounded-2xl bg-gradient-to-br ${accentFrom} ${accentTo} opacity-0 group-hover:opacity-20 blur-lg pointer-events-none transition-opacity`} />
+        <div className="relative flex-1 flex flex-col">
+          <div className="flex items-center gap-2 mb-4">
+            <span className={`text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full border ${tagStyle}`}>{tag}</span>
+            {isNew && <span className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full bg-white text-black">New</span>}
+          </div>
+          <h3 className="text-white font-bold text-xl leading-tight mb-3">{title}</h3>
+          <p className="text-gray-400 text-sm leading-relaxed mb-5 flex-1">{pitch}</p>
+          <div className="grid grid-cols-3 gap-2 mb-5">
+            {stats.map((s, i) => (
+              <div key={i} className="bg-white/5 rounded-lg px-2 py-2">
+                <div className={`text-lg font-bold bg-gradient-to-r ${accentFrom} ${accentTo} bg-clip-text text-transparent leading-tight`}>{s.k}</div>
+                <div className="text-[10px] text-gray-500 truncate">{s.v}</div>
+              </div>
+            ))}
+          </div>
+          <div className={`flex items-center justify-between text-sm font-semibold bg-gradient-to-r ${accentFrom} ${accentTo} bg-clip-text text-transparent`}>
+            <span>{cta}</span>
+            <span className="text-white group-hover:translate-x-1 transition-transform">→</span>
+          </div>
+        </div>
+      </div>
+    </Wrapper>
+  );
 }

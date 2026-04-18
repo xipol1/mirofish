@@ -1,0 +1,184 @@
+{
+  "_description": "Catalog of realistic adverse events that can be injected into a stay simulation to prevent the LLM's marketing-speak bias. Each stay has a configurable probability of receiving 0, 1, or 2 events. Event severity drives how negatively it nudges sensation dimensions and whether it escalates.",
+  "_calibration_version": "2.0",
+  "_calibration_notes": "2026-04-18: reduced delta magnitudes ~25% across the board + shifted resolution_quality distribution toward better recovery (excellent 20% → 28%, unresolved 15% → 8%) to reflect 5-star hotel operational discipline. Previous calibration over-punished incidents, dropping subcategory scores too low vs empirical Villa Le Blanc 4.5-4.9/5 subscores.",
+
+  "injection_config": {
+    "probability_at_least_one_event_per_stay": 0.45,
+    "probability_two_events_per_stay": 0.10,
+    "_trigger_probability_by_tier_notes": "2026-04-18: multiplier applied on top of probability_at_least_one_event_per_stay and the target-star forced probability. Luxury 5★ reviews empirically mention friction in ~10-15% of stays; budget properties closer to 40-50%. Capped at 1.0.",
+    "trigger_probability_by_tier": {
+      "luxury": 0.35,
+      "premium": 0.60,
+      "upscale": 0.85,
+      "midscale": 1.0,
+      "economy": 1.15
+    },
+    "resolution_quality_distribution": {
+      "excellent_recovery": 0.28,
+      "adequate_recovery": 0.40,
+      "mediocre_recovery": 0.24,
+      "unresolved_or_escalated": 0.08
+    },
+    "resolution_quality_distribution_by_tier": {
+      "luxury": { "excellent_recovery": 0.45, "adequate_recovery": 0.40, "mediocre_recovery": 0.12, "unresolved_or_escalated": 0.03 },
+      "premium": { "excellent_recovery": 0.32, "adequate_recovery": 0.42, "mediocre_recovery": 0.20, "unresolved_or_escalated": 0.06 },
+      "upscale": { "excellent_recovery": 0.25, "adequate_recovery": 0.40, "mediocre_recovery": 0.27, "unresolved_or_escalated": 0.08 },
+      "midscale": { "excellent_recovery": 0.18, "adequate_recovery": 0.38, "mediocre_recovery": 0.32, "unresolved_or_escalated": 0.12 },
+      "economy": { "excellent_recovery": 0.12, "adequate_recovery": 0.33, "mediocre_recovery": 0.38, "unresolved_or_escalated": 0.17 }
+    }
+  },
+
+  "events": [
+    {
+      "id": "luggage_delay",
+      "label": "Luggage arrival delayed by airline",
+      "stages_where_relevant": ["arrival", "room_first_impression"],
+      "severity": "medium",
+      "baseline_sensation_deltas": { "speed": -10, "comfort_physical": -8, "service_quality": -5 },
+      "positive_if_resolved_well": { "service_quality": 15, "personalization": 10 },
+      "archetype_sensitivity_multiplier": { "business_traveler": 1.8, "luxury_seeker": 1.3, "honeymooner": 1.2, "event_attendee": 1.6 },
+      "narrative_hint": "Airline-delayed suitcase arrives 4-6 hours after check-in. Guest has to request essentials from hotel."
+    },
+    {
+      "id": "room_not_ready",
+      "label": "Room not ready at promised check-in time",
+      "stages_where_relevant": ["arrival"],
+      "severity": "medium",
+      "baseline_sensation_deltas": { "speed": -15, "service_quality": -8, "personalization": -5 },
+      "positive_if_resolved_well": { "service_quality": 10, "personalization": 8 },
+      "archetype_sensitivity_multiplier": { "business_traveler": 1.7, "family_vacationer": 1.5, "loyalty_maximizer": 1.8 },
+      "narrative_hint": "Room not ready at 15:00 check-in. Guest asked to wait 40-90 minutes. Lobby seating offered but no proactive F&B comp."
+    },
+    {
+      "id": "overbooking_downgrade",
+      "label": "Overbooking: downgrade to standard room despite booking suite/upgrade",
+      "stages_where_relevant": ["arrival"],
+      "severity": "high",
+      "baseline_sensation_deltas": { "service_quality": -14, "value": -18, "personalization": -11, "authenticity": -4 },
+      "positive_if_resolved_well": { "service_quality": 15, "value": 10 },
+      "archetype_sensitivity_multiplier": { "luxury_seeker": 1.5, "honeymooner": 1.5, "loyalty_maximizer": 1.6 },
+      "narrative_hint": "Property overbooked. Guest downgraded to standard room with rate adjustment. Compensation offered varies by staff empowerment."
+    },
+    {
+      "id": "wifi_intermittent",
+      "label": "Wi-Fi intermittent or below advertised speed",
+      "stages_where_relevant": ["room_first_impression", "evening_1", "night_1", "morning_routine", "daytime_activity"],
+      "severity": "low_to_medium",
+      "baseline_sensation_deltas": { "amenity_usability": -10, "modernity": -7, "value": -5 },
+      "positive_if_resolved_well": { "amenity_usability": 8, "service_quality": 5 },
+      "archetype_sensitivity_multiplier": { "business_traveler": 1.6, "digital_nomad": 1.9, "loyalty_maximizer": 1.2 },
+      "narrative_hint": "Wi-Fi drops during Zoom call / streaming / large upload. Measures 15-30 Mbps instead of advertised 200 Mbps. Requires tech support call."
+    },
+    {
+      "id": "noisy_neighbors",
+      "label": "Loud neighboring room disrupting sleep",
+      "stages_where_relevant": ["night_1", "room_first_impression"],
+      "severity": "medium",
+      "baseline_sensation_deltas": { "comfort_physical": -12, "safety": -3, "service_quality": -4 },
+      "positive_if_resolved_well": { "service_quality": 12, "comfort_physical": 8 },
+      "archetype_sensitivity_multiplier": { "business_traveler": 1.3, "luxury_seeker": 1.4, "honeymooner": 1.5, "digital_nomad": 1.3 },
+      "narrative_hint": "Bachelor/ette group or bachelorette party next door until 02:00. Front desk called to intervene. Resolution inconsistent."
+    },
+    {
+      "id": "hvac_malfunction",
+      "label": "AC/heating malfunction in room",
+      "stages_where_relevant": ["room_first_impression", "night_1"],
+      "severity": "medium",
+      "baseline_sensation_deltas": { "comfort_physical": -14, "modernity": -7, "amenity_usability": -7 },
+      "positive_if_resolved_well": { "service_quality": 15, "comfort_physical": 10 },
+      "archetype_sensitivity_multiplier": { "business_traveler": 1.2, "luxury_seeker": 1.3, "family_vacationer": 1.2 },
+      "narrative_hint": "AC unit stuck or stops cooling. Room temperature inappropriate overnight. Maintenance dispatched with 30-120 min delay."
+    },
+    {
+      "id": "dietary_mistake",
+      "label": "Dietary / allergy request mishandled",
+      "stages_where_relevant": ["evening_1", "dinner", "morning_routine", "lunch"],
+      "severity": "high",
+      "baseline_sensation_deltas": { "culinary": -13, "service_quality": -13, "safety": -11, "personalization": -14 },
+      "positive_if_resolved_well": { "service_quality": 18, "culinary": 10, "personalization": 15 },
+      "archetype_sensitivity_multiplier": { "family_vacationer": 1.4, "luxury_seeker": 1.3, "honeymooner": 1.2 },
+      "narrative_hint": "Gluten-free / nut-free / dairy-free request communicated at booking not honored. Dish sent back. Kitchen response variable."
+    },
+    {
+      "id": "pool_closed_unexpected",
+      "label": "Pool closed for maintenance without advance notice",
+      "stages_where_relevant": ["daytime_activity", "morning_routine"],
+      "severity": "medium",
+      "baseline_sensation_deltas": { "amenity_usability": -14, "value": -8, "service_quality": -4 },
+      "positive_if_resolved_well": { "personalization": 8, "service_quality": 5 },
+      "archetype_sensitivity_multiplier": { "family_vacationer": 1.5, "honeymooner": 1.3, "luxury_seeker": 1.2, "budget_optimizer": 1.3 },
+      "narrative_hint": "Main pool closed for maintenance day 2-3 without prior communication. Alternative pool crowded or unavailable."
+    },
+    {
+      "id": "breakfast_quality_slip",
+      "label": "Breakfast buffet low quality or understaffed",
+      "stages_where_relevant": ["morning_routine"],
+      "severity": "low_to_medium",
+      "baseline_sensation_deltas": { "culinary": -10, "service_quality": -8, "value": -5, "speed": -8 },
+      "positive_if_resolved_well": { "culinary": 5, "service_quality": 3 },
+      "archetype_sensitivity_multiplier": { "family_vacationer": 1.4, "luxury_seeker": 1.6, "loyalty_maximizer": 1.3 },
+      "narrative_hint": "Buffet repetitive day 3+, stations emptied not restocked, thin coffee, long wait for fresh eggs."
+    },
+    {
+      "id": "surprise_fee_at_checkout",
+      "label": "Unexpected fee discovered at checkout",
+      "stages_where_relevant": ["checkout"],
+      "severity": "high",
+      "baseline_sensation_deltas": { "value": -20, "service_quality": -10, "authenticity": -7 },
+      "positive_if_resolved_well": { "value": 8, "service_quality": 10 },
+      "archetype_sensitivity_multiplier": { "budget_optimizer": 1.7, "business_traveler": 1.3, "loyalty_maximizer": 1.3, "digital_nomad": 1.2 },
+      "narrative_hint": "Resort fee / parking fee / minibar / wifi charge appears on bill that guest expected included. Dispute at front desk."
+    },
+    {
+      "id": "service_indifference_moment",
+      "label": "Specific staff interaction marked by indifference",
+      "stages_where_relevant": ["arrival", "evening_1", "morning_routine", "dinner"],
+      "severity": "low_to_medium",
+      "baseline_sensation_deltas": { "service_quality": -10, "personalization": -7, "authenticity": -6 },
+      "positive_if_resolved_well": { "service_quality": 5 },
+      "archetype_sensitivity_multiplier": { "luxury_seeker": 1.5, "loyalty_maximizer": 1.3, "honeymooner": 1.3 },
+      "narrative_hint": "One staff member (receptionist / waiter / concierge) treats guest as transaction. Cold tone, no eye contact, script-reading."
+    },
+    {
+      "id": "construction_noise_daytime",
+      "label": "Construction or renovation noise near guest room",
+      "stages_where_relevant": ["morning_routine", "daytime_activity"],
+      "severity": "medium",
+      "baseline_sensation_deltas": { "comfort_physical": -12, "aesthetic": -5, "value": -8 },
+      "positive_if_resolved_well": { "service_quality": 10, "value": 5 },
+      "archetype_sensitivity_multiplier": { "digital_nomad": 1.8, "luxury_seeker": 1.5, "honeymooner": 1.4 },
+      "narrative_hint": "Nearby renovation or pool-area construction starts 8:30 AM, audible in room. Property did not disclose at booking."
+    },
+    {
+      "id": "spa_booking_problem",
+      "label": "Spa booking confusion or cancellation",
+      "stages_where_relevant": ["daytime_activity", "afternoon_activity"],
+      "severity": "medium",
+      "baseline_sensation_deltas": { "service_quality": -12, "personalization": -10, "amenity_usability": -8 },
+      "positive_if_resolved_well": { "service_quality": 10, "personalization": 8 },
+      "archetype_sensitivity_multiplier": { "honeymooner": 1.7, "luxury_seeker": 1.6 },
+      "narrative_hint": "Spa treatment booked at check-in is cancelled / double-booked. Alternative offered is worse time slot or different therapist."
+    },
+    {
+      "id": "bathroom_issue",
+      "label": "Bathroom issue (hot water, drain, fixture)",
+      "stages_where_relevant": ["room_first_impression", "morning_routine"],
+      "severity": "low_to_medium",
+      "baseline_sensation_deltas": { "amenity_usability": -11, "cleanliness": -7, "modernity": -6 },
+      "positive_if_resolved_well": { "service_quality": 10, "amenity_usability": 5 },
+      "archetype_sensitivity_multiplier": { "luxury_seeker": 1.3, "honeymooner": 1.2, "budget_optimizer": 1.2 },
+      "narrative_hint": "Hot water fails for 15-30 min / drain slow / shower head broken / outlet doesn't work. Maintenance visit required."
+    },
+    {
+      "id": "check_in_queue",
+      "label": "Long check-in queue at peak arrival",
+      "stages_where_relevant": ["arrival"],
+      "severity": "low",
+      "baseline_sensation_deltas": { "speed": -12, "service_quality": -5, "personalization": -3 },
+      "positive_if_resolved_well": { "speed": 3, "service_quality": 5 },
+      "archetype_sensitivity_multiplier": { "business_traveler": 1.8, "family_vacationer": 1.5, "loyalty_maximizer": 1.7, "event_attendee": 1.5 },
+      "narrative_hint": "12-18 minute queue at front desk during 15:00-17:00 peak. No triage for loyalty members or pre-checked guests."
+    }
+  ]
+}

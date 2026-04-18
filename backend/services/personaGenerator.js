@@ -15,6 +15,92 @@ const { retrievePainPoints } = require('./painLibrary');
 
 const CONCURRENCY = parseInt(process.env.GROQ_CONCURRENCY, 10) || 4;
 
+// Hospitality-specific archetype weighting: given an audience vector's
+// trip_purpose_primary (and optionally free-text hints), bias which of the
+// 8 hospitality archetypes get selected. Absent vector → uniform weights.
+const HOSPITALITY_TRIP_PURPOSE_WEIGHTS = {
+  leisure_couples:  { luxury_seeker: 3.5, honeymooner: 3.0, loyalty_maximizer: 1.0, event_attendee: 0.5 },
+  honeymoon:        { honeymooner: 5.0, luxury_seeker: 2.5 },
+  leisure_family:   { family_vacationer: 5.0, loyalty_maximizer: 1.2, luxury_seeker: 0.8 },
+  leisure_solo:     { digital_nomad: 2.0, budget_optimizer: 2.0, luxury_seeker: 1.2, loyalty_maximizer: 1.0 },
+  business:         { business_traveler: 5.0, loyalty_maximizer: 2.0, event_attendee: 1.0 },
+  remote_work:      { digital_nomad: 5.0, luxury_seeker: 0.8, business_traveler: 0.8 },
+  event:            { event_attendee: 5.0, business_traveler: 1.5, luxury_seeker: 1.0 },
+  wellness:         { luxury_seeker: 3.5, honeymooner: 2.0, digital_nomad: 0.8 },
+};
+
+const HOSPITALITY_KEYWORD_BOOSTS = [
+  { pattern: /honeymoon|luna de miel|newlywed/i,           archetype: 'honeymooner',       boost: 2.5 },
+  { pattern: /couple|pareja|romantic|romántic/i,           archetype: 'luxury_seeker',     boost: 1.5 },
+  { pattern: /couple|pareja|romantic|romántic/i,           archetype: 'honeymooner',       boost: 1.5 },
+  { pattern: /family|familia|kids|children|ni[ñn]os/i,     archetype: 'family_vacationer', boost: 2.5 },
+  { pattern: /business|corporate|work\s+trip|viaje\s+de\s+negocios/i, archetype: 'business_traveler', boost: 2.0 },
+  { pattern: /nomad|remote|digital|workation/i,            archetype: 'digital_nomad',     boost: 2.0 },
+  { pattern: /budget|affordable|cheap|econom/i,            archetype: 'budget_optimizer',  boost: 2.0 },
+  { pattern: /loyalty|mvc|rewards|platinum|gold|elite/i,   archetype: 'loyalty_maximizer', boost: 2.0 },
+  { pattern: /wedding|conference|congress|event|festiv/i,  archetype: 'event_attendee',    boost: 2.0 },
+  { pattern: /luxury|lujo|premium|five[- ]star|michelin|spa/i, archetype: 'luxury_seeker', boost: 1.8 },
+];
+
+function buildHospitalityArchetypeWeights(archetypes, audienceVector, audienceText = '') {
+  const ids = archetypes.map(a => a.id);
+  const weights = Object.fromEntries(ids.map(id => [id, 1.0])); // uniform baseline
+
+  // Trip purpose bias
+  const tp = audienceVector?.trip_purpose_primary;
+  if (tp && HOSPITALITY_TRIP_PURPOSE_WEIGHTS[tp]) {
+    for (const [id, mult] of Object.entries(HOSPITALITY_TRIP_PURPOSE_WEIGHTS[tp])) {
+      if (id in weights) weights[id] *= mult;
+    }
+  }
+
+  // Free-text keyword boosts
+  const text = typeof audienceVector === 'string'
+    ? audienceVector
+    : (audienceText || audienceVector?.guest_mix || audienceVector?.role_archetype || '');
+  for (const rule of HOSPITALITY_KEYWORD_BOOSTS) {
+    if (rule.pattern.test(text) && rule.archetype in weights) {
+      weights[rule.archetype] *= rule.boost;
+    }
+  }
+  return weights;
+}
+
+function weightedRoundRobin(archetypes, weights, n) {
+  // Proportional allocation with Hamilton's method — guarantees the integer
+  // counts sum to exactly n while respecting the weight ratios.
+  const ids = archetypes.map(a => a.id);
+  const wArr = ids.map(id => Math.max(0, weights[id] || 0));
+  const total = wArr.reduce((s, w) => s + w, 0) || 1;
+  const quotas = wArr.map(w => (w / total) * n);
+  const base = quotas.map(q => Math.floor(q));
+  let assigned = base.reduce((s, v) => s + v, 0);
+  const remainders = quotas.map((q, i) => ({ i, frac: q - Math.floor(q) }))
+    .sort((a, b) => b.frac - a.frac);
+  let k = 0;
+  while (assigned < n && k < remainders.length) {
+    base[remainders[k].i]++;
+    assigned++;
+    k++;
+  }
+  // Zero-weight archetypes only get a slot if there's room AND weight > 0.
+  const assignments = [];
+  let slotIdx = 0;
+  for (let i = 0; i < ids.length; i++) {
+    for (let c = 0; c < base[i]; c++) {
+      assignments.push({ archetype: archetypes[i], variantIndex: c, slotIndex: slotIdx++ });
+    }
+  }
+  // Shuffle so that high-weight archetypes aren't all first (keeps journey logs readable).
+  for (let i = assignments.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [assignments[i], assignments[j]] = [assignments[j], assignments[i]];
+  }
+  // Reassign slotIndex after shuffle so downstream code stays happy.
+  assignments.forEach((a, i) => { a.slotIndex = i; });
+  return assignments;
+}
+
 async function generatePersonas({ taskType, audienceVector, count, onProgress, seedPersonas, industrySlug = 'default' }) {
   const n = count || getCohortSize();
   const emit = onProgress || (() => {});
@@ -30,12 +116,23 @@ async function generatePersonas({ taskType, audienceVector, count, onProgress, s
   const archetypes = getArchetypesForTask(taskType, industrySlug);
   const K = archetypes.length;
 
-  // Round-robin assignment of archetype to each persona slot
-  const assignments = [];
-  for (let i = 0; i < n; i++) {
-    const archetype = archetypes[i % K];
-    const variantIndex = Math.floor(i / K); // 0 for first instance, 1 for second, etc.
-    assignments.push({ archetype, variantIndex, slotIndex: i });
+  // Archetype assignment: for hospitality, bias by audience.trip_purpose_primary +
+  // free-text keywords; otherwise fall back to uniform round-robin.
+  let assignments;
+  if (industrySlug === 'hospitality' && audienceVector && (audienceVector.trip_purpose_primary || audienceVector.guest_mix || typeof audienceVector === 'string')) {
+    const weights = buildHospitalityArchetypeWeights(archetypes, audienceVector);
+    assignments = weightedRoundRobin(archetypes, weights, n);
+    console.log(`[personaGenerator] Hospitality archetype weights:`, Object.fromEntries(Object.entries(weights).map(([k, v]) => [k, Math.round(v * 10) / 10])));
+    const picked = {};
+    for (const a of assignments) picked[a.archetype.id] = (picked[a.archetype.id] || 0) + 1;
+    console.log(`[personaGenerator] Assigned slots:`, picked);
+  } else {
+    assignments = [];
+    for (let i = 0; i < n; i++) {
+      const archetype = archetypes[i % K];
+      const variantIndex = Math.floor(i / K);
+      assignments.push({ archetype, variantIndex, slotIndex: i });
+    }
   }
 
   const personas = [];

@@ -1,0 +1,166 @@
+{
+  "_description": "Booking channel profiles and pricing anchors. Determines pre-arrival expectation shaping: a guest who paid €250 and booked via Booking.com 45 days in advance with non-refundable rate has a different mental contract than one who paid €900 direct with late flexible rate.",
+
+  "channels": {
+    "direct_web": {
+      "label": "Hotel direct website",
+      "typical_ADR_vs_rack_pct": 100,
+      "loyalty_recognition_likely": true,
+      "data_known_to_hotel": "full_profile",
+      "expectation_modifier": {
+        "personalization": -5,
+        "service_quality": -3
+      },
+      "typical_share_pct": 22
+    },
+    "direct_app": {
+      "label": "Hotel direct mobile app",
+      "typical_ADR_vs_rack_pct": 95,
+      "loyalty_recognition_likely": true,
+      "data_known_to_hotel": "full_profile",
+      "expectation_modifier": {
+        "modernity": -5,
+        "personalization": -5,
+        "speed": -3
+      },
+      "typical_share_pct": 10
+    },
+    "booking_com": {
+      "label": "Booking.com",
+      "typical_ADR_vs_rack_pct": 110,
+      "loyalty_recognition_likely": false,
+      "data_known_to_hotel": "limited",
+      "commission_pct": 17,
+      "expectation_modifier": {
+        "personalization": 5,
+        "value": -3
+      },
+      "typical_share_pct": 40
+    },
+    "expedia": {
+      "label": "Expedia / Hotels.com / Trivago",
+      "typical_ADR_vs_rack_pct": 108,
+      "loyalty_recognition_likely": false,
+      "data_known_to_hotel": "limited",
+      "commission_pct": 15,
+      "expectation_modifier": {
+        "personalization": 3,
+        "value": -3
+      },
+      "typical_share_pct": 10
+    },
+    "loyalty_redemption": {
+      "label": "Meliá Rewards points redemption",
+      "typical_ADR_vs_rack_pct": 0,
+      "loyalty_recognition_likely": true,
+      "data_known_to_hotel": "full_profile_plus_history",
+      "expectation_modifier": {
+        "personalization": -10,
+        "service_quality": -5,
+        "amenity_usability": -5
+      },
+      "typical_share_pct": 5
+    },
+    "corporate": {
+      "label": "Corporate travel contract",
+      "typical_ADR_vs_rack_pct": 75,
+      "loyalty_recognition_likely": true,
+      "data_known_to_hotel": "corporate_profile",
+      "expectation_modifier": {
+        "speed": -5,
+        "amenity_usability": -3
+      },
+      "typical_share_pct": 6
+    },
+    "group_mice": {
+      "label": "Group / event / MICE",
+      "typical_ADR_vs_rack_pct": 80,
+      "loyalty_recognition_likely": false,
+      "data_known_to_hotel": "group_only",
+      "expectation_modifier": {
+        "crowd": 5,
+        "service_quality": -2,
+        "amenity_usability": -5
+      },
+      "typical_share_pct": 4
+    },
+    "travel_agency": {
+      "label": "Offline travel agency / tour operator",
+      "typical_ADR_vs_rack_pct": 85,
+      "loyalty_recognition_likely": false,
+      "data_known_to_hotel": "limited",
+      "expectation_modifier": {
+        "personalization": 5,
+        "modernity": 5
+      },
+      "typical_share_pct": 2
+    },
+    "meta": {
+      "label": "Metasearch (Google, Trivago, Kayak redirect)",
+      "typical_ADR_vs_rack_pct": 105,
+      "loyalty_recognition_likely": false,
+      "data_known_to_hotel": "limited",
+      "expectation_modifier": {
+        "personalization": 5,
+        "value": -5
+      },
+      "typical_share_pct": 1
+    }
+  },
+
+  "rate_plans": {
+    "flexible_refundable": {
+      "label": "Fully flexible, refundable up to 24h",
+      "typical_premium_pct": 15,
+      "expectation_modifier": { "service_quality": -2, "personalization": -2 }
+    },
+    "advance_purchase_nonref": {
+      "label": "Advance purchase, non-refundable",
+      "typical_premium_pct": -15,
+      "expectation_modifier": { "value": 3, "speed": -2 }
+    },
+    "package_inclusive": {
+      "label": "Package (room + breakfast or HB or all-inclusive)",
+      "typical_premium_pct": 5,
+      "expectation_modifier": { "culinary": -3, "value": 3, "amenity_usability": -2 }
+    },
+    "member_rate": {
+      "label": "Meliá Rewards member rate",
+      "typical_premium_pct": -5,
+      "expectation_modifier": { "personalization": -3, "service_quality": -2 }
+    },
+    "promo_discount": {
+      "label": "Promotional or seasonal discount",
+      "typical_premium_pct": -20,
+      "expectation_modifier": { "value": 5 }
+    }
+  },
+
+  "pre_booked_upsells_catalog": {
+    "early_check_in": { "typical_price_eur": 40 },
+    "late_checkout": { "typical_price_eur": 60 },
+    "room_upgrade_paid": { "typical_price_eur": 120 },
+    "airport_transfer": { "typical_price_eur": 85 },
+    "fb_credit": { "typical_price_eur": 100 },
+    "spa_credit": { "typical_price_eur": 150 },
+    "anniversary_package": { "typical_price_eur": 180 },
+    "romantic_dinner_package": { "typical_price_eur": 220 }
+  },
+
+  "lead_time_segments": {
+    "last_minute": { "days_max": 3, "expectation_modifier": { "speed": 3, "personalization": -5 }, "value_awareness_multiplier": 0.7 },
+    "short": { "days_max": 14, "expectation_modifier": { "personalization": -3 }, "value_awareness_multiplier": 0.9 },
+    "medium": { "days_max": 45, "expectation_modifier": {}, "value_awareness_multiplier": 1.0 },
+    "long": { "days_max": 120, "expectation_modifier": { "personalization": -3, "amenity_usability": -3 }, "value_awareness_multiplier": 1.1 },
+    "very_long": { "days_max": 365, "expectation_modifier": { "personalization": -5, "amenity_usability": -5 }, "value_awareness_multiplier": 1.2 }
+  },
+
+  "price_anchor_cents": {
+    "_description": "Maps room rate to expectation intensity multiplier. Higher ADR = higher expectation pressure on every dimension.",
+    "economy": { "rate_max_eur": 120, "expectation_pressure_multiplier": 0.7 },
+    "upscale": { "rate_max_eur": 300, "expectation_pressure_multiplier": 1.0 },
+    "premium": { "rate_max_eur": 600, "expectation_pressure_multiplier": 1.25 },
+    "luxury": { "rate_max_eur": 1200, "expectation_pressure_multiplier": 1.5 },
+    "ultra_luxury": { "rate_max_eur": 99999, "expectation_pressure_multiplier": 1.8 }
+  }
+}

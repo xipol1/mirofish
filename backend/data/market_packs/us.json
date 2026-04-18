@@ -1,0 +1,143 @@
+{
+  "pack_version": "0.1.0",
+  "market_id": "us",
+  "label": "United States (+ Canada)",
+  "iso_country_code": "US",
+  "currency_iso": "USD",
+  "sources": [
+    "US National Travel and Tourism Office (NTTO) Outbound 2024",
+    "FRONTUR 2024 — US arrivals to Spain segment",
+    "Phocuswright US Consumer Travel Report 2024",
+    "Skift US Outbound Travel Intelligence 2024",
+    "AENA Barcelona + Palma US-origin traffic",
+    "Cornell Hospitality Quarterly 2024 — American traveler benchmarks",
+    "Statista Travel US 2024"
+  ],
+  "last_updated": "2026-04-18",
+  "cultural_cluster_mapping": "anglo_us_canada",
+
+  "booking_window_distribution_days": {
+    "last_minute_0_3": 0.05,
+    "short_4_14": 0.14,
+    "medium_15_45": 0.32,
+    "long_46_90": 0.30,
+    "very_long_91_plus": 0.19
+  },
+
+  "channel_share_pct": {
+    "booking_com": 24,
+    "direct_web": 25,
+    "expedia_group": 22,
+    "marriott_hilton_hyatt_direct_aggregators": 8,
+    "direct_app": 7,
+    "travel_agency_luxury": 6,
+    "loyalty_redemption": 5,
+    "corporate": 2,
+    "meta": 1
+  },
+
+  "price_sensitivity": {
+    "elasticity_coefficient": -0.85,
+    "walk_away_threshold_pct_above_comp_set": 22,
+    "deal_trigger_threshold_pct_below_comp_set": 15,
+    "sensitivity_segment_override": {
+      "luxury_seeker": -0.45,
+      "business_traveler": -0.65,
+      "budget_optimizer": -1.55
+    }
+  },
+
+  "cancellation_patterns": {
+    "refundable_rate_preference_pct": 78,
+    "nonrefundable_rate_preference_pct": 22,
+    "cancellation_rate_refundable_pct": 18,
+    "cancellation_rate_nonrefundable_pct": 2,
+    "typical_cancellation_window_hours_before_arrival": 48
+  },
+
+  "device_share_pct": {
+    "mobile": 52,
+    "desktop": 38,
+    "tablet": 10
+  },
+
+  "typical_length_of_stay_nights_by_segment": {
+    "leisure_solo": 4.5,
+    "leisure_couples": 6.5,
+    "leisure_family": 8.8,
+    "business": 3.1,
+    "remote_work": 14.2,
+    "event": 3.8
+  },
+
+  "destination_origin_airport_distribution_pct": {
+    "JFK_EWR_LGA_NYC": 28,
+    "MIA_FLL": 16,
+    "LAX_SFO_CA": 14,
+    "ORD": 10,
+    "BOS": 8,
+    "IAD_BWI_DCA": 7,
+    "ATL": 5,
+    "DFW_IAH": 4,
+    "YYZ_YUL_Canada": 5,
+    "other": 3
+  },
+
+  "segment_mix_outbound_to_mediterranean_pct": {
+    "leisure_couples": 38,
+    "leisure_family": 24,
+    "leisure_solo": 10,
+    "business": 8,
+    "remote_work": 8,
+    "event": 5,
+    "honeymoon_milestone": 7
+  },
+
+  "review_platform_usage_pct": {
+    "tripadvisor": 35,
+    "google": 32,
+    "booking_com": 15,
+    "yelp": 8,
+    "travel_blog_personal": 6,
+    "instagram": 4
+  },
+  "review_writing_probability_pct": 52,
+  "complaint_escalation_pattern": "direct_to_manager_immediate",
+
+  "loyalty_tier_penetration_pct": 42,
+
+  "average_spend_per_night_ancillary_eur": {
+    "economy_property": 55,
+    "upscale_property": 140,
+    "luxury_property": 265,
+    "ultra_luxury_property": 485
+  },
+
+  "key_behavioral_traits": [
+    "Service warmth and personalization expected by default, not as exception",
+    "Large rooms and amenity abundance expected — European 'compact' rooms trigger complaints",
+    "Frequent upsell offers welcome; they choose, not rejection",
+    "Loyalty tier recognition must be automatic and visible (Bonvoy, Honors, World)",
+    "24h availability (ice, room service, gym) is expected",
+    "Direct escalation to manager within minutes of any friction",
+    "Long-format reviews (avg 280 words vs 180 global average)",
+    "High ancillary spend — F&B and spa especially",
+    "Longest stays globally — multi-week trips to Europe common",
+    "Tipping expectations carry over — confusion on European non-tipping norms",
+    "Highest ADR acceptance — walk-away threshold 22% above comp set"
+  ],
+
+  "preferred_property_types": [
+    "luxury_resort", "ultra_luxury_resort", "design_led_boutique", "wellness_resort", "suite_led_hotels"
+  ],
+
+  "seasonal_peaks_menorca": ["June", "July", "August", "September", "Thanksgiving_week"],
+
+  "payment_preferences": {
+    "credit_card": 82,
+    "debit_card": 9,
+    "apple_pay_google_pay": 6,
+    "paypal": 2,
+    "bank_transfer": 1
+  }
+}

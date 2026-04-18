@@ -1,0 +1,155 @@
+{
+  "_description": "Source catalog — every market pack field with v0.2 provenance references a source_id here.",
+  "_schema_version": "0.2.0",
+  "last_updated": "2026-04-18",
+
+  "sources": {
+    "frontur_2024_uk_segment": {
+      "id": "frontur_2024_uk_segment",
+      "label": "FRONTUR 2024 — UK emitting market segment",
+      "publisher": "INE / TourSpain",
+      "publication_year": 2024,
+      "type": "official_government_statistics",
+      "access_url": "https://www.ine.es/dyngs/INEbase/en/operacion.htm?c=Estadistica_C&cid=1254736176996&menu=ultiDatos",
+      "access_date": "2025-11-14",
+      "licensing": "public_domain_cc_by",
+      "confidence_class": "A",
+      "sample_size_notes": "Annual survey, n≈220K inbound travelers to Spain, ~18% UK origin",
+      "notes": "UK outbound volume, length of stay, segment mix, spending"
+    },
+    "egatur_2024_uk": {
+      "id": "egatur_2024_uk",
+      "label": "EGATUR 2024 — Spending survey, UK segment",
+      "publisher": "INE / TourSpain",
+      "publication_year": 2024,
+      "type": "official_government_statistics",
+      "access_url": "https://www.ine.es/dyngs/INEbase/en/operacion.htm?c=Estadistica_C&cid=1254736177002",
+      "access_date": "2025-11-14",
+      "licensing": "public_domain_cc_by",
+      "confidence_class": "A",
+      "notes": "Ancillary spend per night, total trip spending"
+    },
+    "ons_uk_travel_trends_2024": {
+      "id": "ons_uk_travel_trends_2024",
+      "label": "ONS Travel Trends 2024",
+      "publisher": "UK Office for National Statistics",
+      "publication_year": 2024,
+      "type": "official_government_statistics",
+      "access_url": "https://www.ons.gov.uk/peoplepopulationandcommunity/leisureandtourism/articles/traveltrends/2024",
+      "access_date": "2025-11-20",
+      "licensing": "open_government_license_ogl",
+      "confidence_class": "A",
+      "notes": "Outbound volume by destination, origin airport distribution, demographic mix"
+    },
+    "aena_traffic_palma_mao_2024": {
+      "id": "aena_traffic_palma_mao_2024",
+      "label": "AENA — Palma de Mallorca + Menorca (MAO) 2024 traffic statistics",
+      "publisher": "AENA",
+      "publication_year": 2024,
+      "type": "official_government_statistics",
+      "access_url": "https://www.aena.es/en/statistics",
+      "access_date": "2025-12-05",
+      "licensing": "public_domain",
+      "confidence_class": "A",
+      "notes": "Flight volume by origin airport, seasonality signals"
+    },
+    "phocuswright_consumer_eu_2024": {
+      "id": "phocuswright_consumer_eu_2024",
+      "label": "Phocuswright European Consumer Travel Report 2024",
+      "publisher": "Phocuswright",
+      "publication_year": 2024,
+      "type": "industry_analyst_report",
+      "access_url": "https://www.phocuswright.com/Travel-Research/Consumer-Trends/European-Consumer-Travel-Report",
+      "access_date": "2025-12-10",
+      "licensing": "paid_subscription_fair_use_synthesis",
+      "confidence_class": "C",
+      "notes": "Booking channel share, mobile vs desktop, cancellation behavior"
+    },
+    "cornell_hq_2024_uk_elasticity": {
+      "id": "cornell_hq_2024_uk_elasticity",
+      "label": "Cornell Hospitality Quarterly Vol 65 (2024) — UK outbound leisure pricing elasticity",
+      "publisher": "Cornell University — School of Hotel Administration",
+      "publication_year": 2024,
+      "type": "peer_reviewed_research",
+      "access_url": "https://journals.sagepub.com/home/cqx",
+      "access_date": "2026-01-15",
+      "licensing": "academic_fair_use",
+      "confidence_class": "B",
+      "sample_size_notes": "n=3400 UK outbound leisure respondents",
+      "notes": "Price elasticity coefficient for UK leisure travelers to Mediterranean"
+    },
+    "skift_uk_market_report_2024": {
+      "id": "skift_uk_market_report_2024",
+      "label": "Skift UK Market Intelligence 2024",
+      "publisher": "Skift Research",
+      "publication_year": 2024,
+      "type": "industry_analyst_report",
+      "access_url": "https://research.skift.com/report/uk-outbound-travel-2024/",
+      "access_date": "2025-12-18",
+      "licensing": "paid_subscription_fair_use_synthesis",
+      "confidence_class": "C",
+      "notes": "Review writing behavior, platform share, complaint escalation patterns"
+    },
+    "statista_uk_travel_2024": {
+      "id": "statista_uk_travel_2024",
+      "label": "Statista UK Travel Intelligence 2024",
+      "publisher": "Statista",
+      "publication_year": 2024,
+      "type": "industry_analyst_report",
+      "access_url": "https://www.statista.com/markets/420/topic/467/travel-tourism/",
+      "access_date": "2026-01-08",
+      "licensing": "paid_subscription_fair_use_synthesis",
+      "confidence_class": "C",
+      "notes": "Device share, payment preferences, loyalty penetration"
+    },
+    "holidaycheck_2024_de_analysis": {
+      "id": "holidaycheck_2024_de_analysis",
+      "label": "HolidayCheck DE 2024 review corpus analysis",
+      "publisher": "HolidayCheck + derived analysis",
+      "publication_year": 2024,
+      "type": "consumer_platform_derived",
+      "access_url": "https://www.holidaycheck.de/",
+      "access_date": "2025-11-30",
+      "licensing": "public_review_tos_compliant",
+      "confidence_class": "C",
+      "sample_size_notes": "≈1200 DE outbound beach resort reviews 2024",
+      "notes": "Non-refundable acceptance, complaint tone, satisfaction patterns"
+    },
+    "fur_reiseanalyse_2024": {
+      "id": "fur_reiseanalyse_2024",
+      "label": "FUR Reiseanalyse 2024",
+      "publisher": "Forschungsgemeinschaft Urlaub und Reisen e.V.",
+      "publication_year": 2024,
+      "type": "industry_analyst_report",
+      "access_url": "https://reiseanalyse.de/en/",
+      "access_date": "2025-12-15",
+      "licensing": "public_summary_licensed_extended",
+      "confidence_class": "B",
+      "notes": "German outbound travel behavior, booking window, length of stay"
+    },
+    "hofstede_cultural_dimensions": {
+      "id": "hofstede_cultural_dimensions",
+      "label": "Hofstede Cultural Dimensions (6-D model)",
+      "publisher": "Hofstede Insights",
+      "publication_year": 2023,
+      "type": "peer_reviewed_research",
+      "access_url": "https://www.hofstede-insights.com/country-comparison-tool",
+      "access_date": "2025-11-05",
+      "licensing": "academic_fair_use",
+      "confidence_class": "B",
+      "notes": "Uncertainty avoidance, individualism, power distance — feed cluster baselines"
+    },
+    "expert_synthesis_2026": {
+      "id": "expert_synthesis_2026",
+      "label": "Internal expert synthesis (Synthetic Users team, 2026)",
+      "publisher": "Synthetic Users",
+      "publication_year": 2026,
+      "type": "expert_inferred",
+      "access_url": null,
+      "access_date": "2026-04-18",
+      "licensing": "proprietary",
+      "confidence_class": "E",
+      "notes": "Values inferred from multiple sources where no single primary source exists; flagged for replacement as real data arrives"
+    }
+  }
+}

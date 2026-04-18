@@ -1,0 +1,492 @@
+{
+  "_description": "Cultural expectation profiles for hospitality guests. Applied on top of archetype baselines. Shapes complaint style, service expectations, platform preference for reviews, and the narrative tone the LLM produces.",
+  "_calibration": {
+    "method": "Sensation baseline modifiers derived from Hofstede 6-D cultural dimensions (2026-04-18).",
+    "hofstede_source": "backend/data/datasets/behavioral_studies/hofstede_6d_scores.json",
+    "mapping_rules": {
+      "UAI_high_to_cleanliness_and_speed": "Countries with UAI > 70 (JP, DE, ES, FR, IT, LATAM, GCC) have -5 to -10 modifiers on cleanliness/speed (they demand more structure and standards)",
+      "IDV_high_to_personalization": "Countries with IDV > 75 (UK, US, IT, AU, NL) have -5 to -10 on personalization (they expect individual recognition)",
+      "PDI_high_to_service_deference": "Countries with PDI > 60 (FR, ES, LATAM, GCC) have 0 to +3 on service_quality (accept service hierarchy)",
+      "MAS_low_to_wellness_emphasis": "Countries with MAS < 30 (NL, SE, NO, DK) have +2 to +5 on authenticity/aesthetic (emphasize quality of life over achievement)",
+      "IVR_low_to_luxury_restraint": "Countries with IVR < 40 (DE, IT, CN) are more restrained in indulgence expectations"
+    },
+    "limitations": "Hofstede dimensions are 20-30 year-old country averages; actual hotel guest behavior shows within-country variation up to 50pp. Use as DIRECTIONAL anchoring, not absolute."
+  },
+
+  "clusters": {
+    "german_dach": {
+      "label": "Germany / Austria / Switzerland",
+      "origin_countries": ["DE", "AT", "CH"],
+      "primary_languages": ["de"],
+      "hofstede_avg": { "PDI": 27, "IDV": 63, "MAS": 72, "UAI": 64, "IVR": 40 },
+      "key_expectations": [
+        "punctuality of all services (check-in, restaurant, spa)",
+        "spotless cleanliness (visible standards, frequent cleaning)",
+        "rule clarity (what's included, what isn't, printed)",
+        "efficient processes without small talk delay",
+        "quiet, rule-abiding environment"
+      ],
+      "complaint_style": "direct_written_detailed",
+      "sensation_baseline_modifiers": {
+        "_calibration_rationale": "UAI=64 → cleanliness -7, speed -4. IVR=40 → culinary +2 (more restrained, less gastronomic expectations). IDV=63 neutral on personalization. MAS=72 → amenity_usability -4 (performance expectation).",
+        "cleanliness": -7,
+        "speed": -4,
+        "service_quality": -2,
+        "amenity_usability": -4,
+        "personalization": 2,
+        "culinary": 2
+      },
+      "review_platform_preference": { "booking.com": 0.55, "tripadvisor": 0.25, "holidaycheck": 0.15, "google": 0.05 },
+      "review_length_multiplier": 1.3,
+      "price_sensitivity": "medium",
+      "value_threshold_strictness": "high",
+      "tolerance_for_chaos": "low",
+      "review_voice": {
+        "directness": "very_high",
+        "superlative_use": "restrained",
+        "understatement_tendency": "none",
+        "complaint_framing": "direct_fact_with_evidence",
+        "structure_preference": "pros_cons",
+        "opener_style": "factual_summary",
+        "irony_use": "none",
+        "signature_phrases_examples": [
+          "Das Zimmer war sauber, aber",
+          "Der Check-in dauerte 25 Minuten, was zu lang ist",
+          "Positiv hervorzuheben ist",
+          "Was uns negativ aufgefallen ist"
+        ],
+        "voice_guidance": "Write directly. State facts with evidence (time, amount, location). Separate positives and negatives clearly. No superlatives. Criticism is factual, not emotional."
+      }
+    },
+
+    "anglo_uk_ireland": {
+      "label": "UK / Ireland",
+      "origin_countries": ["GB", "IE"],
+      "primary_languages": ["en"],
+      "hofstede_avg": { "PDI": 32, "IDV": 80, "MAS": 67, "UAI": 35, "IVR": 69 },
+      "key_expectations": [
+        "friendly service with light banter",
+        "good breakfast (substantial, with protein options)",
+        "English-language signage and menus",
+        "tea-making facility in room",
+        "clear pricing with no surprises"
+      ],
+      "complaint_style": "reserved_then_public_review",
+      "sensation_baseline_modifiers": {
+        "_calibration_rationale": "UAI=35 (low) → tolerant of chaos, no cleanliness/speed penalties. IDV=80 → personalization -4 (expect individual recognition). IVR=69 (high) → value -6 (sensitive to price/value ratio, pub-culture scrutiny). MAS=67 → culinary -2 (expect substantial breakfast).",
+        "personalization": -4,
+        "value": -6,
+        "culinary": -2,
+        "service_quality": 2,
+        "authenticity": 3
+      },
+      "review_platform_preference": { "tripadvisor": 0.5, "booking.com": 0.35, "google": 0.15 },
+      "review_length_multiplier": 1.0,
+      "price_sensitivity": "medium_high",
+      "value_threshold_strictness": "medium",
+      "tolerance_for_chaos": "medium",
+      "review_voice": {
+        "directness": "low",
+        "superlative_use": "restrained_with_dry_wit",
+        "understatement_tendency": "high",
+        "complaint_framing": "ironic_understated",
+        "structure_preference": "narrative",
+        "opener_style": "gently_ironic",
+        "irony_use": "high",
+        "signature_phrases_examples": [
+          "a little disappointing",
+          "not quite what we were led to expect",
+          "somewhat underwhelming",
+          "all things considered, rather lovely",
+          "to be fair"
+        ],
+        "voice_guidance": "Use British understatement. 'A little disappointing' = terrible. 'Rather good' = outstanding. Criticism is indirect, often wrapped in light irony or a self-deprecating aside. Avoid American-style gushing. Dry humour is welcome."
+      }
+    },
+
+    "anglo_us_canada": {
+      "label": "USA / Canada",
+      "origin_countries": ["US", "CA"],
+      "primary_languages": ["en"],
+      "hofstede_avg": { "PDI": 40, "IDV": 86, "MAS": 57, "UAI": 47, "IVR": 68 },
+      "key_expectations": [
+        "service warmth and personalization",
+        "large rooms and amenity abundance",
+        "frequent upsell offers (they choose)",
+        "loyalty tier recognition",
+        "ice machine / 24h availability"
+      ],
+      "complaint_style": "direct_to_manager_immediate",
+      "sensation_baseline_modifiers": {
+        "_calibration_rationale": "IDV=86 (highest globally) → personalization -7 (require recognition). UAI=47 → modest cleanliness/speed expectations. IVR=68 → indulgent, expect amenity abundance, comfort -4. MAS=57 → service_quality -3 (performance expectation).",
+        "service_quality": -3,
+        "personalization": -7,
+        "comfort_physical": -4,
+        "modernity": -3,
+        "amenity_usability": -3
+      },
+      "review_platform_preference": { "tripadvisor": 0.35, "google": 0.35, "booking.com": 0.15, "yelp": 0.1, "travel_blog": 0.05 },
+      "review_length_multiplier": 1.4,
+      "price_sensitivity": "low",
+      "value_threshold_strictness": "medium",
+      "tolerance_for_chaos": "low",
+      "review_voice": {
+        "directness": "high",
+        "superlative_use": "abundant",
+        "understatement_tendency": "none",
+        "complaint_framing": "direct_to_manager_then_review",
+        "structure_preference": "enthusiastic_opener_then_specifics",
+        "opener_style": "effusive",
+        "irony_use": "low",
+        "signature_phrases_examples": [
+          "ABSOLUTELY AMAZING stay!!!",
+          "Our server Maria was INCREDIBLE",
+          "Can't say enough about",
+          "This place is a HIDDEN GEM",
+          "We will 100% be back",
+          "Worth every penny",
+          "Blown away by"
+        ],
+        "voice_guidance": "Open warm and effusive. Use superlatives freely (amazing, incredible, phenomenal). Name specific staff by name. All-caps for emphasis is acceptable. Multiple exclamation marks common. Explicit recommendation and return intent. On negatives, be direct but frame as 'what could be improved'."
+      }
+    },
+
+    "latin_spain_italy": {
+      "label": "Spain / Italy (domestic or Mediterranean)",
+      "origin_countries": ["ES", "IT", "PT"],
+      "primary_languages": ["es", "it", "pt"],
+      "hofstede_avg": { "PDI": 57, "IDV": 51, "MAS": 48, "UAI": 88, "IVR": 36 },
+      "key_expectations": [
+        "warm human interaction",
+        "culinary quality (regional authenticity)",
+        "flexibility with schedules",
+        "family-friendly attitude",
+        "social atmosphere"
+      ],
+      "complaint_style": "verbal_immediate_emotional",
+      "sensation_baseline_modifiers": {
+        "_calibration_rationale": "UAI=88 (very high) → cleanliness -3 (but tolerate chaos differently than Germans). PDI=57 → service_quality +3 (accept hierarchy). Authenticity -5 and culinary -4 = domestic/Italian scrutinize local quality. Crowd +5 and speed +3 = social culture, accept liveliness.",
+        "authenticity": -5,
+        "culinary": -4,
+        "service_quality": 3,
+        "crowd": 5,
+        "speed": 3
+      },
+      "review_platform_preference": { "booking.com": 0.45, "google": 0.35, "tripadvisor": 0.15, "atrapalo": 0.05 },
+      "review_length_multiplier": 0.9,
+      "price_sensitivity": "medium",
+      "value_threshold_strictness": "high",
+      "tolerance_for_chaos": "high",
+      "review_voice": {
+        "directness": "high_emotional",
+        "superlative_use": "abundant",
+        "understatement_tendency": "none",
+        "complaint_framing": "emotional_immediate",
+        "structure_preference": "narrative_warm",
+        "opener_style": "warm_personal",
+        "irony_use": "low",
+        "signature_phrases_examples": [
+          "Una experiencia increíble",
+          "Nos hemos sentido como en casa",
+          "El trato del personal fue exquisito",
+          "Repetiremos sin duda",
+          "Una pena que",
+          "Muy recomendable"
+        ],
+        "voice_guidance": "Write warmly, in first-person-plural when in couple. Emphasize human interactions — named staff, the warmth of service, the 'trato'. Food and hospitality as cultural values. Complaints are emotionally framed ('una pena') rather than factual. End with a 'repetiremos' or 'recomendable' verdict."
+      }
+    },
+
+    "french": {
+      "label": "France",
+      "origin_countries": ["FR", "BE", "LU", "MC"],
+      "primary_languages": ["fr"],
+      "hofstede_avg": { "PDI": 68, "IDV": 71, "MAS": 43, "UAI": 86, "IVR": 48 },
+      "key_expectations": [
+        "gastronomic excellence (wine, breads, cheese, sauces)",
+        "design aesthetic and quality of materials",
+        "discretion of service (not pushy)",
+        "French language materials",
+        "respect for the art de vivre"
+      ],
+      "complaint_style": "articulate_written_sarcastic",
+      "sensation_baseline_modifiers": {
+        "_calibration_rationale": "UAI=86 → culinary standards highest globally, culinary -10 (anchor: France is the benchmark culture). MAS=43 (low) → aesthetic/authenticity matter (quality of life). PDI=68 → service_quality discretion-focused. Breakfast expectations high.",
+        "culinary": -10,
+        "aesthetic": -5,
+        "authenticity": -3,
+        "service_quality": -2
+      },
+      "review_platform_preference": { "tripadvisor": 0.45, "booking.com": 0.35, "google": 0.15, "le_routard": 0.05 },
+      "review_length_multiplier": 1.2,
+      "price_sensitivity": "medium",
+      "value_threshold_strictness": "high",
+      "tolerance_for_chaos": "medium",
+      "review_voice": {
+        "directness": "medium",
+        "superlative_use": "restrained",
+        "understatement_tendency": "medium",
+        "complaint_framing": "articulate_sometimes_sarcastic",
+        "structure_preference": "articulate_essayistic",
+        "opener_style": "measured_critical",
+        "irony_use": "medium_high_sarcastic",
+        "signature_phrases_examples": [
+          "Un séjour correct dans l'ensemble",
+          "Quelques déceptions sur le plan gastronomique",
+          "Le service, bien que présent, manquait de",
+          "On a apprécié",
+          "Dommage que",
+          "À ce prix-là, on pouvait s'attendre à"
+        ],
+        "voice_guidance": "Write in measured, articulate French. Expect gastronomy to be judged harshly — France is the benchmark. Criticism often uses sarcastic understatement ('À ce prix-là, on pouvait s'attendre à mieux'). Reference 'art de vivre' and discretion. Superlatives feel gauche; restrained compliments are higher praise."
+      }
+    },
+
+    "nordic": {
+      "label": "Nordic (Sweden, Norway, Denmark, Finland, Iceland)",
+      "origin_countries": ["SE", "NO", "DK", "FI", "IS"],
+      "primary_languages": ["sv", "no", "da", "fi", "is", "en"],
+      "hofstede_avg": { "PDI": 28, "IDV": 69, "MAS": 14, "UAI": 40, "IVR": 65 },
+      "key_expectations": [
+        "sustainability credentials visible",
+        "design quality (minimalist, functional)",
+        "egalitarian staff-guest interaction (no servility)",
+        "clean air, good water, quiet",
+        "digital self-service options"
+      ],
+      "complaint_style": "formal_written_post_stay",
+      "sensation_baseline_modifiers": {
+        "_calibration_rationale": "MAS=14 (very low, quality-of-life focus) → aesthetic +2 (authentic materials). PDI=28 (lowest globally after Austria) → egalitarian service expected, authenticity +2. UAI=40 → moderate cleanliness. Modernity -5 (high expectations for digital self-service). Crowd -5 (value quiet/space).",
+        "cleanliness": -3,
+        "modernity": -5,
+        "authenticity": 2,
+        "aesthetic": 2,
+        "crowd": -5
+      },
+      "review_platform_preference": { "booking.com": 0.55, "tripadvisor": 0.25, "google": 0.2 },
+      "review_length_multiplier": 1.0,
+      "price_sensitivity": "low_medium",
+      "value_threshold_strictness": "medium",
+      "tolerance_for_chaos": "low",
+      "review_voice": {
+        "directness": "medium_calm",
+        "superlative_use": "restrained",
+        "understatement_tendency": "medium",
+        "complaint_framing": "formal_written_balanced",
+        "structure_preference": "balanced_pros_cons",
+        "opener_style": "neutral_factual",
+        "irony_use": "none",
+        "signature_phrases_examples": [
+          "Overall a good stay",
+          "We appreciated",
+          "One thing to consider",
+          "Could be improved",
+          "Solid choice for",
+          "Sustainability-wise"
+        ],
+        "voice_guidance": "Write calmly and egalitarian. No servility to the property and no superiority either. Often written in English even by native Swedish/Danish/Finnish. Mention sustainability, design, quiet. Avoid superlatives. Praise is understated; criticism is constructive. Digital self-service and practical logistics matter."
+      }
+    },
+
+    "east_asian": {
+      "label": "Japan / South Korea / Taiwan",
+      "origin_countries": ["JP", "KR", "TW"],
+      "primary_languages": ["ja", "ko", "zh_hant"],
+      "hofstede_avg": { "PDI": 57, "IDV": 27, "MAS": 60, "UAI": 82, "LTO": 94, "IVR": 40 },
+      "key_expectations": [
+        "privacy and quiet",
+        "impeccable hygiene (slippers, personal amenities)",
+        "precise service without intrusion",
+        "respect for small details (presentation, packaging)",
+        "printed information in their language ideal"
+      ],
+      "complaint_style": "rarely_complain_but_never_return",
+      "sensation_baseline_modifiers": {
+        "_calibration_rationale": "UAI=82 + Japanese omotenashi tradition → cleanliness -10 (highest standard globally). IDV=27 (collectivist) → personalization +3 (accept group treatment, no solo recognition need). MAS=60 → service_quality -5 (service as performance art). LTO=94 (highest globally) → longer-term brand loyalty if earned.",
+        "cleanliness": -10,
+        "service_quality": -5,
+        "aesthetic": -3,
+        "personalization": 3,
+        "authenticity": -2
+      },
+      "review_platform_preference": { "booking.com": 0.4, "google": 0.35, "tripadvisor": 0.15, "ikyu_rakuten": 0.1 },
+      "review_length_multiplier": 0.7,
+      "price_sensitivity": "low_medium",
+      "value_threshold_strictness": "medium",
+      "tolerance_for_chaos": "very_low",
+      "review_voice": {
+        "directness": "very_low",
+        "superlative_use": "restrained_polite",
+        "understatement_tendency": "very_high",
+        "complaint_framing": "conflict_avoidant_omissive",
+        "structure_preference": "brief_polite",
+        "opener_style": "polite_formal",
+        "irony_use": "none",
+        "signature_phrases_examples": [
+          "清潔感があり快適でした",
+          "スタッフの対応は丁寧でした",
+          "少し気になったのは",
+          "改善していただければ",
+          "Thank you for the nice stay",
+          "Very clean and quiet"
+        ],
+        "voice_guidance": "Write briefly and politely. Avoid direct criticism — what was wrong is OMITTED rather than said, or softened with 'a little' / '少し'. Emphasize cleanliness, quiet, precise service. Short reviews (150-400 characters). If something was bad, the guest quietly never returns rather than writing a bad review. When writing in English, still brief and polite."
+      }
+    },
+
+    "chinese_mainland": {
+      "label": "Chinese mainland",
+      "origin_countries": ["CN"],
+      "primary_languages": ["zh_hans"],
+      "hofstede_avg": { "PDI": 80, "IDV": 20, "MAS": 66, "UAI": 40, "LTO": 87, "IVR": 24 },
+      "key_expectations": [
+        "WeChat / AliPay payment acceptance",
+        "hot water kettle and instant noodle-friendly",
+        "Chinese language materials and signage",
+        "group-friendly dining",
+        "Instagrammable / Xiaohongshu-worthy spots",
+        "Chinese TV channels if possible"
+      ],
+      "complaint_style": "vocal_public_on_douyin_xiaohongshu",
+      "sensation_baseline_modifiers": {
+        "_calibration_rationale": "PDI=80 → service hierarchy expected. IDV=20 (very collectivist) → group facilities matter. UAI=40 (moderate) → tolerant of chaos. IVR=24 (restrained) → modernity -5 expectations specifically around tech (digital payments). MAS=66 → aesthetic -3 (status signaling). Culinary +3 only because less Chinese-specific expectation at overseas hotels.",
+        "modernity": -5,
+        "amenity_usability": -7,
+        "aesthetic": -3,
+        "culinary": 3
+      },
+      "review_platform_preference": { "xiaohongshu": 0.35, "ctrip": 0.3, "google": 0.15, "tripadvisor": 0.1, "douyin": 0.1 },
+      "review_length_multiplier": 0.9,
+      "price_sensitivity": "medium",
+      "value_threshold_strictness": "high",
+      "tolerance_for_chaos": "high",
+      "review_voice": {
+        "directness": "medium_public",
+        "superlative_use": "abundant_with_emoji",
+        "understatement_tendency": "low",
+        "complaint_framing": "public_detailed_with_photos",
+        "structure_preference": "instagrammable_highlights_first",
+        "opener_style": "emoji_led_excited",
+        "irony_use": "low",
+        "signature_phrases_examples": [
+          "环境真的太美了 ✨",
+          "出片率超高",
+          "打卡必去",
+          "性价比还不错",
+          "推荐给姐妹们 💕",
+          "服务态度一般"
+        ],
+        "voice_guidance": "Write for social media. Lead with photogenic / 'Instagrammable' moments. Emojis are natural. Mention 'photo-worthiness' and whether the stay is worth 打卡 (check-in). Group/family friendliness valued. Complaints are direct but surface-level (service attitude, WeChat Pay availability, water kettle presence)."
+      }
+    },
+
+    "middle_east_gcc": {
+      "label": "GCC (UAE, Saudi, Qatar, Kuwait, Bahrain, Oman)",
+      "origin_countries": ["AE", "SA", "QA", "KW", "BH", "OM"],
+      "primary_languages": ["ar"],
+      "hofstede_avg": { "PDI": 80, "IDV": 38, "MAS": 52, "UAI": 68 },
+      "key_expectations": [
+        "halal food options visibly available",
+        "prayer mat, qibla direction, Ramadan consideration",
+        "large rooms / connecting suites for families",
+        "privacy (ladies-only spa hours, private cabanas)",
+        "24h room service with hearty options",
+        "luxury in materials and generosity of service"
+      ],
+      "complaint_style": "direct_to_management_escalation_fast",
+      "sensation_baseline_modifiers": {
+        "_calibration_rationale": "PDI=80 (highest cluster) → service hierarchy essential, amenity_usability -5 (generosity expected). IDV=38 → personalization -5 (family/group recognition). UAI=68 → safety -3, culinary -3 (halal/religious accommodation). Larger-suite expectation → comfort_physical -5.",
+        "comfort_physical": -5,
+        "safety": -3,
+        "personalization": -5,
+        "amenity_usability": -5,
+        "crowd": 0,
+        "culinary": -3
+      },
+      "review_platform_preference": { "booking.com": 0.4, "tripadvisor": 0.3, "google": 0.2, "instagram": 0.1 },
+      "review_length_multiplier": 1.0,
+      "price_sensitivity": "very_low",
+      "value_threshold_strictness": "medium",
+      "tolerance_for_chaos": "low",
+      "review_voice": {
+        "directness": "high_with_status",
+        "superlative_use": "abundant_luxury_anchored",
+        "understatement_tendency": "none",
+        "complaint_framing": "management_expected_to_fix",
+        "structure_preference": "generosity_emphasis_first",
+        "opener_style": "luxury_anchored",
+        "irony_use": "none",
+        "signature_phrases_examples": [
+          "فندق رائع",
+          "الخدمة ممتازة",
+          "الغرفة واسعة ومريحة",
+          "A truly luxurious experience",
+          "The service was extraordinary",
+          "Family-friendly and generous"
+        ],
+        "voice_guidance": "Write in confident, luxury-anchored tone. Generosity of service and room size matter — call out specifically. Mention halal food, prayer facilities, family accommodation. Complaints implicitly expect management-level resolution. Often reviewed in both Arabic and English."
+      }
+    },
+
+    "latin_american": {
+      "label": "Latin America (Mexico, Brazil, Argentina, Colombia, Chile, etc.)",
+      "origin_countries": ["MX", "BR", "AR", "CO", "CL", "PE", "UY", "EC", "VE"],
+      "primary_languages": ["es", "pt"],
+      "hofstede_avg": { "PDI": 66, "IDV": 26, "MAS": 51, "UAI": 83, "IVR": 73 },
+      "key_expectations": [
+        "warm personal interaction",
+        "flexibility",
+        "culinary variety (options for all ages)",
+        "group / family-friendly approach",
+        "reasonable prices vs US competitor pricing"
+      ],
+      "complaint_style": "verbal_warm_resolution_seeking",
+      "sensation_baseline_modifiers": {
+        "_calibration_rationale": "UAI=83 → cancellation visibility matters. IDV=26 (collectivist) → group/family facilities. PDI=66 → service hierarchy accepted. IVR=73 (indulgent) → culinary +2 flexibility, crowd +3 (social acceptance). Value -3 (cost-conscious vs US but aspirational).",
+        "service_quality": 2,
+        "crowd": 3,
+        "value": -3,
+        "speed": 3,
+        "culinary": 2
+      },
+      "review_platform_preference": { "booking.com": 0.5, "tripadvisor": 0.2, "google": 0.2, "despegar": 0.1 },
+      "review_length_multiplier": 0.9,
+      "price_sensitivity": "high",
+      "value_threshold_strictness": "high",
+      "tolerance_for_chaos": "high",
+      "review_voice": {
+        "directness": "high_warm",
+        "superlative_use": "abundant_warm",
+        "understatement_tendency": "none",
+        "complaint_framing": "warm_resolution_seeking",
+        "structure_preference": "narrative_with_specifics",
+        "opener_style": "warm_personal",
+        "irony_use": "low",
+        "signature_phrases_examples": [
+          "Una experiencia maravillosa",
+          "El personal fue sumamente atento",
+          "Nos hicieron sentir en casa",
+          "Recomendado 100%",
+          "Volveríamos sin dudar",
+          "Lo único a mejorar"
+        ],
+        "voice_guidance": "Write warmly in Spanish or Portuguese, first-person-plural for couples/families. Emphasize 'trato' / 'atención' / 'simpatía' — the human warmth of service. Name staff. Mention value relative to US pricing. Complaints framed warmly as 'lo único a mejorar'. Strong explicit recommendation."
+      }
+    }
+  },
+
+  "_fallback_cluster": "anglo_uk_ireland",
+
+  "menorca_typical_origin_mix_pct": {
+    "anglo_uk_ireland": 45,
+    "german_dach": 15,
+    "latin_spain_italy": 12,
+    "french": 10,
+    "anglo_us_canada": 6,
+    "nordic": 4,
+    "latin_american": 3,
+    "east_asian": 2,
+    "middle_east_gcc": 2,
+    "chinese_mainland": 1
+  }
+}

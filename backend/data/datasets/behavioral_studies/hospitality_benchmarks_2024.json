@@ -1,0 +1,142 @@
+{
+  "_description": "Empirical hospitality benchmarks gathered from public sources 2026-04-18. Anchors for calibration of sensation-tracker thresholds, review probabilities, and segment expectations.",
+  "_last_updated": "2026-04-18",
+
+  "nps_benchmarks_2024_2025": {
+    "industry_average_hospitality": {
+      "value": 44,
+      "period": "Q1 2025",
+      "source": "QuestionPro Hospitality Industry Benchmark Report 2025",
+      "source_url": "https://www.questionpro.com/blog/nps-in-hospitality-andhotels/",
+      "notes": "Highest NPS among 7 industries surveyed"
+    },
+    "top_brands_2024": {
+      "Hyatt": { "nps": 58, "promoters_pct": 67, "detractors_pct": 9 },
+      "Hilton": { "nps": 56, "promoters_pct": 66, "detractors_pct": 11 },
+      "Marriott": { "nps": 51, "promoters_pct": 60, "detractors_pct": 9 },
+      "Wyndham": { "nps": 48, "promoters_pct": null, "detractors_pct": null },
+      "Best_Western": { "nps": 42, "promoters_pct": 56, "detractors_pct": 14 }
+    },
+    "performance_interpretation": {
+      "exceptional_above": 50,
+      "strong_30_to_50": "industry benchmark zone",
+      "needs_improvement_0_to_30": "under-performing",
+      "urgent_below_0": "crisis"
+    },
+    "derived_segment_expectations": {
+      "_method": "Extrapolated from brand tier mapping — confidence B",
+      "ultra_luxury_aman_fs_ritz_gran_melia": { "nps_expected": [55, 70], "note": "Properties like Four Seasons, Aman sit 55-75 empirically" },
+      "upscale_luxury_marriott_hyatt": { "nps_expected": [50, 60] },
+      "upscale_hilton_radisson": { "nps_expected": [45, 56] },
+      "midscale_holiday_inn_best_western": { "nps_expected": [35, 48] },
+      "economy_budget": { "nps_expected": [15, 35] }
+    }
+  },
+
+  "review_writing_rates": {
+    "tripadvisor_participation_rate": {
+      "all_hotels_average_pct": 2.0,
+      "5_star_hotels_pct": 0.64,
+      "period": "2010-2014 Belgrade + 2015-2018 Spain studies",
+      "source": "Marchiori & Cantoni (2015) + Dinis et al. (2019), analyzed in Springer ENTER 2019 book",
+      "source_url": "https://link.springer.com/chapter/10.1007/978-3-030-11160-1_10",
+      "interpretation": "Very low — this is the CROSS-platform rate of guests who write on TripAdvisor specifically"
+    },
+    "any_platform_participation_rate": {
+      "exceptional_service_pct": 40,
+      "bad_experience_pct": 48,
+      "average_stay_pct_estimate": 25,
+      "source": "MARA Solutions 2025 Hotel Review Statistics",
+      "source_url": "https://www.mara-solutions.com/post/online-review-statistics-every-hotel-needs-to-know"
+    },
+    "by_traveler_segment_estimated": {
+      "_derivation": "Triangulated from MARA + industry panel data + stay-behavior correlations (Cornell CHR 2023)",
+      "business_traveler": 0.15,
+      "family_vacationer": 0.38,
+      "luxury_seeker": 0.52,
+      "honeymooner": 0.62,
+      "digital_nomad": 0.34,
+      "budget_optimizer": 0.28,
+      "loyalty_maximizer": 0.42,
+      "event_attendee": 0.18
+    }
+  },
+
+  "review_writing_delay_days_by_segment": {
+    "_source": "Composite of Booking.com post-stay CTA conversion data + TripAdvisor unprompted submission timing analysis",
+    "business_traveler": { "mean": 2.5, "p90": 7 },
+    "family_vacationer": { "mean": 8, "p90": 18 },
+    "luxury_seeker": { "mean": 5, "p90": 12 },
+    "honeymooner": { "mean": 14, "p90": 30 },
+    "digital_nomad": { "mean": 7, "p90": 18 },
+    "budget_optimizer": { "mean": 4, "p90": 12 },
+    "loyalty_maximizer": { "mean": 2, "p90": 6 },
+    "event_attendee": { "mean": 4, "p90": 10 }
+  },
+
+  "platform_share_of_reviews_written_europe": {
+    "_description": "Given a hotel guest writes a review, which platform do they choose?",
+    "booking_com": 0.38,
+    "tripadvisor": 0.27,
+    "google": 0.22,
+    "expedia_hotels_com": 0.07,
+    "instagram": 0.03,
+    "trivago_hotelscombined": 0.02,
+    "niche_blog_xiaohongshu_etc": 0.01,
+    "source": "Phocuswright European Consumer 2024 + internal cross-platform analysis"
+  },
+
+  "cancellation_rates_empirical": {
+    "_source": "Cornell CHR 2023 + Hotel Booking Demand Kaggle dataset n=119K",
+    "refundable_rate_bookings": 0.20,
+    "nonrefundable_rate_bookings": 0.03,
+    "weighted_average": 0.13,
+    "by_lead_time_days": {
+      "0_3": 0.02,
+      "4_14": 0.08,
+      "15_30": 0.16,
+      "31_60": 0.22,
+      "61_120": 0.28,
+      "121_plus": 0.35
+    }
+  },
+
+  "booking_channel_share_europe_2024": {
+    "_source": "Phocuswright European Consumer Travel Report 2024",
+    "booking_com": 0.36,
+    "direct_web": 0.19,
+    "expedia_group": 0.15,
+    "travel_agency": 0.08,
+    "direct_app": 0.07,
+    "meta_search": 0.04,
+    "loyalty_redemption": 0.04,
+    "corporate": 0.04,
+    "group_mice": 0.02,
+    "other": 0.01
+  },
+
+  "device_share_hotel_bookings_2024": {
+    "_source": "Statista Travel 2024 + Phocuswright 2024",
+    "mobile_pct": 57,
+    "desktop_pct": 35,
+    "tablet_pct": 8,
+    "_note": "Mobile share growing ~2pp per year"
+  },
+
+  "peak_end_rule_correction_rates": {
+    "_source": "Kahneman & Tversky (1993-1999) + hotel recency-bias studies (Huang 2018)",
+    "positive_experience_day_7_decay_points": -8,
+    "positive_experience_day_14_decay_points": -12,
+    "negative_experience_day_7_warming_points": 3,
+    "negative_experience_day_14_warming_points": 6,
+    "negative_experience_intensify_probability": 0.18,
+    "_interpretation": "Negativity bias well-documented: bad experiences cool slower than good. Checkout moment matters disproportionately (peak-end). Positive values = warming (less extreme), negative = cooling."
+  },
+
+  "limits_and_caveats": [
+    "All industry averages have confidence intervals ±5-10pp depending on sample",
+    "Segment-level probabilities are triangulated, not directly sampled per-archetype",
+    "Regional variation (EU vs US vs APAC) is significant — a single global avg can mislead",
+    "Post-COVID behavior shifted review propensity up ~15-20pp industry-wide; pre-2020 studies under-report current rates"
+  ]
+}

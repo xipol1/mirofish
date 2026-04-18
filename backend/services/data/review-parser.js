@@ -57,14 +57,18 @@ function aggregateReviews(reviews) {
       review_count: 0,
       avg_rating_normalized_5: null,
       sentiment_distribution: { positive: 0, mixed: 0, negative: 0 },
+      star_distribution: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
+      star_distribution_pct: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
       top_positive_themes: [],
       top_negative_themes: [],
       theme_frequencies: {},
+      positive_negative_moment_ratio: null,
     };
   }
 
   const themeFreq = {}; // theme -> { positive, mixed, negative }
   const sentimentDist = { positive: 0, mixed: 0, negative: 0 };
+  const starDist = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
   let ratingSum = 0;
   let ratingCount = 0;
 
@@ -72,7 +76,12 @@ function aggregateReviews(reviews) {
     // Normalize rating to 0-5
     const scale = r.rating_scale || (r.rating_numeric && r.rating_numeric > 5 ? 10 : 5);
     const rating = r.rating_numeric != null ? (r.rating_numeric / scale) * 5 : null;
-    if (rating != null) { ratingSum += rating; ratingCount++; }
+    if (rating != null) {
+      ratingSum += rating;
+      ratingCount++;
+      const starBucket = Math.max(1, Math.min(5, Math.round(rating)));
+      starDist[starBucket]++;
+    }
 
     const bucket = detectSentimentBucket(r.rating_numeric, scale);
     sentimentDist[bucket] = (sentimentDist[bucket] || 0) + 1;
@@ -107,13 +116,27 @@ function aggregateReviews(reviews) {
     .slice(0, 6)
     .map(t => t.theme);
 
+  // Star distribution as percentages (used by stratified sampler)
+  const totalStars = Object.values(starDist).reduce((a, b) => a + b, 0) || 1;
+  const starDistPct = Object.fromEntries(
+    Object.entries(starDist).map(([s, n]) => [s, Math.round((n / totalStars) * 1000) / 10])
+  );
+
+  // Positive:negative moment ratio estimate (for prompt tuning)
+  const posTotal = Object.values(themeFreq).reduce((s, t) => s + t.positive, 0);
+  const negTotal = Object.values(themeFreq).reduce((s, t) => s + t.negative, 0);
+  const pnRatio = negTotal > 0 ? Math.round((posTotal / negTotal) * 10) / 10 : null;
+
   return {
     review_count: reviews.length,
     avg_rating_normalized_5: ratingCount > 0 ? Math.round((ratingSum / ratingCount) * 100) / 100 : null,
     sentiment_distribution: sentimentDist,
+    star_distribution: starDist,
+    star_distribution_pct: starDistPct,
     top_positive_themes: topPositiveThemes,
     top_negative_themes: topNegativeThemes,
     theme_frequencies: themeFreq,
+    positive_negative_moment_ratio: pnRatio,
   };
 }
 
@@ -127,6 +150,17 @@ function toCalibrationSignals(aggregation) {
     top_positive_themes: aggregation.top_positive_themes,
     top_negative_themes: aggregation.top_negative_themes,
     sentiment_distribution: aggregation.sentiment_distribution,
+    star_distribution_pct: aggregation.star_distribution_pct,
+    positive_negative_moment_ratio: aggregation.positive_negative_moment_ratio,
+    theme_top_10: Object.entries(aggregation.theme_frequencies || {})
+      .map(([theme, counts]) => ({
+        theme,
+        total: counts.total,
+        positive_pct: counts.total > 0 ? Math.round((counts.positive / counts.total) * 100) : 0,
+        negative_pct: counts.total > 0 ? Math.round((counts.negative / counts.total) * 100) : 0,
+      }))
+      .sort((a, b) => b.total - a.total)
+      .slice(0, 10),
   };
 }
 

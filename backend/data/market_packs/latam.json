@@ -1,0 +1,144 @@
+{
+  "pack_version": "0.1.0",
+  "market_id": "latam",
+  "label": "Latin America (MX, BR, AR, CO, CL, PE)",
+  "iso_country_code": "LATAM_MIXED",
+  "currency_iso": "USD_or_local_mixed",
+  "sources": [
+    "FRONTUR 2024 — LATAM origin segments",
+    "Phocuswright Latin America Consumer Report 2024",
+    "Despegar Traveler Index 2024 (ES/LATAM platform)",
+    "CELAC / ECLAC tourism outflow stats 2024",
+    "AENA Madrid-Barajas LATAM traffic (main gateway to Spain)",
+    "Skift Latin America Market Intelligence 2024",
+    "Statista LATAM Travel 2024"
+  ],
+  "last_updated": "2026-04-18",
+  "cultural_cluster_mapping": "latin_american",
+
+  "booking_window_distribution_days": {
+    "last_minute_0_3": 0.09,
+    "short_4_14": 0.22,
+    "medium_15_45": 0.33,
+    "long_46_90": 0.22,
+    "very_long_91_plus": 0.14
+  },
+
+  "channel_share_pct": {
+    "booking_com": 32,
+    "despegar_latam": 22,
+    "direct_web": 15,
+    "travel_agency": 10,
+    "expedia_group": 8,
+    "direct_app": 6,
+    "loyalty_redemption": 3,
+    "meta": 2,
+    "corporate": 2
+  },
+
+  "price_sensitivity": {
+    "elasticity_coefficient": -1.85,
+    "walk_away_threshold_pct_above_comp_set": 14,
+    "deal_trigger_threshold_pct_below_comp_set": 13,
+    "sensitivity_segment_override": {
+      "luxury_seeker": -0.75,
+      "business_traveler": -1.15,
+      "budget_optimizer": -2.45
+    }
+  },
+
+  "cancellation_patterns": {
+    "refundable_rate_preference_pct": 58,
+    "nonrefundable_rate_preference_pct": 42,
+    "cancellation_rate_refundable_pct": 24,
+    "cancellation_rate_nonrefundable_pct": 5,
+    "typical_cancellation_window_hours_before_arrival": 72
+  },
+
+  "device_share_pct": {
+    "mobile": 68,
+    "desktop": 24,
+    "tablet": 8
+  },
+
+  "typical_length_of_stay_nights_by_segment": {
+    "leisure_solo": 5.2,
+    "leisure_couples": 8.5,
+    "leisure_family": 11.3,
+    "business": 3.4,
+    "remote_work": 15.8,
+    "event": 3.2
+  },
+
+  "destination_origin_airport_distribution_pct": {
+    "MEX_Mexico_City": 18,
+    "GRU_Sao_Paulo": 17,
+    "EZE_Buenos_Aires": 14,
+    "BOG_Bogota": 12,
+    "SCL_Santiago": 9,
+    "LIM_Lima": 8,
+    "CCS_Caracas": 5,
+    "UIO_Quito": 4,
+    "PTY_Panama": 4,
+    "MDE_Medellin": 3,
+    "GUA_Guatemala": 2,
+    "other": 4
+  },
+
+  "segment_mix_outbound_to_mediterranean_pct": {
+    "leisure_couples": 30,
+    "leisure_family": 28,
+    "leisure_solo": 14,
+    "business": 11,
+    "remote_work": 7,
+    "event": 4,
+    "honeymoon_milestone": 6
+  },
+
+  "review_platform_usage_pct": {
+    "booking_com": 40,
+    "google": 28,
+    "tripadvisor": 14,
+    "despegar": 10,
+    "instagram": 8
+  },
+  "review_writing_probability_pct": 36,
+  "complaint_escalation_pattern": "verbal_warm_resolution_seeking",
+
+  "loyalty_tier_penetration_pct": 14,
+
+  "average_spend_per_night_ancillary_eur": {
+    "economy_property": 30,
+    "upscale_property": 78,
+    "luxury_property": 155,
+    "ultra_luxury_property": 285
+  },
+
+  "key_behavioral_traits": [
+    "Warm personal interaction highly valued — transactional service feels cold",
+    "Flexibility expected (late arrivals, schedule changes)",
+    "Group and family travel patterns — larger parties, multi-generational",
+    "Long-haul trip so longer stays — often 2-3 weeks combining Spain + Italy + Portugal",
+    "Mobile-first (68%) with 4G/5G variable — sites must work on imperfect connections",
+    "Despegar is a major channel alongside Booking.com",
+    "Price-conscious but trades up for premium experiences (not as price-driven as EU)",
+    "Spanish-language customer service is a real value-add",
+    "Instagram and Xiaohongshu-equivalent sharing important — photogenic matters",
+    "Currency sensitivity — USD pricing reduces friction vs local currency that fluctuates"
+  ],
+
+  "preferred_property_types": [
+    "luxury_resort", "design_led_boutique", "beach_resort", "all_inclusive", "family_resort"
+  ],
+
+  "seasonal_peaks_menorca": ["July", "August", "December_year_end", "July_winter_break_south_hemisphere"],
+
+  "payment_preferences": {
+    "credit_card_international": 52,
+    "debit_card_international": 18,
+    "mercado_pago": 10,
+    "paypal": 8,
+    "bank_transfer": 6,
+    "apple_pay_google_pay": 6
+  }
+}

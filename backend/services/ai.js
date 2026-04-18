@@ -142,15 +142,29 @@ async function callAI(prompt, options = {}) {
 }
 
 function extractJSON(raw) {
-  const cleaned = String(raw).trim();
+  let cleaned = String(raw).trim();
 
   // Direct parse
   try { return JSON.parse(cleaned); } catch (e) { /* continue */ }
+
+  // Common small-LLM mistake: wrapping object body in [] instead of {}.
+  // Detect `[ "key": value, ... ]` and swap to `{ "key": value, ... }`.
+  if (/^\[\s*"[^"]+"\s*:/.test(cleaned)) {
+    const swapped = '{' + cleaned.slice(1, cleaned.lastIndexOf(']')) + '}';
+    try { return JSON.parse(swapped); } catch (e) { /* continue */ }
+    // Try also without trimming the final ] (malformed close)
+    try { return JSON.parse(cleaned.replace(/^\[/, '{').replace(/\]\s*$/, '}')); } catch (e) { /* continue */ }
+  }
 
   // Markdown fence extraction
   const fenceMatch = cleaned.match(/```(?:json)?\s*\n?([\s\S]*?)\n?\s*```/);
   if (fenceMatch) {
     try { return JSON.parse(fenceMatch[1].trim()); } catch (e) { /* continue */ }
+    // Also try the [ → { swap on the fenced content
+    const fenced = fenceMatch[1].trim();
+    if (/^\[\s*"[^"]+"\s*:/.test(fenced)) {
+      try { return JSON.parse('{' + fenced.slice(1, fenced.lastIndexOf(']')) + '}'); } catch (e) { /* continue */ }
+    }
   }
 
   // JSON object/array detection

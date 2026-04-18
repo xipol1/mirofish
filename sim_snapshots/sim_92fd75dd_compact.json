@@ -1,0 +1,2259 @@
+{
+  "meta": {
+    "simulation_id": "92fd75dd-b9b5-4811-befb-a6d4732d2479",
+    "status": "completed",
+    "started_at": "2026-04-18T10:04:02.508Z",
+    "completed_at": "2026-04-18T11:33:37.780Z",
+    "property": "Gran Meliá Villa Le Blanc",
+    "brand": "Gran Meliá",
+    "provider": "ollama"
+  },
+  "summary": {
+    "modality": "stay_experience",
+    "total_stays": 20,
+    "avg_stars": 2.2,
+    "avg_nps": -54,
+    "net_promoter_score": -75,
+    "avg_spend_eur": 190.25,
+    "avg_spend_by_category": {
+      "breakfast": 3.9,
+      "room_service": 27.35,
+      "laundry": 0.5,
+      "other": -0.5,
+      "lunch": 30.6,
+      "bar": 10.35,
+      "kids_club_package": 1.9,
+      "dinner": 55,
+      "upsell": 26.4,
+      "dining": 0,
+      "spa": 6,
+      "laundry|room_service|upsell": 0,
+      "coffee_daytime|upsell": 0.25,
+      "activities": 0,
+      "upsell - room upgrade": 10,
+      "transfer": 0.5,
+      "breakfast|lunch|dinner|bar|spa|activities|room_service|laundry|parking|transfer|upsell|other": 0,
+      "parking": 6,
+      "spa_package": 10,
+      "room_service|upsell": 0,
+      "upsell_declined": 0,
+      "null": 0,
+      "room_service|breakfast": 0,
+      "room_service_late_night": 1,
+      "late check-out": 0,
+      "laundry service": 1,
+      "phone call to manager": 0
+    },
+    "would_repeat_pct": 10,
+    "would_recommend_pct": 15,
+    "reviews_generated": 8,
+    "predicted_review_platform_mix": {
+      "tripadvisor": 2,
+      "tripadvisor_lux": 1,
+      "booking.com": 2,
+      "google": 2,
+      "travel_blog_post": 1
+    },
+    "top_predicted_themes": [
+      {
+        "theme": "amenity_usability",
+        "count": 5
+      },
+      {
+        "theme": "service_quality",
+        "count": 4
+      },
+      {
+        "theme": "cleanliness",
+        "count": 4
+      },
+      {
+        "theme": "crowd",
+        "count": 2
+      },
+      {
+        "theme": "value",
+        "count": 2
+      },
+      {
+        "theme": "personalization",
+        "count": 2
+      },
+      {
+        "theme": "culinary",
+        "count": 1
+      },
+      {
+        "theme": "modernity",
+        "count": 1
+      },
+      {
+        "theme": "speed",
+        "count": 1
+      },
+      {
+        "theme": "check_in",
+        "count": 1
+      }
+    ],
+    "realized_star_distribution": {
+      "1": 9,
+      "2": 2,
+      "3": 6,
+      "4": 2,
+      "5": 1
+    },
+    "realized_star_distribution_pct": {
+      "1": 45,
+      "2": 10,
+      "3": 30,
+      "4": 10,
+      "5": 5
+    },
+    "target_star_match_rate_pct": 10,
+    "adversarial_events_triggered": {
+      "breakfast_quality_slip": 2,
+      "room_not_ready": 1,
+      "check_in_queue": 1,
+      "spa_booking_problem": 1,
+      "bathroom_issue": 1,
+      "luggage_delay": 2,
+      "overbooking_downgrade": 2
+    },
+    "adversarial_events_total": 10,
+    "avg_room_rate_paid_eur": 503,
+    "culture_distribution": {
+      "anglo_uk_ireland": 11,
+      "latin_spain_italy": 2,
+      "german_dach": 3,
+      "east_asian": 1,
+      "french": 1,
+      "anglo_us_canada": 2
+    },
+    "booking_channel_distribution": {
+      "corporate": 2,
+      "direct_web": 7,
+      "booking_com": 6,
+      "expedia": 4,
+      "direct_app": 1
+    },
+    "price_tier_distribution": {
+      "premium": 9,
+      "luxury": 6,
+      "upscale": 5
+    },
+    "loyalty_recognition_expected_pct": 50,
+    "post_stay": {
+      "checkout_style_distribution": {
+        "express_mobile": 7,
+        "front_desk_full": 7,
+        "bell_service": 2,
+        "front_desk_quick": 4
+      },
+      "checkout_bill_dispute_pct": 20,
+      "departure_gesture_offered_pct": 30,
+      "avg_post_stay_nps_delta": -1,
+      "avg_review_write_delay_days": 4.1,
+      "avg_return_intent_12m": 0.22,
+      "word_of_mouth_shared_pct": 60,
+      "word_of_mouth_social_post_pct": 40
+    },
+    "avg_staff_rapport": 1.1
+  },
+  "calibration": {
+    "property_name": "Gran Meliá Villa Le Blanc",
+    "property_slug": "gran-melia-villa-le-blanc",
+    "sourced_from": "Real public corpus: TripAdvisor 305 reviews (4.7/5 avg) + Booking 267 reviews (9.2/10) + Expedia (9.0/10) + 3 professional reviews. Fetched 2026-04-18.",
+    "generated_at": "2026-04-18T11:45:00.000Z",
+    "calibration_version": "2.0",
+    "avg_rating": 4.65,
+    "review_count": 572,
+    "subcategory_scores_5_scale": {
+      "location": 4.9,
+      "rooms": 4.9,
+      "sleep_quality": 4.9,
+      "cleanliness": 4.9,
+      "service": 4.7,
+      "value": 4.5,
+      "source": "TripAdvisor subcategory scores (fetched 2026-04-18)"
+    },
+    "subcategory_anchors_100_scale": {
+      "_description": "Target end-of-stay sensation dimension scores anchored to TripAdvisor sub-scores. Use these as simulation calibration targets.",
+      "aesthetic": 98,
+      "comfort_physical": 98,
+      "cleanliness": 98,
+      "service_quality": 94,
+      "value": 90
+    },
+    "top_positive_themes": [
+      "location",
+      "design_aesthetic",
+      "staff_warmth",
+      "breakfast",
+      "sustainability",
+      "dining_variety"
+    ],
+    "top_negative_themes": [
+      "value_price_concern",
+      "fb_slow_service",
+      "menu_variety"
+    ],
+    "sentiment_distribution": {
+      "positive": 485,
+      "mixed": 70,
+      "negative": 17
+    },
+    "star_distribution_pct": {
+      "1": 1,
+      "2": 2,
+      "3": 5,
+      "4": 15,
+      "5": 77
+    },
+    "positive_negative_moment_ratio": 4.5,
+    "theme_top_10": [
+      {
+        "theme": "food",
+        "total": 35,
+        "positive_pct": 89,
+        "negative_pct": 3
+      },
+      {
+        "theme": "service",
+        "total": 31,
+        "positive_pct": 81,
+        "negative_pct": 3
+      },
+      {
+        "theme": "pool",
+        "total": 24,
+        "positive_pct": 92,
+        "negative_pct": 0
+      },
+      {
+        "theme": "spa",
+        "total": 14,
+        "positive_pct": 93,
+        "negative_pct": 0
+      },
+      {
+        "theme": "value",
+        "total": 13,
+        "positive_pct": 69,
+        "negative_pct": 15
+      },
+      {
+        "theme": "check_in",
+        "total": 9,
+        "positive_pct": 78,
+        "negative_pct": 11
+      },
+      {
+        "theme": "location",
+        "total": 8,
+        "positive_pct": 75,
+        "negative_pct": 0
+      },
+      {
+        "theme": "view",
+        "total": 7,
+        "positive_pct": 86,
+        "negative_pct": 14
+      },
+      {
+        "theme": "wifi",
+        "total": 6,
+        "positive_pct": 67,
+        "negative_pct": 17
+      },
+      {
+        "theme": "romantic",
+        "total": 6,
+        "positive_pct": 100,
+        "negative_pct": 0
+      }
+    ],
+    "full_aggregation": {
+      "review_count": 49,
+      "avg_rating_normalized_5": 4.33,
+      "sentiment_distribution": {
+        "positive": 42,
+        "mixed": 5,
+        "negative": 2
+      },
+      "star_distribution": {
+        "1": 1,
+        "2": 1,
+        "3": 4,
+        "4": 15,
+        "5": 28
+      },
+      "star_distribution_pct": {
+        "1": 2,
+        "2": 2,
+        "3": 8.2,
+        "4": 30.6,
+        "5": 57.1
+      },
+      "top_positive_themes": [
+        "food",
+        "service",
+        "pool",
+        "spa",
+        "value",
+        "check_in"
+      ],
+      "top_negative_themes": [
+        "cleanliness",
+        "parking",
+        "bed_comfort"
+      ],
+      "theme_frequencies": {
+        "service": {
+          "positive": 25,
+          "mixed": 5,
+          "negative": 1,
+          "total": 31
+        },
+        "value": {
+          "positive": 9,
+          "mixed": 2,
+          "negative": 2,
+          "total": 13
+        },
+        "food": {
+          "positive": 31,
+          "mixed": 3,
+          "negative": 1,
+          "total": 35
+        },
+        "wifi": {
+          "positive": 4,
+          "mixed": 1,
+          "negative": 1,
+          "total": 6
+        },
+        "pool": {
+          "positive": 22,
+          "mixed": 2,
+          "negative": 0,
+          "total": 24
+        },
+        "view": {
+          "positive": 6,
+          "mixed": 0,
+          "negative": 1,
+          "total": 7
+        },
+        "check_in": {
+          "positive": 7,
+          "mixed": 1,
+          "negative": 1,
+          "total": 9
+        },
+        "hidden_fees": {
+          "positive": 4,
+          "mixed": 1,
+          "negative": 0,
+          "total": 5
+        },
+        "romantic": {
+          "positive": 6,
+          "mixed": 0,
+          "negative": 0,
+          "total": 6
+        },
+        "room_size": {
+          "positive": 6,
+          "mixed": 0,
+          "negative": 0,
+          "total": 6
+        },
+        "check_out": {
+          "positive": 3,
+          "mixed": 0,
+          "negative": 0,
+          "total": 3
+        },
+        "brand": {
+          "positive": 4,
+          "mixed": 2,
+          "negative": 0,
+          "total": 6
+        },
+        "location": {
+          "positive": 6,
+          "mixed": 2,
+          "negative": 0,
+          "total": 8
+        },
+        "spa": {
+          "positive": 13,
+          "mixed": 1,
+          "negative": 0,
+          "total": 14
+        },
+        "family_friendly": {
+          "positive": 4,
+          "mixed": 0,
+          "negative": 0,
+          "total": 4
+        },
+        "loyalty_recognition": {
+          "positive": 1,
+          "mixed": 1,
+          "negative": 0,
+          "total": 2
+        },
+        "cleanliness": {
+          "positive": 0,
+          "mixed": 0,
+          "negative": 2,
+          "total": 2
+        },
+        "parking": {
+          "positive": 1,
+          "mixed": 0,
+          "negative": 1,
+          "total": 2
+        },
+        "noise": {
+          "positive": 3,
+          "mixed": 0,
+          "negative": 0,
+          "total": 3
+        },
+        "bed_comfort": {
+          "positive": 1,
+          "mixed": 0,
+          "negative": 1,
+          "total": 2
+        }
+      },
+      "positive_negative_moment_ratio": 14.2
+    },
+    "notes": [
+      "Real public anchors: TripAdvisor ~4.5/5, Booking.com ~9.0/10",
+      "Star distribution reflects empirical distribution for 5-star design resorts in Menorca",
+      "Theme sentiment ratios derived from the corpus, NOT from LLM generation",
+      "This calibration should be regenerated whenever Meliá provides their actual review export"
+    ]
+  },
+  "audience_vector": {
+    "vertical": "hospitality",
+    "role_archetype": "unspecified",
+    "role_level": "manager",
+    "company_size": "unspecified",
+    "buying_stage": "evaluating",
+    "budget_authority": "executive",
+    "geography": "unspecified",
+    "primary_pain_themes": [
+      "luxury needs",
+      "anniversary celebration",
+      "family travel",
+      "affordability for older children",
+      "loyalty rewards"
+    ],
+    "inferred_constraints": [
+      "limited time for planning",
+      "budget constraints",
+      "need for convenience and ease of use"
+    ],
+    "key_signals_they_look_for": [
+      "positive reviews",
+      "award recognition",
+      "luxury amenities",
+      "Melia Rewards program details"
+    ]
+  },
+  "personas": [
+    {
+      "name": "David Chen",
+      "age": 42,
+      "role": "Business Traveler",
+      "company_description": "Global IT company executive with frequent international business trips.",
+      "archetype_id": "business_traveler",
+      "archetype_label": "The Business Traveler",
+      "goals_for_this_visit": [
+        "Ensure quick and secure booking process",
+        "Get immediate price information for corporate rates"
+      ],
+      "current_alternatives": [
+        "Direct Booking through hotel websites",
+        "Using Amex Global Benefits Transfer (GBT) for faster transactions"
+      ],
+      "pain_quotes_in_voice": [
+        "I hate the uncertainty with corporate rates. They should specify everything upfront.",
+        "Why is there no option to choose a quiet floor? I want peace and quiet during my stay."
+      ],
+      "top_objections": [
+        "The cancellation policy isn't clear enough",
+        "There's no 'quiet floor' feature on the booking page",
+        "I need luxury options for an anniversary celebration, but searching by brand makes it confusing"
+      ],
+      "decision_style": "impulsive",
+      "traits": {
+        "patience": 0.2645771655073388,
+        "trust_baseline": 0.4940144731048477,
+        "price_sensitivity": 0.38351015449539166,
+        "tech_savviness": 0.7161067133942686,
+        "risk_tolerance": 0.4824693165685262
+      },
+      "budget_monthly_usd": 15000,
+      "hot_buttons": [
+        "Luxury accommodations for anniversary celebration",
+        "Quiet floor options on the booking page",
+        "Clear and specific cancellation policies"
+      ],
+      "deal_breakers": [
+        "I won't book if there are hidden fees that don't align with our corporate policy",
+        "No 'quiet floor' option or warning makes me hesitate"
+      ],
+      "behavioral_markers_activated": [
+        "Arrives pre-qualified",
+        "Booking in <3 min is the expectation",
+        "Hates corporate rate validation friction"
+      ],
+      "_archetype_id": "business_traveler",
+      "_variant_index": 0,
+      "_slot_index": 0,
+      "_source_pain_samples": [
+        {
+          "quote": "Cancellation policy: 'Free cancellation until 24 hours before arrival'. But the timezone isn't specified. Is that 24 hours before 3pm local? 6am local? My timezone or the hotel's? I've been charged before because the hotel was 7 hours ahead of me. Tell me the exact deadline with timezone.",
+          "source": "reddit_r_travel"
+        },
+        {
+          "quote": "Room 214 is directly above the nightclub entrance. I didn't know until 11pm Friday. The booking page should have a 'quiet floor' option or warning. I'd have paid more for silence. Now I'm writing this review and booking Hyatt next time.",
+          "source": "tripadvisor_review"
+        },
+        {
+          "quote": "Meliá, Gran Meliá, Sol, INNSIDE, Paradisus — if I search 'Meliá Madrid' I get 8 results with 8 different brand positions. I have no idea which one I'd actually want. Your brand portfolio needs a segmentation filter: 'Show me luxury properties only'. Marriott does this well.",
+          "source": "travel_blog"
+        }
+      ],
+      "_coverage_purpose": "Tests high-frequency direct-booking flow with time-sensitive friction tolerance"
+    },
+    {
+      "name": "Emma Thompson",
+      "age": 38,
+      "role": "Executive Assistant",
+      "company_description": "A tech-savvy executive at a leading hospitality company focused on improving customer experience.",
+      "archetype_id": "family_vacationer",
+      "archetype_label": "The Family Vacationer",
+      "goals_for_this_visit": [
+        "Find the best deals for her family's upcoming vacation",
+        "Ensure all inclusions are clear and valuable"
+      ],
+      "current_alternatives": [
+        "Using her company’s existing travel booking system, which lacks transparency on amenities like kids clubs and connecting rooms"
+      ],
+      "pain_quotes_in_voice": [
+        "'I can't call them back. I need to know now.'",
+        "'The beds looked so clear in the photos! How could they not tell me what it's really like?'",
+        "'Why do they think we care about so many questions? It’s just a few clicks on our survey, right?'"
+      ],
+      "top_objections": [
+        "Not knowing the kids club policies and age limits",
+        "Confusing descriptions of family rooms in property listings",
+        "The endless post-stay surveys asking for feedback that seems irrelevant to booking or staying at a hotel"
+      ],
+      "decision_style": "deliberate",
+      "traits": {
+        "patience": 0.7498844745366244,
+        "trust_baseline": 0.42588446060697766,
+        "price_sensitivity": 0.6818172386157654,
+        "tech_savviness": 0.5113069541640389,
+        "risk_tolerance": 0.23618016918752643
+      },
+      "budget_monthly_usd": 4500,
+      "hot_buttons": [
+        "Luxury accommodations",
+        "Discounts and loyalty rewards",
+        "Family-friendly amenities"
+      ],
+      "deal_breakers": [
+        "Lack of clarity on kids club policies or all-inclusive options",
+        "Inaccurate room descriptions that lead to disappointment",
+        "Excessively long post-stay surveys"
+      ],
+      "behavioral_markers_activated": [
+        "Spends significant time researching properties for upcoming family vacations",
+        "Completely abandons a booking if the property's description of amenities is unclear",
+        "Reads multiple reviews and filters by 'traveled with family'"
+      ],
+      "_archetype_id": "family_vacationer",
+      "_variant_index": 0,
+      "_slot_index": 1,
+      "_source_pain_samples": [
+        {
+          "quote": "I need to know if the kids club is free, what ages it accepts, and what hours it runs. This information should not require me to call the hotel. If I can't find it in 30 seconds, I move to the next property.",
+          "source": "reddit_r_travel"
+        },
+        {
+          "quote": "Booked 'family room' assuming 2 queen beds. Arrived: 1 queen + 1 pull-out sofa. Kids sharing a sofa, wife and I on the queen. 5 nights of this in July. Hotel photos showed beds clearly — should have been 'family room (1 queen + 1 sofa)' at booking.",
+          "source": "booking_review"
+        },
+        {
+          "quote": "Post-stay survey has 47 questions. I filled out 3, got frustrated, abandoned. If you want actual feedback, ask 5 questions max. NPS + 2 specifics + 'anything else?'. You're getting 0% response rate with this beast.",
+          "source": "hospitalitynet_post"
+        }
+      ],
+      "_coverage_purpose": "Tests family-specific needs: connecting rooms, kids amenities, all-inclusive clarity"
+    },
+    {
+      "name": "Xia Li Wei",
+      "age": 42,
+      "role": "Hotel Concierge",
+      "company_description": "Responsible for luxury hotel bookings and customer service in a prestigious hospitality firm.",
+      "archetype_id": "luxury_seeker",
+      "archetype_label": "The Luxury Seeker",
+      "goals_for_this_visit": [
+        "Detailed information on Gran Meliá Palacio de Isora",
+        "Confirmation of specific amenities like high floor and guaranteed bed type"
+      ],
+      "current_alternatives": [
+        "Using travel booking platforms that don't offer granular details about the hotels"
+      ],
+      "pain_quotes_in_voice": [
+        "I really want to make sure I'm not getting an off-brand Meliá. This could be a disaster if it's different from what we know.",
+        "With my anniversary, every detail matters. If they're calling themselves Gran Meliá, I need to see the exact suite photos and the room amenities list."
+      ],
+      "top_objections": [
+        "I don't want to pay more for something that feels cheap or not top-tier",
+        "The service quality needs to be assured as it's an anniversary celebration",
+        "Consistency across all Gran Meliá properties is important, so I'm only sure about the premium ones."
+      ],
+      "decision_style": "deliberate",
+      "traits": {
+        "patience": 0.7567244209981507,
+        "trust_baseline": 0.316379969021321,
+        "price_sensitivity": 0.08830950086889089,
+        "tech_savviness": 0.6407042400823335,
+        "risk_tolerance": 0.2603847869068762
+      },
+      "budget_monthly_usd": 10000,
+      "hot_buttons": [
+        "High-end amenities like a guaranteed view or a high floor room",
+        "White-glove service and concierge contact for planning and assurance"
+      ],
+      "deal_breakers": [
+        "I won't use if I see any generic or staged stock photos of the rooms",
+        "If they don't offer detailed amenity lists, it's a deal-breaker as luxury is all about specifics."
+      ],
+      "behavioral_markers_activated": [
+        "Evaluates brand consistency across properties",
+        "Notices and is offended by low-quality elements in visuals or descriptions",
+        "Asks for white-glove service options"
+      ],
+      "_archetype_id": "luxury_seeker",
+      "_variant_index": 0,
+      "_slot_index": 2,
+      "_source_pain_samples": [
+        {
+          "quote": "The homepage shows me a 'weekend getaway from €89' promo banner next to a photo of the Gran Meliá suite. This immediately cheapens the brand. Luxury buyers should never see budget-tier promos. Segment your audience.",
+          "source": "luxury_forum"
+        },
+        {
+          "quote": "Pre-wedding-night suite €1,800. No photos of the actual suite — just generic 'suite' photos that could be any Meliá. I want to see the exact room. If I'm paying €1,800 I need to know I'm not getting surprise.",
+          "source": "wedding_forum"
+        },
+        {
+          "quote": "Gran Meliá Palacio de Isora vs Gran Meliá Fuerteventura — both 'Gran Meliá' brand. Service, room quality, food all different. Without consistency, the 'Gran Meliá' label means nothing. Four Seasons is a Four Seasons anywhere. That's brand.",
+          "source": "luxury_travel_blog"
+        }
+      ],
+      "_coverage_purpose": "Tests whether premium positioning holds across the funnel"
+    },
+    {
+      "name": "Liang Mei",
+      "age": 35,
+      "role": "Business Consultant",
+      "company_description": "A tech-savvy executive from a medium-sized multinational company.",
+      "archetype_id": "honeymooner",
+      "archetype_label": "The Honeymooner / Milestone Couple",
+      "goals_for_this_visit": [
+        "Find an exclusive suite for their anniversary",
+        "Book a private dinner with loved ones"
+      ],
+      "current_alternatives": [
+        "Other 5-star hotels nearby, online booking platforms"
+      ],
+      "pain_quotes_in_voice": [
+        "I can't stand the noise of the nightclub near my room. It ruins our relaxation.",
+        "The spa booking process is too outdated and time-consuming."
+      ],
+      "top_objections": [
+        "The price of the anniversary suite seems unreasonable for what I get",
+        "The hotel needs to offer more amenities like adults-only rooms",
+        "I'd prefer if they could include a free upgrade in their booking"
+      ],
+      "decision_style": "balanced",
+      "traits": {
+        "patience": 0.7799557535925689,
+        "trust_baseline": 0.40898656552809565,
+        "price_sensitivity": 0.33700329088978065,
+        "tech_savviness": 0.5871007214884951,
+        "risk_tolerance": 0.45563802785161306
+      },
+      "budget_monthly_usd": 5000,
+      "hot_buttons": [
+        "Exclusive honeymoon packages with romantic touches",
+        "Luxury amenities for a memorable anniversary celebration",
+        "Family-friendly options without children"
+      ],
+      "deal_breakers": [
+        "Noisy floor above the nightclub entrance",
+        "Long booking process for spa services"
+      ],
+      "behavioral_markers_activated": [
+        "Willing to upsell: suite upgrade, private dinner with loved ones",
+        "Read reviews from couples who celebrated anniversaries there",
+        "Suggests upgrades like adults-only rooms and family-friendly options"
+      ],
+      "_archetype_id": "honeymooner",
+      "_variant_index": 0,
+      "_slot_index": 3,
+      "_source_pain_samples": [
+        {
+          "quote": "Booking in English, confirmation in Spanish, pre-arrival in English, check-in chat in Spanish again. Inconsistent. Lock my language preference at booking and honor it everywhere.",
+          "source": "tripadvisor_review"
+        },
+        {
+          "quote": "Room 214 is directly above the nightclub entrance. I didn't know until 11pm Friday. The booking page should have a 'quiet floor' option or warning. I'd have paid more for silence. Now I'm writing this review and booking Hyatt next time.",
+          "source": "tripadvisor_review"
+        },
+        {
+          "quote": "Spa booking is only by phone. In a 5-star hotel in 2025. I shouldn't have to call reception to book a massage — I should see treatment menu, therapist availability, prices, and book instantly in the app.",
+          "source": "luxury_blog"
+        }
+      ],
+      "_coverage_purpose": "Tests emotional / romantic product positioning and upsell acceptance"
+    },
+    {
+      "name": "Liu Hui",
+      "age": 32,
+      "role": "Freelance Designer",
+      "company_description": "A digital nomad company focused on remote workspaces in urban areas.",
+      "archetype_id": "digital_nomad",
+      "archetype_label": "The Digital Nomad / Long-Stay",
+      "goals_for_this_visit": [
+        "to find a long-term workspace that offers reliable fast wifi and monthly rates"
+      ],
+      "current_alternatives": [
+        "Airbnb Plus, serviced apartments, hotels for workspaces"
+      ],
+      "pain_quotes_in_voice": [
+        "I was so frustrated with the mobile check-in feature not working as advertised. It's like they didn't even read reviews properly.",
+        "The 'free high-speed' wifi turned out to be 4mbps down and drops every 45 minutes during peak hours, it’s just frustrating."
+      ],
+      "top_objections": [
+        "Mobile check-in reliability issues",
+        "Inconsistent wifi speed and availability",
+        "Lack of flexibility in room rates for longer stays"
+      ],
+      "decision_style": "balanced",
+      "traits": {
+        "patience": 0.5739570132342092,
+        "trust_baseline": 0.5716651441667908,
+        "price_sensitivity": 0.742083285823487,
+        "tech_savviness": 0.8832587783184158,
+        "risk_tolerance": 0.6432015754296573
+      },
+      "budget_monthly_usd": 1200,
+      "hot_buttons": [
+        "Luxury amenities",
+        "Flexible room rates for longer stays",
+        "Pet-friendly features"
+      ],
+      "deal_breakers": [
+        "Very strict pet policies",
+        "No direct line of communication with management during peak hours"
+      ],
+      "behavioral_markers_activated": [
+        "Searches for 'desk in room', 'fast wifi', 'monthly rate'",
+        "Cross-references wifi speeds on reviews",
+        "Compares room rates to competitors like Airbnb Plus and serviced apartments"
+      ],
+      "_archetype_id": "digital_nomad",
+      "_variant_index": 0,
+      "_slot_index": 4,
+      "_source_pain_samples": [
+        {
+          "quote": "Mobile check-in advertised. Clicked in the app. Got 'Please proceed to front desk'. What was the point? Either the feature works or remove it. Meanwhile Marriott Bonvoy lets me pick my room in advance and walk past the queue.",
+          "source": "app_review"
+        },
+        {
+          "quote": "Wifi listed as 'Free high-speed'. Reality: 4mbps down during peak hours, drops every 45 minutes, no wired option. Can't do a Zoom call without freezing. Everyone books hotels for sleep, but I book hotels for wifi. If yours is bad, I'm gone.",
+          "source": "nomadlist_review"
+        },
+        {
+          "quote": "'Pet-friendly' on your booking page. On arrival: €45/night per dog, no dog park, rules against being left alone, leash-mandatory in lobby. That's pet-tolerant, not pet-friendly. Either go Kimpton-level or remove the label.",
+          "source": "pet_travel_forum"
+        }
+      ],
+      "_coverage_purpose": "Tests long-stay product, workspace, weekly/monthly rates"
+    },
+    {
+      "name": "Zhang Yu Liang",
+      "age": 35,
+      "role": "Marketing Manager",
+      "company_description": "Serves a medium-sized hospitality company focusing on corporate travel.",
+      "archetype_id": "budget_optimizer",
+      "archetype_label": "The Budget Optimizer",
+      "goals_for_this_visit": [
+        "Finding the best rate for a corporate anniversary celebration",
+        "Calculating total costs to ensure value"
+      ],
+      "current_alternatives": [
+        "Booking.com and Expedia through OTA channels",
+        "Direct bookings with hotels"
+      ],
+      "pain_quotes_in_voice": [
+        "I can't afford to pay €18 extra per night just because it has breakfast included.",
+        "Why does the resort fee keep creeping up? It's a hidden cost I'd rather avoid."
+      ],
+      "top_objections": [
+        "Resort fees and additional charges are not transparent",
+        "Effective cancellation policies vary by timezone",
+        "Breakfast options differ significantly between plan types"
+      ],
+      "decision_style": "deliberate",
+      "traits": {
+        "patience": 0.5773124396028009,
+        "trust_baseline": 0.30241186234045025,
+        "price_sensitivity": 1,
+        "tech_savviness": 0.6837771614438689,
+        "risk_tolerance": 0.28153083307270327
+      },
+      "budget_monthly_usd": 4500,
+      "hot_buttons": [
+        "Loyalty point rewards",
+        "Detailed breakdown of costs",
+        "Clear cancellation policy"
+      ],
+      "deal_breakers": [
+        "No transparency regarding hidden fees and surcharges",
+        "Inconsistent breakfast inclusion across plans"
+      ],
+      "behavioral_markers_activated": [
+        "Abandoning direct bookings if total cost per night exceeds €5 more than OTA",
+        "Checking for 'surprise' or hidden fees in reviews",
+        "Sorting results by price ascending to find the most affordable options"
+      ],
+      "_archetype_id": "budget_optimizer",
+      "_variant_index": 0,
+      "_slot_index": 5,
+      "_source_pain_samples": [
+        {
+          "quote": "Rate plan 1: 'Standard', €189. Rate plan 2: 'Stay & Save', €179 (no breakfast). Difference is €10. Breakfast buffet on-site is €28. So 'Stay & Save' saves €10 but costs €28. Why not just say 'Includes breakfast: save €18' on Rate 1?",
+          "source": "reddit_r_travel"
+        },
+        {
+          "quote": "Booked a 'corporate rate' at €180/night, then at check-in they add 28€/night resort fee and 22€ parking. €230 effective. My company reimburses 200 — now I'm eating €30/night out of pocket. Next time I'm booking Marriott direct because they disclose the total upfront.",
+          "source": "tripadvisor_review"
+        },
+        {
+          "quote": "Cancellation policy: 'Free cancellation until 24 hours before arrival'. But the timezone isn't specified. Is that 24 hours before 3pm local? 6am local? My timezone or the hotel's? I've been charged before because the hotel was 7 hours ahead of me. Tell me the exact deadline with timezone.",
+          "source": "reddit_r_travel"
+        }
+      ],
+      "_coverage_purpose": "Tests price transparency, OTA rate parity, and value perception"
+    },
+    {
+      "name": "Aidan Zhang",
+      "age": 42,
+      "role": "Sales Manager",
+      "company_description": "Luxury hospitality company focusing on high-end travel experiences for its elite customers.",
+      "archetype_id": "loyalty_maximizer",
+      "archetype_label": "The Loyalty Maximizer",
+      "goals_for_this_visit": [
+        "secure a deal with the best member rates and benefits"
+      ],
+      "current_alternatives": [
+        "other luxury hotels and resorts not offering member benefits or with subpar loyalty programs"
+      ],
+      "pain_quotes_in_voice": [
+        "'I've been platinum for years, but I still have to manually apply for the member rate every time.'",
+        "'Why does it take so long for my account info to be recognized at checkout?'"
+      ],
+      "top_objections": [
+        "lack of automatic application of member rates",
+        "long wait times when trying to redeem points",
+        "limited availability of award stays"
+      ],
+      "decision_style": "deliberate",
+      "traits": {
+        "patience": 0.45279357442176993,
+        "trust_baseline": 0.45210923342831577,
+        "price_sensitivity": 0.22589863837000423,
+        "tech_savviness": 0.8109248741001879,
+        "risk_tolerance": 0.34860760745737085
+      },
+      "budget_monthly_usd": 7000,
+      "hot_buttons": [
+        "exclusive perks like free breakfast",
+        "upgrades to suite rooms during high-demand periods"
+      ],
+      "deal_breakers": [
+        "incomplete recognition of loyalty status at key touchpoints (like booking pages)",
+        "reduced points reward schedule compared to other programs"
+      ],
+      "behavioral_markers_activated": [
+        "logs in before checking rates and benefits",
+        "scrutinizes 'member-only' discount offers closely",
+        "expects bonus points display and free breakfast"
+      ],
+      "_archetype_id": "loyalty_maximizer",
+      "_variant_index": 0,
+      "_slot_index": 6,
+      "_source_pain_samples": [
+        {
+          "quote": "Your member rate vs BAR rate: member saves €4/night on a €200 stay. That's 2%. Hilton Honors saves me 10% baseline. If the economics are this bad, the member rate is marketing theater. Fix the value prop or retire the tier.",
+          "source": "hospitalitynet_comment"
+        },
+        {
+          "quote": "I'm logged in as Platinum. Page still shows me the public rate. I have to manually tick 'Member rate' every search. In 2025 this should auto-apply the second I'm logged in. Otherwise why did you build the loyalty site login?",
+          "source": "linkedin_post"
+        },
+        {
+          "quote": "30,000 points. Redemption calendar: all the hotels I'd actually use are 'not available for awards'. Points are basically a loyalty trap — earn them but can't spend them. Marriott lets me redeem any hotel if there's a paid room available. Match or die.",
+          "source": "flyertalk_thread"
+        }
+      ],
+      "_coverage_purpose": "Tests whether elite recognition and benefits land at every touchpoint"
+    },
+    {
+      "name": "Liu Jia Liang",
+      "age": 32,
+      "role": "Event Manager",
+      "company_description": "Handles all hospitality needs for a mid-sized corporate event planning firm.",
+      "archetype_id": "event_attendee",
+      "archetype_label": "The Event Attendee",
+      "goals_for_this_visit": [
+        "Find the best venue and date at the best price with group rates",
+        "Ensure late checkout on event day",
+        "Get an early check-in to save time"
+      ],
+      "current_alternatives": [
+        "Word of mouth from previous clients, local event listing websites, company internal booking system"
+      ],
+      "pain_quotes_in_voice": [
+        "I've spent so much time trying to get the group rate, and they keep saying there's no such thing. I need this for my client's business anniversary celebration.",
+        "They told me we could check in early because it was an important event day, but when I arrived, they tried to charge us extra for a late checkout."
+      ],
+      "top_objections": [
+        "I'm on a tight budget for this special day, so group rates are crucial for me and my clients.",
+        "They said the venue is only accessible by taxi or shuttle. That's not acceptable for our VIP guests.",
+        "The early check-in would save us some time, but if it causes extra charges or delays in processing, I won't be able to go through with this."
+      ],
+      "decision_style": "impulsive",
+      "traits": {
+        "patience": 0.4538702777791272,
+        "trust_baseline": 0.5882586488716449,
+        "price_sensitivity": 0.5764532944014766,
+        "tech_savviness": 0.6870309589673674,
+        "risk_tolerance": 0.5380716977645205
+      },
+      "budget_monthly_usd": 7500,
+      "hot_buttons": [
+        "Luxury accommodations, especially for my client's anniversary celebration",
+        "Proximity to the event venue (within walking distance preferred)",
+        "Loyalty rewards or group booking codes"
+      ],
+      "deal_breakers": [
+        "No loyalty points awarded",
+        "Group booking code does not work or is hard to find during check-in",
+        "Distance from venue exceeds 15 minutes walk, taxi, or shuttle"
+      ],
+      "behavioral_markers_activated": [
+        "Looks for group booking codes",
+        "Finds exact date and venue details quickly",
+        "Checks the proximity of a location carefully"
+      ],
+      "_archetype_id": "event_attendee",
+      "_variant_index": 0,
+      "_slot_index": 7,
+      "_source_pain_samples": [
+        {
+          "quote": "Asked concierge for a good dinner spot near the hotel. Got a printed list of 8 restaurants, 6 of which are chains. I came here for local. Your concierge should know the best local spots, not hand me Zomato's top 10.",
+          "source": "tripadvisor_review"
+        },
+        {
+          "quote": "Booked with group code for IBTM conference. Code worked for discount but I couldn't see 'group rate' anywhere in the confirmation. Arrived — they tried to charge me BAR. 20 minutes to find the code in their system. Your group booking flow needs a confirmation that survives to check-in.",
+          "source": "conference_review"
+        },
+        {
+          "quote": "The homepage shows me a 'weekend getaway from €89' promo banner next to a photo of the Gran Meliá suite. This immediately cheapens the brand. Luxury buyers should never see budget-tier promos. Segment your audience.",
+          "source": "luxury_forum"
+        }
+      ],
+      "_coverage_purpose": "Tests group rates, location specificity, and constrained-date flexibility"
+    },
+    {
+      "name": "Seth Chen",
+      "age": 42,
+      "role": "CFO of Tech Innovate Inc.",
+      "company_description": "Tech Innovate Inc. is a high-growth startup specializing in AI-driven financial software solutions.",
+      "archetype_id": "business_traveler",
+      "archetype_label": "The Business Traveler",
+      "goals_for_this_visit": [
+        "find more cost-effective travel options",
+        "enhance corporate loyalty programs"
+      ],
+      "current_alternatives": [
+        "Expedia, Booking.com, and Amex GBT",
+        "internal corporate rate negotiation platform"
+      ],
+      "pain_quotes_in_voice": [
+        "'I've booked 10 nights at a hotel that was €25/night. Now it's held on my card for two weeks. That's not a cost-effective solution.'",
+        "'The room service menu is three years old. I need something fresh and relevant.'"
+      ],
+      "top_objections": [
+        "incidental hold fees exceeding corporate policy",
+        "repeated data entry during booking flow",
+        "mandatory marketing opt-ins that trigger security alerts"
+      ],
+      "decision_style": "impulsive",
+      "traits": {
+        "patience": 0.39924869247073574,
+        "trust_baseline": 0.5187046312041722,
+        "price_sensitivity": 0.37688975432666544,
+        "tech_savviness": 0.7303334432922575,
+        "risk_tolerance": 0.4664431052008755
+      },
+      "budget_monthly_usd": 15000,
+      "hot_buttons": [
+        "affordable luxury experiences",
+        "frequent traveler rewards",
+        "modern in-room dining options"
+      ],
+      "deal_breakers": [
+        "mandatory marketing opt-ins during booking flow",
+        "inconsistent room service menus",
+        "incidental hold fees exceeding corporate policy limits"
+      ],
+      "behavioral_markers_activated": [
+        "pre-qualified with corporate card",
+        "booking directly without going through Amex GBT",
+        "selects specific keywords like 'INNSIDE Madrid'"
+      ],
+      "_archetype_id": "business_traveler",
+      "_variant_index": 1,
+      "_slot_index": 8,
+      "_source_pain_samples": [
+        {
+          "quote": "At check-in, €150/night incidental hold on my card. Released after checkout in 5-10 business days. I book 15 nights — that's €2,250 held for two weeks. Why can't this be €25/night like most hotels? The cash flow impact for frequent travelers is real.",
+          "source": "reddit_r_awardtravel"
+        },
+        {
+          "quote": "Room service menu hasn't changed in 3 years. Same picture of the burger. At a 5-star, this is absurd. Charging €32 for a tired club sandwich when Deliveroo shows me 20 better options in the area. Room service should be a reason to stay in.",
+          "source": "hospitality_blog"
+        },
+        {
+          "quote": "I book Meliá 8 times a year. You keep asking me for full address every single time. Amex GBT remembers my preferences. Your system should too. And stop mandatory marketing opt-in as part of the booking flow — corporate security treats that as suspicious.",
+          "source": "twitter_thread"
+        }
+      ],
+      "_coverage_purpose": "Tests high-frequency direct-booking flow with time-sensitive friction tolerance"
+    },
+    {
+      "name": "Wang Junpeng",
+      "age": 35,
+      "role": "Travel Agency Manager",
+      "company_description": "A boutique travel agency specializing in luxury family vacation planning.",
+      "archetype_id": "family_vacationer",
+      "archetype_label": "The Family Vacationer",
+      "goals_for_this_visit": [
+        "To secure a high-end, all-inclusive package for next month's anniversary trip with children.",
+        "To find a connecting room option without resort fees."
+      ],
+      "current_alternatives": [
+        "Booking directly with hotels",
+        "Researching online"
+      ],
+      "pain_quotes_in_voice": [
+        "‘I’m tired of checking every single property’s kids club details. I need that information right away!’",
+        "‘Why can’t they just put the connecting room option on the booking page like any other hotel feature? ’"
+      ],
+      "top_objections": [
+        "Unclear 'all-inclusive' terms",
+        "No visible connection rooms",
+        "High resort fees"
+      ],
+      "decision_style": "deliberate",
+      "traits": {
+        "patience": 0.7066557820287763,
+        "trust_baseline": 0.5314263930258317,
+        "price_sensitivity": 0.6717605407725693,
+        "tech_savviness": 0.5168866789429191,
+        "risk_tolerance": 0.3639447360875653
+      },
+      "budget_monthly_usd": 4000,
+      "hot_buttons": [
+        "Luxury amenities",
+        "Family-oriented services",
+        "Affordable pricing for older children"
+      ],
+      "deal_breakers": [
+        "No visible connecting room options",
+        "Unclear 'all-inclusive' terms that add extra costs",
+        "Resort fees without transparent breakdown"
+      ],
+      "behavioral_markers_activated": [
+        "Spend 15-30 minutes researching properties online",
+        "Read photos of pools, kids clubs, and family rooms obsessively",
+        "Check for 'kids eat free', connecting rooms, cots, and resort fees"
+      ],
+      "_archetype_id": "family_vacationer",
+      "_variant_index": 1,
+      "_slot_index": 9,
+      "_source_pain_samples": [
+        {
+          "quote": "I need to know if the kids club is free, what ages it accepts, and what hours it runs. This information should not require me to call the hotel. If I can't find it in 30 seconds, I move to the next property.",
+          "source": "reddit_r_travel"
+        },
+        {
+          "quote": "Connecting rooms option is never on the booking page. I book, then email the hotel praying they'll honor the request. Every single time in 10 years I've had to do this. Why can't I just click a box?",
+          "source": "tripadvisor_review"
+        },
+        {
+          "quote": "The €45/night resort fee for 'amenities' that includes wifi and pool access. The wifi was in my room anyway and the pool is half the reason we're here. This is charging me for the hotel being a hotel.",
+          "source": "booking_review"
+        }
+      ],
+      "_coverage_purpose": "Tests family-specific needs: connecting rooms, kids amenities, all-inclusive clarity"
+    },
+    {
+      "name": "Wang Hui Jun",
+      "age": 45,
+      "role": "Corporate Executive Officer",
+      "company_description": "An upscale hospitality company focusing on luxury travel experiences, aiming to exceed guest expectations in every detail.",
+      "archetype_id": "luxury_seeker",
+      "archetype_label": "The Luxury Seeker",
+      "goals_for_this_visit": [
+        "Book a premium suite for an anniversary celebration next month",
+        "Ensure language consistency for my Spanish-speaking family",
+        "Secure spa treatment booking without phone interaction"
+      ],
+      "current_alternatives": [
+        "Booking on public travel platforms",
+        "In-house reservation system with sporadic issues",
+        "Traditional in-person hotel reservations with frequent delays"
+      ],
+      "pain_quotes_in_voice": [
+        "I hate seeing budget-tier promotions plastered all over the homepage. It cheapens our brand, and I won't tolerate it.",
+        "It's infuriating to have my preference for English booked in advance overridden. Consistency is key."
+      ],
+      "top_objections": [
+        "A dated look on the website",
+        "Language inconsistencies that violate my personal preferences",
+        "Spa booking procedures are so old-school they make me cringe"
+      ],
+      "decision_style": "deliberate",
+      "traits": {
+        "patience": 0.6228211545801277,
+        "trust_baseline": 0.43894055459788317,
+        "price_sensitivity": 0.02065267474427361,
+        "tech_savviness": 0.608582243443815,
+        "risk_tolerance": 0.24436000961173657
+      },
+      "budget_monthly_usd": 8000,
+      "hot_buttons": [
+        "A concierge contact option for white-glove service",
+        "High-end amenities like guaranteed bed type and view",
+        "Robust loyalty rewards program"
+      ],
+      "deal_breakers": [
+        "Dated buttons or graphics that scream 'outdated' to me",
+        "Promo badges with expiration dates clearly visible",
+        "Spa booking systems that lack digital interactivity, leaving me frustrated"
+      ],
+      "behavioral_markers_activated": [
+        "Notice and report any inconsistencies between the brand's flagship properties like Gran Meliá vs. Sol",
+        "Seek out concierge service options as a non-negotiable requirement for my stay",
+        "Expect premium service levels such as guaranteed bed type, high-floor rooms with beautiful views"
+      ],
+      "_archetype_id": "luxury_seeker",
+      "_variant_index": 1,
+      "_slot_index": 10,
+      "_source_pain_samples": [
+        {
+          "quote": "The homepage shows me a 'weekend getaway from €89' promo banner next to a photo of the Gran Meliá suite. This immediately cheapens the brand. Luxury buyers should never see budget-tier promos. Segment your audience.",
+          "source": "luxury_forum"
+        },
+        {
+          "quote": "Booking in English, confirmation in Spanish, pre-arrival in English, check-in chat in Spanish again. Inconsistent. Lock my language preference at booking and honor it everywhere.",
+          "source": "tripadvisor_review"
+        },
+        {
+          "quote": "Spa booking is only by phone. In a 5-star hotel in 2025. I shouldn't have to call reception to book a massage — I should see treatment menu, therapist availability, prices, and book instantly in the app.",
+          "source": "luxury_blog"
+        }
+      ],
+      "_coverage_purpose": "Tests whether premium positioning holds across the funnel"
+    },
+    {
+      "name": "Amelia Li",
+      "age": 32,
+      "role": "Marketing Manager",
+      "company_description": "An upscale hospitality brand aiming to capture luxury anniversary celebrations.",
+      "archetype_id": "honeymooner",
+      "archetype_label": "The Honeymooner / Milestone Couple",
+      "goals_for_this_visit": [
+        "A personalized room upgrade for my upcoming anniversary celebration.",
+        "An unforgettable dinner experience tailored specifically to couples."
+      ],
+      "current_alternatives": [
+        "My current loyalty program offers limited customization options and no concierge service."
+      ],
+      "pain_quotes_in_voice": [
+        "'I want to make sure I'm booking the right suite, especially since this is a significant milestone for me and my spouse.'",
+        "'I've heard about other hotels doing more than just offering an anniversary package. It's disappointing when they don't take it seriously enough.'"
+      ],
+      "top_objections": [
+        "No exact room photography or description provided on the booking page.",
+        "Lack of concierge service to ensure all requirements are met for a special occasion like our anniversary celebration.",
+        "Unclear noise floor options that could potentially ruin the experience, especially with kids who might be staying."
+      ],
+      "decision_style": "balanced",
+      "traits": {
+        "patience": 0.7878136637028668,
+        "trust_baseline": 0.5528360675089938,
+        "price_sensitivity": 0.36865592339547537,
+        "tech_savviness": 0.7184935870589638,
+        "risk_tolerance": 0.6025506065288133
+      },
+      "budget_monthly_usd": 8000,
+      "hot_buttons": [
+        "Customization options that cater to couples celebrating an anniversary.",
+        "Privacy and comfort features like a private dining area or a dedicated quiet floor."
+      ],
+      "deal_breakers": [
+        "Insufficient concierge service for special requests.",
+        "Noisy room configurations affecting the experience with children in the family travel package."
+      ],
+      "behavioral_markers_activated": [
+        "Willingness to upsell: requesting an anniversary suite upgrade, recommending additional spa treatments, emphasizing 'unforgettable' experiences."
+      ],
+      "_archetype_id": "honeymooner",
+      "_variant_index": 1,
+      "_slot_index": 11,
+      "_source_pain_samples": [
+        {
+          "quote": "Pre-wedding-night suite €1,800. No photos of the actual suite — just generic 'suite' photos that could be any Meliá. I want to see the exact room. If I'm paying €1,800 I need to know I'm not getting surprise.",
+          "source": "wedding_forum"
+        },
+        {
+          "quote": "€1,200/night suite. Booking page: blurry photos, generic description, no concierge contact, no option to specify celebration. Four Seasons asks me at booking what I'm celebrating and prepares a card. You asked me if I wanted travel insurance.",
+          "source": "luxury_travel_blog"
+        },
+        {
+          "quote": "Room 214 is directly above the nightclub entrance. I didn't know until 11pm Friday. The booking page should have a 'quiet floor' option or warning. I'd have paid more for silence. Now I'm writing this review and booking Hyatt next time.",
+          "source": "tripadvisor_review"
+        }
+      ],
+      "_coverage_purpose": "Tests emotional / romantic product positioning and upsell acceptance"
+    },
+    {
+      "name": "Liu Yue Zhang",
+      "age": 29,
+      "role": "Digital Marketing Manager",
+      "company_description": "A tech-savvy hospitality company focusing on luxury urban retreats.",
+      "archetype_id": "digital_nomad",
+      "archetype_label": "The Digital Nomad / Long-Stay",
+      "goals_for_this_visit": [
+        "Finding a comfortable and affordable suite for an anniversary celebration in Shanghai.",
+        "Ensuring the mobile check-in feature works as advertised."
+      ],
+      "current_alternatives": [
+        "Airbnb Plus luxury apartments, serviced apartments with spa facilities"
+      ],
+      "pain_quotes_in_voice": [
+        "The room was 'Deluxe Suite', but it's like they hid the dimensions. It feels like a lie.",
+        "I clicked on mobile check-in and had to go to front desk - I thought this feature would be automatic."
+      ],
+      "top_objections": [
+        "A pet-friendly policy with hidden fees, like charging me €45 per night for my dog.",
+        "My anniversary celebration is next week, so I need an exact room size."
+      ],
+      "decision_style": "balanced",
+      "traits": {
+        "patience": 0.5080921797735266,
+        "trust_baseline": 0.5342967483208017,
+        "price_sensitivity": 0.723324322365454,
+        "tech_savviness": 0.8028153052226316,
+        "risk_tolerance": 0.6253672180902276
+      },
+      "budget_monthly_usd": 5000,
+      "hot_buttons": [
+        "Luxury amenities like a spa or jacuzzi that's not advertised.",
+        "Pet-friendly policies with hidden fees, like extra charges for leashes."
+      ],
+      "deal_breakers": [
+        "A lack of transparency about the actual size of rooms or spaces provided.",
+        "Mobile check-in features not actually mobile-friendly and requiring physical front desk access."
+      ],
+      "behavioral_markers_activated": [
+        "Searches for 'desk in room' with exact measurements and floor plans.",
+        "Looks at recent reviews for real versus advertised space sizes, particularly pet policies and amenities.",
+        "Cross-references with the Nomad List website for additional insights."
+      ],
+      "_archetype_id": "digital_nomad",
+      "_variant_index": 1,
+      "_slot_index": 12,
+      "_source_pain_samples": [
+        {
+          "quote": "The room was 'Deluxe Suite 45m²'. What I didn't know: the 45m² includes the balcony. Actual indoor is 28m² — tiny for a suite. Your floor plan or dimensions breakdown should be mandatory on the booking page.",
+          "source": "tripadvisor_review"
+        },
+        {
+          "quote": "Mobile check-in advertised. Clicked in the app. Got 'Please proceed to front desk'. What was the point? Either the feature works or remove it. Meanwhile Marriott Bonvoy lets me pick my room in advance and walk past the queue.",
+          "source": "app_review"
+        },
+        {
+          "quote": "'Pet-friendly' on your booking page. On arrival: €45/night per dog, no dog park, rules against being left alone, leash-mandatory in lobby. That's pet-tolerant, not pet-friendly. Either go Kimpton-level or remove the label.",
+          "source": "pet_travel_forum"
+        }
+      ],
+      "_coverage_purpose": "Tests long-stay product, workspace, weekly/monthly rates"
+    },
+    {
+      "name": "Ming Zhang",
+      "age": 34,
+      "role": "Digital Marketing Manager",
+      "company_description": "Tech-focused hospitality startup offering direct booking services.",
+      "archetype_id": "budget_optimizer",
+      "archetype_label": "The Budget Optimizer",
+      "goals_for_this_visit": [
+        "Find best price for anniversary celebration trip"
+      ],
+      "current_alternatives": [
+        "Direct booking from hotels, Booking.com, Expedia"
+      ],
+      "pain_quotes_in_voice": [
+        "'I keep getting charged €150 for an incidental hold. It's not transparent at all.'",
+        "'The breakfast rates are misleading — I'm only saving €10 with the 'Stay & Save' plan but they charge me extra for the buffet.'"
+      ],
+      "top_objections": [
+        "Lack of real-time price transparency across OTAs and direct sites.",
+        "No clear information about optional fees, like incidental holds or additional charges.",
+        "OTA rate guarantee terms that require manual verification in 24 hours."
+      ],
+      "decision_style": "deliberate",
+      "traits": {
+        "patience": 0.5730031012161001,
+        "trust_baseline": 0.3344372944083782,
+        "price_sensitivity": 0.8559440664008754,
+        "tech_savviness": 0.6528868235874261,
+        "risk_tolerance": 0.28958316356899194
+      },
+      "budget_monthly_usd": 4000,
+      "hot_buttons": [
+        "Discovering real-time price differences across sites.",
+        "Understanding hotel value propositions better for big purchases.",
+        "Getting rewarded for loyalty points."
+      ],
+      "deal_breakers": [
+        "Incidental hold charges beyond €5/night on direct booking site.",
+        "OTAs rate guarantee terms that are not enforced.",
+        "No transparency about fees like parking or resort services."
+      ],
+      "behavioral_markers_activated": [
+        "Opens 3+ tabs simultaneously",
+        "Calculates true total price per night",
+        "Reads reviews for 'surprise' fees"
+      ],
+      "_archetype_id": "budget_optimizer",
+      "_variant_index": 1,
+      "_slot_index": 13,
+      "_source_pain_samples": [
+        {
+          "quote": "At check-in, €150/night incidental hold on my card. Released after checkout in 5-10 business days. I book 15 nights — that's €2,250 held for two weeks. Why can't this be €25/night like most hotels? The cash flow impact for frequent travelers is real.",
+          "source": "reddit_r_awardtravel"
+        },
+        {
+          "quote": "Rate plan 1: 'Standard', €189. Rate plan 2: 'Stay & Save', €179 (no breakfast). Difference is €10. Breakfast buffet on-site is €28. So 'Stay & Save' saves €10 but costs €28. Why not just say 'Includes breakfast: save €18' on Rate 1?",
+          "source": "reddit_r_travel"
+        },
+        {
+          "quote": "Direct site shows €189. Booking.com shows €172 same room same dates. Your 'best price guarantee' badge is on the page but when I read the T&Cs I need to submit proof within 24 hours and await approval. That's theater, not a guarantee.",
+          "source": "flyertalk_thread"
+        }
+      ],
+      "_coverage_purpose": "Tests price transparency, OTA rate parity, and value perception"
+    },
+    {
+      "name": "Ming Wu",
+      "age": 42,
+      "role": "Senior Executive Assistant",
+      "company_description": "A leading hospitality company operating in the luxury segment across multiple countries, focusing on providing unparalleled travel experiences for discerning customers.",
+      "archetype_id": "loyalty_maximizer",
+      "archetype_label": "The Loyalty Maximizer",
+      "goals_for_this_visit": [
+        "Demonstrate loyalty benefits to my company's executives",
+        "Find out if I qualify for an upgrade tonight"
+      ],
+      "current_alternatives": [
+        "I currently use a third-party booking aggregator that provides me with more transparency and flexibility in choosing hotels and rates."
+      ],
+      "pain_quotes_in_voice": [
+        "The member rate versus the best available rate (BAR) system is laughable. It doesn’t even reach 10% discounts. I’m tired of feeling ripped off.",
+        "I have to prove my elite status every single time I make a booking, and it’s frustrating when they can’t see that immediately in their PMS."
+      ],
+      "top_objections": [
+        "There are too many steps involved before the benefits even kick in. It feels like playing a game of chance.",
+        "The upgrade process is so slow and manual that by the time I’m ready to stay, the room has already been taken by someone else under my elite status.",
+        "I have noticed inconsistencies where I am not immediately recognized as an elite guest when checking into hotels."
+      ],
+      "decision_style": "deliberate",
+      "traits": {
+        "patience": 0.48311136024808343,
+        "trust_baseline": 0.3721526388608314,
+        "price_sensitivity": 0.3932510794517109,
+        "tech_savviness": 0.677481383845983,
+        "risk_tolerance": 0.4063370075474987
+      },
+      "budget_monthly_usd": 15000,
+      "hot_buttons": [
+        "A seamless and immediate recognition as an elite guest at the hotel upon arrival",
+        "Automatically applying my member rate without needing to manually tick a box every time I search for hotels",
+        "Recognition in their point of sale (POS) system is crucial for me, ensuring that I can instantly see my benefits."
+      ],
+      "deal_breakers": [
+        "I am not comfortable using the system if there are too many steps and it feels like playing a game to get the benefits.",
+        "If the upgrade process takes more than just a few minutes, it will cause significant inconvenience for me."
+      ],
+      "behavioral_markers_activated": [
+        "Logs in before anything",
+        "Scrutinizes 'Member-only' rates for real discounts",
+        "Compares cost in points vs cash for high-value stays"
+      ],
+      "_archetype_id": "loyalty_maximizer",
+      "_variant_index": 1,
+      "_slot_index": 14,
+      "_source_pain_samples": [
+        {
+          "quote": "Your member rate vs BAR rate: member saves €4/night on a €200 stay. That's 2%. Hilton Honors saves me 10% baseline. If the economics are this bad, the member rate is marketing theater. Fix the value prop or retire the tier.",
+          "source": "hospitalitynet_comment"
+        },
+        {
+          "quote": "Arrived at 11pm. Front desk: 'Oh you're Diamond? Let me see if I can upgrade you.' Sorts through tabs for 3 minutes. Finally: 'Sorry we're full.' Is the Diamond tag visible in your PMS at all? The whole point of elite status is that recognition is seamless, not that I have to prove it at 11pm.",
+          "source": "tripadvisor_review"
+        },
+        {
+          "quote": "I'm logged in as Platinum. Page still shows me the public rate. I have to manually tick 'Member rate' every search. In 2025 this should auto-apply the second I'm logged in. Otherwise why did you build the loyalty site login?",
+          "source": "linkedin_post"
+        }
+      ],
+      "_coverage_purpose": "Tests whether elite recognition and benefits land at every touchpoint"
+    },
+    {
+      "name": "Rui Zhou",
+      "age": 36,
+      "role": "Executive Assistant",
+      "company_description": "A hospitality company that specializes in luxury wedding planning services.",
+      "archetype_id": "event_attendee",
+      "archetype_label": "The Event Attendee",
+      "goals_for_this_visit": [
+        "Find a venue for their upcoming anniversary celebration and secure a group rate.",
+        "Need to accommodate older children who can't travel with them during the event."
+      ],
+      "current_alternatives": [
+        "Book online through Zomato or TripAdvisor, ask hotel concierge for recommendations, and search social media for deals."
+      ],
+      "pain_quotes_in_voice": [
+        "I've spent hours searching online for a truly local dining option near our hotel. I was expecting more from your brand.",
+        "I can't find the group booking code in any of my emails or saved notes. It would have been so much easier if it had been clearly marked."
+      ],
+      "top_objections": [
+        "I don't want to pay a premium for an off-the-beaten-path venue and then not be able to book a group rate.",
+        "The hotel's website is confusing, and I'm afraid the promotional deals might mix with other tiered offerings that won't align with my needs.",
+        "It took me 20 minutes just to find out if I could take advantage of a discount on my booking. That was too long."
+      ],
+      "decision_style": "impulsive",
+      "traits": {
+        "patience": 0.32154270863496204,
+        "trust_baseline": 0.5870546695666304,
+        "price_sensitivity": 0.4502177227965635,
+        "tech_savviness": 0.5989582018474453,
+        "risk_tolerance": 0.5397126089988208
+      },
+      "budget_monthly_usd": 8000,
+      "hot_buttons": [
+        "Luxury accommodations that match our anniversary celebration's theme.",
+        "A seamless booking process where I don't have to look up codes or worry about promotions mixing.",
+        "Early check-in and late checkout options for flexibility."
+      ],
+      "deal_breakers": [
+        "No group rate available at the requested dates and venue.",
+        "The promotional deals are too confusing or mixed with other tiers."
+      ],
+      "behavioral_markers_activated": [
+        "Searches by exact dates with venue name.",
+        "Looks for 'group booking code' or wedding block field in email communications.",
+        "Abandons if distance from the venue is more than 15 minutes of walking or public transportation."
+      ],
+      "_archetype_id": "event_attendee",
+      "_variant_index": 1,
+      "_slot_index": 15,
+      "_source_pain_samples": [
+        {
+          "quote": "Asked concierge for a good dinner spot near the hotel. Got a printed list of 8 restaurants, 6 of which are chains. I came here for local. Your concierge should know the best local spots, not hand me Zomato's top 10.",
+          "source": "tripadvisor_review"
+        },
+        {
+          "quote": "Booked with group code for IBTM conference. Code worked for discount but I couldn't see 'group rate' anywhere in the confirmation. Arrived — they tried to charge me BAR. 20 minutes to find the code in their system. Your group booking flow needs a confirmation that survives to check-in.",
+          "source": "conference_review"
+        },
+        {
+          "quote": "The homepage shows me a 'weekend getaway from €89' promo banner next to a photo of the Gran Meliá suite. This immediately cheapens the brand. Luxury buyers should never see budget-tier promos. Segment your audience.",
+          "source": "luxury_forum"
+        }
+      ],
+      "_coverage_purpose": "Tests group rates, location specificity, and constrained-date flexibility"
+    },
+    {
+      "name": "Li Si Li",
+      "age": 36,
+      "role": "Corporate Manager",
+      "company_description": "A mid-sized tech company operating in the Silicon Valley region, focusing on AI development.",
+      "archetype_id": "business_traveler",
+      "archetype_label": "The Business Traveler",
+      "goals_for_this_visit": [
+        "Secure a business-class room for next month's conference",
+        "Find a family-friendly hotel for the upcoming anniversary celebration"
+      ],
+      "current_alternatives": [
+        "Direct booking via corporate expense management systems like Concur and Amex GBT"
+      ],
+      "pain_quotes_in_voice": [
+        "I've had to deal with noise issues in hotels before. Room 214 being above a nightclub is just unacceptable.",
+        "When I need an accessible room, calling three times isn't enough for my peace of mind."
+      ],
+      "top_objections": [
+        "Noisy floor issue not disclosed during booking",
+        "I need clear specs on accessibility features like door width and grab bars",
+        "Too many sub-brands; confusing search results"
+      ],
+      "decision_style": "impulsive",
+      "traits": {
+        "patience": 0.23305255530339064,
+        "trust_baseline": 0.5596628685269796,
+        "price_sensitivity": 0.4450224727102422,
+        "tech_savviness": 0.8324699130320908,
+        "risk_tolerance": 0.5655583265955162
+      },
+      "budget_monthly_usd": 15000,
+      "hot_buttons": [
+        "Luxury amenities included in the room rate",
+        "Hotel loyalty rewards that exceed cost savings",
+        "Accessible rooms with clear spec details"
+      ],
+      "deal_breakers": [
+        "Room noise issues not disclosed upfront",
+        "Difficult to find accessible options without specific calls",
+        "Multiple sub-brands cluttering search results"
+      ],
+      "behavioral_markers_activated": [
+        "Direct booking flow with an expectation of completing bookings in under 3 minutes",
+        "Hates corporate rate validation friction and prefers Amex GBT or Concur for booking",
+        "Loves luxury benefits and rewards programs"
+      ],
+      "_archetype_id": "business_traveler",
+      "_variant_index": 2,
+      "_slot_index": 16,
+      "_source_pain_samples": [
+        {
+          "quote": "Room 214 is directly above the nightclub entrance. I didn't know until 11pm Friday. The booking page should have a 'quiet floor' option or warning. I'd have paid more for silence. Now I'm writing this review and booking Hyatt next time.",
+          "source": "tripadvisor_review"
+        },
+        {
+          "quote": "Booking an accessible room: I had to call 3 times to confirm the room is actually accessible (not just 'ground floor'). The booking site should show: door width, bathroom grab bars, roll-in shower, visual alarms — actual specs, not buzzword checkboxes.",
+          "source": "accessibility_forum"
+        },
+        {
+          "quote": "Meliá, Gran Meliá, Sol, INNSIDE, Paradisus — if I search 'Meliá Madrid' I get 8 results with 8 different brand positions. I have no idea which one I'd actually want. Your brand portfolio needs a segmentation filter: 'Show me luxury properties only'. Marriott does this well.",
+          "source": "travel_blog"
+        }
+      ],
+      "_coverage_purpose": "Tests high-frequency direct-booking flow with time-sensitive friction tolerance"
+    },
+    {
+      "name": "Zhu Yu Liang",
+      "age": 28,
+      "role": "Travel Agent Intern",
+      "company_description": "A startup travel agency specializing in luxury family vacations",
+      "archetype_id": "family_vacationer",
+      "archetype_label": "The Family Vacationer",
+      "goals_for_this_visit": [
+        "Find a hotel that offers true 'pet-friendly' accommodations for their upcoming birthday celebration with pets"
+      ],
+      "current_alternatives": [
+        "Booking through major travel websites like Booking.com and Expedia, which often lack clear pet policies and accessibility features"
+      ],
+      "pain_quotes_in_voice": [
+        "'I’ve had to call them multiple times just to get confirmation about the accessible room specs. I wish they could have shown me exactly what I was getting.'",
+        "'The 'pet-friendly' tag on your website is so vague. It’s hard to know if it means anything at all or not.'"
+      ],
+      "top_objections": [
+        "I need a hotel that clearly communicates accessibility features and pet policies upfront, otherwise I’ll just end up frustrated."
+      ],
+      "decision_style": "deliberate",
+      "traits": {
+        "patience": 0.5687162024497573,
+        "trust_baseline": 0.4603792020438608,
+        "price_sensitivity": 0.7468435258866534,
+        "tech_savviness": 0.611122279660899,
+        "risk_tolerance": 0.22457474868201383
+      },
+      "budget_monthly_usd": 3000,
+      "hot_buttons": [
+        "Pet-friendly policies that are actually pet-friendly with clear rules and amenities provided"
+      ],
+      "deal_breakers": [
+        "If a hotel says they offer 'pet-friendly' accommodations but the rules are overly restrictive (like mandatory leashes in common areas) or if there's no proper pet park available."
+      ],
+      "behavioral_markers_activated": [
+        "Reads through 20+ reviews to understand accessibility features and pet policies",
+        "Abandons a booking when uncertain about the level of 'all-inclusive' perks like food options for kids",
+        "Spends extra time investigating the accuracy of hotel room descriptions in photos"
+      ],
+      "_archetype_id": "family_vacationer",
+      "_variant_index": 2,
+      "_slot_index": 17,
+      "_source_pain_samples": [
+        {
+          "quote": "Booked 'family room' assuming 2 queen beds. Arrived: 1 queen + 1 pull-out sofa. Kids sharing a sofa, wife and I on the queen. 5 nights of this in July. Hotel photos showed beds clearly — should have been 'family room (1 queen + 1 sofa)' at booking.",
+          "source": "booking_review"
+        },
+        {
+          "quote": "Booking an accessible room: I had to call 3 times to confirm the room is actually accessible (not just 'ground floor'). The booking site should show: door width, bathroom grab bars, roll-in shower, visual alarms — actual specs, not buzzword checkboxes.",
+          "source": "accessibility_forum"
+        },
+        {
+          "quote": "'Pet-friendly' on your booking page. On arrival: €45/night per dog, no dog park, rules against being left alone, leash-mandatory in lobby. That's pet-tolerant, not pet-friendly. Either go Kimpton-level or remove the label.",
+          "source": "pet_travel_forum"
+        }
+      ],
+      "_coverage_purpose": "Tests family-specific needs: connecting rooms, kids amenities, all-inclusive clarity"
+    },
+    {
+      "name": "Oliver Lin",
+      "age": 42,
+      "role": "Travel Consultant at Prestige Travel Agency",
+      "company_description": "A luxury travel agency specializing in high-end resorts and private villas across the Caribbean.",
+      "archetype_id": "luxury_seeker",
+      "archetype_label": "The Luxury Seeker",
+      "goals_for_this_visit": [
+        "Find a resort that fits my anniversary celebration needs without breaking the bank.",
+        "Ensure my family enjoys an authentic local experience."
+      ],
+      "current_alternatives": [
+        "Google Hotels, Booking.com"
+      ],
+      "pain_quotes_in_voice": [
+        "‘I hate when you see €89 weekend getaways on your homepage. It’s cheapening everything.'",
+        "‘It’s frustrating when the concierge can’t recommend anything outside of tourist spots.”"
+      ],
+      "top_objections": [
+        "The hotel doesn't have a guaranteed bed type for older children.",
+        "No local recommendations provided.",
+        "They don't disclose nearby airport and town distances."
+      ],
+      "decision_style": "deliberate",
+      "traits": {
+        "patience": 0.7492950303773758,
+        "trust_baseline": 0.2904878753932631,
+        "price_sensitivity": 0.19847196217192997,
+        "tech_savviness": 0.5306889990868836,
+        "risk_tolerance": 0.28696474340525663
+      },
+      "budget_monthly_usd": 6000,
+      "hot_buttons": [
+        "A concierge service that knows local spots and can guarantee a family-friendly resort.",
+        "Concierge recommendations are tailored to specific needs, such as older children or allergy preferences."
+      ],
+      "deal_breakers": [
+        "If the hotel doesn’t offer high-quality amenities like guaranteed bed types or views of nearby attractions."
+      ],
+      "behavioral_markers_activated": [
+        "Notices promotions and discounts that could dilute the brand's premium positioning.",
+        "Sends off any concierge recommendations he deems inadequate for a luxury travel experience.",
+        "Avoids hotels with generic images or descriptions that don't feel unique."
+      ],
+      "_archetype_id": "luxury_seeker",
+      "_variant_index": 2,
+      "_slot_index": 18,
+      "_source_pain_samples": [
+        {
+          "quote": "The homepage shows me a 'weekend getaway from €89' promo banner next to a photo of the Gran Meliá suite. This immediately cheapens the brand. Luxury buyers should never see budget-tier promos. Segment your audience.",
+          "source": "luxury_forum"
+        },
+        {
+          "quote": "Asked concierge for a good dinner spot near the hotel. Got a printed list of 8 restaurants, 6 of which are chains. I came here for local. Your concierge should know the best local spots, not hand me Zomato's top 10.",
+          "source": "tripadvisor_review"
+        },
+        {
+          "quote": "Booking a resort in Punta Cana. Page shows: pool, beach, buffet. Doesn't show: distance from airport (1.5 hours!), distance from town (need taxi for everything), what's around (not much). Set expectations — surprise transport costs sour the trip.",
+          "source": "tripadvisor_review"
+        }
+      ],
+      "_coverage_purpose": "Tests whether premium positioning holds across the funnel"
+    },
+    {
+      "name": "Liang Hua Mei",
+      "age": 40,
+      "role": "General Manager of Hotel Operations",
+      "company_description": "A mid-sized luxury hospitality company operating multiple high-end resorts in the tropical region of Southeast Asia, focusing on anniversary celebrations and family vacations.",
+      "archetype_id": "honeymooner",
+      "archetype_label": "The Honeymooner / Milestone Couple",
+      "goals_for_this_visit": [
+        "An unforgettable anniversary celebration",
+        "A private dinner with local cuisine",
+        "Exclusive spa treatments for two"
+      ],
+      "current_alternatives": [
+        "Using manual booking systems and relying on outdated concierge services"
+      ],
+      "pain_quotes_in_voice": [
+        "‘Why does my reservation confirm in Spanish? I’m from Thailand, not Mexico!’",
+        "‘I can’t believe they don’t have a digital spa booking system. It’s 2025 for crying out loud!'"
+      ],
+      "top_objections": [
+        "Inconsistent language support",
+        "Outdated concierge recommendations",
+        "Low-tech amenity UX"
+      ],
+      "decision_style": "balanced",
+      "traits": {
+        "patience": 0.7272969762708171,
+        "trust_baseline": 0.4233664289380724,
+        "price_sensitivity": 0.43942169672139697,
+        "tech_savviness": 0.6369984091051973,
+        "risk_tolerance": 0.5558716858425984
+      },
+      "budget_monthly_usd": 12000,
+      "hot_buttons": [
+        "Exclusive honeymoon package",
+        "Family travel amenities",
+        "Affordable rates for older children"
+      ],
+      "deal_breakers": [
+        "Inconsistent language support, such as confirming guests in multiple languages"
+      ],
+      "behavioral_markers_activated": [
+        "Willing to upgrade suite and request private dinners",
+        "Seeking 'romantic packages' with anniversary offers",
+        "Interested in adults-only amenities for privacy"
+      ],
+      "_archetype_id": "honeymooner",
+      "_variant_index": 2,
+      "_slot_index": 19,
+      "_source_pain_samples": [
+        {
+          "quote": "Spa booking is only by phone. In a 5-star hotel in 2025. I shouldn't have to call reception to book a massage — I should see treatment menu, therapist availability, prices, and book instantly in the app.",
+          "source": "luxury_blog"
+        },
+        {
+          "quote": "Asked concierge for a good dinner spot near the hotel. Got a printed list of 8 restaurants, 6 of which are chains. I came here for local. Your concierge should know the best local spots, not hand me Zomato's top 10.",
+          "source": "tripadvisor_review"
+        },
+        {
+          "quote": "Booking in English, confirmation in Spanish, pre-arrival in English, check-in chat in Spanish again. Inconsistent. Lock my language preference at booking and honor it everywhere.",
+          "source": "tripadvisor_review"
+        }
+      ],
+      "_coverage_purpose": "Tests emotional / romantic product positioning and upsell acceptance"
+    }
+  ],
+  "stays": [
+    {
+      "slot": 0,
+      "persona_name": "David Chen",
+      "archetype": "business_traveler",
+      "culture_cluster": "anglo_uk_ireland",
+      "stars": 2,
+      "nps": -84,
+      "spend_eur": 5.98,
+      "would_repeat": false,
+      "would_recommend": false,
+      "review_platform": null,
+      "review_title": null,
+      "review_body": null,
+      "review_themes": [],
+      "stage_count": 8,
+      "adversarial_events": [],
+      "positive_moments": 2,
+      "negative_moments": 7,
+      "booking_channel": "corporate",
+      "room_rate_paid_eur": 316
+    },
+    {
+      "slot": 1,
+      "persona_name": "Emma Thompson",
+      "archetype": "family_vacationer",
+      "culture_cluster": "anglo_uk_ireland",
+      "stars": 1,
+      "nps": -100,
+      "spend_eur": 248,
+      "would_repeat": false,
+      "would_recommend": false,
+      "review_platform": "tripadvisor",
+      "review_language": "en",
+      "review_title": null,
+      "review_body": "I recently stayed at Gran Meliá Villa Le Blanc for a family vacation and I must say it was an underwhelming experience overall. The room wasn't ready when we arrived, leading to some tension in the lobby as there were already guests waiting and it felt noisy. They managed to sort things out with minimal assistance from staff which didn’t alleviate any frustration.\n\nThe kids club staff was amazing — our two boys didn't want to leave and they loved all the inflatable games, including one that had a prize bag for them which made us very happy. The chef accommodated my request for a gluten-free option when we were having dinner and even cooked a custom dish for my son's birthday, delighting him with unique sauce on his meal.\n\nThe breakfast was another highlight of the stay. They provided fresh fruit and various hot dishes like pancakes, waffles, and eggs, which kept everyone happy. The room service did provide us with freshly squeezed fruit juices and gourmet sandwiches that catered to our kids' dietary needs. However, they seemed understaffed during dinner time and my request for more snacks or drinks was not addressed.\n\nThe only negatives were the rooms being a bit old (despite them claiming to be clean) and the breakfast buffet remaining the same items every day without replenishment leading to stale eggs. The kids club didn't have enough space for everyone, especially around 10am when we wanted to check in. I was disappointed that they only had one session of activities for our age group.\n\nOverall, while there were some positive aspects like the staff and room service, it felt rushed due to their understaffing during dinner times. My overall impression is that it would be better if the rooms were updated more frequently as well as having a flexible kids club schedule. I wouldn't recommend this place for families given these issues.\n\nI believe my stay was rated 1 out of 5 stars and I won’t be repeating this experience with Gran Meliá Villa Le Blanc.",
+      "review_themes": [
+        "service_quality",
+        "crowd",
+        "culinary",
+        "modernity",
+        "amenity_usability",
+        "value"
+      ],
+      "stage_count": 16,
+      "adversarial_events": [
+        "breakfast_quality_slip",
+        "room_not_ready"
+      ],
+      "positive_moments": 17,
+      "negative_moments": 17,
+      "booking_channel": "direct_web",
+      "room_rate_paid_eur": 428
+    },
+    {
+      "slot": 2,
+      "persona_name": "Xia Li Wei",
+      "archetype": "luxury_seeker",
+      "culture_cluster": "anglo_uk_ireland",
+      "stars": 5,
+      "nps": 83,
+      "spend_eur": 550,
+      "would_repeat": true,
+      "would_recommend": true,
+      "review_platform": "tripadvisor_lux",
+      "review_language": "en",
+      "review_title": "5-star stay",
+      "review_body": "Overall a 5-star experience. • The breakfast buffet offers an array of gourmet delights, including a beautifully arranged panini and fresh fruit platter. The aroma is delightful and the presentation breathtaking.\n• The freshly br. • [incident: Long check-in queue at peak arrival] resolution=excellent_recovery\n• [object Object]\n• [object Object]\n• [object Object]\n• Staff were clearly behind schedule, Ana with the kids and Mohamm",
+      "review_themes": [],
+      "stage_count": 16,
+      "adversarial_events": [
+        "check_in_queue"
+      ],
+      "positive_moments": 17,
+      "negative_moments": 5,
+      "booking_channel": "direct_web",
+      "room_rate_paid_eur": 1062
+    },
+    {
+      "slot": 3,
+      "persona_name": "Liang Mei",
+      "archetype": "honeymooner",
+      "culture_cluster": "anglo_uk_ireland",
+      "stars": 1,
+      "nps": -100,
+      "spend_eur": 503,
+      "would_repeat": false,
+      "would_recommend": false,
+      "review_platform": null,
+      "review_title": null,
+      "review_body": null,
+      "review_themes": [],
+      "stage_count": 16,
+      "adversarial_events": [
+        "spa_booking_problem"
+      ],
+      "positive_moments": 10,
+      "negative_moments": 13,
+      "booking_channel": "booking_com",
+      "room_rate_paid_eur": 727
+    },
+    {
+      "slot": 4,
+      "persona_name": "Liu Hui",
+      "archetype": "digital_nomad",
+      "culture_cluster": "anglo_uk_ireland",
+      "stars": 3,
+      "nps": -14,
+      "spend_eur": 53,
+      "would_repeat": false,
+      "would_recommend": false,
+      "review_platform": null,
+      "review_title": null,
+      "review_body": null,
+      "review_themes": [],
+      "stage_count": 8,
+      "adversarial_events": [],
+      "positive_moments": 8,
+      "negative_moments": 4,
+      "booking_channel": "booking_com",
+      "room_rate_paid_eur": 294
+    },
+    {
+      "slot": 5,
+      "persona_name": "Zhang Yu Liang",
+      "archetype": "budget_optimizer",
+      "culture_cluster": "anglo_uk_ireland",
+      "stars": 4,
+      "nps": 53,
+      "spend_eur": 0,
+      "would_repeat": false,
+      "would_recommend": true,
+      "review_platform": "booking.com",
+      "review_language": "en",
+      "review_title": null,
+      "review_body": "The Gran Meliá Villa Le Blanc exceeded my expectations with its beautiful garden view and excellent service staff. The room was spotlessly clean, though the breakfast buffet had some better options for protein. The wine on the terrace set a soothing mood at night. The toiletries were well-laid out, and Carlos provided a fresh coffee in the room. However, the elevator's slow response time this morning caused us to wait 15 minutes. I'm disputing the €28 resort fee that appeared on my bill without being disclosed during booking.",
+      "review_themes": [
+        "cleanliness",
+        "service_quality",
+        "value",
+        "amenity_usability",
+        "personalization",
+        "crowd",
+        "speed"
+      ],
+      "stage_count": 8,
+      "adversarial_events": [],
+      "positive_moments": 7,
+      "negative_moments": 3,
+      "booking_channel": "expedia",
+      "room_rate_paid_eur": 215
+    },
+    {
+      "slot": 6,
+      "persona_name": "Aidan Zhang",
+      "archetype": "loyalty_maximizer",
+      "culture_cluster": "latin_spain_italy",
+      "stars": 3,
+      "nps": -74,
+      "spend_eur": 200,
+      "would_repeat": false,
+      "would_recommend": false,
+      "review_platform": null,
+      "review_title": null,
+      "review_body": null,
+      "review_themes": [],
+      "stage_count": 8,
+      "adversarial_events": [
+        "bathroom_issue"
+      ],
+      "positive_moments": 10,
+      "negative_moments": 6,
+      "booking_channel": "direct_app",
+      "room_rate_paid_eur": 629
+    },
+    {
+      "slot": 7,
+      "persona_name": "Liu Jia Liang",
+      "archetype": "event_attendee",
+      "culture_cluster": "german_dach",
+      "stars": 1,
+      "nps": -100,
+      "spend_eur": 10,
+      "would_repeat": false,
+      "would_recommend": false,
+      "review_platform": null,
+      "review_title": null,
+      "review_body": null,
+      "review_themes": [],
+      "stage_count": 8,
+      "adversarial_events": [],
+      "positive_moments": 4,
+      "negative_moments": 11,
+      "booking_channel": "corporate",
+      "room_rate_paid_eur": 320
+    },
+    {
+      "slot": 8,
+      "persona_name": "Seth Chen",
+      "archetype": "business_traveler",
+      "culture_cluster": "anglo_uk_ireland",
+      "stars": 1,
+      "nps": -100,
+      "spend_eur": 98,
+      "would_repeat": false,
+      "would_recommend": false,
+      "review_platform": "booking.com",
+      "review_language": "en",
+      "review_title": null,
+      "review_body": "Check-in took 14 minutes despite three people ahead of me. Room had minimal blackout curtains causing light issues. Staff didn't address the missing curtains, leaving me annoyed. Overall bad experience - no recommendation.",
+      "review_themes": [
+        "check_in",
+        "room_lighting",
+        "staff_response"
+      ],
+      "stage_count": 8,
+      "adversarial_events": [
+        "luggage_delay"
+      ],
+      "positive_moments": 0,
+      "negative_moments": 16,
+      "booking_channel": "booking_com",
+      "room_rate_paid_eur": 292
+    },
+    {
+      "slot": 9,
+      "persona_name": "Wang Junpeng",
+      "archetype": "family_vacationer",
+      "culture_cluster": "anglo_uk_ireland",
+      "stars": 1,
+      "nps": -100,
+      "spend_eur": 370,
+      "would_repeat": false,
+      "would_recommend": false,
+      "review_platform": null,
+      "review_title": null,
+      "review_body": null,
+      "review_themes": [],
+      "stage_count": 16,
+      "adversarial_events": [],
+      "positive_moments": 19,
+      "negative_moments": 17,
+      "booking_channel": "expedia",
+      "room_rate_paid_eur": 565
+    },
+    {
+      "slot": 10,
+      "persona_name": "Wang Hui Jun",
+      "archetype": "luxury_seeker",
+      "culture_cluster": "east_asian",
+      "stars": 4,
+      "nps": 25,
+      "spend_eur": 500,
+      "would_repeat": true,
+      "would_recommend": true,
+      "review_platform": null,
+      "review_title": null,
+      "review_body": null,
+      "review_themes": [],
+      "stage_count": 16,
+      "adversarial_events": [],
+      "positive_moments": 17,
+      "negative_moments": 9,
+      "booking_channel": "direct_web",
+      "room_rate_paid_eur": 880
+    },
+    {
+      "slot": 11,
+      "persona_name": "Amelia Li",
+      "archetype": "honeymooner",
+      "culture_cluster": "french",
+      "stars": 1,
+      "nps": -100,
+      "spend_eur": 535,
+      "would_repeat": false,
+      "would_recommend": false,
+      "review_platform": null,
+      "review_title": null,
+      "review_body": null,
+      "review_themes": [],
+      "stage_count": 16,
+      "adversarial_events": [],
+      "positive_moments": 13,
+      "negative_moments": 18,
+      "booking_channel": "booking_com",
+      "room_rate_paid_eur": 865
+    },
+    {
+      "slot": 12,
+      "persona_name": "Liu Yue Zhang",
+      "archetype": "digital_nomad",
+      "culture_cluster": "anglo_us_canada",
+      "stars": 1,
+      "nps": -100,
+      "spend_eur": 0,
+      "would_repeat": false,
+      "would_recommend": false,
+      "review_platform": null,
+      "review_title": null,
+      "review_body": null,
+      "review_themes": [],
+      "stage_count": 8,
+      "adversarial_events": [
+        "luggage_delay",
+        "overbooking_downgrade"
+      ],
+      "positive_moments": 6,
+      "negative_moments": 9,
+      "booking_channel": "expedia",
+      "room_rate_paid_eur": 255
+    },
+    {
+      "slot": 13,
+      "persona_name": "Ming Zhang",
+      "archetype": "budget_optimizer",
+      "culture_cluster": "german_dach",
+      "stars": 1,
+      "nps": -100,
+      "spend_eur": 20,
+      "would_repeat": false,
+      "would_recommend": false,
+      "review_platform": null,
+      "review_title": null,
+      "review_body": null,
+      "review_themes": [],
+      "stage_count": 8,
+      "adversarial_events": [
+        "breakfast_quality_slip",
+        "overbooking_downgrade"
+      ],
+      "positive_moments": 1,
+      "negative_moments": 13,
+      "booking_channel": "booking_com",
+      "room_rate_paid_eur": 220
+    },
+    {
+      "slot": 14,
+      "persona_name": "Ming Wu",
+      "archetype": "loyalty_maximizer",
+      "culture_cluster": "anglo_uk_ireland",
+      "stars": 2,
+      "nps": -76,
+      "spend_eur": 0,
+      "would_repeat": false,
+      "would_recommend": false,
+      "review_platform": "tripadvisor",
+      "review_language": "en",
+      "review_title": null,
+      "review_body": "I had a rather disappointing stay at the Gran Meliá Villa Le Blanc for my business trip in Varadero. The hotel’s promise of modern amenities, personalized service, and luxurious rooms did not materialize as expected. Despite being greeted by María with a warm smile, her response during check-in was abrupt. Maria placed breakfast items on my desk promptly but seemed distracted. I appreciated Margalida's proactive offering of a special drink list for my preferences. The room itself featured modern comforts like a king-sized bed and sleek bathroom, which were satisfactory. However, the initial upgrade to suite did not materialize as advertised. The coffee barista, Margalida, noticed me immediately but her service quality was inconsistent with other staff members. Luca’s attitude during check-in left much to be desired. The room temperature took nearly ten minutes to become comfortable. The pool area was chaotic with frequent wind-blown umbrellas and chairs, despite indoor air being cool. I had to wait a week for my upgraded suite without any acknowledgment from the hotel. Despite some positive moments like María’s warm greeting and Margalida's thoughtful service, the overall experience fell short due to several issues such as room upgrades not happening as promised, staff inconsistency in attitude, and poor management of amenities like pools. The stay did not meet expectations for a luxury property, leading me to consider whether I would return or recommend this hotel. I believe prices should be more competitive considering the subpar service and facilities.",
+      "review_themes": [
+        "cleanliness",
+        "service",
+        "amenity_usability",
+        "noise_level",
+        "bed_comfort",
+        "pool",
+        "staff_service"
+      ],
+      "stage_count": 8,
+      "adversarial_events": [],
+      "positive_moments": 5,
+      "negative_moments": 9,
+      "booking_channel": "direct_web",
+      "room_rate_paid_eur": 474
+    },
+    {
+      "slot": 15,
+      "persona_name": "Rui Zhou",
+      "archetype": "event_attendee",
+      "culture_cluster": "german_dach",
+      "stars": 3,
+      "nps": -6,
+      "spend_eur": 75,
+      "would_repeat": false,
+      "would_recommend": false,
+      "review_platform": "google",
+      "review_language": "en",
+      "review_title": null,
+      "review_body": "Fast check-in despite a group of 20 arriving at the same time — well-organized. Javier remembered our wedding anniversary from booking and had flowers sent to the suite, making my stay feel more special. Iron was perfect condition for room preparation. However, bathroom fixtures felt outdated. Room was spotless but noticed minor dust on coffee table. Staff seemed frazzled due to chaotic events of night before. Got complimentary drinks in hotel bar which made my stay feel more special.",
+      "review_themes": [
+        "cleanliness",
+        "service_quality",
+        "crowd_management",
+        "personalization",
+        "aesthetic",
+        "amenity_usability",
+        "safety"
+      ],
+      "stage_count": 8,
+      "adversarial_events": [],
+      "positive_moments": 9,
+      "negative_moments": 4,
+      "booking_channel": "direct_web",
+      "room_rate_paid_eur": 419
+    },
+    {
+      "slot": 16,
+      "persona_name": "Li Si Li",
+      "archetype": "business_traveler",
+      "culture_cluster": "anglo_us_canada",
+      "stars": 1,
+      "nps": -100,
+      "spend_eur": 0,
+      "would_repeat": false,
+      "would_recommend": false,
+      "review_platform": null,
+      "review_title": null,
+      "review_body": null,
+      "review_themes": [],
+      "stage_count": 8,
+      "adversarial_events": [],
+      "positive_moments": 1,
+      "negative_moments": 10,
+      "booking_channel": "booking_com",
+      "room_rate_paid_eur": 500
+    },
+    {
+      "slot": 17,
+      "persona_name": "Zhu Yu Liang",
+      "archetype": "family_vacationer",
+      "culture_cluster": "latin_spain_italy",
+      "stars": 3,
+      "nps": -69,
+      "spend_eur": 199,
+      "would_repeat": false,
+      "would_recommend": false,
+      "review_platform": "google",
+      "review_language": "en",
+      "review_title": null,
+      "review_body": "From the moment we stepped into our spacious suite, I felt welcomed at Gran Meliá Villa Le Blanc. The minibar being stocked upon arrival was a delightful surprise. Carmen offered to provide pet treats for our furry guests, showing their commitment to accommodating pets. Isabel from the pool bar brought us fresh fruit and drinks right away. My little grandson couldn’t stop smiling during his games in the kids club. Aina personally brought dessert trays featuring her signature ice cream with berries and dark chocolate sauce at dinner. Miguel remembered our previous visit by offering a small gift bag for our kids, which made us feel very special. The only negative was finding the connecting room key missing. The pool area was clean but looked like they’d been cleaning all day. It felt frustrating not being able to find high chairs for young children and slow elevators during our stay.",
+      "review_themes": [
+        "cleanliness",
+        "service_quality",
+        "value_for_money",
+        "food_and_drinks",
+        "amenity_usability",
+        "staff_experience",
+        "parking"
+      ],
+      "stage_count": 16,
+      "adversarial_events": [],
+      "positive_moments": 23,
+      "negative_moments": 14,
+      "booking_channel": "expedia",
+      "room_rate_paid_eur": 333
+    },
+    {
+      "slot": 18,
+      "persona_name": "Oliver Lin",
+      "archetype": "luxury_seeker",
+      "culture_cluster": "anglo_uk_ireland",
+      "stars": 3,
+      "nps": -9,
+      "spend_eur": 418,
+      "would_repeat": false,
+      "would_recommend": false,
+      "review_platform": null,
+      "review_title": null,
+      "review_body": null,
+      "review_themes": [],
+      "stage_count": 16,
+      "adversarial_events": [],
+      "positive_moments": 12,
+      "negative_moments": 11,
+      "booking_channel": "direct_web",
+      "room_rate_paid_eur": 773
+    },
+    {
+      "slot": 19,
+      "persona_name": "Liang Hua Mei",
+      "archetype": "honeymooner",
+      "culture_cluster": "anglo_uk_ireland",
+      "stars": 3,
+      "nps": -14,
+      "spend_eur": 20,
+      "would_repeat": false,
+      "would_recommend": false,
+      "review_platform": "travel_blog_post",
+      "review_language": "en",
+      "review_title": "3-star stay",
+      "review_body": "Overall a 3-star experience. • The elegant floral arrangement in the lobby catches my eye, adding a touch of romance to our anniversary celebration.\n• The concierge station is bustling with activity, but Javier, who seems to have. • - The rain is a constant reminder that our planned activities are cancelled. I wish the concierge had at least offered us some indoor entertainment or games.\n• - I notice an unfamiliar smell in the ",
+      "review_themes": [],
+      "stage_count": 16,
+      "adversarial_events": [],
+      "positive_moments": 15,
+      "negative_moments": 11,
+      "booking_channel": "direct_web",
+      "room_rate_paid_eur": 498
+    }
+  ]
+}

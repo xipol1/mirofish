@@ -11,6 +11,14 @@
       "env": {
         "NEXT_TELEMETRY_DISABLED": "1"
       }
+    },
+    {
+      "name": "backend",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["server.js"],
+      "port": 5001,
+      "autoPort": false,
+      "cwd": "backend"
     }
   ]
 }
