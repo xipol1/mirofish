@@ -10,7 +10,7 @@
  */
 
 import Head from 'next/head';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, Fragment as FragmentWithKey } from 'react';
 
 // In production / Vercel, always use same-origin (relative URL) so we hit
 // /api/scenario-preview in this Next.js app. Only fall back to the legacy
@@ -1104,6 +1104,36 @@ function DecisionInsightsPanel({ scenario, preview, loading, updateDecision }) {
     return () => clearTimeout(sweepRef.current);
   }, [scenario]);
 
+  // Competitor matrix state
+  const [competitorData, setCompetitorData] = useState(null);
+  const [competitorLoading, setCompetitorLoading] = useState(false);
+  const matrixRef = useRef(null);
+  useEffect(() => {
+    // Only fetch for rate_change — the only supported type for now
+    if (scenario?.decision?.type !== 'rate_change') {
+      setCompetitorData(null);
+      return;
+    }
+    clearTimeout(matrixRef.current);
+    matrixRef.current = setTimeout(async () => {
+      setCompetitorLoading(true);
+      try {
+        const res = await fetch(`${API_URL}/api/competitor-matrix`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ property: scenario.property, audience: scenario.audience, decision: scenario.decision }),
+        });
+        const data = await res.json();
+        setCompetitorData(data);
+      } catch (err) {
+        setCompetitorData({ error: err.message });
+      } finally {
+        setCompetitorLoading(false);
+      }
+    }, 500);
+    return () => clearTimeout(matrixRef.current);
+  }, [scenario]);
+
   // Segment expansion + interview state
   const [expandedSegment, setExpandedSegment] = useState(null);
   const [interviewMap, setInterviewMap] = useState({});
@@ -1169,6 +1199,55 @@ function DecisionInsightsPanel({ scenario, preview, loading, updateDecision }) {
             if (updateDecision && param) updateDecision({ [param]: value });
           }}
         />
+      </div>
+
+      {/* ─────── Competitor reaction (game-theory matrix) ─────── */}
+      {scenario?.decision?.type === 'rate_change' && (
+        <div style={{
+          background: 'white', border: '1px solid #e5e7eb', borderRadius: 10,
+          padding: '20px 24px', marginBottom: 16,
+          boxShadow: '0 2px 6px rgba(0,0,0,0.05)',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 10 }}>
+            <div>
+              <div style={{ fontSize: 11, letterSpacing: 1.4, textTransform: 'uppercase', color: '#6b7888', fontWeight: 700 }}>
+                ⚔️ Competitor reaction
+              </div>
+              <h3 style={{ margin: '4px 0 0', fontSize: 17, fontWeight: 800, color: '#0A3558' }}>
+                What if they don't follow? — 3×3 game-theory matrix
+              </h3>
+              <div style={{ fontSize: 12, color: '#6b7888', marginTop: 3 }}>
+                Tests your 3 rate options against 3 plausible competitor reactions. Identifies the <strong>dominant strategy</strong> (safest maximin play) and the <strong>Nash equilibrium</strong> (stable joint outcome).
+              </div>
+            </div>
+            {competitorLoading && (
+              <div style={{ fontSize: 11, color: '#6b7888', fontStyle: 'italic' }}>re-running…</div>
+            )}
+          </div>
+
+          <CompetitorMatrixGrid matrix={competitorData?.matrix} data={competitorData} />
+        </div>
+      )}
+
+      {/* ─────── Review narrative forecaster ─────── */}
+      <div style={{
+        background: 'white', border: '1px solid #e5e7eb', borderRadius: 10,
+        padding: '20px 24px', marginBottom: 16,
+        boxShadow: '0 2px 6px rgba(0,0,0,0.05)',
+      }}>
+        <div style={{ marginBottom: 12 }}>
+          <div style={{ fontSize: 11, letterSpacing: 1.4, textTransform: 'uppercase', color: '#6b7888', fontWeight: 700 }}>
+            📝 Review forecast
+          </div>
+          <h3 style={{ margin: '4px 0 0', fontSize: 17, fontWeight: 800, color: '#0A3558' }}>
+            What guests will write in the next 90 days
+          </h3>
+          <div style={{ fontSize: 12, color: '#6b7888', marginTop: 3 }}>
+            Predicted reviews on TripAdvisor / Booking / Google if this decision ships today. Each card is a forecast from the synthetic cohort — citable in your client report.
+          </div>
+        </div>
+
+        <ReviewForecastCards forecast={preview?.review_forecast} />
       </div>
 
       {/* ─────── Segment reactions (FULL WIDTH, with drilldowns) ─── */}
@@ -1694,6 +1773,315 @@ function AnnotationCard({ label, value, sub, color, onClick }) {
       <div style={{ fontSize: 18, fontWeight: 800, color: '#1a1d23', marginTop: 2 }}>{value}</div>
       <div style={{ fontSize: 10, color: '#6b7888', marginTop: 2, lineHeight: 1.4 }}>{sub}</div>
       {interactive && <div style={{ fontSize: 9, color, fontWeight: 700, marginTop: 4 }}>click to set as input →</div>}
+    </div>
+  );
+}
+
+// ══════════════════ ReviewForecastCards ═══════════════════════════════
+//
+// Visual wall of reviews that would appear on TripAdvisor / Booking / Google
+// in the next 90 days if the decision ships. Each card is styled to match
+// the respective platform so the consultant can show it to their client and
+// say "this is the review wall you're going to see".
+
+function ReviewForecastCards({ forecast }) {
+  const [filter, setFilter] = useState('all'); // all | positive | negative
+  if (!forecast || forecast.error || !forecast.reviews || forecast.reviews.length === 0) {
+    return (
+      <div style={{ fontSize: 12, color: '#6b7888', fontStyle: 'italic', padding: 20, textAlign: 'center' }}>
+        {forecast?.note || 'No review forecast available — configure audience + decision'}
+      </div>
+    );
+  }
+
+  const reviews = forecast.reviews.filter((r) => {
+    if (filter === 'all') return true;
+    if (filter === 'positive') return r.stars >= 4;
+    if (filter === 'negative') return r.stars <= 2;
+    return true;
+  });
+
+  const starDelta = forecast.star_delta;
+  const starDeltaColor = starDelta >= 0.1 ? '#059669' : starDelta <= -0.1 ? '#dc2626' : '#6b7888';
+
+  return (
+    <div>
+      {/* Headline stats */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 10, marginBottom: 14 }}>
+        <StatPill label="Expected avg ★" value={forecast.expected_avg_star?.toFixed(2) || '—'} sub={`baseline ${forecast.baseline_star?.toFixed(2)}`} color="#0F4C75" />
+        <StatPill label="Δ vs baseline" value={`${starDelta >= 0 ? '+' : ''}${starDelta?.toFixed(2)}★`} sub="90-day forecast" color={starDeltaColor} />
+        <StatPill label="Review volume Δ" value={`${forecast.volume_forecast_pct >= 0 ? '+' : ''}${forecast.volume_forecast_pct?.toFixed(1)}%`} sub="vs prior period" color={forecast.volume_forecast_pct >= 0 ? '#059669' : '#dc2626'} />
+        <StatPill label="Breakdown" value={`${forecast.tier_breakdown.love}★★★★★ · ${forecast.tier_breakdown.bad + forecast.tier_breakdown.angry}★★☆`} sub={`n = ${forecast.reviews.length}`} color="#6b7888" />
+      </div>
+
+      {/* Filter pills */}
+      <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
+        {[['all', 'All'], ['positive', 'Positive (4-5★)'], ['negative', 'Negative (1-2★)']].map(([k, lbl]) => (
+          <button
+            key={k}
+            onClick={() => setFilter(k)}
+            style={{
+              padding: '6px 12px', borderRadius: 16,
+              background: filter === k ? '#0F4C75' : 'white',
+              color: filter === k ? 'white' : '#374151',
+              border: `1px solid ${filter === k ? '#0F4C75' : '#e5e7eb'}`,
+              fontSize: 11, fontWeight: 600, cursor: 'pointer',
+            }}
+          >
+            {lbl}
+          </button>
+        ))}
+        <div style={{ flex: 1 }} />
+        <div style={{ fontSize: 10, color: '#6b7888', alignSelf: 'center', fontStyle: 'italic' }}>
+          Reviews shown are forecast — written by the synthetic cohort to demonstrate the narrative wall you\'ll see
+        </div>
+      </div>
+
+      {/* Cards grid */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 12 }}>
+        {reviews.map((r, i) => <ReviewCard key={i} review={r} />)}
+      </div>
+    </div>
+  );
+}
+
+function ReviewCard({ review }) {
+  const platformStyle = {
+    tripadvisor: { bg: '#00AF87', text: 'Tripadvisor', logo: '◎' },
+    booking: { bg: '#003580', text: 'Booking.com', logo: 'B.' },
+    google: { bg: '#4285F4', text: 'Google', logo: 'G' },
+  }[review.platform] || { bg: '#6b7888', text: review.platform, logo: '' };
+
+  const d = new Date(review.date);
+  const dateFmt = d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+
+  const tierBg = {
+    love: 'white',
+    fine: 'white',
+    bad: '#fffbeb',
+    angry: '#fef2f2',
+  }[review.tier] || 'white';
+  const tierBorder = {
+    love: '#d1fae5',
+    fine: '#e5e7eb',
+    bad: '#fde68a',
+    angry: '#fecaca',
+  }[review.tier] || '#e5e7eb';
+
+  return (
+    <div style={{
+      background: tierBg, border: `1px solid ${tierBorder}`, borderRadius: 8,
+      padding: '14px 16px', display: 'flex', flexDirection: 'column',
+      boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+    }}>
+      {/* Platform ribbon */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span style={{
+            background: platformStyle.bg, color: 'white',
+            padding: '2px 8px', borderRadius: 4, fontSize: 10, fontWeight: 700, letterSpacing: 0.4,
+          }}>
+            {platformStyle.logo} {platformStyle.text}
+          </span>
+          <span style={{ fontSize: 10, color: '#6b7888' }}>{dateFmt}</span>
+        </div>
+        <Stars n={review.stars} scale={review.rating_scale === 10 ? `${review.rating.toFixed(1)}/10` : null} />
+      </div>
+
+      {/* Reviewer */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6, fontSize: 11, color: '#374151' }}>
+        <span style={{ fontWeight: 600 }}>{review.reviewer_name}</span>
+        <span style={{ color: '#9ca3af' }}>·</span>
+        <span style={{ color: '#6b7888' }}>{flagEmoji(review.country_code)} {review.country_label}</span>
+        <span style={{ color: '#9ca3af' }}>·</span>
+        <span style={{ color: '#6b7888' }}>{review.trip_type}</span>
+      </div>
+
+      {/* Title */}
+      <div style={{ fontSize: 13, fontWeight: 700, color: '#1a1d23', marginBottom: 6, lineHeight: 1.3 }}>
+        {review.title}
+      </div>
+
+      {/* Body */}
+      <div style={{ fontSize: 12, color: '#374151', lineHeight: 1.5, flex: 1 }}>
+        {review.body}
+      </div>
+
+      {/* Archetype chip */}
+      <div style={{ marginTop: 10, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <span style={{
+          fontSize: 9, letterSpacing: 0.6, textTransform: 'uppercase', color: '#6b7888', fontWeight: 600,
+          background: '#f0f1f4', padding: '2px 8px', borderRadius: 10,
+        }}>
+          {review.archetype.replace(/_/g, ' ')}
+        </span>
+        <span style={{ fontSize: 9, color: '#9ca3af', fontStyle: 'italic' }}>
+          synthetic · forecast
+        </span>
+      </div>
+    </div>
+  );
+}
+
+function Stars({ n, scale }) {
+  if (scale) {
+    return <span style={{ fontSize: 11, fontWeight: 700, color: '#003580' }}>{scale}</span>;
+  }
+  return (
+    <div style={{ display: 'flex', gap: 1 }}>
+      {[1,2,3,4,5].map((s) => (
+        <span key={s} style={{ color: s <= n ? '#f59e0b' : '#e5e7eb', fontSize: 14 }}>★</span>
+      ))}
+    </div>
+  );
+}
+
+function flagEmoji(code) {
+  if (!code || code.length !== 2) return '';
+  const offset = 0x1F1E6 - 'A'.charCodeAt(0);
+  return String.fromCodePoint(code.charCodeAt(0) + offset) + String.fromCodePoint(code.charCodeAt(1) + offset);
+}
+
+function StatPill({ label, value, sub, color }) {
+  return (
+    <div style={{ background: 'white', border: '1px solid #e5e7eb', borderRadius: 6, padding: '8px 10px' }}>
+      <div style={{ fontSize: 9, letterSpacing: 1, textTransform: 'uppercase', color: '#6b7888', fontWeight: 700 }}>{label}</div>
+      <div style={{ fontSize: 16, fontWeight: 800, color, marginTop: 2 }}>{value}</div>
+      {sub && <div style={{ fontSize: 9, color: '#9ca3af', marginTop: 1 }}>{sub}</div>}
+    </div>
+  );
+}
+
+// ══════════════════ CompetitorMatrixGrid ══════════════════════════════
+
+function CompetitorMatrixGrid({ matrix, data }) {
+  if (!matrix || !data) {
+    return <div style={{ padding: 20, fontSize: 12, color: '#6b7888', textAlign: 'center', fontStyle: 'italic' }}>Loading game-theory matrix…</div>;
+  }
+  if (data.error) {
+    return <div style={{ padding: 20, fontSize: 12, color: '#b91c1c', textAlign: 'center' }}>{data.error}</div>;
+  }
+
+  const fmt = (n) => {
+    if (n == null) return '—';
+    const s = n >= 0 ? '+' : '−';
+    const a = Math.abs(n);
+    if (a >= 1_000_000) return `${s}€${(a / 1_000_000).toFixed(2)}M`;
+    if (a >= 1_000) return `${s}€${(a / 1_000).toFixed(0)}K`;
+    return `${s}€${Math.round(a)}`;
+  };
+
+  const verdictColors = {
+    HIGH_PRIORITY: '#059669',
+    PROCEED: '#22c55e',
+    CAUTION: '#d97706',
+    NOT_RECOMMENDED: '#dc2626',
+  };
+
+  const nashIdx = data.nash_equilibrium ? { row: data.nash_equilibrium.row, col: data.nash_equilibrium.col } : null;
+  const dominantIdx = data.dominant_strategy?.row_idx;
+
+  return (
+    <div>
+      <div style={{ display: 'grid', gridTemplateColumns: '180px repeat(3, 1fr)', gap: 6, marginBottom: 14 }}>
+        {/* Header row */}
+        <div />
+        {data.competitor_reactions.map((c, i) => (
+          <div key={i} style={{
+            background: '#f6f7f9', padding: '10px 12px', borderRadius: 6,
+            fontSize: 11, fontWeight: 700, color: '#374151', textAlign: 'center',
+          }}>
+            {c.label}
+          </div>
+        ))}
+
+        {/* Rows */}
+        {matrix.map((row, ri) => (
+          <FragmentWithKey key={ri}>
+            <div style={{
+              background: ri === dominantIdx ? '#ecfdf5' : '#f6f7f9',
+              padding: '10px 12px', borderRadius: 6,
+              fontSize: 11, fontWeight: 700, color: ri === dominantIdx ? '#059669' : '#374151',
+              display: 'flex', alignItems: 'center',
+              border: ri === dominantIdx ? '1px solid #a7f3d0' : 'none',
+            }}>
+              {ri === dominantIdx && <span style={{ marginRight: 4 }}>🏆</span>}
+              {data.your_options[ri].label}
+            </div>
+            {row.map((cell, ci) => {
+              const color = verdictColors[cell.verdict] || '#6b7888';
+              const isNash = nashIdx && nashIdx.row === ri && nashIdx.col === ci;
+              return (
+                <div key={ci} style={{
+                  background: 'white',
+                  border: isNash ? `2px solid #0F4C75` : `1px solid ${color}44`,
+                  borderLeft: `4px solid ${color}`,
+                  borderRadius: 6, padding: '12px 14px',
+                  position: 'relative',
+                }}>
+                  {isNash && (
+                    <span style={{
+                      position: 'absolute', top: -8, right: 8,
+                      background: '#0F4C75', color: 'white', padding: '2px 8px',
+                      borderRadius: 10, fontSize: 9, fontWeight: 700, letterSpacing: 0.6,
+                    }}>
+                      NASH
+                    </span>
+                  )}
+                  <div style={{ fontSize: 18, fontWeight: 800, color, marginBottom: 4 }}>
+                    {fmt(cell.net_eur)}
+                  </div>
+                  <div style={{ fontSize: 9, letterSpacing: 0.6, textTransform: 'uppercase', color, fontWeight: 700 }}>
+                    {cell.verdict.replace('_', ' ')}
+                  </div>
+                  <div style={{ fontSize: 10, color: '#6b7888', marginTop: 6, display: 'flex', justifyContent: 'space-between' }}>
+                    <span>ST {fmt(cell.short_term_eur)}</span>
+                    <span>LT {fmt(cell.long_term_eur)}</span>
+                  </div>
+                  {cell.gap_pct !== 0 && (
+                    <div style={{ fontSize: 9, color: '#9ca3af', marginTop: 4 }}>
+                      gap: {cell.gap_pct >= 0 ? '+' : ''}{cell.gap_pct}pp
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </FragmentWithKey>
+        ))}
+      </div>
+
+      {/* Summary / interpretation */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12 }}>
+        <AnnotationCard
+          label="🏆 Dominant strategy"
+          value={data.dominant_strategy?.label || '—'}
+          sub={data.dominant_strategy ? `Worst-case net ≥ ${fmt(data.dominant_strategy.min_guaranteed_net_eur)} regardless of competitor move` : ''}
+          color="#059669"
+        />
+        <AnnotationCard
+          label="⚖️ Nash equilibrium"
+          value={data.nash_equilibrium ? `Row ${data.nash_equilibrium.row + 1}, Col ${data.nash_equilibrium.col + 1}` : 'None in matrix'}
+          sub={data.nash_equilibrium ? `${fmt(data.nash_equilibrium.cell.net_eur)} — neither side can unilaterally improve` : 'no stable joint outcome in this 3×3 set'}
+          color="#0F4C75"
+        />
+        <AnnotationCard
+          label="⚠ Your plan worst case"
+          value={fmt(data.current_plan_worst_case_eur)}
+          sub="if competitor picks the move that hurts you most"
+          color="#d97706"
+        />
+      </div>
+
+      <div style={{
+        marginTop: 12, padding: '10px 12px',
+        background: '#fef7e0', border: '1px solid #fde68a', borderLeft: '4px solid #d97706',
+        borderRadius: 4, fontSize: 11, color: '#78350f', lineHeight: 1.5,
+      }}>
+        <strong>How to read this.</strong> Rows are YOUR rate options. Columns are how the competitor could react.
+        The 🏆 dominant strategy is the row with the best worst-case outcome — it's your safest play if the competitor
+        is adversarial. The ⚖️ Nash cell is where neither side has an incentive to change move unilaterally.
+        Click any cell to jump to that rate and see the full preview recalculate.
+      </div>
     </div>
   );
 }

@@ -567,6 +567,14 @@ function computeScenarioPreview(scenario) {
   const audience = scenario.audience || { archetype_mix: {}, cultural_mix: {} };
 
   const result = handler(scenario.decision, { property, audience });
+  // Always attach a review forecast so consultants can cite in client reports.
+  try {
+    result.review_forecast = generateReviewForecast({
+      scenario, preview: result, property, audience, decision: scenario.decision,
+    });
+  } catch (err) {
+    result.review_forecast = { error: err.message?.substring(0, 140) };
+  }
   result.elapsed_ms = Date.now() - t0;
   result.baseline_annual_revenue_eur = Math.round(baselineAnnualRevenue(property));
   return result;
@@ -938,10 +946,484 @@ function generateInterviewAnswer({ question, archId, clusterId }) {
   };
 }
 
+// ══════════════════════ Review Forecaster ═════════════════════════════
+//
+// Given a preview + scenario, generates 6-8 realistic reviews that would
+// plausibly appear on TripAdvisor / Booking.com / Google in the 90 days
+// after shipping the decision. Used by the consultant to SHOW the client
+// what the review wall will look like — not just an abstract star delta.
+
+const COUNTRY_BY_CLUSTER = {
+  anglo_uk_ireland: [{ code: 'GB', label: 'United Kingdom' }, { code: 'IE', label: 'Ireland' }],
+  german_dach: [{ code: 'DE', label: 'Germany' }, { code: 'AT', label: 'Austria' }, { code: 'CH', label: 'Switzerland' }],
+  anglo_us_canada: [{ code: 'US', label: 'United States' }, { code: 'CA', label: 'Canada' }],
+  french: [{ code: 'FR', label: 'France' }, { code: 'BE', label: 'Belgium' }],
+  latin_spain_italy: [{ code: 'ES', label: 'Spain' }, { code: 'IT', label: 'Italy' }],
+  nordic: [{ code: 'SE', label: 'Sweden' }, { code: 'NO', label: 'Norway' }, { code: 'DK', label: 'Denmark' }, { code: 'FI', label: 'Finland' }],
+  latin_american: [{ code: 'MX', label: 'Mexico' }, { code: 'BR', label: 'Brazil' }, { code: 'AR', label: 'Argentina' }],
+  middle_east_gcc: [{ code: 'AE', label: 'UAE' }, { code: 'SA', label: 'Saudi Arabia' }, { code: 'QA', label: 'Qatar' }],
+  east_asian: [{ code: 'JP', label: 'Japan' }, { code: 'KR', label: 'South Korea' }],
+  chinese_mainland: [{ code: 'CN', label: 'China' }],
+};
+
+const TRIP_TYPE_BY_ARCHETYPE = {
+  luxury_seeker: 'couple',
+  honeymooner: 'couple',
+  family_vacationer: 'family',
+  business_traveler: 'business',
+  digital_nomad: 'solo',
+  budget_optimizer: 'solo',
+  loyalty_maximizer: 'couple',
+  event_attendee: 'business',
+};
+
+const REVIEW_TEMPLATES = {
+  // ★★★★★ / 5 — strong positive
+  love: {
+    title: [
+      'Exceeded every expectation',
+      'Best stay in years',
+      'Worth every euro',
+      'We will be back',
+      'Unforgettable',
+      'A genuine 5-star experience',
+    ],
+    openers: [
+      'Stayed {nights} nights for our {occasion} and {property} delivered from arrival to checkout.',
+      'This was our {times_there} time here and somehow it keeps getting better.',
+      'Booked on short notice and glad we did — the experience lived up to the price tag.',
+    ],
+    middles_pos: [
+      'The {positive_theme} was exceptional. Staff remembered our names by day two.',
+      'Design, food, location — all at a level you rarely find at this price point.',
+      'Quiet attention to detail everywhere: the amenity kit, the handwritten note, the silent cortesy.',
+      'Food at the main restaurant is genuinely a destination, not a hotel dining room.',
+    ],
+    endings: [
+      'Already booked our return for next summer. Easy 5 stars.',
+      'Rare that a hotel lives up to its instagram feed — this one does.',
+      'Worth every cent and would recommend without hesitation.',
+    ],
+  },
+  // ★★★★ / 4 — fine with reservations
+  fine: {
+    title: [
+      'Beautiful property, some quirks',
+      'Mostly great with caveats',
+      'Lovely but pricey',
+      'Good but not perfect',
+      'Solid, room for improvement',
+    ],
+    openers: [
+      'Spent {nights} nights here for {occasion}. Mixed feelings overall.',
+      'Booked based on the reviews. Mostly met expectations, some gaps.',
+      'Returning guest so I can compare — still good, but noticed the edges.',
+    ],
+    middles_pos: [
+      '{positive_theme} remained a highlight.',
+      'Check-in and housekeeping were smooth throughout.',
+    ],
+    middles_neg: [
+      'However, the {negative_theme} felt below the tier you pay for.',
+      'Small things added up: service inconsistency, long waits at F&B, WiFi drops at the pool.',
+      'The price jump from last year is hard to justify if the amenities haven\'t visibly improved.',
+    ],
+    endings: [
+      'Would consider returning if the value equation improves.',
+      'Good stay, but the price-value gap is widening.',
+      'Solid 4 stars for now, not 5 anymore.',
+    ],
+  },
+  // ★★★ / 3 — clearly disappointed
+  bad: {
+    title: [
+      'Expected more for the price',
+      'Beautiful but overpriced',
+      'Decline from previous stay',
+      'Not what it used to be',
+      'Left with a bitter taste',
+    ],
+    openers: [
+      'Booked {nights} nights expecting something closer to what was advertised.',
+      'At {rate}€ per night I had specific expectations — most were not met.',
+      'This is my {times_there} stay and the gap is growing.',
+    ],
+    middles_neg: [
+      'The {negative_theme} was the main let-down. Not what I pay luxury pricing for.',
+      'Service felt rushed, impersonal, and inconsistent across shifts.',
+      'The F&B is understaffed at peak — watched the bar team drown during cocktail hour.',
+      'Pool music far too loud for the "adults-only sanctuary" they sell on the website.',
+    ],
+    middles_pos: [
+      'The {positive_theme} was the one thing that saved it.',
+      'Housekeeping did their best despite everything else.',
+    ],
+    endings: [
+      'Considering alternatives for next year — {competitor} looks sharper for the money.',
+      'Will not be rushing back at current pricing.',
+      'Would not recommend without a serious rate adjustment.',
+    ],
+  },
+  // ★★ / 2 — angry
+  angry: {
+    title: [
+      'A €{rate}/night mistake',
+      'Overpriced and overconfident',
+      'Won\'t be coming back',
+      'Massive disappointment',
+      'Brand-damaging pricing',
+    ],
+    openers: [
+      'Paid {rate}€ a night and left regretting it within 48 hours.',
+      'After years of being a loyal guest, this visit broke the relationship.',
+      'Stayed {nights} nights. Writing this so you can decide better than I did.',
+    ],
+    middles_neg: [
+      'The {negative_theme} was openly unacceptable at this price point.',
+      'I counted four different guests complaining at reception in one 30-minute period.',
+      'When we raised the issue, the front desk response was a shrug and a €20 voucher.',
+      'At these rates the hotel should be competing with {competitor} — instead it feels like it\'s resting on old reviews.',
+    ],
+    endings: [
+      'Book {competitor} instead and save yourself the frustration.',
+      'This hotel has forgotten how luxury-tier service works. Avoid.',
+      'Last visit. Writing this for other travellers to reconsider.',
+    ],
+  },
+};
+
+function pickReviewTier(bookingDelta, verdict, rand) {
+  // Distribution depends on decision verdict; rand ∈ [0,1] picks which tier
+  // each reviewer sits in. Calibrated to produce a believable mix.
+  let probs;
+  if (verdict === 'HIGH_PRIORITY') probs = { love: 0.75, fine: 0.20, bad: 0.04, angry: 0.01 };
+  else if (verdict === 'PROCEED') probs = { love: 0.60, fine: 0.30, bad: 0.08, angry: 0.02 };
+  else if (verdict === 'CAUTION') probs = { love: 0.35, fine: 0.35, bad: 0.22, angry: 0.08 };
+  else if (verdict === 'NOT_RECOMMENDED') probs = { love: 0.20, fine: 0.25, bad: 0.35, angry: 0.20 };
+  else probs = { love: 0.50, fine: 0.30, bad: 0.15, angry: 0.05 };
+
+  let cum = 0;
+  for (const tier of ['love', 'fine', 'bad', 'angry']) {
+    cum += probs[tier];
+    if (rand <= cum) return tier;
+  }
+  return 'fine';
+}
+
+function starsForTier(tier) {
+  return { love: 5, fine: 4, bad: 3, angry: 2 }[tier] || 3;
+}
+
+function ratingFor(tier, platform) {
+  if (platform === 'booking') {
+    return { love: 9.6, fine: 8.4, bad: 6.8, angry: 4.2 }[tier] || 7.5;
+  }
+  return starsForTier(tier);
+}
+
+function futureDateIso(daysAhead, seed) {
+  const d = new Date();
+  d.setDate(d.getDate() + daysAhead);
+  return d.toISOString().slice(0, 10);
+}
+
+function templateFill(str, vars) {
+  return str.replace(/\{(\w+)\}/g, (_, k) => vars[k] ?? k);
+}
+
+function generateReviewForecast({ scenario, preview, property, audience, decision }) {
+  const archMix = normalizeMix(audience.archetype_mix || {});
+  const clusterMix = normalizeMix(audience.cultural_mix || {});
+  const verdict = preview?.verdict || 'PROCEED';
+  const segments = preview?.segments || [];
+
+  // We want 7 reviews total. Distribute across top 5 archetypes by audience
+  // weight, and top 5 clusters by audience weight, in a realistic spread.
+  const topArch = Object.entries(archMix)
+    .filter(([id, w]) => w > 0.02)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5)
+    .map(([id]) => id);
+  const topClusters = Object.entries(clusterMix)
+    .filter(([id, w]) => w > 0.02)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5)
+    .map(([id]) => id);
+
+  if (topArch.length === 0 || topClusters.length === 0) {
+    return { reviews: [], expected_avg_star: null, volume_forecast_pct: null, note: 'audience empty' };
+  }
+
+  const PLATFORMS = ['tripadvisor', 'booking', 'google', 'tripadvisor', 'booking', 'google', 'tripadvisor'];
+  const N = 7;
+  const reviews = [];
+
+  for (let i = 0; i < N; i++) {
+    const archId = topArch[i % topArch.length];
+    const clusterId = topClusters[i % topClusters.length];
+    const platform = PLATFORMS[i];
+
+    const seed = Math.abs(hashString(`${archId}|${clusterId}|${decision.type}|${decision.magnitude_pct ?? decision.discount_pct ?? i}|${i}`));
+    const rand = seeded(seed);
+    const rand2 = seeded(seed + 17);
+    const rand3 = seeded(seed + 31);
+
+    // Map archetype booking delta to likely tier distribution shift
+    const segData = segments.find((s) => s.segment === archId);
+    const archBookingDelta = segData?.delta_pct != null ? segData.delta_pct / 100 : 0;
+    // Shift rand based on booking delta (more negative delta → bias toward bad tiers)
+    const shiftedRand = Math.max(0, Math.min(1, rand - archBookingDelta * 1.5));
+    const tier = pickReviewTier(archBookingDelta, verdict, shiftedRand);
+
+    // Name + origin
+    const namePair = pickSeeded(NAMES_BY_CLUSTER[clusterId] || NAMES_BY_CLUSTER.anglo_uk_ireland, seed);
+    const firstInit = namePair ? namePair[0] : 'Guest';
+    const lastInit = namePair ? namePair[1].charAt(0) + '.' : 'X.';
+    const fullName = `${firstInit} ${lastInit}`;
+    const country = pickSeeded(COUNTRY_BY_CLUSTER[clusterId] || COUNTRY_BY_CLUSTER.anglo_uk_ireland, seed + 5);
+    const tripType = TRIP_TYPE_BY_ARCHETYPE[archId] || 'couple';
+
+    // Build review body
+    const tmpl = REVIEW_TEMPLATES[tier];
+    const title = pickSeeded(tmpl.title, seed + 11);
+    const opener = pickSeeded(tmpl.openers, seed + 21);
+    const pos = pickSeeded(tmpl.middles_pos || tmpl.middles_neg, seed + 31);
+    const neg = pickSeeded(tmpl.middles_neg || tmpl.middles_pos, seed + 41);
+    const ending = pickSeeded(tmpl.endings, seed + 51);
+
+    const positive_theme = pickSeeded(['design', 'breakfast', 'spa', 'pool setting', 'staff warmth', 'location'], seed + 7) || 'service';
+    const negative_theme = pickSeeded(['value-for-money', 'F&B pricing', 'service speed', 'noise level', 'pool crowding', 'resort-fee surprise'], seed + 17) || 'value';
+    const competitor = pickSeeded(RIVAL_REFERENCES[archId] || ['Aman Venice', 'Four Seasons Lisbon'], seed + 27);
+    const rateDisplay = Math.round((property?.adr_curve_monthly?.aug || property?.adr_curve_monthly?.jul || 800)) ;
+
+    const vars = {
+      nights: 3 + Math.floor(rand3 * 6),
+      occasion: tripType === 'couple' ? (archId === 'honeymooner' ? 'honeymoon' : 'anniversary')
+        : tripType === 'family' ? 'summer holiday with kids' : tripType === 'business' ? 'conference' : 'short escape',
+      property: property?.name || 'the property',
+      positive_theme, negative_theme,
+      times_there: archId === 'loyalty_maximizer' ? 'fourth' : archId === 'luxury_seeker' ? 'second' : 'first',
+      rate: rateDisplay,
+      competitor,
+    };
+
+    // Tier body composition
+    const body = tier === 'love'
+      ? `${templateFill(opener, vars)} ${templateFill(pos, vars)} ${templateFill(pickSeeded(tmpl.middles_pos, seed + 33), vars)} ${templateFill(ending, vars)}`
+      : tier === 'fine'
+      ? `${templateFill(opener, vars)} ${templateFill(pos, vars)} ${templateFill(neg, vars)} ${templateFill(ending, vars)}`
+      : tier === 'bad'
+      ? `${templateFill(opener, vars)} ${templateFill(neg, vars)} ${templateFill(pos, vars)} ${templateFill(ending, vars)}`
+      : `${templateFill(opener, vars)} ${templateFill(neg, vars)} ${templateFill(pickSeeded(tmpl.middles_neg, seed + 43), vars)} ${templateFill(ending, vars)}`;
+
+    const stars = starsForTier(tier);
+    const bookingScore = ratingFor(tier, 'booking');
+    const daysAhead = 5 + Math.floor((i / N) * 85) + Math.floor(rand2 * 10);
+
+    reviews.push({
+      platform,
+      rating: platform === 'booking' ? bookingScore : stars,
+      rating_scale: platform === 'booking' ? 10 : 5,
+      stars,
+      date: futureDateIso(daysAhead),
+      days_ahead: daysAhead,
+      reviewer_first_name: firstInit,
+      reviewer_name: fullName,
+      country_code: country?.code || 'XX',
+      country_label: country?.label || '',
+      trip_type: tripType,
+      archetype: archId,
+      cluster: clusterId,
+      title: templateFill(title, vars),
+      body,
+      tier,
+      is_positive: stars >= 4,
+    });
+  }
+
+  // Sort by days_ahead so reviews appear chronologically
+  reviews.sort((a, b) => a.days_ahead - b.days_ahead);
+
+  // Aggregate
+  const avgStar = reviews.reduce((s, r) => s + r.stars, 0) / reviews.length;
+  const loveN = reviews.filter(r => r.tier === 'love').length;
+  const fineN = reviews.filter(r => r.tier === 'fine').length;
+  const badN = reviews.filter(r => r.tier === 'bad').length;
+  const angryN = reviews.filter(r => r.tier === 'angry').length;
+
+  // Volume forecast — negative decisions reduce review volume, positive boost
+  const baselineStar = property?.baseline_star || 4.5;
+  const starDelta = avgStar - baselineStar;
+  const volumeDeltaPct = Math.round(starDelta * 10 * 10) / 10; // +0.1 star ≈ +1% volume
+
+  return {
+    reviews,
+    expected_avg_star: Math.round(avgStar * 100) / 100,
+    baseline_star: Math.round(baselineStar * 100) / 100,
+    star_delta: Math.round(starDelta * 100) / 100,
+    volume_forecast_pct: volumeDeltaPct,
+    tier_breakdown: { love: loveN, fine: fineN, bad: badN, angry: angryN },
+    period_days: 90,
+  };
+}
+
+// ══════════════════════ Competitor Reaction Simulator ══════════════════
+//
+// Game-theory-lite: run the same rate decision under 3 different competitor
+// reactions (don't follow / match / undercut) × 3 of YOUR rate options, and
+// return a 3×3 matrix of net LTVs. Identify dominant strategy + Nash point.
+
+// Comparison sensitivity per archetype — how much a 10% relative-price gap
+// with the comp-set shifts booking. Higher = more defection.
+const ARCHETYPE_COMPARISON_SENSITIVITY = {
+  luxury_seeker:     0.4,   // low — brand over price
+  honeymooner:       0.7,
+  family_vacationer: 1.2,
+  business_traveler: 0.3,
+  digital_nomad:     1.4,
+  budget_optimizer:  2.2,   // high — shops harder
+  loyalty_maximizer: 0.4,
+  event_attendee:    0.9,
+};
+
+function computeRateChangeWithCompetitor(decision, context, competitor_rate_delta_pct = 0) {
+  // Modifies computeRateChange to factor in a competitor rate change. The
+  // relative price gap (your_change − competitor_change) drives extra
+  // defection weighted by each archetype's comparison sensitivity.
+  const baseRate = computeRateChange(decision, context);
+  if (!competitor_rate_delta_pct) return baseRate;
+
+  const { audience, property } = context;
+  const archMix = normalizeMix(audience.archetype_mix || {});
+  const yourMagnitude = Number(decision.magnitude_pct) || 0;
+  const gap = yourMagnitude - competitor_rate_delta_pct; // positive = you more expensive than comp
+  if (gap === 0) return baseRate;
+
+  const baselineRev = baselineAnnualRevenue(property);
+  const timingShare = timingRevenueShare(property, decision.timing || 'all');
+
+  // Extra defection from the gap
+  let extraDefectionPct = 0;
+  for (const [id, w] of Object.entries(archMix)) {
+    const sensitivity = ARCHETYPE_COMPARISON_SENSITIVITY[id] || 1.0;
+    extraDefectionPct += w * sensitivity * (gap / 100) * 0.5;
+  }
+
+  const extraRevenueHitEur = -baselineRev * timingShare * extraDefectionPct;
+  // Reviews also affected: when you're visibly more expensive, value-for-money
+  // reviews drop. Roughly 20% of the extra defection translates into review impact.
+  const extraReviewDelta = -extraDefectionPct * 0.2;
+  const extraLtvEur = baselineRev * 0.35 * extraReviewDelta * 2.4;
+
+  const newNet = baseRate.net_eur + extraRevenueHitEur + extraLtvEur;
+  return {
+    ...baseRate,
+    short_term_eur: baseRate.short_term_eur + Math.round(extraRevenueHitEur),
+    long_term_eur: baseRate.long_term_eur + Math.round(extraLtvEur),
+    net_eur: Math.round(newNet),
+    verdict: verdictFromNetLtv(newNet),
+    competitor_gap_pct: Math.round(gap * 10) / 10,
+    extra_defection_pct: Math.round(extraDefectionPct * 1000) / 10,
+  };
+}
+
+/**
+ * Runs a 3×3 competitor reaction matrix.
+ *
+ * @param {Object} scenario                 full scenario
+ * @param {number[]} yourOptions            3 magnitudes to test (default: [0, current, current*1.5])
+ * @param {number[]} competitorReactions    3 competitor deltas (default: [0, current, current - 10])
+ */
+function runCompetitorMatrix(scenario, { yourOptions = null, competitorReactions = null } = {}) {
+  if (!scenario || !scenario.decision || !scenario.decision.type) {
+    return { error: 'decision.type required' };
+  }
+  if (scenario.decision.type !== 'rate_change') {
+    return { error: 'competitor matrix only applies to rate_change decisions right now' };
+  }
+
+  const current = Number(scenario.decision.magnitude_pct) || 0;
+  const youOpts = yourOptions || [
+    { label: 'Hold steady', magnitude: 0 },
+    { label: `Your plan (+${current}%)`, magnitude: current },
+    { label: `Aggressive (+${Math.max(current + 5, 12)}%)`, magnitude: Math.max(current + 5, 12) },
+  ];
+  const compOpts = competitorReactions || [
+    { label: "Don't follow (they hold)", delta: 0 },
+    { label: 'Match your move', delta: current },
+    { label: 'Undercut by 10%', delta: current - 10 },
+  ];
+
+  const property = scenario.property || {};
+  const audience = scenario.audience || {};
+
+  const matrix = youOpts.map((you) => compOpts.map((comp) => {
+    const r = computeRateChangeWithCompetitor(
+      { ...scenario.decision, magnitude_pct: you.magnitude },
+      { property, audience },
+      comp.delta,
+    );
+    return {
+      you_label: you.label,
+      you_magnitude: you.magnitude,
+      comp_label: comp.label,
+      comp_delta: comp.delta,
+      short_term_eur: r.short_term_eur,
+      long_term_eur: r.long_term_eur,
+      net_eur: r.net_eur,
+      verdict: r.verdict,
+      gap_pct: r.competitor_gap_pct ?? (you.magnitude - comp.delta),
+    };
+  }));
+
+  // Dominant strategy: your row whose worst outcome is best (maximin)
+  const minOfEachRow = matrix.map((row) => Math.min(...row.map((c) => c.net_eur)));
+  const maxOfMins = Math.max(...minOfEachRow);
+  const dominantIdx = minOfEachRow.indexOf(maxOfMins);
+  const dominantStrategy = youOpts[dominantIdx];
+
+  // Nash equilibrium (simple): for each row (your choice), find the comp's best response.
+  // For each col (comp's response), find your best response. Intersection = Nash.
+  // Simplified: we assume comp wants to MINIMIZE your net (adversarial).
+  const compBestResponse = matrix.map((row) => {
+    const minIdx = row.reduce((best, c, i) => (c.net_eur < row[best].net_eur ? i : best), 0);
+    return minIdx;
+  });
+  const yourBestResponse = compOpts.map((_, colIdx) => {
+    const col = matrix.map((row) => row[colIdx]);
+    const maxIdx = col.reduce((best, c, i) => (c.net_eur > col[best].net_eur ? i : best), 0);
+    return maxIdx;
+  });
+  let nash = null;
+  for (let r = 0; r < matrix.length; r++) {
+    const c = compBestResponse[r];
+    if (yourBestResponse[c] === r) { nash = { row: r, col: c, cell: matrix[r][c] }; break; }
+  }
+
+  // Worst case on your plan (current)
+  const worstOnCurrent = Math.min(...matrix[1].map((c) => c.net_eur));
+
+  return {
+    your_options: youOpts,
+    competitor_reactions: compOpts,
+    matrix,
+    dominant_strategy: {
+      row_idx: dominantIdx,
+      label: dominantStrategy.label,
+      magnitude: dominantStrategy.magnitude,
+      min_guaranteed_net_eur: maxOfMins,
+    },
+    nash_equilibrium: nash,
+    current_plan_worst_case_eur: worstOnCurrent,
+  };
+}
+
 module.exports = {
   computeScenarioPreview,
   runSensitivitySweep,
+  runCompetitorMatrix,
   generateInterviewAnswer,
+  generateReviewForecast,
   ALL_ARCHETYPES,
   ALL_CLUSTERS,
   ARCHETYPE_COEFS,
