@@ -112,8 +112,29 @@ function verdictFromNetLtv(netEur) {
 // ══════════════════════ 6 decision type handlers ══════════════════════
 
 function computeRateChange({ magnitude_pct = 0, timing = 'peak', scope = { type: 'all' } }, { property, audience }) {
+  // Softcap extreme magnitudes. Real-world rate decisions rarely exceed ±40%.
+  // Anything beyond is likely a typo or test; we cap to avoid nonsense €M figures.
+  const cappedMagnitude = Math.max(-60, Math.min(60, Number(magnitude_pct) || 0));
+  magnitude_pct = cappedMagnitude;
+
   const archMix = normalizeMix(audience.archetype_mix || {});
   const clusterMix = normalizeMix(audience.cultural_mix || {});
+
+  // Empty audience guard — returns a neutral error-style response rather than
+  // computing garbage. Sums total weight before normalization.
+  const archTotal = Object.values(audience.archetype_mix || {}).reduce((s, v) => s + Number(v || 0), 0);
+  if (archTotal === 0) {
+    return {
+      short_term_eur: 0, long_term_eur: 0, net_eur: 0,
+      nps_delta: 0, star_delta: 0, booking_delta_pct: 0,
+      segments: [],
+      complaints: ['audience is empty — add archetype weights to compute impact'],
+      verdict: 'PROCEED',
+      short_term_label: 'no audience configured',
+      long_term_label: 'no audience configured',
+    };
+  }
+
   const baselineRev = baselineAnnualRevenue(property);
   const timingShare = timingRevenueShare(property, timing);
 
@@ -196,19 +217,40 @@ function computeRateChange({ magnitude_pct = 0, timing = 'peak', scope = { type:
   };
 }
 
+// Parse an inclusion string like "spa credit €120" or "breakfast" and return
+// its EUR value. If no "€" is found, fall back to a generic €80 per inclusion
+// so the user still sees impact from adding/removing items.
+function parseInclusionValueEur(text) {
+  if (!text || typeof text !== 'string') return 80;
+  const m = text.match(/(?:€|eur\s*|\$)\s*(\d[\d.,]*)/i) || text.match(/(\d[\d.,]*)\s*(?:€|eur|euros?)/i);
+  if (m) {
+    const n = Number(String(m[1]).replace(/[^\d.]/g, ''));
+    if (Number.isFinite(n) && n > 0) return n;
+  }
+  return 80;
+}
+
 function computePackageChange({ inclusions_added = [], inclusions_removed = [], price_delta_eur = 0, timing = 'all', scope = { type: 'all' } }, { property, audience }) {
-  // Treat as a value-perception shift equivalent to ~-2% effective rate per €100 added value
-  // (i.e. guests feel 2% of rate cheaper for every €100 of package value).
-  const valueShiftEur = inclusions_added.length * 80 - inclusions_removed.length * 80 - price_delta_eur;
-  // Translate into rate-equivalent
+  // Value shift in EUR: parse "€120" etc. from each inclusion string; fall back
+  // to €80 default per inclusion when no price is given. Removed inclusions
+  // subtract. Price delta adds cost (paying more = value down).
+  const addedValue = inclusions_added.reduce((s, x) => s + parseInclusionValueEur(x), 0);
+  const removedValue = inclusions_removed.reduce((s, x) => s + parseInclusionValueEur(x), 0);
+  const valueShiftEur = addedValue - removedValue - (Number(price_delta_eur) || 0);
+  // Anchor against total stay value (rate × nights), not nightly rate alone,
+  // because packages are priced relative to the full stay economics.
   const avgRate = 800;
-  const equivalentPriceDeltaPct = -(valueShiftEur / avgRate) * 100;
+  const avgNights = 4;
+  const stayValueAnchor = avgRate * avgNights; // €3,200 typical luxury stay
+  const equivalentPriceDeltaPct = -(valueShiftEur / stayValueAnchor) * 100;
   const rate = computeRateChange({ magnitude_pct: equivalentPriceDeltaPct, timing, scope }, { property, audience });
   return {
     ...rate,
     short_term_label: 'Direct margin on package',
     long_term_label: 'LTV via value perception',
     complaints: buildComplaintsForPackage(inclusions_added, inclusions_removed),
+    _package_value_shift_eur: Math.round(valueShiftEur),
+    _equivalent_rate_delta_pct: Math.round(equivalentPriceDeltaPct * 10) / 10,
   };
 }
 
