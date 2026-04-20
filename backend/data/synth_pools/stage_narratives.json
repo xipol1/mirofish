@@ -1,0 +1,252 @@
+{
+  "_version": "1.0",
+  "_generated_at": "2026-04-19",
+  "_source": "Claude-authored per-stage first-person narrative variants. Replaces the single-template lookup in buildNarrative(). Keys: {stage}_{targetStars}.",
+  "_notes": "Narratives are property-aware (Villa Le Blanc / Menorca specifics: Thai Spa, La Sal, rooftop bar, Cala Galdana, Núria/Alejandro/Marco/Lin staff names, breakfast tomatoes/salty bread). Incident text is appended by buildNarrative when present.",
+  "narratives": {
+    "arrival_5": [
+      "We arrived at the property just after 3pm. The check-in was unhurried and warm — three questions, a handwritten welcome card, and we were in the suite before we'd finished the local vermouth. Our bags appeared within minutes.",
+      "The transfer from Mahón landed us at the entrance at quarter past three. Núria greeted us by name, remembered our flight. The lobby view across to the sea stopped us in our tracks for a moment. We didn't mind the brief wait.",
+      "Arrival was seamless. Valet parking, a handwritten note already on the table, two flutes of cava on ice. The lobby scent — something like figs and sea salt — sets the tone immediately.",
+      "We checked in around 3:30 pm. The receptionist remembered our anniversary from the booking and quietly upgraded us to a sea-facing suite. Bags arrived before we'd finished the welcome drink.",
+      "Pulled up to the entrance after a morning flight. Núria knew our names, knew we'd come from a long trip, and moved us through check-in in under five minutes. The suite was ready early. Proper service.",
+      "Arrival was the first signal that this would be different. No queue, no clipboard questions, no paperwork ritual. A warm 'welcome home' and a gentle handoff to the bellman."
+    ],
+    "arrival_4": [
+      "Check-in was fine — efficient if not particularly warm. The room wasn't quite ready at 3pm so they parked us at the terrace bar with two glasses of cava. Twenty minutes later, we were in.",
+      "Arrived around 3:15pm. The welcome was pleasant, the lobby was busy with a coach party checking out. Our bags took a little longer than expected to arrive at the suite.",
+      "Check-in took about 25 minutes with a short queue ahead of us. The receptionist was friendly and offered us a welcome drink while we waited. Room was ready when we got there."
+    ],
+    "arrival_3": [
+      "Arrival was functional rather than warm. The receptionist ran through the details briskly, our room wasn't ready and we were directed to the lobby bar without much apology. Waited 40 minutes.",
+      "Check-in was slower than expected for a property in this bracket. No welcome ritual, no handwritten anything — just a keycard and directions to the suite."
+    ],
+    "arrival_2": [
+      "The check-in experience set a tone we'd hoped to avoid. Our room wasn't ready at the posted time despite an email confirmation. The apology was perfunctory and the compensation was a single glass of wine at the bar.",
+      "Arrived to chaos at the front desk — two parties ahead of us with complaints, one receptionist trying to manage all three. Our suite wasn't ready for nearly 50 minutes."
+    ],
+    "arrival_1": [
+      "Our arrival was poorly handled from the first minute. Room not ready, no explanation, no drink, no apology beyond a shrug. We had to ask three times for someone to store our bags properly."
+    ],
+    "room_first_impression_5": [
+      "Walking into the suite, I could tell the design team cared. Natural stone, linen curtains, a terrace larger than the photos suggested. I took a photo of the view; the camera never captures these things properly.",
+      "The room surprised us — bigger than expected, quieter than expected, and the bath felt like a small ritual in itself. A handwritten note from the GM was waiting on the table.",
+      "First impressions mattered and this one delivered. The door opened onto a view of the Mediterranean that made us pause. The bed was the right firmness (they'd asked), the lighting was warm, the amenity selection felt personal.",
+      "The suite smelled of figs and sea salt. Blackout curtains that actually black out. A freestanding tub on the terrace. An espresso machine with local beans. Details.",
+      "We opened the door and laughed — the terrace alone was larger than our hotel room in London. A welcome basket of local honey, fig soap, and a small bottle of Menorcan gin was waiting.",
+      "Our first few minutes in the room were quiet. We sat on the terrace, watched the sea, didn't talk. That's what we came here for."
+    ],
+    "room_first_impression_4": [
+      "The room was lovely, though slightly smaller than the photos led us to believe. The terrace made up for it. A couple of minor issues — one lamp bulb out, Wi-Fi needing a reset — sorted quickly.",
+      "Very nice suite with a proper sea view. The bath was excellent but the shower pressure was weaker than we'd hoped. Minor thing.",
+      "Our room was attractive and comfortable. The Wi-Fi dropped out while we were unpacking, which we flagged and was fixed within twenty minutes.",
+      "The suite was well designed but the minibar was understocked on our preferred sparkling water. Called housekeeping and they topped it up within an hour."
+    ],
+    "room_first_impression_3": [
+      "The room was fine. Smaller than the website suggested, a view only partially of the sea, linen that had seen better days. For the price point, unremarkable.",
+      "Our suite was comfortable enough but lacked the design flourishes we'd expected. The bath was standard, the amenities generic."
+    ],
+    "room_first_impression_2": [
+      "The suite didn't match the marketing. The terrace was partly obstructed by a maintenance enclosure, the bath had a visible chip, and the bed linen felt tired.",
+      "Our room was adequate but clearly not recently refreshed. For a 5-star property, we'd expected higher standards of finish."
+    ],
+    "room_first_impression_1": [
+      "The suite was a disappointment on multiple fronts — worn linens, a stained chair, a bath drain that moved slowly. At this price, genuinely difficult to forgive."
+    ],
+    "evening_1_5": [
+      "For our first evening we stayed on property. Aperitifs at the rooftop bar while the sun dropped into the Mediterranean, then a late dinner downstairs. The bartender Alejandro made us something custom based on what we told him we liked.",
+      "We started the stay with a cocktail on the rooftop. Cicadas, a rosé sunset, a breeze that had been waiting all afternoon. Dinner afterward exceeded our first-night expectations.",
+      "First evening: a slow aperitivo at Cru. The tuna carpaccio was the best we've had outside Tokyo. Wine list was genuinely curated, not just priced.",
+      "We wandered up to the rooftop around seven. Two hours passed without our noticing. A chef came out briefly to mention a tasting tomorrow — we booked on the spot.",
+      "Kept it simple on the first night. Glass of local cava, plate of charcuterie on the terrace, early bed. Exactly the decompression we'd wanted."
+    ],
+    "evening_1_4": [
+      "First-night dinner was good, not exceptional. The menu felt somewhat limited and the service had some lag at the start. The food itself was quite good once it arrived.",
+      "We had drinks at the rooftop and dinner at the main restaurant. Lovely views, decent food. A nearby table was loud enough that we asked to be moved.",
+      "Our first evening was pleasant. The sommelier made a good recommendation for pairing. Dinner came a little slowly — a bit of a gap between courses — but overall enjoyable."
+    ],
+    "evening_1_3": [
+      "The first evening was quieter than we'd hoped. Restaurant reservation took 25 minutes to seat despite booking, service felt rushed once we were in. Food was good but nothing memorable.",
+      "We had dinner at the main restaurant. The menu seemed narrow for a 5-star property and the wine markups were steep."
+    ],
+    "evening_1_2": [
+      "Dinner service was visibly understaffed — our table waited nearly 40 minutes between the first and second courses. The sommelier had to be chased.",
+      "Our first-night dinner was a letdown — slow, forgettable, overpriced. The only highlight was the setting."
+    ],
+    "evening_1_1": [
+      "Dinner was a farce. They lost our reservation, tried to squeeze us into the corner of the bar, and the food when it eventually arrived was cold."
+    ],
+    "morning_routine_5": [
+      "Breakfast was the highlight of the day so far. Tomatoes on salty bread, eggs cooked to order, locally-roasted coffee, pastries still warm. We stayed over an hour on the terrace.",
+      "We ate on the terrace by nine. The same barista remembered our coffee preference from yesterday — cortado for me, flat white with oat for my wife. Breakfast is clearly the kitchen's favorite meal.",
+      "Breakfast spread was exceptional. Local cheeses, jamón Menorquín cut from the bone at the counter, figs that tasted like sugar. The coffee alone would make me come back.",
+      "Slow, unhurried breakfast on the terrace. Morning light through the linen curtains made the room glow gold an hour earlier. Nobody rushed us.",
+      "We stumbled down at 9:15. Fresh orange juice, three kinds of bread from a local bakery, eggs any style. The fig jam alone justified breakfast. Lingered for ninety minutes."
+    ],
+    "morning_routine_4": [
+      "Breakfast was solid. Good coffee, fresh pastries, a decent spread. The service was slightly rushed — had to ask twice for a coffee refill — but the food quality made up for it.",
+      "Breakfast buffet was very good, especially the local cheeses and smoked fish. Eggs cooked-to-order took a little long, and the coffee wasn't refilled as promptly as we'd have liked.",
+      "The breakfast was mostly very good with one or two quibbles. The tomatoes were stellar. The bread choices felt limited for a property of this tier."
+    ],
+    "morning_routine_3": [
+      "Breakfast was OK. The buffet had all the basics but nothing stood out. Coffee was fine, pastries fine, fruit fine. Nothing memorable.",
+      "We ate quickly at breakfast — the pace of the service felt off and the terrace was over-capacity at 10am."
+    ],
+    "morning_routine_2": [
+      "Breakfast was visibly understaffed. Coffee took twelve minutes, the buffet had run out of the pastry options by 9:30, and nobody seemed to be refreshing anything.",
+      "The morning meal was a disappointment — stale pastries, weak coffee, dirty tables visibly ignored for the full 90 minutes we sat there."
+    ],
+    "morning_routine_1": [
+      "Breakfast was the low point of the day. The buffet hadn't been refreshed, the coffee was tepid, and we waited 15 minutes for someone to take our eggs order."
+    ],
+    "daytime_activity_5": [
+      "Spent the morning by the adults-only pool. Private cabana, chilled rosé, cold towels every 20 minutes. Marco topped us up without us asking twice. Exactly the reset we came here for.",
+      "Pool day. The cabana was spaced generously from the next — you feel alone even when the pool is busy. Lin from the spa brought us a signature infusion poolside.",
+      "A slow day by the pool, which is how we always intended to spend at least two of the five. Read, swam, napped, ate a lemon granita from the attendant who saw us glance at the menu.",
+      "The concierge arranged a last-minute half-day sailing charter to Cala Galdana. The skipper was local, brought us to a quiet cove, handled lunch, made it feel like ours.",
+      "Beach morning. Walked the coastal path, came back for a slow lunch at the poolside. Sun, salt, silence."
+    ],
+    "daytime_activity_4": [
+      "The pool area was lovely but reached capacity around 11am. We retreated to the cabana we'd reserved. Service was good but not flawless — one towel refresh took 45 minutes.",
+      "Spent most of the day by the pool. Very nice setting, quieter than we'd feared. A minor friction with the pool bar which was slow to serve — otherwise a good day.",
+      "The sailing trip was a highlight — a bit over-priced but the location was stunning. Back by four, quick dip, off to dinner."
+    ],
+    "daytime_activity_3": [
+      "The pool was more crowded than we'd expected for an 'adults-only' property. A group of six arrived and took over four loungers, with no intervention from staff.",
+      "Tried to book the sailing excursion but the concierge was backed up and couldn't confirm until mid-afternoon. We ended up at the pool, which was fine."
+    ],
+    "daytime_activity_2": [
+      "The pool was over-capacity by 11am. Loungers were saved with towels at 7:30am, which nobody policed. Service was visibly overstretched.",
+      "Tried to book a day trip but the concierge app was down and the desk was backed up. Lost most of the morning to logistics."
+    ],
+    "daytime_activity_1": [
+      "The pool was a disappointment — overcrowded, noisy, with children in what was supposed to be an adults-only zone. Staff were not enforcing the rules."
+    ],
+    "lunch_5": [
+      "Lunch at the poolside restaurant was excellent — grilled fish, chilled white wine, sea view. The open-kitchen concept is charming.",
+      "Light lunch: grilled squid over black rice at SAmardor, a chilled albariño. The chef came out for a brief chat about provenance. That kind of touch is rare.",
+      "We ate a slow paella by the pool with a chilled rosé. Two hours, two courses, sun on the water. Perfect.",
+      "Lunch was a quiet, deliberate affair. The salad came with tomatoes that tasted of the sun, the fish was grilled simply and well. We lingered."
+    ],
+    "lunch_4": [
+      "Lunch was good. The pool restaurant was less refined than the main one but the food was pleasant. Service was the weak link — a bit slow, a bit distracted.",
+      "Poolside lunch was fine. Reasonable food, slightly steep prices, pleasant staff. Would eat there again."
+    ],
+    "lunch_3": [
+      "Lunch was adequate. Nothing stood out. Service was slow enough that we ended up skipping coffee to make our spa appointment."
+    ],
+    "lunch_2": [
+      "Poolside lunch was poor — overdone fish, warm white wine, 30-minute wait for dessert.",
+      "We ate at the pool bar — a simple sandwich took 35 minutes."
+    ],
+    "lunch_1": [
+      "Lunch was a disaster. Wrong order twice, cold when it finally arrived. We paid and left."
+    ],
+    "afternoon_activity_5": [
+      "Thai Spa hydrothermal circuit, then a signature treatment. Lin was technically superb and intuitive about pressure. Left feeling genuinely reset.",
+      "The spa session was the high point of the stay for me. Steam, sauna, cold plunge, then 90 minutes of expert bodywork. Post-treatment, they left a lavender infusion in the relaxation room.",
+      "Couples massage at the spa — the room smelled of eucalyptus, the music was neither intrusive nor clichéd, and the therapists coordinated their rhythms. Rare.",
+      "The hydrothermal circuit is the best I've used on any Mediterranean island. Quiet, uncrowded, properly heated. I stayed longer than planned."
+    ],
+    "afternoon_activity_4": [
+      "The spa was excellent, though the booking app glitched and we nearly lost our preferred slot. Staff sorted it quickly.",
+      "Spa treatment was very good. The facility is first-rate. A minor issue with the changing room hair dryers — older models — didn't spoil the visit."
+    ],
+    "afternoon_activity_3": [
+      "The spa was fine. The therapist was technically OK but lacked the intuition we'd expected at this price. The facility is strong, the staff inconsistent."
+    ],
+    "afternoon_activity_2": [
+      "Our spa booking was mishandled — the appointment we'd held for weeks was given to another guest. They offered a later slot but it clashed with dinner.",
+      "The spa treatment we booked was downgraded at the last minute without explanation. We received a partial credit but the afternoon was essentially lost."
+    ],
+    "afternoon_activity_1": [
+      "The spa cancelled our double booking at the last minute. The replacement treatment was perfunctory and the credit offered was token."
+    ],
+    "dinner_5": [
+      "Dinner at La Sal was exceptional — seven courses, each with a story, wine pairing that educated without lecturing. The chef came out to explain the provenance of the langoustines.",
+      "The tasting menu was as good as any Michelin starred meal we've had this year. The sommelier's wine pairing included a biodynamic local rosé we'd never have ordered on our own.",
+      "A long, unhurried dinner on the terrace. The langoustine course alone would have justified the meal. Candlelight, sea breeze, attentive but invisible service.",
+      "Dinner at Cru tonight — the tartare was exceptional, the main a simply grilled turbot that didn't need anything more. Alejandro made us a negroni at the bar afterward.",
+      "Seven courses and no dud. The pacing was perfect, the pairings inspired, the service was choreographed without feeling rehearsed."
+    ],
+    "dinner_4": [
+      "Dinner was very good but not exceptional. The menu felt more limited than we'd expected at this tier, and the pace between courses was slightly off.",
+      "A good dinner. The wine pairing was thoughtful. A slightly over-seasoned main kept this from being a highlight, but overall pleasant.",
+      "The tasting menu was pleasant. Courses three and four were memorable, the rest merely competent. Service was warm."
+    ],
+    "dinner_3": [
+      "Dinner was fine. The menu was more limited than we'd hoped and two of the courses overlapped in flavor profile. Service was perfunctory.",
+      "The restaurant felt tired tonight. Kitchen was slow, sommelier was harried, the food landed closer to good than great."
+    ],
+    "dinner_2": [
+      "Dinner was poor. The main course was cold, the sommelier was abrupt when we asked for a substitution, and the bill arrived with an error.",
+      "A disappointing dinner at a supposedly signature restaurant. Menu was too limited, service was rushed, flavors were flat."
+    ],
+    "dinner_1": [
+      "Dinner was the worst meal of the trip. Wrong wine, over-cooked fish, a soup that had clearly been microwaved. Walked out before dessert."
+    ],
+    "evening_leisure_5": [
+      "Limoncello on the terrace afterward, stars out, silence. I could feel the day ending properly.",
+      "We finished the evening at the rooftop — a split of amaro Montenegro and the kind of quiet that money increasingly struggles to buy.",
+      "Night swim in the adults-only pool, lit softly, nobody else around. We stayed until the bar closed.",
+      "Post-dinner we walked the coastal path for fifteen minutes, back to the terrace for a digestif. The sea sounded closer at night."
+    ],
+    "evening_leisure_4": [
+      "A quiet end to the evening — the rooftop bar was closing earlier than posted, which cut our plans short. Digestif in the suite instead.",
+      "Ended the night at the lobby bar with a glass of port. Pleasant but the volume of background music was higher than the earlier evenings."
+    ],
+    "evening_leisure_3": [
+      "A quiet, forgettable end to the day. The rooftop closed at 11pm despite the 00:30 posted hours and the lobby bar was nearly empty.",
+      "The evening wound down without incident or memory. We went up earlier than planned."
+    ],
+    "evening_leisure_2": [
+      "The bar closed unexpectedly early. We ended up with a minibar drink in the suite, wondering if we'd misjudged the hotel.",
+      "Evening entertainment was minimal and the rooftop was closed for a private event we hadn't been warned about."
+    ],
+    "evening_leisure_1": [
+      "The evening ended flatly. Nothing was open past 10:30 despite what we'd been told."
+    ],
+    "last_morning_5": [
+      "Last breakfast was as perfect as the first. Consistency matters at this level. The GM stopped by to thank us and asked about our return.",
+      "Final breakfast on the terrace. They'd prepared a picnic box for the airport with our favorite pastries. Thoughtful to the end.",
+      "A lingering last breakfast. The team had clearly noted we were departing — a handwritten note appeared with the bill.",
+      "We took a slower pace on the last morning. The breakfast was identical to day one — same quality, same warmth, same staff remembering names."
+    ],
+    "last_morning_4": [
+      "Last breakfast was fine. The team was warm but clearly stretched — checkout queue visible from the terrace.",
+      "Nice last breakfast. A small mix-up on the bill but sorted politely."
+    ],
+    "last_morning_3": [
+      "Last breakfast was a repeat of the same. We were already mentally leaving.",
+      "The final breakfast felt perfunctory — the novelty had faded and the service didn't compensate."
+    ],
+    "last_morning_2": [
+      "Final breakfast was tired — buffet not refreshed, tables not cleared. Nobody came to offer coffee.",
+      "We skipped most of breakfast on the last day because the pacing and quality had drifted noticeably by day five."
+    ],
+    "last_morning_1": [
+      "Last breakfast was as poor as the rest of the F&B had been. We left early to the airport."
+    ],
+    "checkout_5": [
+      "Checkout was effortless. The bill matched the quote, the bellman walked us to the car with our luggage and a bottle of local olive oil. A handwritten thank-you note was slipped into our suitcase.",
+      "Frictionless checkout. Javi brought our bags down, held the transfer car, handed over a small gift from the concierge. They know how to end a stay.",
+      "Checkout in under three minutes. Exact bill, warm handshake, small farewell gift, and a smile that felt genuine.",
+      "A graceful goodbye. The GM made a point to see us off, thanked us for choosing them, asked about our return dates."
+    ],
+    "checkout_4": [
+      "Checkout was mostly smooth. A small queue at the desk — maybe ten minutes — but the team was warm and the final total matched expectations.",
+      "Checkout was fine. A minor discrepancy on the minibar was sorted politely when flagged."
+    ],
+    "checkout_3": [
+      "Checkout was slower than it should have been. One receptionist, three parties, a visible queue. The resort fee on the bill we queried but accepted.",
+      "A lukewarm goodbye. Transactional, efficient, not warm. The bill was right, the handoff was perfunctory."
+    ],
+    "checkout_2": [
+      "Checkout was poor. A €45 resort fee per night appeared on the bill that we hadn't seen at booking. The receptionist shrugged and said it was standard.",
+      "The bill had three line items we queried — two were corrected, one was not. We left frustrated."
+    ],
+    "checkout_1": [
+      "Checkout was the final insult — surprise charges, a defensive receptionist, no apology for the cascade of failures over five nights."
+    ]
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "property": {
+    "name": "Gran Meliá Palacio de los Duques",
+    "brand": "Gran Meliá",
+    "slug": "gran-melia-palacio-de-los-duques",
+    "tier": "luxury",
+    "data_json": {
+      "identity": { "tier": "luxury", "stars": 5, "sub_brand": "Gran Meliá", "adults_only": false, "urban": true },
+      "location": "Cuesta de Santo Domingo 5-7, Madrid, Spain",
+      "description": "Urban 5★ flagship in central Madrid, adjacent to the Royal Palace and Plaza de España. Housed in a restored 19th-century palace. 180 rooms, DOS CIELOS Madrid restaurant (Michelin-recognized), rooftop terrace with city view, Thai Spa, gym, co-working lounge. Strong leisure + corporate + MICE mix.",
+      "amenities": ["rooftop terrace", "DOS CIELOS restaurant", "Thai Spa", "heated indoor pool", "gym", "co-working lounge", "private event halls", "valet parking"],
+      "archetype_mix_override": {
+        "luxury_seeker": 2.4,
+        "business_traveler": 2.2,
+        "loyalty_maximizer": 1.6,
+        "honeymooner": 1.4,
+        "event_attendee": 1.0,
+        "family_vacationer": 0.8,
+        "digital_nomad": 0.4,
+        "budget_optimizer": 0.2
+      },
+      "origin_mix_preset": "madrid_urban_gran_melia",
+      "returning_guests_pct": 24
+    }
+  },
+  "audience": "mix of luxury leisure couples visiting Madrid, Meliá Rewards loyalty travelers, senior executives on business travel, and MICE event attendees; strong international origin mix (Latin American, US, Spain, UK, France)",
+  "agent_count": 50,
+  "stay_length_nights": 3
+}

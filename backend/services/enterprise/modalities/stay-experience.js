@@ -16,12 +16,18 @@ const bookingContextSvc = require('../booking-context');
 const externalContextSvc = require('../external-context');
 const starSampler = require('../star-sampler');
 const personaEnricher = require('../persona-enricher');
+const { generateEpisodicMemories } = require('../episodic-memory');
+const { generatePreArrivalImpulse } = require('../pre-arrival-impulse');
+const { resolveTension } = require('../tension-resolution');
+
+const INSIGHTS_V2_ENABLED = process.env.ENABLE_INSIGHTS_V2 === 'true';
 
 const REQUIRED = ['property', 'audience'];
 const OPTIONAL = [
   'agent_count', 'stay_length_nights', 'calibration',
   'season', 'weather_array', 'local_events', 'occupancy_pct',
   'property_country', 'origin_mix_override', 'market_pack_ids',
+  'operational_context',
 ];
 
 function validateInputs(raw) {
@@ -82,6 +88,33 @@ async function runForAgent({ persona, agentCtx, globalCtx, onStage }) {
     bookingContext: agentCtx.booking_context,
   });
 
+  // Entregable 3 + PASO 0: episodic memories and pre-arrival impulse (opt-in
+  // via ENABLE_INSIGHTS_V2). Both fields hang off the persona so every
+  // downstream prompt can read them without new plumbing. Fail-open: any
+  // error leaves the persona untouched and the baseline pipeline continues.
+  if (INSIGHTS_V2_ENABLED) {
+    try {
+      enrichedPersona.episodic_memories = await generateEpisodicMemories({
+        persona: enrichedPersona,
+        cultural_context: agentCtx.cultural_context,
+        property: globalCtx.property,
+      });
+    } catch (err) {
+      console.error('[stay-experience] episodic memory failed:', err.message?.substring(0, 140));
+    }
+    try {
+      enrichedPersona.pre_arrival = await generatePreArrivalImpulse({
+        persona: enrichedPersona,
+        cultural_context: agentCtx.cultural_context,
+        property: globalCtx.property,
+        booking_context: agentCtx.booking_context,
+        episodic_memory: enrichedPersona.episodic_memories,
+      });
+    } catch (err) {
+      console.error('[stay-experience] pre-arrival impulse failed:', err.message?.substring(0, 140));
+    }
+  }
+
   const stay = await runStay({
     persona: enrichedPersona,
     property: globalCtx.property,
@@ -93,8 +126,25 @@ async function runForAgent({ persona, agentCtx, globalCtx, onStage }) {
     cultural_context: agentCtx.cultural_context,
     booking_context: agentCtx.booking_context,
     external_context: agentCtx.external_context,
+    operational_context: globalCtx.operational_context || null,
     onStage,
   });
+
+  // PASO 4a: tension resolution between stay end and review generation.
+  // Forces a forced-commitment choice on complaint channel so the review
+  // below cannot drift into "spoke to manager" when the channel is silent.
+  if (INSIGHTS_V2_ENABLED) {
+    try {
+      stay.tension_resolution = await resolveTension({
+        stay,
+        persona: enrichedPersona,
+        cultural_context: agentCtx.cultural_context,
+        property: globalCtx.property,
+      });
+    } catch (err) {
+      console.error('[stay-experience] tension resolution failed:', err.message?.substring(0, 140));
+    }
+  }
 
   const predictedReview = await predictReview({
     stay,

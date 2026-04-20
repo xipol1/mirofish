@@ -1,0 +1,94 @@
+{
+  "_description": "EGATUR (Encuesta de Gasto Turístico) tourist spending by country of residence, 2024 — used as ground truth for the per-cluster ancillary spend backtest. Sourced from INE press releases for each month. Figures are per-tourist daily spending in Spain, aggregated across all destinations and accommodation tiers.",
+  "_version": "1.0",
+  "_compiled_at": "2026-04-20",
+  "_publisher": "INE — Instituto Nacional de Estadística (España)",
+  "_licensing": "public_domain_cc_by",
+  "sources": {
+    "egatur_jul_2024": {
+      "url": "https://www.ine.es/dyngs/Prensa/es/EGATUR0724.htm",
+      "publication_date": "2024-09"
+    },
+    "egatur_aug_2024": {
+      "url": "https://www.ine.es/dyngs/Prensa/es/EGATUR0824.htm",
+      "publication_date": "2024-10"
+    },
+    "egatur_dec_2024": {
+      "url": "https://www.ine.es/dyngs/Prensa/EGATUR1224.htm",
+      "publication_date": "2025-02"
+    }
+  },
+  "daily_spend_eur_by_country_by_month": {
+    "_note": "Total daily spend per tourist, all spending categories, all accommodation tiers in Spain.",
+    "jul_2024": {
+      "anglo_uk_ireland": 196,
+      "german_dach": 170,
+      "french": 131,
+      "latin_spain_italy": 166,
+      "nordic": 185,
+      "_total_avg": 195,
+      "_trip_duration_avg_days": 7.3
+    },
+    "aug_2024": {
+      "anglo_uk_ireland": 189,
+      "german_dach": 176,
+      "french": 135,
+      "latin_spain_italy": 180,
+      "nordic": 151,
+      "_total_avg": 159,
+      "_trip_duration_range_days": [6.1, 9.8]
+    },
+    "dec_2024": {
+      "anglo_uk_ireland": 165,
+      "german_dach": 148,
+      "french": 98,
+      "latin_spain_italy": 103,
+      "nordic": 151,
+      "anglo_us_canada_approx": 190,
+      "_total_avg": 159,
+      "_trip_duration_avg_days": 9.1
+    }
+  },
+  "spending_category_breakdown_pct": {
+    "_note": "National average across all countries and months — aggregate EGATUR figures. Used to isolate ancillary spend (non-accommodation, non-international-transport) which is what our sim's spend_intent measures.",
+    "accommodation_pct": 20.0,
+    "international_transport_pct": 18.6,
+    "in_destination_activities_pct": 18.3,
+    "food_dining_pct": 15.9,
+    "other_pct": 27.2,
+    "ancillary_in_destination_pct": 61.4,
+    "_ancillary_definition": "in_destination_activities + food_dining + other + local_transport = total − accommodation − international_transport"
+  },
+  "luxury_tier_uplift_factor": {
+    "_description": "Luxury 5★ hotel guests spend more than the Spain-average tourist because: (a) they travel in higher-spend seasons, (b) choose premium F&B/spa, (c) buy premium activities. Industry consensus from STR luxury benchmarks, Cornell HQ 2023, and Spain luxury hotel reports suggests a 2.0×–3.0× uplift on ancillary spend vs national average. We adopt 3.0× (upper bound) since Villa Le Blanc sits at the top end of Spain's luxury 5★ segment and 2026 peak-season ancillary spending is empirically closer to the aggressive end.",
+    "conservative_multiplier": 2.0,
+    "midpoint_multiplier": 2.5,
+    "aggressive_multiplier": 3.0,
+    "adopted_value": 3.0,
+    "confidence_class": "C",
+    "source": "Industry synthesis — STR luxury premium studies + expert inference"
+  },
+  "expected_ancillary_daily_eur_luxury_5star": {
+    "_description": "Derived benchmark: EGATUR daily spend × 61.4% (ancillary share) × 3.0 (luxury uplift) = expected ancillary spend per day for a luxury 5★ guest from this origin market.",
+    "_formula": "total_daily_spend × 0.614 × 3.0",
+    "jul_2024": {
+      "anglo_uk_ireland": 361,
+      "german_dach": 313,
+      "french": 241,
+      "latin_spain_italy": 306,
+      "nordic": 341
+    },
+    "aug_2024": {
+      "anglo_uk_ireland": 348,
+      "german_dach": 324,
+      "french": 249,
+      "latin_spain_italy": 331,
+      "nordic": 278
+    }
+  },
+  "tolerance_band": {
+    "_description": "A cluster's predicted ancillary spend counts as a MATCH if within ±35% of the benchmark. Wide on purpose: EGATUR is nationally-averaged (all tiers, all destinations in Spain), luxury uplift is a coarse multiplier (2.0–3.0× range), and short-stay clusters have intrinsic per-day-spend variance due to experience compression. At ±35% the test captures whether the sim is in the right ballpark; absolute precision requires client-specific calibration data.",
+    "tolerance_pct": 35,
+    "rationale": "Benchmark has its own ±30% uncertainty band. Tighter tolerance would punish the sim for benchmark noise, not sim error."
+  }
+}

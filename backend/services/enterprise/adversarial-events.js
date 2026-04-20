@@ -18,12 +18,33 @@ const path = require('path');
 const fs = require('fs');
 
 const EVENTS_PATH = path.join(__dirname, '..', '..', 'data', 'industries', 'hospitality', 'adversarial_events.json');
+const REAL_RATES_PATH = path.join(__dirname, '..', '..', 'data', 'sources', 'ops_incident_rates.json');
 
 let _cfg = null;
+let _realRates = null;
 function getConfig() {
   if (_cfg) return _cfg;
   _cfg = JSON.parse(fs.readFileSync(EVENTS_PATH, 'utf-8'));
   return _cfg;
+}
+function getRealRates() {
+  if (_realRates !== null) return _realRates;
+  try {
+    _realRates = fs.existsSync(REAL_RATES_PATH) ? JSON.parse(fs.readFileSync(REAL_RATES_PATH, 'utf-8')) : null;
+  } catch (e) { _realRates = null; }
+  return _realRates;
+}
+
+// Research-backed per-stay frequency (Cornell HQ, STR, AHLA). When the
+// real_rates file is present, event weighting biases toward empirical rates
+// instead of equal-probability sampling.
+function realFrequencyMultiplier(eventId, tier) {
+  const rates = getRealRates();
+  if (!rates) return 1.0;
+  const tierRates = rates.real_frequency_pct_per_stay_by_tier?.[tier];
+  if (!tierRates || typeof tierRates[eventId] !== 'number') return 1.0;
+  // Scale: baseline at 5% rate = 1.0 multiplier. Higher rates boost the weight.
+  return Math.max(0.2, Math.min(3.0, tierRates[eventId] / 0.05));
 }
 
 function weightedPick(items, weightFn) {
@@ -79,13 +100,17 @@ function planInjections({ archetypeId, stages, forceProbabilityAtLeastOne = null
   );
   if (candidateEvents.length === 0) return { events: [] };
 
-  // Bias toward events this archetype is most sensitive to (higher multiplier = more realistic)
+  // Bias toward events this archetype is most sensitive to AND events that
+  // actually happen more often per research (Cornell HQ / STR) at this tier.
   const picked = [];
   const usedIds = new Set();
   for (let i = 0; i < eventCount; i++) {
     const pool = candidateEvents.filter(e => !usedIds.has(e.id));
     if (pool.length === 0) break;
-    const ev = weightedPick(pool, e => (e.archetype_sensitivity_multiplier?.[archetypeId] || 1.0));
+    const ev = weightedPick(pool, e =>
+      (e.archetype_sensitivity_multiplier?.[archetypeId] || 1.0)
+      * realFrequencyMultiplier(e.id, propertyTier || 'luxury')
+    );
     const validStages = ev.stages_where_relevant.filter(s => stageSet.has(s));
     const stage = validStages[Math.floor(Math.random() * validStages.length)];
     const resolution_quality = pickResolution(propertyTier);

@@ -1,0 +1,286 @@
+{
+  "_version": "1.0",
+  "_generated_at": "2026-04-19",
+  "_source": "Claude-authored title variants by cultural cluster × stars. Replaces the single-title lookup in composeReviewTitle().",
+  "titles": {
+    "anglo_uk_ireland_5": [
+      "An absolute gem",
+      "Rather lovely, from start to finish",
+      "A proper grown-up hotel",
+      "Everything one hopes for at this tier",
+      "Would return in a heartbeat",
+      "Quietly exceptional",
+      "Worth every penny",
+      "A small masterpiece in Menorca",
+      "Serene, elegant, properly run"
+    ],
+    "anglo_uk_ireland_4": [
+      "Very good stay with minor quibbles",
+      "Lovely, with one or two grumbles",
+      "Nearly perfect",
+      "A solid five with a nick or two",
+      "Rather good, not quite perfect",
+      "Four comfortable nights"
+    ],
+    "anglo_uk_ireland_3": [
+      "A little disappointing",
+      "A mixed bag",
+      "Bit hit and miss",
+      "Fine, not memorable",
+      "Something of a letdown"
+    ],
+    "anglo_uk_ireland_2": [
+      "Rather disappointing",
+      "Didn't quite live up",
+      "Below what one would hope",
+      "For the price, a bit of a shame"
+    ],
+    "anglo_uk_ireland_1": [
+      "Would not return",
+      "A rough few nights",
+      "A cascade of small failures",
+      "Unacceptable for the tier"
+    ],
+    "anglo_us_canada_5": [
+      "BEST Hotel We've EVER Stayed At!!!",
+      "ABSOLUTELY INCREDIBLE",
+      "10/10 — we'll be back",
+      "A MUST for the Mediterranean",
+      "Stunning from start to finish",
+      "Worth every dollar",
+      "Beyond expectation",
+      "Pure magic ✨"
+    ],
+    "anglo_us_canada_4": [
+      "Great stay, would recommend",
+      "Really strong property",
+      "Almost perfect",
+      "Solid stay, small hiccups",
+      "Very close to five stars"
+    ],
+    "anglo_us_canada_3": [
+      "OK but not great",
+      "Mixed feelings",
+      "Some hits, some misses",
+      "Not quite worth the hype"
+    ],
+    "anglo_us_canada_2": [
+      "Not worth the money",
+      "Way overpriced for what you get",
+      "Expected SO much more"
+    ],
+    "anglo_us_canada_1": [
+      "Avoid!",
+      "Hard pass",
+      "Do NOT book this",
+      "Absolute disaster"
+    ],
+    "german_dach_5": [
+      "Perfekter Aufenthalt — sehr empfehlenswert",
+      "Absolut erstklassiges Haus",
+      "Rundum gelungener Aufenthalt",
+      "Sehr hohes Niveau, konsistent",
+      "Ein Hotel, das hält was es verspricht",
+      "Erholsam, elegant, kompetent",
+      "Herausragende Servicequalität"
+    ],
+    "german_dach_4": [
+      "Schöner Aufenthalt mit kleinen Abstrichen",
+      "Sehr gut mit kleinen Schwächen",
+      "Fast perfekt",
+      "Insgesamt sehr zufrieden"
+    ],
+    "german_dach_3": [
+      "Durchschnittlich für den Preis",
+      "Durchwachsener Aufenthalt",
+      "Nicht auf dem erwarteten Niveau"
+    ],
+    "german_dach_2": [
+      "Enttäuschend für 5-Sterne-Anspruch",
+      "Zum Preis nicht gerechtfertigt",
+      "Erwartungen klar verfehlt"
+    ],
+    "german_dach_1": [
+      "Nie wieder!",
+      "Inakzeptabel für diese Kategorie",
+      "Totalausfall"
+    ],
+    "french_5": [
+      "Un séjour d'exception",
+      "Une adresse d'exception",
+      "Parfait, de l'arrivée au départ",
+      "Élégance et précision",
+      "Un très beau séjour",
+      "À la hauteur de la promesse",
+      "Grand hôtel, grand service"
+    ],
+    "french_4": [
+      "Un séjour très agréable",
+      "Très bien, avec quelques bémols",
+      "Séjour réussi dans l'ensemble",
+      "Presque parfait"
+    ],
+    "french_3": [
+      "Correct sans plus",
+      "Honnête, sans éclat",
+      "Séjour en demi-teinte"
+    ],
+    "french_2": [
+      "Déception à ce prix",
+      "En-dessous des attentes",
+      "Pas à la hauteur du positionnement"
+    ],
+    "french_1": [
+      "À éviter",
+      "Totale déception",
+      "Un désastre pour le prix"
+    ],
+    "latin_spain_italy_5": [
+      "Una experiencia inolvidable",
+      "Simplemente maravilloso",
+      "Un hotel de primer nivel",
+      "Diez sobre diez",
+      "Volveremos sin duda",
+      "Lujo auténtico, no impostado",
+      "Cinco noches redondas"
+    ],
+    "latin_spain_italy_4": [
+      "Muy buen hotel",
+      "Muy recomendable con pequeños peros",
+      "Buena estancia en general"
+    ],
+    "latin_spain_italy_3": [
+      "Ni fu ni fa",
+      "Regular para la categoría",
+      "Con luces y sombras"
+    ],
+    "latin_spain_italy_2": [
+      "Decepcionante",
+      "No a la altura del precio",
+      "Esperábamos más"
+    ],
+    "latin_spain_italy_1": [
+      "No recomendado",
+      "Mala experiencia",
+      "No volveríamos"
+    ],
+    "latin_american_5": [
+      "Simplemente maravilloso",
+      "Una estadía inolvidable",
+      "Excelente hotel, recomendado 100%",
+      "Lujo con calidez",
+      "Volveríamos sin dudar"
+    ],
+    "latin_american_4": [
+      "Muy recomendable",
+      "Buena experiencia en general",
+      "Muy buen hotel con pequeños detalles"
+    ],
+    "latin_american_3": [
+      "Regular",
+      "Esperábamos más",
+      "Estancia promedio"
+    ],
+    "latin_american_2": [
+      "Decepcionante",
+      "No lo recomiendo para el precio"
+    ],
+    "latin_american_1": [
+      "No lo recomiendo",
+      "Muy mala experiencia"
+    ],
+    "nordic_5": [
+      "Exceptional stay — highly recommend",
+      "Quietly excellent",
+      "Minimalist, precise, warm",
+      "Sustainability done right",
+      "An understated masterpiece"
+    ],
+    "nordic_4": [
+      "Great stay overall",
+      "Very good with minor issues",
+      "Almost perfect"
+    ],
+    "nordic_3": [
+      "Mixed experience",
+      "Uneven stay",
+      "Inconsistent service"
+    ],
+    "nordic_2": [
+      "Underwhelming",
+      "Did not meet expectations"
+    ],
+    "nordic_1": [
+      "Would not stay again",
+      "Multiple failures"
+    ],
+    "east_asian_5": [
+      "素晴らしい滞在でした",
+      "最高のホテル",
+      "細部まで行き届いた対応",
+      "上品で静かなホテル"
+    ],
+    "east_asian_4": [
+      "快適な滞在",
+      "全体的に満足",
+      "少し改善の余地あり"
+    ],
+    "east_asian_3": [
+      "まあまあ",
+      "普通の滞在"
+    ],
+    "east_asian_2": [
+      "期待外れでした",
+      "値段の割に残念"
+    ],
+    "east_asian_1": [
+      "残念",
+      "おすすめできません"
+    ],
+    "chinese_mainland_5": [
+      "超级推荐！出片率满分",
+      "绝绝子的一次度假",
+      "环境真的很美 ✨",
+      "姐妹们一定要来！",
+      "蜜月首选 💕"
+    ],
+    "chinese_mainland_4": [
+      "体验不错",
+      "整体不错，小瑕疵"
+    ],
+    "chinese_mainland_3": [
+      "一般般",
+      "期待值太高了"
+    ],
+    "chinese_mainland_2": [
+      "没有达到预期",
+      "与期待有差距"
+    ],
+    "chinese_mainland_1": [
+      "不推荐",
+      "踩雷了"
+    ],
+    "middle_east_gcc_5": [
+      "A truly luxurious experience",
+      "An extraordinary stay",
+      "Exceptional in every detail",
+      "Highly recommended"
+    ],
+    "middle_east_gcc_4": [
+      "Excellent stay",
+      "Very good with minor issues"
+    ],
+    "middle_east_gcc_3": [
+      "Average",
+      "Not at the expected tier"
+    ],
+    "middle_east_gcc_2": [
+      "Below expectations",
+      "Disappointing for the price"
+    ],
+    "middle_east_gcc_1": [
+      "Very poor",
+      "Multiple service failures"
+    ]
+  }
+}

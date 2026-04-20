@@ -1,0 +1,83 @@
+{
+  "property_name": "Gran Meliá Palacio de los Duques",
+  "property_slug": "gran-melia-palacio-de-los-duques",
+  "sourced_from": ["TripAdvisor public aggregate", "Booking.com public aggregate", "Google Reviews public aggregate"],
+  "generated_at": "2026-04-19T13:30:00.000Z",
+  "calibration_version": "1.0-public-aggregate",
+  "_note": "Scaffold calibration built from publicly visible aggregate ratings (TripAdvisor 4.5/5 from ~2100 reviews, Booking 8.9/10, Google 4.6/5). Detailed subcategory anchors and theme breakdown estimated from cluster of Madrid 5★ urban luxury comparables and brand positioning — replace with scraped corpus when cleared by Meliá.",
+  "property_context": {
+    "city": "Madrid",
+    "country": "ES",
+    "tier": "luxury",
+    "property_type": "urban_flagship",
+    "rooms": 180,
+    "opened_year": 2016,
+    "brand": "Gran Meliá",
+    "segments": ["leisure_couples", "business_traveler", "corporate", "mice", "loyalty_platinum"]
+  },
+  "avg_rating": 4.55,
+  "review_count_public_aggregate": 2100,
+  "subcategory_scores_5_scale": {
+    "location": 4.9,
+    "rooms": 4.6,
+    "sleep_quality": 4.6,
+    "cleanliness": 4.7,
+    "service": 4.5,
+    "value": 4.2,
+    "source": "Estimated from TripAdvisor public subcategory aggregates for Madrid 5★ urban flagships"
+  },
+  "subcategory_anchors_100_scale": {
+    "_description": "Target end-of-stay sensation dimension scores anchored to public sub-scores. Values lower than Villa Le Blanc on aesthetic/comfort (urban vs resort), higher on modernity/amenity (business traveler base).",
+    "aesthetic": 93,
+    "comfort_physical": 92,
+    "cleanliness": 94,
+    "service_quality": 90,
+    "value": 84,
+    "modernity": 90,
+    "amenity_usability": 88
+  },
+  "top_positive_themes": [
+    "location_royal_palace_adjacent",
+    "rooftop_terrace_view",
+    "staff_warmth",
+    "breakfast_buffet",
+    "spa_thai",
+    "business_amenities"
+  ],
+  "top_negative_themes": [
+    "value_price_concern",
+    "room_size_standard",
+    "breakfast_crowded_peak"
+  ],
+  "sentiment_distribution": {
+    "positive": 1680,
+    "mixed": 340,
+    "negative": 80
+  },
+  "star_distribution_pct": {
+    "1": 1,
+    "2": 3,
+    "3": 8,
+    "4": 22,
+    "5": 66
+  },
+  "positive_negative_moment_ratio": 3.8,
+  "archetype_mix_expected_pct": {
+    "luxury_seeker": 24,
+    "business_traveler": 22,
+    "honeymooner": 14,
+    "loyalty_maximizer": 16,
+    "family_vacationer": 8,
+    "event_attendee": 10,
+    "digital_nomad": 4,
+    "budget_optimizer": 2
+  },
+  "recommended_origin_mix_preset": "madrid_urban_gran_melia",
+  "seasonality_hint": {
+    "peak_months": ["4", "5", "9", "10"],
+    "shoulder_months": ["3", "6", "11"],
+    "low_months": ["1", "2", "7", "8", "12"],
+    "_note": "Madrid urban pattern: peak in spring/fall, low in deep summer (Madrileños flee heat) and winter holidays"
+  },
+  "_validation_status": "PUBLIC_AGGREGATE_ONLY — replace with full review corpus scrape when authorized by Meliá"
+}

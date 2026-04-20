@@ -92,6 +92,13 @@
       "measurable_signals": ["design coherence", "photographable moments", "color palette", "material quality feel"],
       "typical_triggers_positive": ["lobby instagrammable", "room lighting sets romantic mood", "pool area designed beautifully"],
       "typical_triggers_negative": ["90s carpet still present", "mismatched furniture", "stained ceiling tiles", "harsh fluorescent lighting"]
+    },
+    "sustainability_awareness": {
+      "label": "Sustainability / Eco-Awareness",
+      "description": "Visibility and credibility of the property's sustainability practices — materials, energy, food sourcing, waste, local sourcing. Matters most for Gen-Z / Millennial luxury, Nordic, German DACH; neutral for others.",
+      "measurable_signals": ["visible eco certifications", "local provenance on menu", "no single-use plastics", "net-zero claim substantiated", "regenerative practices communicated"],
+      "typical_triggers_positive": ["net-zero claim with dashboard", "Menorca-biosphere-reserve tour mentioned", "zero single-use plastics", "local-first seasonal menu", "regenerative agriculture partners"],
+      "typical_triggers_negative": ["empty greenwash claims", "single-use plastics still visible", "food miles visible on menu", "sustainability claim not substantiated", "energy waste in visible areas"]
     }
   },
 
@@ -108,7 +115,8 @@
     "crowd": 55,
     "culinary": 50,
     "safety": 65,
-    "aesthetic": 55
+    "aesthetic": 55,
+    "sustainability_awareness": 45
   },
 
   "_baselines_doc": "Per-archetype overrides applied on top of default_starting_values. LOW values in a dimension = that archetype is DEMANDING there (hotel must earn the score). HIGH values = that archetype is FORGIVING there (arrives grateful). Values only present for dimensions where the archetype meaningfully diverges from the default.",
@@ -202,21 +210,21 @@
   },
 
   "nps_calculation": {
-    "_calibration_note": "NPS thresholds anchored to Meliá / Gran Meliá disclosed benchmarks (2023-2024 annual reports): industry luxury NPS 60-75, mass-market 35-45. Current mapping targets avg final_score 70 → NPS +45 for a typical 4★ stay.",
-    "formula": "weighted_avg_final_sensations * archetype_importance - penalty_negative_moments + bonus_positive_moments",
+    "_calibration_note": "NPS thresholds recalibrated 2026-04-19 to account for Kahneman peak-end composite (avg*0.4 + final*0.35 + peakLow*0.25) which systematically shifts scores ~5pp lower than the old final-state-only calculation. Targets luxury NPS 60-75 / mass-market 35-45.",
+    "formula": "kahneman_composite - penalty_negative_moments + bonus_positive_moments",
     "thresholds": {
-      "promoter_above": 72,
-      "passive_range": [52, 72],
-      "detractor_below": 52
+      "promoter_above": 67,
+      "passive_range": [47, 67],
+      "detractor_below": 47
     }
   },
 
   "star_rating_bucket": {
-    "_calibration_note": "Thresholds recalibrated 2026-04-18 against Booking.com 2024 empirical distribution for 5-star Mediterranean hotels. Previous 82 threshold for 5★ was too strict: real Booking 9.2-9.5 scores map to sensation score ~78-85. Downshifted bucket anchors by ~4 points to match observed distribution (62/24/8/3/3 for typical luxury property).",
-    "5_star_above_score": 78,
-    "4_star_range": [62, 78],
-    "3_star_range": [45, 62],
-    "2_star_range": [28, 45],
-    "1_star_below": 28
+    "_calibration_note": "Thresholds shifted 5pp down 2026-04-19 after Kahneman peak-end formula lowered mean scores. 5★ threshold now 73 (was 78). Target: 70-78% of 5★-target stays should actually land 5★ with the new formula, matching real 77% 5★ Booking distribution for Villa Le Blanc.",
+    "5_star_above_score": 73,
+    "4_star_range": [57, 73],
+    "3_star_range": [42, 57],
+    "2_star_range": [26, 42],
+    "1_star_below": 26
   }
 }

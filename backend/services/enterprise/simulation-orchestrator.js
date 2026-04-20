@@ -116,6 +116,13 @@ async function runSimulation(opts) {
   emit({ type: 'phase_start', phase: 'generating_personas', phase_index: 3, payload: { message: `Generating ${agent_count} personas` } });
   const frozenPersonas = modality_inputs._frozen_personas;
   const frozenContexts = modality_inputs._frozen_contexts;
+  // Property-level overrides (Meliá-spec: adults-only, sub-brand mix).
+  const archetypeMixOverride = property?.data_json?.archetype_mix_override || null;
+  const culturalMixFromProperty = property?.data_json?.cultural_mix || null;
+  if (culturalMixFromProperty && !globalCtx.origin_mix_override) {
+    globalCtx.origin_mix_override = culturalMixFromProperty;
+    emit({ type: 'property_cultural_mix_applied', payload: culturalMixFromProperty });
+  }
   const personas = Array.isArray(frozenPersonas) && frozenPersonas.length === agent_count
     ? frozenPersonas
     : await generatePersonas({
@@ -124,6 +131,7 @@ async function runSimulation(opts) {
         count: agent_count,
         industrySlug: 'hospitality',
         seedPersonas: Array.isArray(frozenPersonas) ? frozenPersonas : undefined,
+        archetypeMixOverride,
         onProgress: (p) => emit({ type: 'phase_progress', phase: 'generating_personas', payload: p }),
       });
 
@@ -287,6 +295,79 @@ async function runSimulation(opts) {
     }
   }
 
+  // Phase 6: Insights Engine (4 passes — aggregate, diverge, anomaly,
+  // adversarial). Opt-in via ENABLE_INSIGHTS_V2=true so the cached demo path
+  // stays cheap and deterministic. Fail-open: any pass error stays inside the
+  // returned report, the summary ships without insights but is not blocked.
+  if (process.env.ENABLE_INSIGHTS_V2 === 'true' && modality.id === 'stay_experience') {
+    emit({ type: 'phase_start', phase: 'insights_engine', phase_index: 6 });
+    try {
+      const { runInsightsEngine } = require('./insights-engine');
+      summary.insights = await runInsightsEngine({
+        records,
+        calibration,
+        property,
+        audience_vector: audienceVector,
+      });
+      emit({
+        type: 'insights_complete',
+        payload: {
+          ready_for_client: summary.insights.ready_for_client,
+          reason: summary.insights.reason,
+          trustworthiness: summary.insights?.passes?.adversarial?.overall_report_trustworthiness ?? null,
+        },
+      });
+    } catch (err) {
+      console.error('[orchestrator] insights engine failed:', err.message?.substring(0, 150));
+      summary.insights = {
+        enabled: true,
+        ready_for_client: false,
+        reason: err.message?.substring(0, 120),
+      };
+    }
+
+    // Phase 7: Decision Engine — only when insights are client-ready.
+    if (summary.insights?.ready_for_client) {
+      emit({ type: 'phase_start', phase: 'decision_engine', phase_index: 7 });
+      try {
+        const { runDecisionEngine } = require('./decision-engine');
+        const userGoal = opts.user_goal || modality_inputs?.user_goal || null;
+        summary.recommendations_v2 = await runDecisionEngine({
+          insights: summary.insights,
+          calibration,
+          property,
+          audience_vector: audienceVector,
+          user_goal: userGoal,
+        });
+        emit({
+          type: 'decisions_complete',
+          payload: {
+            count: summary.recommendations_v2?.recommendations?.length || 0,
+            forks: summary.recommendations_v2?.forks?.length || 0,
+            ready: summary.recommendations_v2?.ready,
+          },
+        });
+      } catch (err) {
+        console.error('[orchestrator] decision engine failed:', err.message?.substring(0, 150));
+        summary.recommendations_v2 = {
+          enabled: true,
+          ready: false,
+          reason: err.message?.substring(0, 120),
+          recommendations: [],
+          forks: [],
+        };
+      }
+    } else {
+      summary.recommendations_v2 = {
+        enabled: true,
+        ready: false,
+        reason: 'insights_not_ready_for_client',
+        recommendations: [],
+        forks: [],
+      };
+    }
+  }
+
   emit({ type: 'sim_complete', payload: summary });
 
   return {
@@ -356,9 +437,13 @@ function loadPrebuiltCalibration(property) {
     || (property.name || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
   if (!slug) return null;
 
+  const slugUnder = slug.replace(/-/g, '_');
+  const dataDir = path.join(__dirname, '..', '..', 'data', 'industries', 'hospitality');
   const candidatePaths = [
-    path.join(__dirname, '..', '..', 'data', 'industries', 'hospitality', `${slug}_calibration.json`),
-    slug.includes('villa-le-blanc') ? path.join(__dirname, '..', '..', 'data', 'industries', 'hospitality', 'villa_le_blanc_calibration.json') : null,
+    path.join(dataDir, `${slug}_calibration.json`),
+    path.join(dataDir, `${slugUnder}_calibration.json`),
+    slug.includes('villa-le-blanc') ? path.join(dataDir, 'villa_le_blanc_calibration.json') : null,
+    slug.includes('palacio') ? path.join(dataDir, 'gran_melia_palacio_duques_calibration.json') : null,
   ].filter(Boolean);
 
   for (const p of candidatePaths) {

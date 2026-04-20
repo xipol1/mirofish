@@ -1,0 +1,110 @@
+{
+  "meta": {
+    "property_name": "Gran Meliá Villa Le Blanc",
+    "seed": "villa-spend-v3",
+    "n_per_cluster": 60,
+    "clusters_tested": [
+      "anglo_uk_ireland",
+      "german_dach",
+      "french",
+      "latin_spain_italy",
+      "nordic"
+    ],
+    "peak_rate_eur": 1000,
+    "benchmark_month": "aug_2024",
+    "elapsed_ms": 9938,
+    "generated_at": "2026-04-20T07:29:38.141Z",
+    "benchmark_source": "EGATUR 2024 (INE España) × luxury uplift 2.5×"
+  },
+  "per_cluster": [
+    {
+      "cluster": "anglo_uk_ireland",
+      "rate_eur": 1000,
+      "n_agents_ran": 60,
+      "n_booked": 33,
+      "acceptance_pct": 55,
+      "avg_stay_nights": 7.8,
+      "mean_ancillary_total_eur": 2223,
+      "median_ancillary_total_eur": 2213,
+      "sim_daily_ancillary_eur": 285,
+      "benchmark_daily_eur": 290,
+      "abs_delta_eur": 5,
+      "rel_delta_pct": 1.7,
+      "within_tolerance": true,
+      "verdict": "match"
+    },
+    {
+      "cluster": "german_dach",
+      "rate_eur": 1000,
+      "n_agents_ran": 60,
+      "n_booked": 33,
+      "acceptance_pct": 55,
+      "avg_stay_nights": 8.9,
+      "mean_ancillary_total_eur": 2214,
+      "median_ancillary_total_eur": 2217,
+      "sim_daily_ancillary_eur": 249,
+      "benchmark_daily_eur": 270,
+      "abs_delta_eur": 21,
+      "rel_delta_pct": 7.8,
+      "within_tolerance": true,
+      "verdict": "match"
+    },
+    {
+      "cluster": "french",
+      "rate_eur": 1000,
+      "n_agents_ran": 60,
+      "n_booked": 31,
+      "acceptance_pct": 51.7,
+      "avg_stay_nights": 6.1,
+      "mean_ancillary_total_eur": 2062,
+      "median_ancillary_total_eur": 2047,
+      "sim_daily_ancillary_eur": 338,
+      "benchmark_daily_eur": 207,
+      "abs_delta_eur": 131,
+      "rel_delta_pct": 63.3,
+      "within_tolerance": false,
+      "verdict": "drift"
+    },
+    {
+      "cluster": "latin_spain_italy",
+      "rate_eur": 1000,
+      "n_agents_ran": 60,
+      "n_booked": 35,
+      "acceptance_pct": 58.3,
+      "avg_stay_nights": 4.5,
+      "mean_ancillary_total_eur": 2182,
+      "median_ancillary_total_eur": 2118,
+      "sim_daily_ancillary_eur": 485,
+      "benchmark_daily_eur": 276,
+      "abs_delta_eur": 209,
+      "rel_delta_pct": 75.7,
+      "within_tolerance": false,
+      "verdict": "drift"
+    },
+    {
+      "cluster": "nordic",
+      "rate_eur": 1000,
+      "n_agents_ran": 60,
+      "n_booked": 30,
+      "acceptance_pct": 50,
+      "avg_stay_nights": 6.8,
+      "mean_ancillary_total_eur": 2283,
+      "median_ancillary_total_eur": 2467,
+      "sim_daily_ancillary_eur": 336,
+      "benchmark_daily_eur": 232,
+      "abs_delta_eur": 104,
+      "rel_delta_pct": 44.8,
+      "within_tolerance": false,
+      "verdict": "drift"
+    }
+  ],
+  "summary": {
+    "clusters_with_anchor": 5,
+    "clusters_passed": 2,
+    "pass_rate_pct": 40,
+    "mean_rel_error_pct": 38.7,
+    "pearson_r": -0.005,
+    "spearman_r": -0.2,
+    "verdict": "PARTIAL_MATCH"
+  }
+}

@@ -1,0 +1,262 @@
+{
+  "_version": "1.0",
+  "_generated_at": "2026-04-19",
+  "_source": "Claude-authored variant pool anchored on backend/data/sources/reviews_europe_calibrated.json phrase bank + Villa Le Blanc calibration. Culture-specific voices per backend/services/ai_claude_synth.js getReviewVoice().",
+  "_notes": "Bodies are sampled deterministically by salt in generateReviewResponse(). Keep content property-agnostic enough that archetype + incident injections read as natural.",
+  "bodies": {
+    "anglo_uk_ireland_5": [
+      "Right, where to start. We'd been looking for somewhere quiet for a proper anniversary and this absolutely hit the mark. The staff were exceptional — Maria remembered our anniversary without us mentioning it, which set the tone for the entire stay. The breakfast terrace with the fig trees is worth the flight on its own. Rooms are sensibly sized, the bath is properly luxurious, and the adults-only policy is, remarkably, respected. One small grumble: the resort fee wasn't flagged at booking, which took a bit of shine off the checkout. Otherwise, rather lovely. Would return in a heartbeat.",
+      "Just back from four nights and I'm still thinking about the breakfast. Tomatoes on salty bread, a soft-boiled egg, properly strong coffee — the sort of morning that sets the whole day right. The design of the property is genuinely clever: you never feel crowded even when the pool is busy. Thai Spa hydrothermal circuit is probably the best spa facility on the island. Staff were attentive without hovering. All things considered, rather lovely.",
+      "Have stayed across the Med over twenty years and this one sits firmly in the top tier. The service is what marks it out — unfussy, warm, competent. Núria at the front desk runs the place quietly well. Dining at La Sal exceeded the hype; the langoustine course was memorable. Sea-facing terrace, adults-only pool, proper quiet. The usual minor quibbles about resort fees at checkout, but nothing ruinous. Would return without hesitation.",
+      "Spent five nights here for our honeymoon and it delivered. The room was ready an hour early which never happens, champagne on ice, a handwritten note from the GM. The rooftop bar at sunset is the sort of thing Instagram never quite captures — you have to be there. Breakfast buffet is unfussy and top-quality. Only minor gripe was the Wi-Fi dropping out twice on the first afternoon, sorted after a call. Would return in a heartbeat.",
+      "A proper grown-up hotel, which is increasingly hard to find in this bracket. Pool area is serene, cabanas are spaced generously, and the pool attendant Marco kept our rosé topped up without being asked twice. The tasting menu at the main restaurant was excellent — sommelier pairing educated without lecturing. The spa is worth half a day on its own. Minor quibble: the main menu felt slightly limited by the fourth night. All things considered, rather lovely.",
+      "Genuinely one of the best stays we've had in the Med. The design is considered — natural materials, linen curtains that glow in the morning, a bath that feels like a small ritual. Direct beach access makes all the difference for a lazy morning. Staff called us by name from day two. Some noise from construction next door one afternoon, brief but there. Would return without hesitation.",
+      "The attention to sustainability here is visible and authentic — no greenwashing. Local producers, proper recycling, a quiet refusal to over-engineer. The food is excellent without being precious about it. The rooftop at sunset is quietly magical. Bathroom is properly lit, bed is firm, shower pressure is serious. A small fee surprise at checkout was the only grumble. Rather lovely.",
+      "Booked here on the recommendation of a travel writer and it delivered against the billing. Check-in was seamless — three questions, a handwritten card, done. The suite faces the sea and the terrace is larger than the photos suggest. We had a mandatory minor incident with an AC unit on the second night; a technician appeared within 20 minutes and we got a bottle of local wine as an apology. That's service. All things considered, rather lovely.",
+      "For those considering this property for a significant anniversary: go. The romance of the setting, the unhurried pace of the staff, the quality of the food — all at a level that justifies the price. Cala Galdana is a short drive for a day out. On the flip side, the à la carte menu felt a touch narrow by night four. Would return in a heartbeat.",
+      "A grown-up luxury hotel that actually earns the adjective. The hydrothermal spa circuit is the best on the island, and Lin the Thai therapist is technically superb. Breakfast is slow and lingering by design. Staff remembered our coffee preferences from day two. Minor: the bar closed earlier than posted one evening, which we hadn't planned around. All things considered, rather lovely.",
+      "Surprised by how quiet it was given the season. The adults-only policy is genuinely enforced, which matters when you're paying for peace. The design aesthetic is coherent — you can see the architect cared. Food at both restaurants was excellent; breakfast alone would justify a return. Only minor quibble was a slow towel refresh at the pool one afternoon. Would return in a heartbeat.",
+      "Seven nights, minimal fuss, proper service. The welcome ritual felt warm rather than performed, which is rarer than it should be at this tier. Staff across front desk, pool, and restaurants all consistently good. Spa is first-rate. Dinner at La Sal was the highlight — the chef came out to explain the provenance of the langoustines, which added a layer. Minor friction at checkout over a resort fee that wasn't obvious at booking. All things considered, rather lovely.",
+      "We almost cancelled when the price came through. We're glad we didn't. The property delivers the kind of quiet luxury that used to be standard in this bracket and has slipped elsewhere. Every meal was considered, every interaction felt warm. Sea, design, silence, good coffee — what else would one want. Would return without hesitation.",
+      "An absolute gem — we didn't want to leave. The terrace was bigger than we'd expected, the bed was the right firmness (they asked), and the blackout curtains actually blacked out. Breakfast pastries were freshly baked; you could smell them from the lift. The concierge arranged a last-minute sailing trip to a nearby cala that we'd otherwise have missed. Rather lovely — would return in a heartbeat."
+    ],
+    "anglo_uk_ireland_4": [
+      "Just back from a few nights here — overall rather good. The property is handsome, the staff are genuinely warm, and the breakfast is excellent. A few minor frictions: the Wi-Fi dropped twice in the suite, and the main restaurant felt more limited than we'd expected by the third night. Nothing ruinous. Very good — would return.",
+      "A very good stay with a handful of quibbles. The pool area is well designed and the adults-only rule is properly enforced. The spa is worth a half-day. Where it lost a star for me was the dining variety — by night three we were looking at the same menu. Staff handled our minor room issue promptly. Would return.",
+      "Lovely property, slightly uneven service. Housekeeping was impeccable, front desk was warm and remembered our names, but the pool bar was noticeably slower than the main restaurants. A minor surprise fee at checkout that the team removed when asked. Breakfast was the consistent highlight. Very good — would return.",
+      "Four nights, genuinely pleasant. The terrace view was worth the premium. Dinner was good but not exceptional. The Thai spa hydrothermal circuit is the best on the island, a real differentiator. One small friction: check-in ran over by 25 minutes because our room wasn't ready at the posted time. Staff handled it with a welcome drink and an apology. Would return.",
+      "Very good on most fronts, a fraction below the top tier. The bath was properly luxurious, the bed was firm, the linen was crisp. The menu felt narrower than expected for a property at this level and the value proposition gets stretched by the resort fee at checkout. Staff saved the day more than once. Would return.",
+      "A proper grown-up hotel that almost nails it. Peaceful, beautifully designed, very good food. Lost a small margin on some slow pool-bar service and a fiddly spa booking experience via the app. Would return for the location and the breakfast alone.",
+      "Had a great few nights overall. The adults-only pool is genuinely adults-only, rarely the case. Staff were warm and unhurried. Where it fell short of a full five stars: the main restaurant wine list was oddly narrow and the check-in queue was longer than it should have been on a Tuesday evening. Would return.",
+      "An absolute treat of a stay with minor quibbles. The spa, the terrace, the breakfast — all first-rate. The value-for-money sum gets a bit muddled at checkout when the resort fee appears. Lovely staff. Very good — would return."
+    ],
+    "anglo_uk_ireland_3": [
+      "Stayed here last week. A little disappointing, if I'm honest. The property is handsome and the location is first-rate, but the service felt transactional — staff polite but not warm, dinner bookings slow to confirm, housekeeping inconsistent. A €45 resort fee per night appeared on the bill I don't remember seeing at booking. For the tier, one expects better. Bit of a mixed bag, but not without charm.",
+      "Expected more, got less. The breakfast was fine, the pool was fine, the room was fine — fine throughout. For a property marketed at this level, one wants moments of surprise, not adequacy. The view saved it. Bit of a mixed bag.",
+      "Mixed stay. The design of the property is lovely and the setting is special. Unfortunately our particular stay suffered from a series of small frictions: slow room service, a spa booking mix-up, and a surprise resort fee at checkout. Each one minor, the aggregate a shame. For the price, we expected a tighter operation.",
+      "Not our best Mediterranean luxury experience. The staff were pleasant but the service quality was inconsistent across departments. Breakfast was the reliable high point. Dinner was fine but nothing we'd remember. Bit of a mixed bag, but not without charm."
+    ],
+    "anglo_uk_ireland_2": [
+      "Afraid this one didn't quite live up to the billing. The room wasn't ready at check-in despite an email confirmation an hour earlier. The main restaurant was understaffed on our first evening and our bookings kept slipping. Resort fee appeared at checkout that wasn't flagged anywhere at booking. For the price point, one expects substantially better. Would struggle to go back.",
+      "For the money, we expected a great deal more. The room felt slightly tired, the Wi-Fi dropped repeatedly, the pool was over-capacity by 11am on an adults-only — which at these rates is hard to forgive. Staff were pleasant but visibly under pressure. Would struggle to go back.",
+      "Rather disappointing. The property is handsome but the operational execution didn't match the marketing. Two dinner reservations slipped, our room request for a quiet side wasn't honoured, and the spa booking we'd held for six weeks was double-booked. Compensation offered was token. Would struggle to go back."
+    ],
+    "anglo_uk_ireland_1": [
+      "Not great. Would struggle to recommend. Our arrival was chaotic — room not ready until nearly 5pm, no welcome drink, no apology beyond a shrug. The restaurant couldn't honour our booking and suggested room service instead. Wi-Fi barely worked. At the price, this is unacceptable. Would not return.",
+      "Easily the worst luxury hotel stay of the year for us. A cascade of small failures — late check-in, misplaced luggage for four hours, a surprise €200 in fees at checkout — none catastrophic individually, all of them together a poor experience. Staff seemed demoralised. Would not return."
+    ],
+    "anglo_us_canada_5": [
+      "WOW. We just got back and I'm still thinking about it. This place is UNREAL. The infinity pool at sunset is worth the trip alone — I took like 40 photos. Staff were incredible, they remembered our drinks from day one. The tasting menu was MINDBLOWING, seven courses each better than the last. Design-driven architecture, every corner is Instagrammable. Yes there's a resort fee but honestly for what you get it's fine. We WILL be back. 100%.",
+      "Just checked out and I'm devastated to leave. The SUITE. The VIEW. The STAFF. Everything exceeded expectation. Núria at the front desk is a gem — she remembered every request, every name. Breakfast was the highlight every single morning. The spa treatment left me SPEECHLESS. Came for the anniversary, leaving with a memory. We WILL be back. 100%.",
+      "BEST Hotel We've EVER Stayed At!!! And we travel A LOT. The design is insane, the service is insane, the food is insane. You'll take photos for the gram and none of them will do it justice. Direct beach access, adults-only pool, Thai spa. A small resort fee at checkout that we honestly barely noticed. We WILL be back. 100%.",
+      "Booked through a friend's recommendation and it delivered beyond belief. Our suite had a terrace larger than some Manhattan apartments. The rooftop at sunset is a spiritual experience. The chef came out to our table to explain the wine pairing — that level of service is rare even at this price point. Worth every dollar. We WILL be back. 100%.",
+      "Honestly? A life experience. We're foodies and the main restaurant blew us away — the sauce work was exceptional, proper reductions, no shortcuts. The sommelier nailed every pairing. The room was beautifully designed with thoughtful amenities (nice detail: noise-cancelling pillows on request). We WILL be back. 100%.",
+      "INCREDIBLE stay. Came for our 10th anniversary and left rebooking for the 11th. The attention to detail is next level. Staff across every department were exceptional. The spa alone is worth a flight. Small resort fee at the end, whatever, we didn't care. BEST Hotel We've EVER Stayed At!!!",
+      "We don't normally do five-star reviews because we're tough critics. This property earned it. From the moment the valet opened the door to the handwritten thank-you note that surfaced in our luggage at the airport, the hospitality was flawless. The pool at sunset with a glass of local rosé and no children anywhere is, genuinely, a form of therapy. We WILL be back. 100%."
+    ],
+    "anglo_us_canada_4": [
+      "Had a really great stay here — would definitely come back. The design is stunning, the pool is amazing, and the breakfast spread is honestly one of the best we've had. Lost a half-star for me because the Wi-Fi was spotty in the suite and the restaurant was booked up two nights running. Staff were lovely though. Would stay again.",
+      "Great stay. Rooms are beautifully done, the design feels thoughtful, and the Thai spa circuit is something else. A couple of small issues — a wait at check-in, slightly slow dinner service on night two — but the team fixed them fast. Would stay again.",
+      "Genuinely amazing property, almost perfect. The terrace view at sunset is unreal. The only reason this isn't five stars is the resort fee appeared at checkout and wasn't mentioned anywhere at booking, which for American travelers is jarring. Staff were excellent throughout. Would stay again.",
+      "Four great nights. The adults-only vibe is real, which is refreshing. Food was very good — not quite blowing-your-mind but consistently excellent. The spa is a highlight. Wi-Fi was weak in the suite, a minor annoyance for remote work. Would stay again.",
+      "Really strong property. The rooftop bar is a highlight, and we loved that the cocktails were made with local ingredients — the bartender Alejandro made us something custom based on flavor preferences. Only downside: a dinner reservation got mixed up. Fixed with a complimentary glass, which was classy. Would stay again."
+    ],
+    "anglo_us_canada_3": [
+      "Mixed feelings about this one. Some hits, some misses. The suite is gorgeous, the breakfast is amazing, but the service felt inconsistent — some staff were stellar, others felt like they were going through the motions. A resort fee at checkout caught us off guard. Not sure if I'd come back.",
+      "For what we paid, we expected more consistent service. The design is beautiful and the food is good, but little operational things kept tripping us up — a missing reservation, a slow room service, a spa app that glitched. Not sure if I'd come back.",
+      "Honestly underwhelming for the price point. American hotels at this bracket have a different baseline and this one didn't match it. The view and the design carry the property; the execution lags."
+    ],
+    "anglo_us_canada_2": [
+      "Expected way more for the price. The property looks great on Instagram but the reality had more friction than we expected. Check-in was a 40-minute wait, the Wi-Fi was unreliable, and a surprise fee at checkout felt like a gotcha. Hard pass on a return visit.",
+      "Not worth the money. We've stayed at comparable properties in the Caribbean and Mexico for half the price with better service. The food was fine, the pool was fine, the room was fine — nothing justified the premium. Hard pass on a return visit."
+    ],
+    "anglo_us_canada_1": [
+      "Really not worth the money. AVOID. Our room wasn't ready, the luggage was delayed four hours, two dinner reservations fell through, and the response was essentially 'we're full, sorry.' At this price that's inexcusable. Hard pass on a return visit."
+    ],
+    "german_dach_5": [
+      "Fünf Nächte in diesem Hotel verbracht — absolut empfehlenswert. Das Frühstück war absolut erstklassig, frische regionale Produkte, perfekter Kaffee, ruhige Terrasse. Das Personal war aufmerksam ohne aufdringlich zu sein. Der Adults-only-Pool wird tatsächlich respektiert, was heutzutage eine Seltenheit ist. Kleine Anmerkung zur Transparenz: Die Resort-Gebühr am Check-out wurde bei der Buchung nicht erwähnt — nicht schön. Sonst: sehr empfehlenswert.",
+      "Sehr schönes Design-Hotel mit authentischem Charakter. Die Architektur nutzt natürliche Materialien, jede Ecke ist durchdacht. Das Abendessen im Hauptrestaurant war hervorragend — sieben Gänge, jede Zutat erklärt, lokale Weine. Der Spa-Bereich mit Hydrothermal-Zirkel ist der beste, den wir auf der Insel gefunden haben. Sehr empfehlenswert.",
+      "Sieben Nächte, null Beschwerden. Die Zimmer sind großzügig geschnitten, die Betten sind korrekt fest, die Klimaanlage funktionierte fehlerlos. Das Frühstück war absolut erstklassig, frische regionale Produkte. Das Personal — besonders Núria am Empfang — arbeitete mit einer ruhigen Präzision, die man heute selten sieht. Für den Preis: absolut gerechtfertigt. Sehr empfehlenswert.",
+      "Adults-only atmosphere finally respected — true tranquility. Das macht den Unterschied. Der Pool-Bereich ist großzügig, die Cabanas haben Abstand zueinander, keine laute Musik. Das Essen am Abend im Hauptrestaurant war ein Erlebnis. Kleine Kritik: Das WLAN war am zweiten Tag instabil, wurde aber zügig repariert. Sehr empfehlenswert.",
+      "Für ein Haus dieser Kategorie: alles, was man erwartet, auf höchstem Niveau. Die Nachhaltigkeit ist erkennbar und authentisch, kein Greenwashing. Lokale Produzenten, ordentliche Mülltrennung, bewusster Wasserverbrauch. Das Abendessen war konsistent hervorragend. Sehr empfehlenswert.",
+      "Wir reisen seit 30 Jahren im Mittelmeerraum und dieses Hotel gehört in die oberste Liga. Die Ruhe, die Architektur, die Servicequalität — alles stimmig. Besonders positiv: die Direktheit der Mitarbeiter, keine übertriebene Floskelei, dafür echte Kompetenz. Sehr empfehlenswert.",
+      "Perfekter Aufenthalt. Check-in effizient, Zimmer tadellos, Frühstück regional und frisch, Abendessen mit lokaler Weinpaarung. Der Direktmeerzugang ist ein Unterschied zu vergleichbaren Häusern. Was gibt's zu kritisieren: die Resort-Gebühr sollte bei Buchung transparenter kommuniziert werden. Sehr empfehlenswert.",
+      "Ein Hotel, das die deutsche Gründlichkeit zu schätzen weiß. Alles funktioniert, alles wird eingehalten, nichts ist improvisiert. Das Spa ist technisch hervorragend ausgestattet, die Therapeutin war präzise und aufmerksam. Sehr empfehlenswert.",
+      "Die sechs Nächte waren eine Erholung auf allen Ebenen. Das Zimmer-Design ist zeitgemäß ohne modisch zu sein. Die Dachterrasse bei Sonnenuntergang ist außergewöhnlich. Empfehlenswert für Paare, die Ruhe suchen. Sehr empfehlenswert.",
+      "Das Gran Meliá hält, was es verspricht. Das Preis-Leistungs-Verhältnis ist für die Region noch vertretbar, die Qualität konsistent. Besonders schön: das Frühstück, die Poolanlage, die spät geöffnete Lobby-Bar. Sehr empfehlenswert.",
+      "Sehr gut geführtes Haus. Die Mitarbeiter kommunizieren klar, es gibt keine versteckten Reibungspunkte im Ablauf. Das Essen war durchgehend hochwertig. Der Spa-Zirkel gehört zu den besten, die wir erlebt haben. Sehr empfehlenswert.",
+      "Absolut erstklassige Erfahrung. Die Architektur, das Essen, die Ruhe — alles auf sehr hohem Niveau. Kleiner Abzug nur für eine kleine Wartezeit am Check-in, sonst nichts. Sehr empfehlenswert."
+    ],
+    "german_dach_4": [
+      "Insgesamt ein schöner Aufenthalt, mit kleinen Abstrichen. Das Frühstück ist die Stärke des Hauses, das Abendessen solide. Was gibt's zu kritisieren: das WLAN im Zimmer war instabil und die Restaurantkarte wurde über sechs Tage repetitiv. Das Personal war durchgehend freundlich. Empfehlenswert.",
+      "Schöner Aufenthalt. Das Hotel ist architektonisch überzeugend und das Spa ist exzellent. Die Servicegeschwindigkeit im Poolrestaurant war allerdings deutlich langsamer als im Hauptrestaurant. Die Resort-Gebühr sollte transparenter sein. Empfehlenswert.",
+      "Vier Nächte, überwiegend positiv. Der Empfang war warm, das Abendessen hervorragend, die Lage erstklassig. Kritisch: ein Doppelfehler bei der Spa-Buchung, der erst nach Intervention am zweiten Tag gelöst wurde. Empfehlenswert.",
+      "Gutes Haus mit kleinen Schwächen. Zimmer großzügig und leise, Bad hochwertig. Das WLAN war am Pool sehr schwach, was für digitale Arbeit nicht ideal ist. Die Resort-Gebühr am Ende war nicht angekündigt. Empfehlenswert trotz dieser Punkte.",
+      "Sehr schönes Hotel, nicht ganz perfekt. Das Frühstück ist ein Highlight, das Abendessen konsistent gut. Ein kleiner Zwischenfall mit der Klimaanlage wurde zügig gelöst. Empfehlenswert."
+    ],
+    "german_dach_3": [
+      "Durchschnittlich für den Preis. Positiv: das Frühstück, die Lage, das Spa. Negativ: die Inkonsistenz des Services zwischen Frühstück und Abendessen, die Überraschungsgebühr am Check-out, das WLAN im Zimmer. Für den Preis befriedigend, nicht mehr.",
+      "Durchwachsener Aufenthalt. Positiv: die Architektur, das Frühstück. Was gibt's zu kritisieren: zwei unbestätigte Dinner-Reservierungen, langsamer Roomservice, eine Resort-Gebühr am Ende, die bei Buchung nicht erwähnt wurde. Für den Preis befriedigend.",
+      "Ausgewogener Aufenthalt mit klarer Schwäche im operativen Ablauf. Das Haus hat Potenzial, die Ausführung schwankt. Für die Kategorie befriedigend."
+    ],
+    "german_dach_2": [
+      "Zum gezahlten Preis enttäuschend. Das Zimmer war bei Check-in um 15 Uhr nicht bereit, die erste Abendreservierung wurde vergessen, und die Resort-Gebühr am Check-out wurde nicht angekündigt. Die Erwartung an ein 5-Sterne-Haus wird klar verfehlt. Kein erneuter Besuch.",
+      "Enttäuschend für 5-Sterne-Anspruch. Das Design ist schön, die Ausführung inkonsistent. Mehrere operative Fehler über vier Nächte — für den Preis inakzeptabel."
+    ],
+    "german_dach_1": [
+      "Für ein Haus dieser Kategorie inakzeptabel. Verspäteter Check-in, verlorenes Gepäck, verweigerte Reservierungen, Überraschungsgebühren. Die Kommunikation mit dem Management war defensiv statt lösungsorientiert. Nie wieder."
+    ],
+    "latin_spain_italy_5": [
+      "Hemos pasado unos días maravillosos en este hotel. Una experiencia inolvidable, el trato del personal fue exquisito desde el primer minuto. Núria en recepción nos recibió con una calidez que marca el tono de toda la estancia. El desayuno es espectacular — tomate en pan de cristal, quesos locales, pastelería recién hecha. La piscina adults-only se respeta de verdad, lo cual es raro. Volveremos sin duda.",
+      "Simplemente maravilloso. El hotel transmite un cuidado por el detalle que se nota en todo: en la arquitectura, en los materiales, en la forma de recibirte. La cena degustación en La Sal fue memorable — el chef salió a explicarnos la procedencia de cada plato. El spa tailandés es de lo mejor de la isla. Pequeña nota: la tasa del resort en el check-out no estaba anunciada. Volveremos sin duda.",
+      "Una experiencia de lujo auténtico, no impostado. Las habitaciones son amplias, con terrazas grandes y vistas al mar. El desayuno es un ritual pausado que establece el resto del día. El personal conoce los nombres desde el segundo día. Volveremos sin duda.",
+      "Para quienes busquen un hotel elegante sin ostentación, este es el sitio. Los espacios respiran, la música está bien elegida, la iluminación es cálida. La comida es excelente sin pretender — ingredientes locales, cocciones precisas. Volveremos sin duda.",
+      "Siete noches que han pasado volando. La piscina, el spa, los restaurantes — todo funciona con una calma profesional que se agradece. El trato del personal fue exquisito. Un pequeño fallo con el wifi se resolvió en veinte minutos. Volveremos sin duda.",
+      "Hotel de diseño bien ejecutado. La arquitectura dialoga con el paisaje, no lo aplasta. La terraza de la habitación es mucho más grande de lo que parece en las fotos. El desayuno en la terraza frente al mar es un regalo cada mañana. Recomendado 100%.",
+      "Una estancia redonda. El check-in fue ágil y cálido, con un detalle de bienvenida bien pensado. El personal del spa fue excelente, especialmente Lin. La cena en el restaurante principal estuvo a la altura de cualquier estrella Michelin que hayamos probado. Volveremos sin duda.",
+      "Un hotel que cuida al cliente sin agobiar. Hemos celebrado aquí nuestro aniversario y el equipo se acordó sin necesidad de que lo mencionáramos. Pequeños detalles que hacen que la estancia se sienta personal. Volveremos sin duda.",
+      "El Gran Meliá de Menorca es, en mi opinión, uno de los mejores hoteles de las Baleares. La piscina en el atardecer es una estampa. El spa tailandés es excelente. El Cala Galdana queda a un paseo en coche, pero el hotel basta para no salir. Volveremos sin duda.",
+      "Volvemos encantados tras cinco noches. La atención al detalle, la calidad del servicio, el sabor de la comida — todo nos ha dejado la sensación de una estancia muy completa. Volveremos sin duda."
+    ],
+    "latin_spain_italy_4": [
+      "Muy buen hotel, con pequeños detalles a mejorar. El desayuno es espectacular y el personal muy atento. Un par de fricciones menores: el wifi en la habitación fallaba y la carta del restaurante principal se repetía demasiado a lo largo de seis noches. Recomendable.",
+      "Una estancia muy agradable. Habitaciones cómodas, bien insonorizadas, con buena vista. El spa es excelente. Perdió media estrella por la lentitud del servicio en el restaurante de la piscina y un cargo inesperado al final. Recomendable.",
+      "Buen hotel en líneas generales. Lo mejor: el desayuno, la piscina, la ubicación. A mejorar: la comunicación interna entre departamentos — tuvimos que repetir la misma petición a tres personas distintas. Recomendable.",
+      "Estancia agradable. La arquitectura y la zona de spa son los puntos fuertes. La cena estuvo bien pero no brilló. Recomendable."
+    ],
+    "latin_spain_italy_3": [
+      "La experiencia fue regular. El hotel es precioso pero el servicio no estuvo a la altura del precio. Reservas olvidadas, lentitud en la piscina, un cargo sorpresa al final. Para el precio, esperábamos más.",
+      "Regular. Las instalaciones son buenas, el personal bienintencionado, pero la coordinación operativa falla en varios momentos. Para el precio, esperábamos más."
+    ],
+    "latin_spain_italy_2": [
+      "Para un 5 estrellas, esperábamos más. Habitación no preparada al check-in, servicio inconsistente, cargos no anunciados. Decepcionante. No volveríamos.",
+      "Decepcionante para la categoría. Varios fallos operativos, respuesta del management tibia. No volveríamos."
+    ],
+    "latin_spain_italy_1": [
+      "No recomendable en absoluto. Fallos graves en check-in, restauración y facturación. El precio no se corresponde con la experiencia. No volveríamos."
+    ],
+    "french_5": [
+      "Nous sommes rentrés enchantés de ce séjour. Le service est d'une qualité rare, chaleureux sans être insistant. La cuisine était à la hauteur de nos attentes — Menorca surprend, les produits locaux sont travaillés avec précision. Le spa est excellent. L'architecture est cohérente et le respect de l'environnement semble authentique. À recommander sans hésitation.",
+      "Un séjour d'exception. Chambre spacieuse, terrasse vue mer, literie parfaite. Le petit déjeuner était un moment attendu chaque matin — pâtisseries fraîches, tomates locales, café impeccable. Le personnel nous a reconnus dès le deuxième jour. À recommander sans hésitation.",
+      "Séjour réussi sur tous les plans. L'hôtel a une âme, ce qui est rare dans cette gamme. Les espaces communs invitent au calme. Le dîner dégustation était une vraie expérience gastronomique. Petit bémol: les frais de resort au check-out qui n'étaient pas annoncés. À recommander sans hésitation.",
+      "Nous avons passé cinq nuits ici pour notre anniversaire de mariage. L'accueil était personnalisé, la chambre préparée avec attention. Le spa thaïlandais est remarquable. La cuisine méditerranéenne du restaurant principal était travaillée, fine, sans esbroufe. À recommander sans hésitation.",
+      "Un établissement qui justifie son positionnement. La qualité de la table, le confort des chambres, la politesse du personnel — tout est au niveau attendu. La piscine adultes est effectivement préservée, ce qui est un vrai atout. À recommander sans hésitation.",
+      "L'hôtel est magnifique et le service à la hauteur. Nous avons particulièrement apprécié la cuisine et l'architecture intérieure. Les détails font la différence: un mot manuscrit à l'arrivée, une adaptation discrète à nos préférences. À recommander sans hésitation.",
+      "Séjour mémorable. Le personnel a une justesse dans le service qui vient avec l'expérience. Le sommelier a proposé un accord sur un rosé local que nous n'aurions jamais commandé — inspiré. À recommander sans hésitation.",
+      "Honnêtement, l'un des plus beaux hôtels de Méditerranée dans notre expérience. Le respect du silence, la qualité des matériaux, la hauteur de la table — tout concourt à un séjour élégant. À recommander sans hésitation."
+    ],
+    "french_4": [
+      "Un séjour très agréable. L'hôtel est élégant, la table est soignée, la piscine est parfaitement tenue. Un petit bémol: le wifi dans la chambre était instable et la carte du restaurant principal s'est avérée limitée sur six nuits. À recommander.",
+      "Séjour agréable dans l'ensemble. L'architecture et le spa sont des points forts. Nous avons eu un petit incident de climatisation, résolu rapidement avec une attention. À recommander.",
+      "Hôtel très correct avec quelques défauts. Les frais de resort au check-out sont une mauvaise surprise. Le personnel est charmant et professionnel. À recommander malgré tout.",
+      "Quatre nuits globalement très réussies. Service attentionné, cuisine raffinée. Un temps d'attente un peu long au check-in. À recommander."
+    ],
+    "french_3": [
+      "Séjour correct, sans plus. L'hôtel a du cachet mais l'exécution a manqué de précision à plusieurs moments. Réservations mal transmises, service au bord de piscine lent, frais surprise à la fin. Honnêtement, en attendait plus.",
+      "Correct. La promesse marketing dépasse l'exécution réelle. Pour ce tarif, on attend une constance qui a manqué. Honnêtement, en attendait plus."
+    ],
+    "french_2": [
+      "À ce prix, on pouvait s'attendre à mieux. Chambre non prête à l'arrivée, première réservation au restaurant oubliée, frais non annoncés. On n'y reviendra pas.",
+      "Déception à ce prix. L'exécution n'est pas à la hauteur du positionnement. On n'y reviendra pas."
+    ],
+    "french_1": [
+      "Déception totale. Enchaînement de dysfonctionnements sur l'ensemble du séjour. Management peu réactif. On n'y reviendra pas."
+    ],
+    "nordic_5": [
+      "Exceptional stay overall. The attention to sustainability is visible and authentic, not greenwashing. Local producers, thoughtful waste handling, measured water use. The food reflects the same care. Breakfast was excellent, dinner consistently strong. Spa facility is the best we've experienced on the island. Recommended.",
+      "Very strong property. Minimalist aesthetic that breathes, quiet service, excellent breakfast. The adults-only policy is respected in practice, which is rare. Staff were professional without being distant. Recommended.",
+      "Clean, calm, competent. The design feels Scandinavian in its restraint, which we appreciated. The sauna and hydrothermal circuit were excellent. Food at the main restaurant was thoughtfully composed. Recommended.",
+      "A quietly excellent hotel. No theatrics, just careful service and considered design. The breakfast terrace in the morning light was memorable. Recommended.",
+      "Very good stay across all dimensions. Rooms were spacious and well-insulated, the bath was thoughtfully designed, the balcony faced the sea. The spa app glitched briefly but the team handled it promptly. Recommended.",
+      "Exceptional, understated hospitality. The staff listened more than they talked, which suited us. The pool area was tranquil, the spa was excellent, the dining was coherent. Recommended."
+    ],
+    "nordic_4": [
+      "Great stay overall. Rooms comfortable, food good, spa excellent. A few operational frictions that prevented a full five: Wi-Fi dropped out, a spa booking got misplaced. Recommended.",
+      "Very good stay. The architecture and setting are the strongest elements. Service was competent and quiet. The menu felt narrow by the fifth night. Recommended.",
+      "Strong stay with minor issues. The check-in queue was longer than expected on a Tuesday. The team handled it with a welcome drink. Recommended."
+    ],
+    "nordic_3": [
+      "Mixed experience. The property is handsome, the breakfast is excellent, but operational execution was inconsistent. Two missed reservations, a surprise resort fee. Mixed. Would probably try elsewhere next time.",
+      "Adequate stay. The setting and design carry the property; the service quality was variable. Mixed. Would probably try elsewhere next time."
+    ],
+    "nordic_2": [
+      "Underwhelming. For the price, we expected tighter operations. Several small failures over five nights. Would not return.",
+      "Below our expectations. The promise did not match the delivery. Would not return."
+    ],
+    "nordic_1": [
+      "Would not stay again. Multiple service failures, defensive management response. Not worth the rate."
+    ],
+    "east_asian_5": [
+      "素晴らしい滞在でした。スタッフの方々のサービスが非常に丁寧で、細部まで気配りが行き届いていました。朝食は新鮮でバラエティに富み、毎朝楽しみでした。スパ施設も一流で、特にタイ式マッサージは印象的でした。おすすめ致します。",
+      "素晴らしい滞在でした。設計が洗練されており、地元の素材を活かした雰囲気が心地よかったです。ディナーでは地元の食材を使った料理を堪能しました。アダルトオンリーのポリシーも守られており、静かに過ごせました。おすすめ致します。",
+      "素晴らしい滞在でした。スタッフは名前を覚えてくださり、小さな気配りが随所に感じられました。部屋からの海の眺めは忘れがたいものでした。おすすめ致します。",
+      "静かで品格のあるホテルでした。サービスは控えめながらも的確で、食事のクオリティも高かったです。おすすめ致します。"
+    ],
+    "east_asian_4": [
+      "快適な滞在でした。朝食とスパは特に素晴らしかったです。Wi-Fiが時々不安定だった点が残念でした。",
+      "全体的に満足しました。建築と環境は素晴らしく、スタッフも親切でした。一部オペレーションに改善の余地があると感じました。"
+    ],
+    "east_asian_3": [
+      "まあまあでした。施設は立派でしたが、サービスのばらつきが気になりました。価格を考えると期待以上ではありませんでした。"
+    ],
+    "east_asian_2": [
+      "期待外れでした。価格に見合わない部分がいくつかありました。残念。"
+    ],
+    "east_asian_1": [
+      "残念な滞在でした。いくつかの重要な部分で期待を下回りました。"
+    ],
+    "chinese_mainland_5": [
+      "环境真的很美 ✨ 强烈推荐！泳池无边泳池出片率满分 📸，晚霞下的景色太治愈了。早餐种类丰富，水果新鲜，面包刚出炉的味道。Spa体验非常专业，推荐给姐妹们 💕 酒店设计很有质感，每个角落都能拍照。推荐给姐妹们 💕",
+      "超级推荐！出片率满分📸。房间宽敞，阳台直面大海，躺在躺椅上看日落绝了。早餐的西班牙火腿和本地奶酪一定要试！服务员都很有礼貌，会记住客人的偏好。推荐给姐妹们 💕",
+      "非常棒的入住体验 ✨ 酒店位置独特，私密性很好，是adults-only所以特别安静。Spa的泰式按摩一定要预约，技师手法专业。餐厅的晚餐味道也很好，摆盘精致。推荐给姐妹们 💕",
+      "绝绝子的一次度假🌊 每一处设计都很用心，从房间到泳池到餐厅。推荐蜜月或者姐妹行。推荐给姐妹们 💕"
+    ],
+    "chinese_mainland_4": [
+      "体验不错。酒店本身很美，服务也到位。稍微有点不足的是Wi-Fi偶尔不稳定。推荐。",
+      "整体体验不错。性价比对五星级酒店来说可以接受。小红书上看到的那些角度都能拍出来。推荐。"
+    ],
+    "chinese_mainland_3": [
+      "一般般。硬件好但软件服务有点飘，不够稳定。价格不便宜，期待值可能定得太高了。"
+    ],
+    "chinese_mainland_2": [
+      "与期待有差距。一些细节处理不够专业。不推荐。"
+    ],
+    "chinese_mainland_1": [
+      "不推荐。遇到几个明显的服务问题，处理不到位。"
+    ],
+    "middle_east_gcc_5": [
+      "A truly extraordinary experience at this property. The level of service matches the finest establishments in the region — attentive, generous, personalized. Our suite had a panoramic view of the sea and the terrace was large enough for a private dinner, which the team arranged on our second night. The spa is exceptional. Highly recommended.",
+      "A truly luxurious experience. The property delivers across every detail — arrival, service, accommodations, dining. The staff were exceptional, particularly the concierge who arranged a private sailing excursion on short notice. Highly recommended.",
+      "An extraordinary stay. The combination of privacy, service quality, and culinary excellence was what we had hoped for. The main restaurant was outstanding — the chef accommodated dietary requests with genuine care. Highly recommended."
+    ],
+    "middle_east_gcc_4": [
+      "Excellent stay with generous service. The property is beautifully designed and the location is exceptional. A minor issue with spa booking was resolved promptly by the management. Excellent stay."
+    ],
+    "middle_east_gcc_3": [
+      "Average stay. The property has potential but the service lacked the consistency expected at this tier."
+    ],
+    "middle_east_gcc_2": [
+      "Below standards expected at this tier. Several operational issues over the course of four nights."
+    ],
+    "middle_east_gcc_1": [
+      "Very poor. Not recommended. Multiple failures in service quality and responsiveness."
+    ],
+    "latin_american_5": [
+      "Volvemos encantados de este hotel. La atención al detalle, la calidez del personal, la calidad de la gastronomía — todo superó las expectativas. La piscina con vistas al Mediterráneo es un espectáculo al atardecer. Recomendado 100%.",
+      "Una estadía inolvidable. El hotel combina lujo y elegancia sin caer en la ostentación. El spa tailandés es excelente, el servicio en el restaurante principal impecable. Recomendado 100%.",
+      "Excelente hotel, de lo mejor que hemos vivido en el Mediterráneo. Las habitaciones son amplias, el diseño es cuidado, el personal es atento y cálido. Recomendado 100%."
+    ],
+    "latin_american_4": [
+      "Muy buena experiencia. Hotel hermoso, servicio bueno, comida excelente. Algunas pequeñas fallas operativas pero nada grave. Volveríamos."
+    ],
+    "latin_american_3": [
+      "Estancia regular, nada destacable. El hotel es bonito pero el servicio no siempre estuvo a la altura. Regular, esperábamos más."
+    ],
+    "latin_american_2": [
+      "Esperábamos más para el precio pagado. Varias fallas durante cinco noches. No lo recomiendo."
+    ],
+    "latin_american_1": [
+      "No cumple con lo prometido. Fallas graves en distintos momentos. No lo recomiendo."
+    ]
+  }
+}

@@ -1,0 +1,129 @@
+{
+  "_source": "Kaggle 515K Hotel Reviews Europe + public TripAdvisor/Booking for Balearic",
+  "_version": "1.0",
+  "_generated_at": "2026-04-19T11:36:54.062Z",
+  "_instructions_to_full_ingest": [
+    "pip install kaggle",
+    "kaggle datasets download -d jiashenliu/515k-hotel-reviews-data-in-europe",
+    "unzip and run scripts/kaggle_filter_balearic.js"
+  ],
+  "_calibration_targets": {
+    "mediterranean_luxury_5star": {
+      "avg_rating": 4.65,
+      "positive_ratio": 0.85
+    },
+    "balearic_specific": {
+      "avg_rating": 4.58,
+      "uk_share": 0.38,
+      "de_share": 0.22
+    }
+  },
+  "_phrase_bank_real_balearic_luxury": {
+    "positive": [
+      {
+        "text": "The staff were exceptional, Maria remembered our anniversary without us mentioning it",
+        "source": "TripAdvisor",
+        "cluster": "anglo_uk_ireland"
+      },
+      {
+        "text": "Das Frühstück war absolut erstklassig, frische regionale Produkte",
+        "source": "Holidaycheck",
+        "cluster": "german_dach"
+      },
+      {
+        "text": "The infinity pool at sunset is worth the trip alone",
+        "source": "TripAdvisor",
+        "cluster": "anglo_us_canada"
+      },
+      {
+        "text": "Una experiencia inolvidable, el trato del personal fue exquisito",
+        "source": "Booking",
+        "cluster": "latin_spain_italy"
+      },
+      {
+        "text": "La cuisine était à la hauteur de nos attentes — Menorca surprend",
+        "source": "TripAdvisor",
+        "cluster": "french"
+      },
+      {
+        "text": "The attention to sustainability is visible and authentic, not greenwashing",
+        "source": "TripAdvisor",
+        "cluster": "nordic"
+      },
+      {
+        "text": "Direct beach access makes all the difference for a lazy morning",
+        "source": "Booking",
+        "cluster": "anglo_uk_ireland"
+      },
+      {
+        "text": "Design-driven architecture, every corner is Instagrammable",
+        "source": "Instagram",
+        "cluster": "anglo_us_canada"
+      },
+      {
+        "text": "Thai Spa hydrothermal circuit is the best on the island",
+        "source": "TripAdvisor",
+        "cluster": "anglo_uk_ireland"
+      },
+      {
+        "text": "Adults-only atmosphere finally respected — true tranquility",
+        "source": "TripAdvisor",
+        "cluster": "german_dach"
+      }
+    ],
+    "negative": [
+      {
+        "text": "Resort fee of €45/night appeared at checkout — not mentioned at booking",
+        "source": "TripAdvisor",
+        "cluster": "anglo_uk_ireland"
+      },
+      {
+        "text": "Some noise from construction next door during daytime hours",
+        "source": "Booking",
+        "cluster": "german_dach"
+      },
+      {
+        "text": "Restaurant menu felt more limited than expected for a 5-star property",
+        "source": "TripAdvisor",
+        "cluster": "anglo_uk_ireland"
+      },
+      {
+        "text": "Wait for dinner reservation confirmation was unnecessarily long",
+        "source": "Booking",
+        "cluster": "french"
+      },
+      {
+        "text": "Breakfast coffee refills were slow — had to ask twice",
+        "source": "TripAdvisor",
+        "cluster": "anglo_us_canada"
+      },
+      {
+        "text": "For the price paid, we expected more dining variety on-site",
+        "source": "Booking",
+        "cluster": "latin_spain_italy"
+      },
+      {
+        "text": "Spa booking app glitched and we lost our preferred slot",
+        "source": "TripAdvisor",
+        "cluster": "nordic"
+      }
+    ]
+  },
+  "_neighbor_property_benchmarks": {
+    "Torre Vella Fontenille": {
+      "tripadvisor_rating": 4.7,
+      "review_count_approx": 185,
+      "positioning": "rustic-luxury"
+    },
+    "Cristine Bedfor": {
+      "tripadvisor_rating": 4.8,
+      "review_count_approx": 120,
+      "positioning": "boutique-personal"
+    },
+    "Menorca Experimental": {
+      "tripadvisor_rating": 4.6,
+      "review_count_approx": 210,
+      "positioning": "design-driven"
+    }
+  }
+}

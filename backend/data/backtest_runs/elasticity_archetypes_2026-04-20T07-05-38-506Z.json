@@ -1,0 +1,279 @@
+{
+  "meta": {
+    "property_name": "Gran Meliá Villa Le Blanc",
+    "seed": "villa-elast-v2",
+    "n_per_rate": 60,
+    "archetypes_tested": [
+      "luxury_seeker",
+      "honeymooner",
+      "family_vacationer",
+      "business_traveler",
+      "digital_nomad",
+      "budget_optimizer",
+      "loyalty_maximizer",
+      "event_attendee"
+    ],
+    "elapsed_ms": 35063,
+    "generated_at": "2026-04-20T07:05:38.505Z",
+    "benchmark_sources": [
+      "vives_jacob_2023",
+      "vives_jacob_2021_dynamic",
+      "garin_munoz_german_spain",
+      "singh_corsun_2023",
+      "xuan_tran_2011_luxury_us",
+      "rateboard_industry_consensus",
+      "hoteltechreport_2024"
+    ]
+  },
+  "per_archetype": [
+    {
+      "archetype": "luxury_seeker",
+      "sweet_spot_eur": 1200,
+      "p_low": 900,
+      "p_high": 1500,
+      "rate_increase_pct": 66.7,
+      "low_rate": {
+        "rate_eur": 900,
+        "acceptance_pct": 96.7,
+        "walk_away_pct": 0,
+        "actual_cohort": 60
+      },
+      "high_rate": {
+        "rate_eur": 1500,
+        "acceptance_pct": 25,
+        "walk_away_pct": 0,
+        "actual_cohort": 60
+      },
+      "empirical_elasticity": -2.648,
+      "benchmark_value": -0.45,
+      "benchmark_range": [
+        -0.6,
+        -0.3
+      ],
+      "abs_delta": 2.198,
+      "within_range": false,
+      "within_tolerance": false,
+      "verdict": "fail",
+      "primary_source": "xuan_tran_2011_luxury_us + singh_corsun_2023"
+    },
+    {
+      "archetype": "honeymooner",
+      "sweet_spot_eur": 1000,
+      "p_low": 750,
+      "p_high": 1250,
+      "rate_increase_pct": 66.7,
+      "low_rate": {
+        "rate_eur": 750,
+        "acceptance_pct": 98.3,
+        "walk_away_pct": 0,
+        "actual_cohort": 60
+      },
+      "high_rate": {
+        "rate_eur": 1250,
+        "acceptance_pct": 71.7,
+        "walk_away_pct": 20,
+        "actual_cohort": 60
+      },
+      "empirical_elasticity": -0.618,
+      "benchmark_value": -0.85,
+      "benchmark_range": [
+        -1.1,
+        -0.6
+      ],
+      "abs_delta": 0.232,
+      "within_range": true,
+      "within_tolerance": true,
+      "verdict": "in_range",
+      "primary_source": "xuan_tran_2011 + vives_jacob_2023 couple segment"
+    },
+    {
+      "archetype": "family_vacationer",
+      "sweet_spot_eur": 700,
+      "p_low": 525,
+      "p_high": 875,
+      "rate_increase_pct": 66.7,
+      "low_rate": {
+        "rate_eur": 525,
+        "acceptance_pct": 85,
+        "walk_away_pct": 0,
+        "actual_cohort": 60
+      },
+      "high_rate": {
+        "rate_eur": 875,
+        "acceptance_pct": 81.7,
+        "walk_away_pct": 0,
+        "actual_cohort": 60
+      },
+      "empirical_elasticity": -0.078,
+      "benchmark_value": -1.008,
+      "benchmark_range": [
+        -1.25,
+        -0.8
+      ],
+      "abs_delta": 0.93,
+      "within_range": false,
+      "within_tolerance": false,
+      "verdict": "fail",
+      "primary_source": "vives_jacob_2023 family segment"
+    },
+    {
+      "archetype": "business_traveler",
+      "sweet_spot_eur": 500,
+      "p_low": 375,
+      "p_high": 625,
+      "rate_increase_pct": 66.7,
+      "low_rate": {
+        "rate_eur": 375,
+        "acceptance_pct": 85,
+        "walk_away_pct": 0,
+        "actual_cohort": 60
+      },
+      "high_rate": {
+        "rate_eur": 625,
+        "acceptance_pct": 36.7,
+        "walk_away_pct": 1.7,
+        "actual_cohort": 60
+      },
+      "empirical_elasticity": -1.644,
+      "benchmark_value": -0.7,
+      "benchmark_range": [
+        -0.9,
+        -0.5
+      ],
+      "abs_delta": 0.944,
+      "within_range": false,
+      "within_tolerance": false,
+      "verdict": "fail",
+      "primary_source": "rateboard_industry_consensus + hoteltechreport_2024"
+    },
+    {
+      "archetype": "digital_nomad",
+      "sweet_spot_eur": 300,
+      "p_low": 225,
+      "p_high": 375,
+      "rate_increase_pct": 66.7,
+      "low_rate": {
+        "rate_eur": 225,
+        "acceptance_pct": 50,
+        "walk_away_pct": 0,
+        "actual_cohort": 60
+      },
+      "high_rate": {
+        "rate_eur": 375,
+        "acceptance_pct": 100,
+        "walk_away_pct": 0,
+        "actual_cohort": 60
+      },
+      "empirical_elasticity": 1.357,
+      "benchmark_value": -1.3,
+      "benchmark_range": [
+        -1.55,
+        -1.05
+      ],
+      "abs_delta": 2.657,
+      "within_range": false,
+      "within_tolerance": false,
+      "verdict": "fail",
+      "primary_source": "rateboard_industry_consensus leisure avg"
+    },
+    {
+      "archetype": "budget_optimizer",
+      "sweet_spot_eur": 200,
+      "p_low": 150,
+      "p_high": 250,
+      "rate_increase_pct": 66.7,
+      "low_rate": {
+        "rate_eur": 150,
+        "acceptance_pct": 71.7,
+        "walk_away_pct": 0,
+        "actual_cohort": 60
+      },
+      "high_rate": {
+        "rate_eur": 250,
+        "acceptance_pct": 75,
+        "walk_away_pct": 5,
+        "actual_cohort": 60
+      },
+      "empirical_elasticity": 0.088,
+      "benchmark_value": -1.57,
+      "benchmark_range": [
+        -1.85,
+        -1.3
+      ],
+      "abs_delta": 1.658,
+      "within_range": false,
+      "within_tolerance": false,
+      "verdict": "fail",
+      "primary_source": "vives_jacob_2023 solo traveler segment"
+    },
+    {
+      "archetype": "loyalty_maximizer",
+      "sweet_spot_eur": 600,
+      "p_low": 450,
+      "p_high": 750,
+      "rate_increase_pct": 66.7,
+      "low_rate": {
+        "rate_eur": 450,
+        "acceptance_pct": 83.3,
+        "walk_away_pct": 0,
+        "actual_cohort": 60
+      },
+      "high_rate": {
+        "rate_eur": 750,
+        "acceptance_pct": 76.7,
+        "walk_away_pct": 23.3,
+        "actual_cohort": 60
+      },
+      "empirical_elasticity": -0.162,
+      "benchmark_value": -0.55,
+      "benchmark_range": [
+        -0.75,
+        -0.35
+      ],
+      "abs_delta": 0.388,
+      "within_range": false,
+      "within_tolerance": false,
+      "verdict": "fail",
+      "primary_source": "Industry synthesis — loyalty members absorb price via points"
+    },
+    {
+      "archetype": "event_attendee",
+      "sweet_spot_eur": 450,
+      "p_low": 338,
+      "p_high": 563,
+      "rate_increase_pct": 66.6,
+      "low_rate": {
+        "rate_eur": 338,
+        "acceptance_pct": 86.7,
+        "walk_away_pct": 0,
+        "actual_cohort": 60
+      },
+      "high_rate": {
+        "rate_eur": 563,
+        "acceptance_pct": 28.3,
+        "walk_away_pct": 56.7,
+        "actual_cohort": 60
+      },
+      "empirical_elasticity": -2.194,
+      "benchmark_value": -1.2,
+      "benchmark_range": [
+        -1.45,
+        -0.95
+      ],
+      "abs_delta": 0.994,
+      "within_range": false,
+      "within_tolerance": false,
+      "verdict": "fail",
+      "primary_source": "Industry consensus + event hotel pricing literature"
+    }
+  ],
+  "summary": {
+    "archetypes_with_anchor": 8,
+    "strict_in_range": 1,
+    "passed_within_tolerance": 1,
+    "pass_rate_pct": 12.5,
+    "strict_match_rate_pct": 12.5,
+    "mean_abs_error": 1.25,
+    "verdict": "DRIFT"
+  }
+}

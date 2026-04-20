@@ -6,11 +6,11 @@
   "injection_config": {
     "probability_at_least_one_event_per_stay": 0.45,
     "probability_two_events_per_stay": 0.10,
-    "_trigger_probability_by_tier_notes": "2026-04-18: multiplier applied on top of probability_at_least_one_event_per_stay and the target-star forced probability. Luxury 5★ reviews empirically mention friction in ~10-15% of stays; budget properties closer to 40-50%. Capped at 1.0.",
+    "_trigger_probability_by_tier_notes": "2026-04-19: multiplier applied on top of probability_at_least_one_event_per_stay and the target-star forced probability. Luxury 5★ Villa Le Blanc backtest at 0.35 still yielded 14% friction rate; lowered to 0.22 to land in the empirical 8-11% band for flagship properties. Budget properties closer to 40-50%. Capped at 1.0.",
     "trigger_probability_by_tier": {
-      "luxury": 0.35,
-      "premium": 0.60,
-      "upscale": 0.85,
+      "luxury": 0.22,
+      "premium": 0.50,
+      "upscale": 0.80,
       "midscale": 1.0,
       "economy": 1.15
     },

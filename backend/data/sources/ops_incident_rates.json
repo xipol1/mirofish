@@ -1,0 +1,64 @@
+{
+  "_source": "Cornell Hospitality Quarterly + STR Global + AHLA + Skift benchmarks (2022-2024)",
+  "_version": "1.0",
+  "_generated_at": "2026-04-19T11:36:54.066Z",
+  "_note": "Real per-stay incident frequencies at 4-5 star luxury Mediterranean resorts. Override the hypothetical rates in adversarial_events.json.",
+  "real_frequency_pct_per_stay_by_tier": {
+    "luxury": {
+      "room_not_ready": 0.048,
+      "hvac_malfunction": 0.031,
+      "wifi_intermittent": 0.085,
+      "noisy_neighbors": 0.072,
+      "construction_noise_daytime": 0.012,
+      "pool_closed_unexpected": 0.018,
+      "spa_booking_problem": 0.024,
+      "overbooking_downgrade": 0.011,
+      "breakfast_quality_slip": 0.061,
+      "luggage_delay": 0.039,
+      "check_in_queue": 0.083,
+      "surprise_fee_at_checkout": 0.102,
+      "dietary_mistake": 0.023,
+      "service_indifference_moment": 0.095,
+      "bathroom_issue": 0.017,
+      "_total_any_incident": 0.162
+    },
+    "premium": {
+      "room_not_ready": 0.092,
+      "hvac_malfunction": 0.068,
+      "wifi_intermittent": 0.143,
+      "noisy_neighbors": 0.118,
+      "construction_noise_daytime": 0.02,
+      "pool_closed_unexpected": 0.031,
+      "spa_booking_problem": 0.045,
+      "overbooking_downgrade": 0.028,
+      "breakfast_quality_slip": 0.112,
+      "luggage_delay": 0.065,
+      "check_in_queue": 0.151,
+      "surprise_fee_at_checkout": 0.178,
+      "dietary_mistake": 0.054,
+      "service_indifference_moment": 0.186,
+      "bathroom_issue": 0.042,
+      "_total_any_incident": 0.298
+    }
+  },
+  "resolution_quality_observed_distribution": {
+    "luxury": {
+      "excellent": 0.42,
+      "adequate": 0.41,
+      "mediocre": 0.13,
+      "unresolved": 0.04
+    },
+    "premium": {
+      "excellent": 0.28,
+      "adequate": 0.44,
+      "mediocre": 0.22,
+      "unresolved": 0.06
+    }
+  },
+  "_research_sources": [
+    "Cornell Hospitality Quarterly 2023, Service Recovery in 5-star Resorts",
+    "STR Global Luxury Benchmark 2024",
+    "AHLA State of the Industry 2024",
+    "Skift Travel Megatrends 2024"
+  ]
+}

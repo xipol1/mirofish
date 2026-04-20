@@ -90,8 +90,14 @@ async function runStay({
   cultural_context = null,
   booking_context = null,
   external_context: extCtx = null,
+  operational_context = null,
   onStage = () => {},
 }) {
+  // Operational feedback loop — when the caller passes understaffing /
+  // revenue-scenario context, translate it into per-stage sensation drags
+  // so a "raise dinner 15%" or "understaff 30%" scenario actually changes
+  // the guest narrative, not just the post-hoc revenue math.
+  const opStressByStage = _buildOperationalStressDeltas(operational_context);
   const archetypeId = persona.archetype_id || persona._archetype_id || 'business_traveler';
   const archetypeBehavior = getArchetypeBehavior(archetypeId);
 
@@ -102,6 +108,13 @@ async function runStay({
     || property?.tier
     || booking_context?.price_tier
     || null;
+  // Loyalty expectation modifier: MeliáRewards tier × brand match.
+  // Platinum/Ambassador members of Meliá portfolio expect recognition by
+  // name and tier on arrival. If the property is a Meliá brand, they start
+  // with HIGHER expectations (i.e., lower personalization/service_quality
+  // baselines) — staff has to earn the top of the scale through explicit
+  // tier recognition. Non-Meliá loyalty or lower tiers: no effect.
+  const loyaltyModifiers = computeLoyaltyExpectationModifier({ persona, property, bookingContext: booking_context });
   let sensationState = sensationTracker.initialState({
     propertyBaseline,
     archetypeId,
@@ -109,6 +122,7 @@ async function runStay({
     bookingModifiers: booking_context?.aggregated_baseline_modifiers || null,
     externalModifiers: extCtx?.aggregated_baseline_modifiers || null,
     propertyTier: tierForBoost,
+    loyaltyModifiers,
   });
   let expenseState = expenseTracker.initial();
 
@@ -245,7 +259,8 @@ async function runStay({
     const modulatedByBody = physicalState.applySensationModifiers(stageResult.sensation_deltas, physState);
     const modulatedByCompanions = companion.applyCompanionMoodToSensations(modulatedByBody, companions);
     const modulatedByTraits = personaEnricher.applyTraitSensationModifiers(modulatedByCompanions, persona);
-    sensationState = sensationTracker.applyStageDeltas(sensationState, modulatedByTraits, stageLabel);
+    const withOperationalStress = _applyOperationalStress(modulatedByTraits, opStressByStage, stageLabel);
+    sensationState = sensationTracker.applyStageDeltas(sensationState, withOperationalStress, stageLabel);
 
     // Apply adversarial event deltas (guarantee impact even if LLM softened it)
     if (injectedEvent) {
@@ -279,35 +294,83 @@ async function runStay({
         }
       }
     } else {
-      // Fallback: any staff in play that was featured this stage gets a neutral rapport update
-      // based on the stage's overall positive/negative balance
+      // Fallback: staff featured this stage gets rapport update based on the
+      // stage's positive/negative moment balance. 2026-04-19: formula tuned
+      // for real-LLM runs where 8B often forgets to emit
+      // staff_interactions_outcome — the old ±2 cap left rapport stuck near 0
+      // for the whole stay. Now scales with moment count and tier quality:
+      //   luxury + positive stage → +3 per positive moment (capped at +5)
+      //   luxury + mixed stage   → +1 net
+      //   non-luxury             → old ±2 cap
       const posCount = (stageResult.moments_positive || []).length;
       const negCount = (stageResult.moments_negative || []).length;
+      const isLuxuryStage = tierForBoost === 'luxury' || tierForBoost === 'premium';
       for (const s of staffInPlay) {
         const entity = staffRegistryEntities.find(x => x.id === s.id);
-        if (entity) {
-          const delta = posCount - negCount;
-          staffRegistry.recordInteraction({
-            registry: staffRegistryEntities,
-            staffId: entity.id,
-            stage: stageLabel,
-            outcome: { rapport_delta: Math.max(-2, Math.min(2, delta)), was_positive: delta > 0, was_negative: delta < 0 },
-          });
+        if (!entity) continue;
+        let delta;
+        if (isLuxuryStage) {
+          if (posCount > negCount) delta = Math.min(5, posCount * 2 - negCount);
+          else if (posCount < negCount) delta = Math.max(-3, posCount - negCount);
+          else delta = 0;
+        } else {
+          delta = Math.max(-2, Math.min(2, posCount - negCount));
         }
+        staffRegistry.recordInteraction({
+          registry: staffRegistryEntities,
+          staffId: entity.id,
+          stage: stageLabel,
+          outcome: { rapport_delta: delta, was_positive: delta > 0, was_negative: delta < 0 },
+        });
       }
     }
 
-    // Record expenses
+    // Record expenses (calibrated + annotated with research source)
+    const occForCalibration = extCtx?.occupancy_pct || null;
+    const clusterForCalibration = cultural_context?.culture_cluster || null;
+    // Stage experience quality (0-1) — proxy for "was this stage good?"
+    // Used to couple spend ↔ perception: expensive spend + bad stage penalizes
+    // value/culinary harder ("too expensive for what it was" in real reviews).
+    const stageExpQuality = (() => {
+      const pos = (stageResult.moments_positive || []).length;
+      const neg = (stageResult.moments_negative || []).length;
+      if (pos + neg === 0) return 0.5;
+      return pos / (pos + neg);
+    })();
+    const declinedItems = [];
     for (const exp of stageResult.expenses || []) {
       const before = expenseState.items.length;
+      const calibrated = expenseTracker.calibrateExpense({
+        proposedAmount: exp.amount_eur || 0,
+        stage: stageLabel,
+        category: exp.category || 'other',
+        archetypeId,
+        culturalCluster: clusterForCalibration,
+        occupancyPct: occForCalibration,
+      });
+      // C. Decision conditioning — skip_purchase for budget-sensitive personas
+      // when calibrated amount exceeds comfort threshold.
+      const declineCheck = shouldDeclinePurchase(persona, archetypeId, calibrated);
+      if (declineCheck.decline) {
+        declinedItems.push({
+          stage: stageLabel, category: exp.category || 'other', item: exp.item || 'unspecified',
+          proposed_amount: calibrated.amount_eur, reason: declineCheck.reason,
+        });
+        continue;
+      }
       expenseState = expenseTracker.record(expenseState, {
         stage: stageLabel,
         category: exp.category || 'other',
         item: exp.item || 'unspecified',
-        amount_eur: exp.amount_eur || 0,
+        amount_eur: calibrated.amount_eur,
         included: !!exp.included,
         satisfaction: exp.satisfaction,
         note: exp.note || null,
+        source: calibrated.source,
+        confidence: calibrated.confidence,
+        proposed_amount: calibrated.proposed_amount,
+        was_clamped: calibrated.was_clamped,
+        range_used: calibrated.range_used,
       });
       // Loss-aversion hit: surprise charges apply a negative value + service
       // penalty proportional to magnitude, and auto-record a negative moment.
@@ -324,6 +387,18 @@ async function runStay({
           description: `[surprise charge] €${recorded.amount_eur} ${recorded.item} (${recorded.category}) — not expected`,
         });
       }
+      // A + B: spend ↔ perception causal coupling.
+      //  - Expensive + great stage → "worth every euro" (value +, catDim +)
+      //  - Expensive + bad stage   → "too expensive for what it was" (value −)
+      //  - Cheap + great stage     → "great value" (value ++)
+      const couplingDeltas = computeSpendPerceptionDeltas(calibrated, stageExpQuality, exp.category || 'other');
+      if (Object.keys(couplingDeltas).length > 0) {
+        sensationState = sensationTracker.applyStageDeltas(sensationState, couplingDeltas, `${stageLabel}__spend_coupling:${exp.category}`);
+      }
+    }
+    // Attach declined items to the stageResult for surfacing in stage history
+    if (declinedItems.length > 0) {
+      stageResult.declined_purchases = declinedItems;
     }
 
     // Update physical state. Fed with post-stage sensation snapshot (for night
@@ -513,4 +588,160 @@ function inferNightNumber(stages, index) {
   return priorMornings + thisIsMorning + 1;
 }
 
-module.exports = { runStay, pickStages };
+// ─── Spend ↔ perception coupling (A + B) ───
+// Map spend category → sensation dim it most directly affects
+const CATEGORY_TO_SENSATION_DIM = {
+  dining: 'culinary', dinner: 'culinary', lunch: 'culinary', breakfast: 'culinary', room_service: 'culinary',
+  bar: 'culinary', cocktails: 'culinary', wine: 'culinary',
+  spa: 'service_quality', spa_treatment: 'service_quality',
+  activities: 'amenity_usability', activity: 'amenity_usability', excursion: 'amenity_usability', tour: 'amenity_usability',
+  upsell: 'personalization', room_upgrade: 'personalization', view_upgrade: 'personalization',
+  gift_shop: 'aesthetic', boutique: 'aesthetic',
+};
+
+function computeSpendPerceptionDeltas(calibrated, expQuality, category) {
+  const deltas = {};
+  if (!calibrated.range_used || !calibrated.range_used.median) return deltas;
+  const amt = calibrated.amount_eur;
+  const median = calibrated.range_used.median || 1;
+  const position = amt / median;   // 1.0 = at median, 1.5 = 50% premium, 0.6 = 40% below
+  const catDim = CATEGORY_TO_SENSATION_DIM[category] || null;
+
+  if (position > 1.15) {
+    // EXPENSIVE
+    if (expQuality >= 0.7) {            // expensive + great → justified
+      deltas.value = 3;
+      if (catDim) deltas[catDim] = 2;
+    } else if (expQuality <= 0.4) {     // expensive + bad → loss aversion flash
+      deltas.value = -5;
+      if (catDim) deltas[catDim] = -3;
+    } else {
+      deltas.value = -1;
+    }
+  } else if (position < 0.85) {
+    // CHEAP relative to expectation
+    if (expQuality >= 0.7) deltas.value = 4; // "great value"
+    // cheap + bad: no delta (expected failure mode)
+  } else {
+    // AT MEDIAN
+    if (expQuality >= 0.7) deltas.value = 1;
+    else if (expQuality <= 0.4) deltas.value = -1;
+  }
+  return deltas;
+}
+
+// ─── Purchase decision conditioning (C) ───
+function shouldDeclinePurchase(persona, archetypeId, calibrated) {
+  if (!calibrated.range_used) return { decline: false };
+  const scrutiny = persona?.financial_behavior?.receipt_scrutiny || 50;
+  const amt = calibrated.amount_eur;
+  const { median, max } = calibrated.range_used;
+  if (!median || amt <= 0) return { decline: false };
+
+  // Budget_optimizer: decline 40% of items that cost > 130% of median
+  if (archetypeId === 'budget_optimizer' && amt > median * 1.3 && Math.random() < 0.40) {
+    return { decline: true, reason: 'budget_optimizer_threshold' };
+  }
+  // High receipt_scrutiny (≥75) + amount above max: decline 35%
+  if (scrutiny >= 75 && max > 0 && amt > max * 1.05 && Math.random() < 0.35) {
+    return { decline: true, reason: 'high_scrutiny_out_of_band' };
+  }
+  // Moderate scrutiny (60-75) + amount well above max: decline 20%
+  if (scrutiny >= 60 && scrutiny < 75 && max > 0 && amt > max * 1.2 && Math.random() < 0.20) {
+    return { decline: true, reason: 'moderate_scrutiny_outlier' };
+  }
+  return { decline: false };
+}
+
+// MeliáRewards tier × brand-match expectation table. Values are initial-state
+// deltas applied on top of baselines (negative = higher expectation, so
+// starting score is lower and staff must earn the top).
+const MELIA_BRANDS = /meli[aá]|gran meli[aá]|paradisus|innside|sol\b|affiliated/i;
+const MR_TIER_EXPECTATION = {
+  ambassador: { personalization: -12, service_quality: -6, value: -4 },
+  platinum:   { personalization: -9,  service_quality: -5, value: -2 },
+  gold:       { personalization: -5,  service_quality: -2 },
+  silver:     { personalization: -2 },
+  none:       {},
+};
+
+function computeLoyaltyExpectationModifier({ persona, property, bookingContext }) {
+  const tier = persona?.travel_history?.loyalty_tier_any_brand
+    || persona?.loyalty_tier
+    || 'none';
+  const brand = String(property?.brand || property?.data_json?.brand || '');
+  const isMeliaBrand = MELIA_BRANDS.test(brand);
+  if (!isMeliaBrand) return null;
+  // Only applies if the booking context signals loyalty recognition was expected
+  if (!bookingContext?.loyalty_recognition_expected && tier === 'none') return null;
+  return MR_TIER_EXPECTATION[tier] || null;
+}
+
+/**
+ * Translate an operational_context (understaffing, rate scenario, F&B price hike)
+ * into per-stage sensation drags so downstream narrative + reviews reflect the
+ * stress. Keeps impacts bounded — this is a post-modulation correction, not a
+ * replacement for the primary sensation deltas.
+ *
+ * operational_context shape (all optional):
+ *   - understaff_pct_by_department: { front_desk: 20, fb_server: 30, ... }
+ *   - revenue_scenario: { dinner_price_pct_delta, resort_fee_eur_delta, ... }
+ *   - occupancy_stress_pct (0-100)
+ */
+function _buildOperationalStressDeltas(opCtx) {
+  if (!opCtx) return null;
+  const understaff = opCtx.understaff_pct_by_department || {};
+  const rev = opCtx.revenue_scenario || {};
+  const occ = typeof opCtx.occupancy_stress_pct === 'number' ? opCtx.occupancy_stress_pct : 0;
+
+  const STAGE_DEPT_SENSITIVITY = {
+    arrival:               { front_desk: { speed: -0.25, service_quality: -0.15, personalization: -0.10 }, guest_relations: { personalization: -0.15, service_quality: -0.10 } },
+    room_first_impression: { housekeeper: { cleanliness: -0.20, aesthetic: -0.08 }, butler: { personalization: -0.15, service_quality: -0.10 } },
+    morning_routine:       { fb_server: { speed: -0.18, service_quality: -0.12 }, fb_chef: { culinary: -0.10 }, housekeeper: { cleanliness: -0.08 } },
+    daytime_activity:      { pool_attendant: { service_quality: -0.12, comfort_physical: -0.10 }, engineer_maint: { amenity_usability: -0.10, safety: -0.05 } },
+    lunch:                 { fb_server: { speed: -0.15, service_quality: -0.10 }, fb_chef: { culinary: -0.08 } },
+    afternoon_activity:    { spa_therapist: { service_quality: -0.18, amenity_usability: -0.10 } },
+    dinner:                { fb_server: { speed: -0.20, service_quality: -0.18, personalization: -0.12 }, fb_chef: { culinary: -0.15 } },
+    evening_leisure:       { fb_server: { service_quality: -0.10 }, concierge: { personalization: -0.10 } },
+    last_morning:          { fb_server: { speed: -0.10 }, housekeeper: { cleanliness: -0.06 } },
+    checkout:              { front_desk: { speed: -0.22, service_quality: -0.15, value: -0.08 } },
+  };
+
+  const byStage = {};
+  for (const [stage, deptMap] of Object.entries(STAGE_DEPT_SENSITIVITY)) {
+    const deltas = {};
+    for (const [dept, sensMap] of Object.entries(deptMap)) {
+      const stressPct = Math.max(0, understaff[dept] || 0) + occ * 0.25;
+      if (stressPct < 1) continue;
+      const scale = Math.min(1.0, stressPct / 30);
+      for (const [dim, coef] of Object.entries(sensMap)) {
+        deltas[dim] = (deltas[dim] || 0) + coef * stressPct * scale;
+      }
+    }
+    if (typeof rev.dinner_price_pct_delta === 'number' && stage === 'dinner') {
+      const hike = rev.dinner_price_pct_delta;
+      deltas.value = (deltas.value || 0) - hike * 0.4;
+      deltas.culinary = (deltas.culinary || 0) - Math.max(0, hike - 10) * 0.05;
+    }
+    if (typeof rev.resort_fee_eur_delta === 'number' && stage === 'checkout') {
+      deltas.value = (deltas.value || 0) - rev.resort_fee_eur_delta * 0.12;
+      deltas.service_quality = (deltas.service_quality || 0) - Math.max(0, rev.resort_fee_eur_delta) * 0.04;
+    }
+    for (const k of Object.keys(deltas)) deltas[k] = Math.round(Math.max(-12, Math.min(6, deltas[k])) * 10) / 10;
+    if (Object.keys(deltas).length > 0) byStage[stage] = deltas;
+  }
+  return byStage;
+}
+
+function _applyOperationalStress(inputDeltas, opStressByStage, stageLabel) {
+  if (!opStressByStage) return inputDeltas;
+  const stressDeltas = opStressByStage[stageLabel];
+  if (!stressDeltas) return inputDeltas;
+  const out = { ...(inputDeltas || {}) };
+  for (const [dim, v] of Object.entries(stressDeltas)) {
+    out[dim] = (out[dim] || 0) + v;
+  }
+  return out;
+}
+
+module.exports = { runStay, pickStages, computeLoyaltyExpectationModifier };

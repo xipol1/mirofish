@@ -26,14 +26,41 @@ function getCluster(clusterId) {
  */
 function sampleClusterForMenorca() {
   const mix = getConfig().menorca_typical_origin_mix_pct || {};
-  const entries = Object.entries(mix);
-  const total = entries.reduce((s, [, v]) => s + v, 0) || 100;
+  return _sampleFromMix(mix);
+}
+
+function _sampleFromMix(mix) {
+  const entries = Object.entries(mix).filter(([k]) => !k.startsWith('_'));
+  const total = entries.reduce((s, [, v]) => s + (typeof v === 'number' ? v : 0), 0) || 100;
   let r = Math.random() * total;
   for (const [k, v] of entries) {
+    if (typeof v !== 'number') continue;
     r -= v;
     if (r <= 0) return k;
   }
-  return entries[0][0];
+  return entries[0]?.[0];
+}
+
+/**
+ * Sample a cluster using a named preset (menorca_leisure_flagship,
+ * madrid_urban_gran_melia, cancun_caribbean_paradisus, asia_pacific_melia,
+ * gcc_dubai_melia, global_brand_mix) defined in cultural_profiles.json.
+ *
+ * Falls back to the Menorca mix if the preset is unknown.
+ */
+function sampleClusterFromPreset(presetName) {
+  const presets = getConfig().origin_mix_presets || {};
+  const mix = presets[presetName];
+  if (!mix) return sampleClusterForMenorca();
+  return _sampleFromMix(mix);
+}
+
+function listOriginMixPresets() {
+  const presets = getConfig().origin_mix_presets || {};
+  return Object.keys(presets).filter(k => !k.startsWith('_')).map(id => ({
+    id,
+    _when_to_use: presets[id]._when_to_use || null,
+  }));
 }
 
 /**
@@ -113,4 +140,4 @@ function buildCulturalContext({ clusterId = null, countryIso = null, propertyCou
   };
 }
 
-module.exports = { buildCulturalContext, getCluster, getConfig, sampleClusterForMenorca, sampleCountryFromCluster };
+module.exports = { buildCulturalContext, getCluster, getConfig, sampleClusterForMenorca, sampleClusterFromPreset, sampleCountryFromCluster, listOriginMixPresets };

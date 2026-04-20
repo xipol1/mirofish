@@ -1,0 +1,215 @@
+{
+  "meta": {
+    "property_name": "Gran Meliá Villa Le Blanc",
+    "property_slug": "gran-melia-villa-le-blanc",
+    "seed": "villa-le-blanc-2026-04-19",
+    "train_ratio": 0.6,
+    "agent_count": 60,
+    "elapsed_ms": 7417,
+    "generated_at": "2026-04-19T21:32:11.163Z"
+  },
+  "split": {
+    "total_reviews": 49,
+    "train_size": 29,
+    "test_size": 20,
+    "stratification": {
+      "tripadvisor": {
+        "total": 20,
+        "train": 12,
+        "test": 8
+      },
+      "booking": {
+        "total": 19,
+        "train": 11,
+        "test": 8
+      },
+      "google": {
+        "total": 10,
+        "train": 6,
+        "test": 4
+      }
+    }
+  },
+  "train_calibration": {
+    "avg_rating": 4.34,
+    "star_distribution_pct": {
+      "1": 0,
+      "2": 3.4,
+      "3": 10.3,
+      "4": 31,
+      "5": 55.2
+    },
+    "top_positive_themes": [
+      "food",
+      "pool",
+      "service",
+      "spa",
+      "check_in",
+      "romantic"
+    ],
+    "top_negative_themes": [
+      "wifi",
+      "parking",
+      "cleanliness"
+    ],
+    "sentiment_distribution": {
+      "positive": 24,
+      "mixed": 4,
+      "negative": 1
+    }
+  },
+  "predicted_aggregation": {
+    "review_count": 36,
+    "avg_rating": 4.19,
+    "star_distribution_pct": {
+      "1": 13.9,
+      "2": 0,
+      "3": 0,
+      "4": 25,
+      "5": 61.1
+    },
+    "top_positive_themes": [
+      "view",
+      "room_size",
+      "food",
+      "breakfast",
+      "hidden_fees"
+    ],
+    "top_negative_themes": [
+      "service",
+      "spa"
+    ],
+    "sentiment_distribution": {
+      "positive": 31,
+      "mixed": 0,
+      "negative": 5
+    }
+  },
+  "actual_aggregation": {
+    "review_count": 20,
+    "avg_rating": 4.32,
+    "star_distribution_pct": {
+      "1": 5,
+      "2": 0,
+      "3": 5,
+      "4": 30,
+      "5": 60
+    },
+    "top_positive_themes": [
+      "service",
+      "food",
+      "pool",
+      "value",
+      "wifi",
+      "check_out"
+    ],
+    "top_negative_themes": [
+      "cleanliness",
+      "bed_comfort"
+    ],
+    "sentiment_distribution": {
+      "positive": 18,
+      "mixed": 1,
+      "negative": 1
+    }
+  },
+  "scores": {
+    "composite": {
+      "accuracy_score": 0.591,
+      "accuracy_pct": 59.1,
+      "weights": {
+        "star": 0.3,
+        "rating": 0.2,
+        "pos_themes": 0.2,
+        "neg_themes": 0.2,
+        "sentiment": 0.1
+      },
+      "component_scores": {
+        "star": 0.9,
+        "rating": 0.968,
+        "pos_themes": 0.182,
+        "neg_themes": 0,
+        "sentiment": 0.911
+      }
+    },
+    "verdict": "PARTIAL_MATCH",
+    "top_positive_themes": {
+      "precision": 0.2,
+      "recall": 0.167,
+      "f1": 0.182,
+      "matched": [
+        "food"
+      ],
+      "missed": [
+        "service",
+        "pool",
+        "value",
+        "wifi",
+        "check_out"
+      ],
+      "extra": [
+        "view",
+        "room_size",
+        "breakfast",
+        "hidden_fees"
+      ]
+    },
+    "top_negative_themes": {
+      "precision": 0,
+      "recall": 0,
+      "f1": 0,
+      "matched": [],
+      "missed": [
+        "cleanliness",
+        "bed_comfort"
+      ],
+      "extra": [
+        "service",
+        "spa"
+      ]
+    },
+    "star_distribution": {
+      "l1_distance_pct": 20,
+      "similarity": 0.9,
+      "per_bucket_abs_delta_pct": {
+        "1": 8.9,
+        "2": 0,
+        "3": 5,
+        "4": 5,
+        "5": 1.1
+      }
+    },
+    "avg_rating": {
+      "predicted": 4.19,
+      "actual": 4.32,
+      "abs_delta": 0.13,
+      "similarity": 0.968
+    },
+    "sentiment_distribution": {
+      "predicted_pct": {
+        "positive": 86.1,
+        "mixed": 0,
+        "negative": 13.9
+      },
+      "actual_pct": {
+        "positive": 90,
+        "mixed": 5,
+        "negative": 5
+      },
+      "l1_distance_pct": 17.8,
+      "similarity": 0.911
+    },
+    "sample_sizes": {
+      "predicted_reviews": 36,
+      "actual_reviews": 20
+    }
+  },
+  "sim_summary": {
+    "provider": "synth",
+    "total_stays": 60,
+    "review_writers": 36,
+    "write_rate_pct": 60,
+    "avg_stars": 4.2,
+    "avg_nps": 52
+  }
+}

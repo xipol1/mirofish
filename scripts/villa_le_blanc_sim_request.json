@@ -3,11 +3,32 @@
     "name": "Gran Meliá Villa Le Blanc",
     "brand": "Gran Meliá",
     "slug": "gran-melia-villa-le-blanc",
-    "tier": "5-star luxury",
+    "tier": "luxury",
     "data_json": {
+      "identity": { "tier": "luxury", "stars": 5, "sub_brand": "Gran Meliá", "adults_only": true, "net_zero": true },
       "location": "Santo Tomás, Menorca, Balearic Islands, Spain",
       "description": "Design-driven adults-only luxury resort on the south coast of Menorca. Net-zero carbon. 159 rooms, La Sal fine-dining plus SAmardor plus Nivi plus Cru restaurants, Thai Spa with hydrothermal circuit, three pools including adult-only rooftop heated pool.",
-      "amenities": ["private beach access", "3 pools", "adult-only rooftop heated pool", "La Sal fine dining", "SAmardor seafood", "Nivi pizza paella", "Cru ceviche sushi", "Thai Spa", "gym", "kids club Montessori"]
+      "amenities": ["private beach access", "3 pools", "adult-only rooftop heated pool", "La Sal fine dining", "SAmardor seafood", "Nivi pizza paella", "Cru ceviche sushi", "Thai Spa", "gym"],
+      "archetype_mix_override": {
+        "honeymooner": 3.0,
+        "luxury_seeker": 2.5,
+        "loyalty_maximizer": 2.0,
+        "digital_nomad": 0.8,
+        "budget_optimizer": 0.3,
+        "business_traveler": 0.7,
+        "event_attendee": 0.3,
+        "family_vacationer": 0
+      },
+      "cultural_mix": {
+        "anglo_uk_ireland": 35,
+        "german_dach": 25,
+        "latin_spain_italy": 20,
+        "french": 10,
+        "anglo_us_canada": 5,
+        "nordic": 3,
+        "latin_american": 2
+      },
+      "returning_guests_pct": 30
     }
   },
   "audience": "mix of luxury couples, honeymoon anniversary celebrators, affluent families with older children, Melia Rewards loyalty members, and a few business travelers",

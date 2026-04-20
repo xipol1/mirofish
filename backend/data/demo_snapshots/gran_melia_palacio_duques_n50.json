@@ -1,0 +1,378 @@
+{
+  "_demo_source": "synthesized-from-public-aggregate-calibration",
+  "_demo_generated": "2026-04-19T13:54:01.928Z",
+  "_demo_n_original": 50,
+  "_demo_n_sampled": 0,
+  "_demo_provenance": "Scaffold snapshot — real corpus regeneration required before production pitch.",
+  "mode": "stay_experience",
+  "provider": "claude-synth-deterministic",
+  "industry": "hospitality",
+  "property": {
+    "name": "Gran Meliá Palacio de los Duques",
+    "brand": "Gran Meliá",
+    "slug": "gran-melia-palacio-de-los-duques",
+    "tier": "luxury",
+    "data_json": {
+      "identity": {
+        "tier": "luxury",
+        "stars": 5,
+        "sub_brand": "Gran Meliá",
+        "adults_only": false,
+        "urban": true
+      },
+      "location": "Cuesta de Santo Domingo 5-7, Madrid, Spain",
+      "description": "Urban 5★ flagship in central Madrid, adjacent to the Royal Palace and Plaza de España. Housed in a restored 19th-century palace. 180 rooms, DOS CIELOS Madrid restaurant (Michelin-recognized), rooftop terrace with city view, Thai Spa, gym, co-working lounge. Strong leisure + corporate + MICE mix.",
+      "amenities": [
+        "rooftop terrace",
+        "DOS CIELOS restaurant",
+        "Thai Spa",
+        "heated indoor pool",
+        "gym",
+        "co-working lounge",
+        "private event halls",
+        "valet parking"
+      ],
+      "archetype_mix_override": {
+        "luxury_seeker": 2.4,
+        "business_traveler": 2.2,
+        "loyalty_maximizer": 1.6,
+        "honeymooner": 1.4,
+        "event_attendee": 1,
+        "family_vacationer": 0.8,
+        "digital_nomad": 0.4,
+        "budget_optimizer": 0.2
+      },
+      "origin_mix_preset": "madrid_urban_gran_melia",
+      "returning_guests_pct": 24
+    }
+  },
+  "audience_vector": {
+    "vertical": "hospitality",
+    "guest_mix": "mix of luxury leisure couples visiting Madrid, Meliá Rewards loyalty travelers, senior executives on business travel, and MICE event attendees; strong international origin mix (Latin American, US, Spain, UK, France)",
+    "trip_purpose_primary": "urban_luxury_mixed",
+    "price_sensitivity": "luxury",
+    "origin_geography": "international_madrid_urban"
+  },
+  "personas": [],
+  "stays_sample": [],
+  "calibration": {
+    "property_name": "Gran Meliá Palacio de los Duques",
+    "property_slug": "gran-melia-palacio-de-los-duques",
+    "sourced_from": [
+      "TripAdvisor public aggregate",
+      "Booking.com public aggregate",
+      "Google Reviews public aggregate"
+    ],
+    "generated_at": "2026-04-19T13:30:00.000Z",
+    "calibration_version": "1.0-public-aggregate",
+    "_note": "Scaffold calibration built from publicly visible aggregate ratings (TripAdvisor 4.5/5 from ~2100 reviews, Booking 8.9/10, Google 4.6/5). Detailed subcategory anchors and theme breakdown estimated from cluster of Madrid 5★ urban luxury comparables and brand positioning — replace with scraped corpus when cleared by Meliá.",
+    "property_context": {
+      "city": "Madrid",
+      "country": "ES",
+      "tier": "luxury",
+      "property_type": "urban_flagship",
+      "rooms": 180,
+      "opened_year": 2016,
+      "brand": "Gran Meliá",
+      "segments": [
+        "leisure_couples",
+        "business_traveler",
+        "corporate",
+        "mice",
+        "loyalty_platinum"
+      ]
+    },
+    "avg_rating": 4.55,
+    "review_count_public_aggregate": 2100,
+    "subcategory_scores_5_scale": {
+      "location": 4.9,
+      "rooms": 4.6,
+      "sleep_quality": 4.6,
+      "cleanliness": 4.7,
+      "service": 4.5,
+      "value": 4.2,
+      "source": "Estimated from TripAdvisor public subcategory aggregates for Madrid 5★ urban flagships"
+    },
+    "subcategory_anchors_100_scale": {
+      "_description": "Target end-of-stay sensation dimension scores anchored to public sub-scores. Values lower than Villa Le Blanc on aesthetic/comfort (urban vs resort), higher on modernity/amenity (business traveler base).",
+      "aesthetic": 93,
+      "comfort_physical": 92,
+      "cleanliness": 94,
+      "service_quality": 90,
+      "value": 84,
+      "modernity": 90,
+      "amenity_usability": 88
+    },
+    "top_positive_themes": [
+      "location_royal_palace_adjacent",
+      "rooftop_terrace_view",
+      "staff_warmth",
+      "breakfast_buffet",
+      "spa_thai",
+      "business_amenities"
+    ],
+    "top_negative_themes": [
+      "value_price_concern",
+      "room_size_standard",
+      "breakfast_crowded_peak"
+    ],
+    "sentiment_distribution": {
+      "positive": 1680,
+      "mixed": 340,
+      "negative": 80
+    },
+    "star_distribution_pct": {
+      "1": 1,
+      "2": 3,
+      "3": 8,
+      "4": 22,
+      "5": 66
+    },
+    "positive_negative_moment_ratio": 3.8,
+    "archetype_mix_expected_pct": {
+      "luxury_seeker": 24,
+      "business_traveler": 22,
+      "honeymooner": 14,
+      "loyalty_maximizer": 16,
+      "family_vacationer": 8,
+      "event_attendee": 10,
+      "digital_nomad": 4,
+      "budget_optimizer": 2
+    },
+    "recommended_origin_mix_preset": "madrid_urban_gran_melia",
+    "seasonality_hint": {
+      "peak_months": [
+        "4",
+        "5",
+        "9",
+        "10"
+      ],
+      "shoulder_months": [
+        "3",
+        "6",
+        "11"
+      ],
+      "low_months": [
+        "1",
+        "2",
+        "7",
+        "8",
+        "12"
+      ],
+      "_note": "Madrid urban pattern: peak in spring/fall, low in deep summer (Madrileños flee heat) and winter holidays"
+    },
+    "_validation_status": "PUBLIC_AGGREGATE_ONLY — replace with full review corpus scrape when authorized by Meliá"
+  },
+  "summary": {
+    "modality": "stay_experience",
+    "total_stays": 50,
+    "avg_stars": 4.46,
+    "avg_nps": 62,
+    "net_promoter_score": 62,
+    "avg_spend_eur": 769,
+    "avg_spend_by_category": {
+      "dinner": 245,
+      "spa": 180,
+      "bar": 60,
+      "lunch": 95,
+      "activities": 40
+    },
+    "would_repeat_pct": 67,
+    "would_recommend_pct": 82,
+    "reviews_generated": 24,
+    "predicted_review_platform_mix": {
+      "tripadvisor": 18,
+      "google": 14,
+      "booking.com": 12,
+      "holidaycheck": 3
+    },
+    "top_predicted_themes": [
+      {
+        "theme": "location",
+        "count": 28
+      },
+      {
+        "theme": "rooftop_view",
+        "count": 24
+      },
+      {
+        "theme": "service",
+        "count": 20
+      },
+      {
+        "theme": "breakfast",
+        "count": 17
+      },
+      {
+        "theme": "room_size",
+        "count": 11
+      },
+      {
+        "theme": "value",
+        "count": 9
+      }
+    ],
+    "realized_star_distribution": {
+      "1": 1,
+      "2": 1,
+      "3": 5,
+      "4": 11,
+      "5": 34
+    },
+    "realized_star_distribution_pct": {
+      "1": 1,
+      "2": 2,
+      "3": 10,
+      "4": 21,
+      "5": 67
+    },
+    "target_star_match_rate_pct": 86,
+    "adversarial_events_triggered": {
+      "breakfast_quality_slip": 2,
+      "wifi_intermittent": 1,
+      "surprise_fee_at_checkout": 1,
+      "check_in_queue": 1,
+      "noisy_neighbors": 1
+    },
+    "adversarial_events_total": 6,
+    "avg_room_rate_paid_eur": 411,
+    "culture_distribution": {
+      "latin_spain_italy": 9,
+      "anglo_us_canada": 9,
+      "latin_american": 8,
+      "anglo_uk_ireland": 6,
+      "french": 5,
+      "german_dach": 4,
+      "middle_east_gcc": 3,
+      "east_asian": 3,
+      "chinese_mainland": 2,
+      "nordic": 1
+    },
+    "booking_channel_distribution": {
+      "direct_web": 15,
+      "direct_app": 9,
+      "booking.com": 8,
+      "corporate": 6,
+      "travel_agency": 5,
+      "loyalty_redemption": 4,
+      "expedia": 2,
+      "group_mice": 1
+    },
+    "price_tier_distribution": {
+      "luxury": 30,
+      "premium": 17,
+      "upscale": 3
+    },
+    "loyalty_recognition_expected_pct": 48,
+    "post_stay": {
+      "checkout_style_distribution": {
+        "express_mobile": 19,
+        "front_desk_full": 13,
+        "bell_service": 10,
+        "front_desk_quick": 7,
+        "group_billing": 1
+      },
+      "checkout_bill_dispute_pct": 7,
+      "departure_gesture_offered_pct": 38,
+      "avg_post_stay_nps_delta": -4,
+      "avg_review_write_delay_days": 5.2,
+      "avg_return_intent_12m": 0.62,
+      "word_of_mouth_shared_pct": 72,
+      "word_of_mouth_social_post_pct": 31
+    },
+    "avg_staff_rapport": 4.3,
+    "avg_stars_ci": {
+      "value": 4.46,
+      "ci_low": 4.38,
+      "ci_high": 4.54,
+      "std": 0.04,
+      "n": 50
+    },
+    "avg_nps_ci": {
+      "value": 62,
+      "ci_low": 56,
+      "ci_high": 68,
+      "std": 3.1,
+      "n": 50
+    },
+    "avg_spend_eur_ci": {
+      "value": 769,
+      "ci_low": 724,
+      "ci_high": 814,
+      "std": 22,
+      "n": 50
+    },
+    "avg_room_rate_paid_eur_ci": {
+      "value": 411,
+      "ci_low": 396,
+      "ci_high": 426,
+      "std": 7,
+      "n": 50
+    },
+    "would_repeat_pct_ci": {
+      "value": 68,
+      "ci_low": 61,
+      "ci_high": 74,
+      "std": 3.1,
+      "n": 50
+    },
+    "would_recommend_pct_ci": {
+      "value": 82,
+      "ci_low": 76,
+      "ci_high": 87,
+      "std": 2.8,
+      "n": 50
+    },
+    "net_promoter_score_ci": {
+      "value": 62,
+      "ci_low": 57,
+      "ci_high": 67,
+      "std": 2.5,
+      "n": 50
+    },
+    "realized_star_distribution_pct_ci": {
+      "1": {
+        "value": 1,
+        "ci_low": 0,
+        "ci_high": 3.5,
+        "std": 1.2,
+        "n": 50
+      },
+      "2": {
+        "value": 2,
+        "ci_low": 0,
+        "ci_high": 4.5,
+        "std": 1.2,
+        "n": 50
+      },
+      "3": {
+        "value": 10,
+        "ci_low": 7.5,
+        "ci_high": 12.5,
+        "std": 1.2,
+        "n": 50
+      },
+      "4": {
+        "value": 21,
+        "ci_low": 18.5,
+        "ci_high": 23.5,
+        "std": 1.2,
+        "n": 50
+      },
+      "5": {
+        "value": 67,
+        "ci_low": 64.5,
+        "ci_high": 69.5,
+        "std": 1.2,
+        "n": 50
+      }
+    },
+    "avg_return_intent_12m_ci": {
+      "value": 0.62,
+      "ci_low": 0.58,
+      "ci_high": 0.66,
+      "std": 0.02,
+      "n": 50
+    }
+  }
+}

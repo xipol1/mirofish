@@ -488,5 +488,52 @@
     "east_asian": 2,
     "middle_east_gcc": 2,
     "chinese_mainland": 1
+  },
+
+  "origin_mix_presets": {
+    "_description": "Preset mixes for different Meliá property archetypes. Select by property context so the cohort reflects the actual guest base, not a Menorca-only bias.",
+
+    "menorca_leisure_flagship": {
+      "_when_to_use": "Villa Le Blanc, Cap Rocat — adults-only Mediterranean resort.",
+      "anglo_uk_ireland": 45, "german_dach": 15, "latin_spain_italy": 12, "french": 10,
+      "anglo_us_canada": 6, "nordic": 4, "latin_american": 3, "east_asian": 2,
+      "middle_east_gcc": 2, "chinese_mainland": 1
+    },
+
+    "madrid_urban_gran_melia": {
+      "_when_to_use": "Gran Meliá Palacio de los Duques, Gran Meliá Fénix — Madrid luxury urban.",
+      "latin_spain_italy": 18, "anglo_us_canada": 18, "latin_american": 17,
+      "anglo_uk_ireland": 12, "french": 10, "german_dach": 8,
+      "middle_east_gcc": 6, "east_asian": 5, "chinese_mainland": 3, "nordic": 3
+    },
+
+    "cancun_caribbean_paradisus": {
+      "_when_to_use": "Paradisus Cancún, Playa del Carmen, Punta Cana — Caribbean all-inclusive luxury.",
+      "anglo_us_canada": 42, "latin_american": 22, "anglo_uk_ireland": 10,
+      "latin_spain_italy": 7, "french": 6, "german_dach": 5,
+      "nordic": 3, "chinese_mainland": 2, "east_asian": 2, "middle_east_gcc": 1
+    },
+
+    "asia_pacific_melia": {
+      "_when_to_use": "Meliá Bali, Meliá Hanoi, Meliá Koh Samui — APAC resorts.",
+      "east_asian": 25, "chinese_mainland": 20, "anglo_us_canada": 14,
+      "anglo_uk_ireland": 10, "german_dach": 8, "latin_spain_italy": 6,
+      "french": 6, "middle_east_gcc": 5, "nordic": 3, "latin_american": 3
+    },
+
+    "gcc_dubai_melia": {
+      "_when_to_use": "Meliá Dubai, ME by Meliá Dubai — Gulf luxury.",
+      "middle_east_gcc": 32, "anglo_uk_ireland": 18, "anglo_us_canada": 12,
+      "german_dach": 9, "french": 7, "east_asian": 6, "chinese_mainland": 5,
+      "latin_spain_italy": 5, "nordic": 3, "latin_american": 3
+    },
+
+    "global_brand_mix": {
+      "_when_to_use": "Weighted average of Meliá's published international guest mix — use when unsure which specific property archetype applies or presenting enterprise-level analysis.",
+      "_weighting_rationale": "Approximates the Meliá International 2025 origin distribution across leisure + urban + Caribbean + APAC portfolios.",
+      "anglo_uk_ireland": 18, "latin_spain_italy": 16, "anglo_us_canada": 14,
+      "latin_american": 12, "german_dach": 10, "french": 8,
+      "east_asian": 7, "chinese_mainland": 6, "middle_east_gcc": 5, "nordic": 4
+    }
   }
 }

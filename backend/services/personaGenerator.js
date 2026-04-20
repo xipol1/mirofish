@@ -101,7 +101,7 @@ function weightedRoundRobin(archetypes, weights, n) {
   return assignments;
 }
 
-async function generatePersonas({ taskType, audienceVector, count, onProgress, seedPersonas, industrySlug = 'default' }) {
+async function generatePersonas({ taskType, audienceVector, count, onProgress, seedPersonas, industrySlug = 'default', archetypeMixOverride = null }) {
   const n = count || getCohortSize();
   const emit = onProgress || (() => {});
 
@@ -120,7 +120,15 @@ async function generatePersonas({ taskType, audienceVector, count, onProgress, s
   // free-text keywords; otherwise fall back to uniform round-robin.
   let assignments;
   if (industrySlug === 'hospitality' && audienceVector && (audienceVector.trip_purpose_primary || audienceVector.guest_mix || typeof audienceVector === 'string')) {
-    const weights = buildHospitalityArchetypeWeights(archetypes, audienceVector);
+    let weights = buildHospitalityArchetypeWeights(archetypes, audienceVector);
+    // Property-level archetype override (e.g., Villa Le Blanc is adults-only
+    // and must block family_vacationer regardless of audience text).
+    if (archetypeMixOverride && typeof archetypeMixOverride === 'object') {
+      for (const [id, mult] of Object.entries(archetypeMixOverride)) {
+        if (id in weights) weights[id] = Number(mult) || 0;
+      }
+      console.log(`[personaGenerator] Archetype mix OVERRIDE applied from property:`, archetypeMixOverride);
+    }
     assignments = weightedRoundRobin(archetypes, weights, n);
     console.log(`[personaGenerator] Hospitality archetype weights:`, Object.fromEntries(Object.entries(weights).map(([k, v]) => [k, Math.round(v * 10) / 10])));
     const picked = {};
@@ -184,7 +192,7 @@ async function generatePersonas({ taskType, audienceVector, count, onProgress, s
   return personas;
 }
 
-async function synthesizePersona({ archetype, painPoints, audienceVector, taskType, avoidNames = [], variantIndex = 0, slotIndex = 0 }) {
+async function synthesizePersona({ archetype, painPoints, audienceVector, taskType, avoidNames = [], variantIndex = 0, slotIndex = 0, industrySlug = 'default' }) {
   const painContext = painPoints.map((p, i) =>
     `[Real pain #${i + 1}] "${p.pain_quote}"\n  Language markers: ${(p.language_markers || []).join(', ')}\n  Concerns: ${(p.concerns || []).join(', ')}`
   ).join('\n\n');
@@ -208,7 +216,123 @@ async function synthesizePersona({ archetype, painPoints, audienceVector, taskTy
     ? `\nThis is VARIANT ${variantIndex} of this archetype — other variants of this same archetype already exist in the cohort. Make this one distinctively DIFFERENT: different industry sub-niche, different company stage, different geography, different specific pain point focus. The archetype label is the same but the specific person must feel unique.`
     : '';
 
-  const prompt = `You are instantiating ONE realistic synthetic persona for a product-testing simulation.
+  // ─────────────────────────────────────────────────────────────────────
+  // Entregable 8 fix: hospitality prompt MUST NOT leak B2B SaaS fields
+  // (vertical / role_archetype / company_size / buying_stage / budget_authority).
+  // Those produced audience_vector.role_archetype=unspecified drift documented
+  // in memory/project_synthetic_users_realism.md. Hospitality uses the schema
+  // from audienceDecomposer's hospitality branch.
+  // ─────────────────────────────────────────────────────────────────────
+  const isHospitality = industrySlug === 'hospitality';
+
+  const prompt = isHospitality
+    ? buildHospitalityPersonaPrompt({ archetype, audienceVector, painContext, jitteredTraits, variantNote, nameConstraint })
+    : buildSaaSPersonaPrompt({ archetype, audienceVector, painContext, jitteredTraits, variantNote, nameConstraint });
+
+  const persona = await callAIJSON(prompt, { maxTokens: 1200, temperature: 0.9 });
+
+  // Attach meta for traceability
+  persona._archetype_id = archetype.id;
+  persona._variant_index = variantIndex;
+  persona._slot_index = slotIndex;
+  persona._source_pain_samples = painPoints.map(p => ({ quote: p.pain_quote, source: p.source_type }));
+  persona._coverage_purpose = archetype.coverage_purpose;
+
+  // Force-override traits with jittered values (LLM sometimes ignores the instruction)
+  persona.traits = jitteredTraits;
+  persona.archetype_id = archetype.id;
+  persona.archetype_label = archetype.label;
+  persona.decision_style = archetype.decision_style;
+
+  return persona;
+}
+
+// ─────────────────────────────────────────────────────────────────────
+// Hospitality persona prompt (Entregable 8).
+// No B2B SaaS fields. Uses the hospitality audience schema from
+// audienceDecomposer (trip_purpose_primary / guest_mix / stay_length /
+// budget_band / group_or_solo). Emits enums from archetypes.json +
+// cultural_profiles.json. Wildcards (plausible rare combinations) are
+// naturally produced across cohort variants.
+// ─────────────────────────────────────────────────────────────────────
+function buildHospitalityPersonaPrompt({ archetype, audienceVector, painContext, jitteredTraits, variantNote, nameConstraint }) {
+  const tripPurpose = audienceVector.trip_purpose_primary || 'leisure_couples';
+  const guestMix = audienceVector.guest_mix || '';
+  const partySize = audienceVector.party_size || null;
+  const stayLength = audienceVector.stay_length_preference_nights || null;
+  const budgetBand = audienceVector.budget_band_per_night_eur || '';
+  const dietaryFocus = audienceVector.dietary_focus || '';
+  const accessibility = audienceVector.accessibility_needs || '';
+  const groupOrSolo = audienceVector.group_or_solo || '';
+
+  return `You are instantiating ONE realistic synthetic hotel guest for a stay simulation. VERTICAL FIXED: hospitality. Do NOT use B2B SaaS fields (company_size, buying_stage, budget_authority, role_level) — this is a leisure/business traveler, not a software buyer.
+
+=== ARCHETYPE (hospitality) ===
+Label: ${archetype.label}
+ID: ${archetype.id}
+Coverage purpose: ${archetype.coverage_purpose}
+Decision style: ${archetype.decision_style}
+Behavioral markers: ${(archetype.behavioral_markers || []).join('; ')}${variantNote}
+
+=== TRIP CONTEXT (from audience) ===
+Trip purpose: ${tripPurpose}
+Guest mix description: ${guestMix || '(not specified)'}
+Group or solo: ${groupOrSolo || '(not specified)'}
+Party size: ${partySize ?? '(not specified)'}
+Preferred stay length (nights): ${stayLength ?? '(varies)'}
+Budget band per night (EUR): ${budgetBand || '(varies)'}
+Dietary focus: ${dietaryFocus || '(none flagged)'}
+Accessibility needs: ${accessibility || '(none flagged)'}
+
+=== REAL PAIN POINTS (from public sources) ===
+${painContext}
+
+=== PERSONALITY TRAITS TO USE ===
+patience=${jitteredTraits.patience.toFixed(2)}, trust_baseline=${jitteredTraits.trust_baseline.toFixed(2)}, price_sensitivity=${jitteredTraits.price_sensitivity.toFixed(2)}, tech_savviness=${jitteredTraits.tech_savviness.toFixed(2)}, risk_tolerance=${jitteredTraits.risk_tolerance.toFixed(2)}
+
+=== CORRELATIONS YOU MUST RESPECT ===
+- honeymooner → occasion honeymoon/anniversary; trait_optimism typically high; no recent bereavement.
+- business_traveler → often loyalty_tier ≠ none; conscientiousness skew high; life_stress elevated.
+- luxury_seeker → lifetime stays 50-200 or 200+; loyalty tier gold+; low price_sensitivity; high openness.
+- budget_optimizer → high receipt_scrutiny; lifetime stays <20; price_sensitivity ≥ 0.8.
+- digital_nomad → high tech_savvy; long stay preference; caffeine-dependent.
+- family_vacationer → dietary often includes kids' needs; scent_tolerance avoids/neutral.
+- loyalty_maximizer → tier gold/platinum/ambassador; lifetime 50-200 or 200+.
+
+${nameConstraint}
+
+Instantiate ONE concrete guest. The "goals_for_this_visit" and "pain_quotes_in_voice" MUST be hospitality-specific (not "evaluate if this solves my problem" — things like "find somewhere we can actually relax for once" or "wifi that does not kick me off mid-call"). Return this JSON:
+
+{
+  "name": "realistic first and last name — MUST differ from the avoid list",
+  "age": number,
+  "role": "specific job title (in their real life — what they do outside this trip)",
+  "company_description": "1-sentence context about where they work / life situation",
+  "archetype_id": "${archetype.id}",
+  "archetype_label": "${archetype.label}",
+  "goals_for_this_visit": ["2-3 concrete hospitality-specific outcomes they want from this stay"],
+  "current_alternatives": ["2-3 named properties or travel options they considered / usually pick"],
+  "pain_quotes_in_voice": ["2 short first-person quotes about past travel pain, in their actual voice"],
+  "top_objections": ["3 specific hesitations about THIS property category (e.g. 'resort fees I won't know about until checkout')"],
+  "decision_style": "${archetype.decision_style}",
+  "traits": {
+    "patience": ${jitteredTraits.patience.toFixed(2)},
+    "trust_baseline": ${jitteredTraits.trust_baseline.toFixed(2)},
+    "price_sensitivity": ${jitteredTraits.price_sensitivity.toFixed(2)},
+    "tech_savviness": ${jitteredTraits.tech_savviness.toFixed(2)},
+    "risk_tolerance": ${jitteredTraits.risk_tolerance.toFixed(2)}
+  },
+  "budget_monthly_usd": number (their disposable travel budget, not software budget),
+  "hot_buttons": ["3 specific travel delighters for this archetype (e.g. 'private beach access', 'late checkout', 'handwritten welcome note')"],
+  "deal_breakers": ["2-3 instant-bounce things (e.g. 'loud corridor neighbor', 'dated bathroom photos revealed on arrival')"],
+  "behavioral_markers_activated": ["pick 3 most relevant from the archetype markers"]
+}`;
+}
+
+// Original B2B SaaS prompt — preserved for non-hospitality runs (landing page,
+// pricing test, feature validation on software products).
+function buildSaaSPersonaPrompt({ archetype, audienceVector, painContext, jitteredTraits, variantNote, nameConstraint }) {
+  return `You are instantiating ONE realistic synthetic persona for a product-testing simulation.
 
 === ARCHETYPE ===
 Label: ${archetype.label}
@@ -258,23 +382,6 @@ Instantiate ONE concrete persona who embodies this archetype, in this audience, 
   "deal_breakers": ["2-3 instant-bounce triggers"],
   "behavioral_markers_activated": ["pick 3 most relevant"]
 }`;
-
-  const persona = await callAIJSON(prompt, { maxTokens: 1200, temperature: 0.9 });
-
-  // Attach meta for traceability
-  persona._archetype_id = archetype.id;
-  persona._variant_index = variantIndex;
-  persona._slot_index = slotIndex;
-  persona._source_pain_samples = painPoints.map(p => ({ quote: p.pain_quote, source: p.source_type }));
-  persona._coverage_purpose = archetype.coverage_purpose;
-
-  // Force-override traits with jittered values (LLM sometimes ignores the instruction)
-  persona.traits = jitteredTraits;
-  persona.archetype_id = archetype.id;
-  persona.archetype_label = archetype.label;
-  persona.decision_style = archetype.decision_style;
-
-  return persona;
 }
 
 function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }

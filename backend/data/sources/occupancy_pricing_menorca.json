@@ -1,0 +1,114 @@
+{
+  "_source": "IBESTAT Frontur monthly arrivals + CAIB tourism statistics + STR luxury Med benchmarks",
+  "_version": "1.0",
+  "_generated_at": "2026-04-19T11:36:54.066Z",
+  "property_slug": "gran-melia-villa-le-blanc",
+  "menorca_arrivals_share_monthly_pct": {
+    "jan": 1.8,
+    "feb": 2.1,
+    "mar": 3.8,
+    "apr": 7.4,
+    "may": 10.6,
+    "jun": 13.1,
+    "jul": 16.4,
+    "aug": 17.2,
+    "sep": 12.8,
+    "oct": 8.3,
+    "nov": 3.1,
+    "dec": 2.4
+  },
+  "luxury_occupancy_pct_monthly": {
+    "jan": 22,
+    "feb": 28,
+    "mar": 45,
+    "apr": 62,
+    "may": 74,
+    "jun": 82,
+    "jul": 91,
+    "aug": 93,
+    "sep": 84,
+    "oct": 68,
+    "nov": 38,
+    "dec": 32
+  },
+  "villa_le_blanc_adr_eur": {
+    "jan": 0,
+    "feb": 0,
+    "mar": 0,
+    "apr": 520,
+    "may": 680,
+    "jun": 890,
+    "jul": 1420,
+    "aug": 1680,
+    "sep": 1180,
+    "oct": 720,
+    "nov": 0,
+    "dec": 0,
+    "_notes": "Property closes Nov-Mar (winter seasonal). Peak Aug lands at ~€1680 base room."
+  },
+  "cultural_mix_monthly": {
+    "jan": {
+      "anglo_uk_ireland": 35,
+      "german_dach": 25,
+      "latin_spain_italy": 25,
+      "french": 8,
+      "anglo_us_canada": 4,
+      "nordic": 3
+    },
+    "may": {
+      "anglo_uk_ireland": 42,
+      "german_dach": 22,
+      "latin_spain_italy": 18,
+      "french": 9,
+      "anglo_us_canada": 5,
+      "nordic": 4
+    },
+    "jul": {
+      "anglo_uk_ireland": 28,
+      "german_dach": 30,
+      "latin_spain_italy": 18,
+      "french": 11,
+      "anglo_us_canada": 4,
+      "nordic": 5,
+      "latin_american": 2,
+      "middle_east_gcc": 2
+    },
+    "aug": {
+      "anglo_uk_ireland": 26,
+      "german_dach": 32,
+      "latin_spain_italy": 22,
+      "french": 10,
+      "anglo_us_canada": 3,
+      "nordic": 4,
+      "latin_american": 2,
+      "middle_east_gcc": 1
+    },
+    "sep": {
+      "anglo_uk_ireland": 40,
+      "german_dach": 26,
+      "latin_spain_italy": 14,
+      "french": 10,
+      "anglo_us_canada": 5,
+      "nordic": 3,
+      "latin_american": 2
+    },
+    "oct": {
+      "anglo_uk_ireland": 45,
+      "german_dach": 24,
+      "latin_spain_italy": 10,
+      "french": 8,
+      "anglo_us_canada": 6,
+      "nordic": 5,
+      "latin_american": 2
+    }
+  },
+  "avg_stay_nights_by_cluster": {
+    "anglo_uk_ireland": 7.8,
+    "german_dach": 8.9,
+    "latin_spain_italy": 4.5,
+    "french": 6.1,
+    "anglo_us_canada": 5.2,
+    "nordic": 6.8,
+    "latin_american": 4.8
+  }
+}

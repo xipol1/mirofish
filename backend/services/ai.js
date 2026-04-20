@@ -1,31 +1,50 @@
 /**
  * AI Provider Multiplexer
  *
- * Priority: Groq (free, fast, large model) > Claude (paid, top quality) > Ollama (local)
+ * Priority: DeepSeek > Groq > Claude > Ollama (configurable via USE_* flags)
  * Exposes callAI(prompt) and callAIJSON(prompt) with consistent interface.
  */
 
 const GROQ_API_KEY = process.env.GROQ_API_KEY;
 const CLAUDE_API_KEY = process.env.CLAUDE_API_KEY;
+const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY;
 const OLLAMA_URL = process.env.OLLAMA_URL || 'http://localhost:11434';
 const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'qwen2.5:3b';
 const GROQ_MODEL = process.env.GROQ_MODEL || 'llama-3.3-70b-versatile';
+const DEEPSEEK_MODEL = process.env.DEEPSEEK_MODEL || 'deepseek-chat';
 
 function hasValidKey(key) {
   return key && key.length > 10 && !key.includes('your-key-here');
 }
 
 let provider = 'none';
-if (process.env.USE_OLLAMA === 'true') provider = 'ollama';
+if (process.env.USE_SYNTH === 'true') provider = 'synth';
+else if (process.env.USE_OLLAMA === 'true') provider = 'ollama';
+else if (process.env.USE_DEEPSEEK === 'true' && hasValidKey(DEEPSEEK_API_KEY)) provider = 'deepseek';
+else if (hasValidKey(DEEPSEEK_API_KEY)) provider = 'deepseek';
 else if (hasValidKey(GROQ_API_KEY)) provider = 'groq';
 else if (hasValidKey(CLAUDE_API_KEY)) provider = 'claude';
-else provider = 'ollama';
+else provider = 'synth';
+
+// Enable automatic fallback to the deterministic synth stub whenever the
+// remote provider throws (network, 5xx, rate limit exhaustion). Off by
+// default for tests, ON in demo/production simulation paths so a flaky
+// provider cannot nuke a 1000-agent run.
+const AUTO_FALLBACK = process.env.AI_AUTO_FALLBACK !== 'false';
+let _synthProvider = null;
+function getSynthProvider() {
+  if (_synthProvider) return _synthProvider;
+  _synthProvider = require('./ai_claude_synth');
+  return _synthProvider;
+}
 
 console.log(`[AI] Provider selected: ${provider} (model: ${
   provider === 'groq' ? GROQ_MODEL :
+  provider === 'deepseek' ? DEEPSEEK_MODEL :
   provider === 'ollama' ? OLLAMA_MODEL :
-  provider === 'claude' ? 'claude-sonnet-4-20250514' : 'none'
-})`);
+  provider === 'claude' ? 'claude-sonnet-4-20250514' :
+  provider === 'synth' ? 'claude-synth-deterministic' : 'none'
+}) — auto_fallback=${AUTO_FALLBACK}`);
 
 // ─────────────────────────────────────────────────────────────
 // GROQ
@@ -132,13 +151,65 @@ async function callOllama(prompt, options = {}) {
 }
 
 // ─────────────────────────────────────────────────────────────
+// DEEPSEEK (OpenAI-compatible)
+// ─────────────────────────────────────────────────────────────
+async function callDeepseek(prompt, options = {}, attempt = 0) {
+  const { maxTokens = 4096, temperature = 0.7, system = null } = options;
+
+  const messages = [];
+  if (system) messages.push({ role: 'system', content: system });
+  messages.push({ role: 'user', content: prompt });
+
+  const res = await fetch('https://api.deepseek.com/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${DEEPSEEK_API_KEY}`,
+    },
+    body: JSON.stringify({
+      model: DEEPSEEK_MODEL,
+      messages,
+      max_tokens: maxTokens,
+      temperature,
+    }),
+  });
+
+  if (res.status === 429 && attempt < 4) {
+    const waitMs = Math.min(2000 * Math.pow(2, attempt), 30000);
+    console.log(`[AI] DeepSeek rate limited, waiting ${Math.round(waitMs / 1000)}s (attempt ${attempt + 1}/4)`);
+    await new Promise(r => setTimeout(r, waitMs));
+    return callDeepseek(prompt, options, attempt + 1);
+  }
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`DeepSeek API error ${res.status}: ${text.substring(0, 300)}`);
+  }
+
+  const data = await res.json();
+  return data.choices[0].message.content;
+}
+
+// ─────────────────────────────────────────────────────────────
 // UNIFIED INTERFACE
 // ─────────────────────────────────────────────────────────────
-async function callAI(prompt, options = {}) {
+async function callAIPrimary(prompt, options = {}) {
+  if (provider === 'synth') return getSynthProvider().callAI(prompt, options);
+  if (provider === 'deepseek') return callDeepseek(prompt, options);
   if (provider === 'groq') return callGroq(prompt, options);
   if (provider === 'claude') return callClaudeAPI(prompt, options);
   if (provider === 'ollama') return callOllama(prompt, options);
   throw new Error('No AI provider configured');
+}
+
+async function callAI(prompt, options = {}) {
+  try {
+    return await callAIPrimary(prompt, options);
+  } catch (err) {
+    if (!AUTO_FALLBACK || provider === 'synth') throw err;
+    console.warn(`[AI] primary "${provider}" failed (${err.message.substring(0, 140)}) — falling back to synth stub`);
+    return getSynthProvider().callAI(prompt, options);
+  }
 }
 
 function extractJSON(raw) {
@@ -208,10 +279,13 @@ function extractJSON(raw) {
 async function callAIJSON(prompt, options = {}, retries = 2) {
   const jsonInstruction = '\n\nOUTPUT FORMAT: Return ONLY valid JSON. No markdown fences, no explanation, no preamble. Start your response with [ or { directly and end with ] or }.';
 
+  // Synth provider is deterministic JSON in/out — no extraction dance needed.
+  if (provider === 'synth') return getSynthProvider().callAIJSON(prompt, options);
+
   let lastError;
   for (let attempt = 0; attempt <= retries; attempt++) {
     try {
-      const raw = await callAI(prompt + jsonInstruction, options);
+      const raw = await callAIPrimary(prompt + jsonInstruction, options);
       return extractJSON(raw);
     } catch (err) {
       lastError = err;
@@ -220,6 +294,11 @@ async function callAIJSON(prompt, options = {}, retries = 2) {
         await new Promise(r => setTimeout(r, 500));
       }
     }
+  }
+  if (AUTO_FALLBACK) {
+    console.warn(`[AI] JSON retries exhausted on "${provider}" — falling back to synth stub`);
+    try { return await getSynthProvider().callAIJSON(prompt, options); }
+    catch (synthErr) { /* fall through to original error below */ }
   }
   throw lastError;
 }

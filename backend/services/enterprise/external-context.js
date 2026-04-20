@@ -12,11 +12,20 @@ const path = require('path');
 const fs = require('fs');
 
 const EXT_PATH = path.join(__dirname, '..', '..', 'data', 'industries', 'hospitality', 'external_context.json');
+const PUBLIC_DATA_PATH = path.join(__dirname, '..', '..', 'data', 'sources', 'occupancy_pricing_menorca.json');
 let _cfg = null;
+let _publicData = null;
 function getConfig() {
   if (_cfg) return _cfg;
   _cfg = JSON.parse(fs.readFileSync(EXT_PATH, 'utf-8'));
   return _cfg;
+}
+function getPublicData() {
+  if (_publicData !== null) return _publicData;
+  try {
+    _publicData = fs.existsSync(PUBLIC_DATA_PATH) ? JSON.parse(fs.readFileSync(PUBLIC_DATA_PATH, 'utf-8')) : null;
+  } catch (e) { _publicData = null; }
+  return _publicData;
 }
 
 function pickWeightedKey(weights) {
@@ -91,7 +100,7 @@ function mergeModifiers(...mods) {
  * @param {string[]} input.local_events    Pre-specified local events during the stay
  * @param {number} input.occupancy_pct     0-100. If omitted, inferred from season.
  */
-function buildExternalContext({ season = 'mid', nights = 5, weather_array = null, local_events = null, occupancy_pct = null } = {}) {
+function buildExternalContext({ season = 'mid', nights = 5, weather_array = null, local_events = null, occupancy_pct = null, month = null } = {}) {
   const seasonInfo = getSeasonInfo(season);
 
   const weather = weather_array && weather_array.length === nights
@@ -100,9 +109,19 @@ function buildExternalContext({ season = 'mid', nights = 5, weather_array = null
 
   const events = Array.isArray(local_events) ? local_events : (Math.random() < 0.25 ? [weightedLocalEvent()] : []);
 
+  // IBESTAT-calibrated monthly occupancy override (when `month` provided)
+  let inferredOcc = null;
+  if (month && typeof month === 'string') {
+    const pd = getPublicData();
+    const m = month.toLowerCase().slice(0, 3);
+    const curve = pd?.luxury_occupancy_pct_monthly;
+    if (curve && typeof curve[m] === 'number') inferredOcc = curve[m] + Math.round(Math.random() * 10 - 5);
+  }
   const occ = occupancy_pct != null
     ? Math.max(0, Math.min(100, occupancy_pct))
-    : Math.max(20, Math.min(100, Math.round((seasonInfo.typical_occupancy_pct || 70) + (Math.random() * 20 - 10))));
+    : (inferredOcc != null
+        ? Math.max(0, Math.min(100, inferredOcc))
+        : Math.max(20, Math.min(100, Math.round((seasonInfo.typical_occupancy_pct || 70) + (Math.random() * 20 - 10)))));
   const occBucket = getOccupancyBucket(occ);
 
   // Aggregate the sensation modifiers (season + occupancy + events + average weather)
@@ -187,8 +206,54 @@ function getStageContextBlock({ externalContext, nightNumber = 1 }) {
   return `\n--- Stage context ---\n${lines.join('\n')}\n`;
 }
 
+/**
+ * Infer the operational context of a specific date range (e.g., 2026-08-14
+ * to 2026-08-20). Reads occupancy_pricing_menorca.json (IBESTAT-derived) to
+ * return: season, occupancy_pct, cultural_mix, and suggested weather bias.
+ *
+ * Used by the stay-simulate-direct route when caller passes `date_range`.
+ * Lets Revenue Management / Ops simulate THE REAL WEEK they care about.
+ *
+ * @param {string} start ISO date "YYYY-MM-DD"
+ * @param {string} end   ISO date "YYYY-MM-DD" (exclusive or inclusive both work)
+ * @returns {Object} { month, nights, season, occupancy_pct, cultural_mix, weather_bias }
+ */
+function inferContextFromDateRange(start, end) {
+  const s = new Date(start);
+  const e = new Date(end);
+  if (isNaN(s.getTime()) || isNaN(e.getTime())) throw new Error('Invalid date_range');
+  const nights = Math.max(1, Math.round((e - s) / 86400000));
+  const monthKey = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'][s.getMonth()];
+  // Season buckets by month (high = jun-sep, mid = apr-may+oct, low = nov-mar)
+  const season = ['jun','jul','aug','sep'].includes(monthKey) ? 'high'
+               : ['apr','may','oct'].includes(monthKey) ? 'mid'
+               : 'low';
+  const pd = getPublicData();
+  const occupancy_pct = pd?.luxury_occupancy_pct_monthly?.[monthKey] ?? null;
+  const cultural_mix = pd?.cultural_mix_monthly?.[monthKey] ?? null;
+  // Weather bias suggestion (not yet integrated but returnable to caller)
+  const weather_bias = monthKey === 'aug' ? 'sunny_heatwave_likely'
+                     : ['jul','jun'].includes(monthKey) ? 'sunny_calm_dominant'
+                     : ['apr','may','oct'].includes(monthKey) ? 'mixed_variable'
+                     : 'low_season_overcast_possible';
+  return { month: monthKey, nights, season, occupancy_pct, cultural_mix, weather_bias };
+}
+
+/**
+ * Compute agent_count for a "full hotel" simulation: rooms × occupancy ×
+ * turnover_over_window. For a 7-night window with 5-night avg stay, one
+ * room generates ~1.4 check-ins. For a 14-night window, ~2.8.
+ */
+function computeFullHotelAgentCount({ rooms, occupancyPct, nights, avgStayLength = 5 }) {
+  if (!rooms || !occupancyPct || !nights) return null;
+  const turnover = Math.max(1, nights / Math.max(1, avgStayLength));
+  return Math.round(rooms * (occupancyPct / 100) * turnover);
+}
+
 module.exports = {
   buildExternalContext,
+  inferContextFromDateRange,
+  computeFullHotelAgentCount,
   getStageContextBlock,
   sampleWeatherArray,
   getWeatherInfo,

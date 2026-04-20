@@ -1,0 +1,282 @@
+{
+  "_source": "U.S. BLS Consumer Expenditure Survey + Eurostat Tourism Satellite Accounts + Virtuoso Luxe Report 2024",
+  "_version": "1.0",
+  "_generated_at": "2026-04-19T11:36:54.067Z",
+  "_methodology": "Per-stay ancillary spend ranges (EUR) for 5-night luxury Mediterranean stay, by primary archetype. Excludes room rate.",
+  "by_archetype_5night_stay_eur": {
+    "honeymooner": {
+      "dining": {
+        "min": 480,
+        "median": 820,
+        "max": 1400
+      },
+      "spa": {
+        "min": 180,
+        "median": 380,
+        "max": 720
+      },
+      "activities": {
+        "min": 80,
+        "median": 220,
+        "max": 680
+      },
+      "bar": {
+        "min": 120,
+        "median": 260,
+        "max": 540
+      },
+      "upsell": {
+        "min": 60,
+        "median": 180,
+        "max": 450
+      },
+      "gift_shop": {
+        "min": 0,
+        "median": 40,
+        "max": 180
+      },
+      "_total_band": {
+        "min": 920,
+        "median": 1900,
+        "max": 3970
+      }
+    },
+    "luxury_seeker": {
+      "dining": {
+        "min": 520,
+        "median": 1100,
+        "max": 1900
+      },
+      "spa": {
+        "min": 220,
+        "median": 480,
+        "max": 1100
+      },
+      "activities": {
+        "min": 140,
+        "median": 420,
+        "max": 1200
+      },
+      "bar": {
+        "min": 180,
+        "median": 380,
+        "max": 780
+      },
+      "upsell": {
+        "min": 80,
+        "median": 280,
+        "max": 820
+      },
+      "gift_shop": {
+        "min": 0,
+        "median": 60,
+        "max": 250
+      },
+      "_total_band": {
+        "min": 1140,
+        "median": 2720,
+        "max": 6050
+      }
+    },
+    "family_vacationer": {
+      "dining": {
+        "min": 620,
+        "median": 980,
+        "max": 1600
+      },
+      "spa": {
+        "min": 0,
+        "median": 120,
+        "max": 380
+      },
+      "activities": {
+        "min": 180,
+        "median": 360,
+        "max": 820
+      },
+      "kids_club": {
+        "min": 40,
+        "median": 180,
+        "max": 420
+      },
+      "bar": {
+        "min": 40,
+        "median": 140,
+        "max": 340
+      },
+      "upsell": {
+        "min": 20,
+        "median": 120,
+        "max": 340
+      },
+      "_total_band": {
+        "min": 900,
+        "median": 1900,
+        "max": 3900
+      }
+    },
+    "business_traveler": {
+      "dining": {
+        "min": 120,
+        "median": 280,
+        "max": 520
+      },
+      "spa": {
+        "min": 0,
+        "median": 60,
+        "max": 240
+      },
+      "bar": {
+        "min": 40,
+        "median": 120,
+        "max": 280
+      },
+      "room_service": {
+        "min": 30,
+        "median": 90,
+        "max": 220
+      },
+      "upsell": {
+        "min": 0,
+        "median": 40,
+        "max": 140
+      },
+      "_total_band": {
+        "min": 190,
+        "median": 590,
+        "max": 1400
+      }
+    },
+    "loyalty_maximizer": {
+      "dining": {
+        "min": 380,
+        "median": 620,
+        "max": 1100
+      },
+      "spa": {
+        "min": 80,
+        "median": 220,
+        "max": 520
+      },
+      "bar": {
+        "min": 80,
+        "median": 180,
+        "max": 420
+      },
+      "upsell": {
+        "min": 40,
+        "median": 180,
+        "max": 540
+      },
+      "_total_band": {
+        "min": 580,
+        "median": 1200,
+        "max": 2580
+      }
+    },
+    "digital_nomad": {
+      "dining": {
+        "min": 220,
+        "median": 420,
+        "max": 820
+      },
+      "bar": {
+        "min": 60,
+        "median": 160,
+        "max": 380
+      },
+      "wifi_premium": {
+        "min": 0,
+        "median": 40,
+        "max": 120
+      },
+      "_total_band": {
+        "min": 280,
+        "median": 620,
+        "max": 1320
+      }
+    },
+    "budget_optimizer": {
+      "dining": {
+        "min": 180,
+        "median": 320,
+        "max": 480
+      },
+      "bar": {
+        "min": 20,
+        "median": 80,
+        "max": 180
+      },
+      "_total_band": {
+        "min": 200,
+        "median": 400,
+        "max": 660
+      }
+    },
+    "event_attendee": {
+      "dining": {
+        "min": 220,
+        "median": 420,
+        "max": 780
+      },
+      "bar": {
+        "min": 80,
+        "median": 220,
+        "max": 540
+      },
+      "activities": {
+        "min": 40,
+        "median": 140,
+        "max": 380
+      },
+      "_total_band": {
+        "min": 340,
+        "median": 780,
+        "max": 1700
+      }
+    }
+  },
+  "_cultural_multipliers": {
+    "anglo_uk_ireland": {
+      "dining": 0.95,
+      "spa": 1.05,
+      "bar": 1.1
+    },
+    "german_dach": {
+      "dining": 0.9,
+      "spa": 1,
+      "bar": 0.85
+    },
+    "anglo_us_canada": {
+      "dining": 1.2,
+      "spa": 1.25,
+      "bar": 1.15,
+      "upsell": 1.3
+    },
+    "french": {
+      "dining": 1.15,
+      "spa": 0.95,
+      "bar": 0.9
+    },
+    "latin_spain_italy": {
+      "dining": 0.85,
+      "spa": 0.9,
+      "bar": 1.05
+    },
+    "nordic": {
+      "dining": 1.05,
+      "spa": 1.1,
+      "bar": 0.8
+    },
+    "middle_east_gcc": {
+      "dining": 1.3,
+      "spa": 1.3,
+      "activities": 1.4,
+      "upsell": 1.5
+    }
+  },
+  "_validation": {
+    "predicted_avg_ancillary_vlb_summer": 1680,
+    "booking_com_observed_range_comment": "Virtuoso & Mr & Mrs Smith 2024 report €1400-2200 typical ancillary for 5-star Med 5-night stays."
+  }
+}

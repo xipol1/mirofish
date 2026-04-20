@@ -1,0 +1,418 @@
+{
+  "meta": {
+    "property_name": "Gran Meliá Villa Le Blanc",
+    "property_slug": "gran-melia-villa-le-blanc",
+    "seed": "smoketest-rate",
+    "agent_count_per_month": 12,
+    "months_tested": [
+      "apr",
+      "may",
+      "jun",
+      "jul",
+      "aug",
+      "sep",
+      "oct"
+    ],
+    "elapsed_ms": 2917,
+    "generated_at": "2026-04-20T06:25:03.413Z"
+  },
+  "inputs": {
+    "rates_eur": {
+      "apr": 520,
+      "may": 680,
+      "jun": 890,
+      "jul": 1420,
+      "aug": 1680,
+      "sep": 1180,
+      "oct": 720
+    },
+    "observed_occupancy_pct": {
+      "apr": 62,
+      "may": 74,
+      "jun": 82,
+      "jul": 91,
+      "aug": 93,
+      "sep": 84,
+      "oct": 68
+    },
+    "cultural_mix_used": {
+      "apr": {
+        "anglo_uk_ireland": 28,
+        "german_dach": 30,
+        "latin_spain_italy": 18,
+        "french": 11,
+        "anglo_us_canada": 4,
+        "nordic": 5,
+        "latin_american": 2,
+        "middle_east_gcc": 2
+      },
+      "may": {
+        "anglo_uk_ireland": 42,
+        "german_dach": 22,
+        "latin_spain_italy": 18,
+        "french": 9,
+        "anglo_us_canada": 5,
+        "nordic": 4
+      },
+      "jun": {
+        "anglo_uk_ireland": 28,
+        "german_dach": 30,
+        "latin_spain_italy": 18,
+        "french": 11,
+        "anglo_us_canada": 4,
+        "nordic": 5,
+        "latin_american": 2,
+        "middle_east_gcc": 2
+      },
+      "jul": {
+        "anglo_uk_ireland": 28,
+        "german_dach": 30,
+        "latin_spain_italy": 18,
+        "french": 11,
+        "anglo_us_canada": 4,
+        "nordic": 5,
+        "latin_american": 2,
+        "middle_east_gcc": 2
+      },
+      "aug": {
+        "anglo_uk_ireland": 26,
+        "german_dach": 32,
+        "latin_spain_italy": 22,
+        "french": 10,
+        "anglo_us_canada": 3,
+        "nordic": 4,
+        "latin_american": 2,
+        "middle_east_gcc": 1
+      },
+      "sep": {
+        "anglo_uk_ireland": 40,
+        "german_dach": 26,
+        "latin_spain_italy": 14,
+        "french": 10,
+        "anglo_us_canada": 5,
+        "nordic": 3,
+        "latin_american": 2
+      },
+      "oct": {
+        "anglo_uk_ireland": 45,
+        "german_dach": 24,
+        "latin_spain_italy": 10,
+        "french": 8,
+        "anglo_us_canada": 6,
+        "nordic": 5,
+        "latin_american": 2
+      }
+    }
+  },
+  "per_month": [
+    {
+      "month": "apr",
+      "rate_eur": 520,
+      "cultural_mix": {
+        "anglo_uk_ireland": 28,
+        "german_dach": 30,
+        "latin_spain_italy": 18,
+        "french": 11,
+        "anglo_us_canada": 4,
+        "nordic": 5,
+        "latin_american": 2,
+        "middle_east_gcc": 2
+      },
+      "agent_count": 12,
+      "acceptance_pct": 41.7,
+      "avg_revenue_per_prospect_eur": 1047.25,
+      "walk_away_rate_pct": 16.7,
+      "top_walk_away_reasons": [
+        {
+          "reason": "price too high for perceived value",
+          "count": 1
+        },
+        {
+          "reason": "price outside acceptable range",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "month": "may",
+      "rate_eur": 680,
+      "cultural_mix": {
+        "anglo_uk_ireland": 42,
+        "german_dach": 22,
+        "latin_spain_italy": 18,
+        "french": 9,
+        "anglo_us_canada": 5,
+        "nordic": 4
+      },
+      "agent_count": 12,
+      "acceptance_pct": 58.3,
+      "avg_revenue_per_prospect_eur": 2133.08,
+      "walk_away_rate_pct": 16.7,
+      "top_walk_away_reasons": [
+        {
+          "reason": "price outside acceptable range",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "month": "jun",
+      "rate_eur": 890,
+      "cultural_mix": {
+        "anglo_uk_ireland": 28,
+        "german_dach": 30,
+        "latin_spain_italy": 18,
+        "french": 11,
+        "anglo_us_canada": 4,
+        "nordic": 5,
+        "latin_american": 2,
+        "middle_east_gcc": 2
+      },
+      "agent_count": 12,
+      "acceptance_pct": 41.7,
+      "avg_revenue_per_prospect_eur": 2050.5,
+      "walk_away_rate_pct": 33.3,
+      "top_walk_away_reasons": [
+        {
+          "reason": "price too high for perceived value",
+          "count": 2
+        },
+        {
+          "reason": "price marginally above comfort, alternatives look more competitive",
+          "count": 1
+        },
+        {
+          "reason": "price outside acceptable range",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "month": "jul",
+      "rate_eur": 1420,
+      "cultural_mix": {
+        "anglo_uk_ireland": 28,
+        "german_dach": 30,
+        "latin_spain_italy": 18,
+        "french": 11,
+        "anglo_us_canada": 4,
+        "nordic": 5,
+        "latin_american": 2,
+        "middle_east_gcc": 2
+      },
+      "agent_count": 12,
+      "acceptance_pct": 0,
+      "avg_revenue_per_prospect_eur": 0,
+      "walk_away_rate_pct": 66.7,
+      "top_walk_away_reasons": [
+        {
+          "reason": "price outside acceptable range",
+          "count": 5
+        },
+        {
+          "reason": "price too high for perceived value",
+          "count": 2
+        },
+        {
+          "reason": "price marginally above comfort, alternatives look more competitive",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "month": "aug",
+      "rate_eur": 1680,
+      "cultural_mix": {
+        "anglo_uk_ireland": 26,
+        "german_dach": 32,
+        "latin_spain_italy": 22,
+        "french": 10,
+        "anglo_us_canada": 3,
+        "nordic": 4,
+        "latin_american": 2,
+        "middle_east_gcc": 1
+      },
+      "agent_count": 12,
+      "acceptance_pct": 0,
+      "avg_revenue_per_prospect_eur": 0,
+      "walk_away_rate_pct": 100,
+      "top_walk_away_reasons": [
+        {
+          "reason": "price too high for perceived value",
+          "count": 7
+        },
+        {
+          "reason": "price outside acceptable range",
+          "count": 5
+        }
+      ]
+    },
+    {
+      "month": "sep",
+      "rate_eur": 1180,
+      "cultural_mix": {
+        "anglo_uk_ireland": 40,
+        "german_dach": 26,
+        "latin_spain_italy": 14,
+        "french": 10,
+        "anglo_us_canada": 5,
+        "nordic": 3,
+        "latin_american": 2
+      },
+      "agent_count": 12,
+      "acceptance_pct": 25,
+      "avg_revenue_per_prospect_eur": 1705.58,
+      "walk_away_rate_pct": 50,
+      "top_walk_away_reasons": [
+        {
+          "reason": "price outside acceptable range",
+          "count": 3
+        },
+        {
+          "reason": "price marginally above comfort, alternatives look more competitive",
+          "count": 2
+        },
+        {
+          "reason": "price too high for perceived value",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "month": "oct",
+      "rate_eur": 720,
+      "cultural_mix": {
+        "anglo_uk_ireland": 45,
+        "german_dach": 24,
+        "latin_spain_italy": 10,
+        "french": 8,
+        "anglo_us_canada": 6,
+        "nordic": 5,
+        "latin_american": 2
+      },
+      "agent_count": 12,
+      "acceptance_pct": 33.3,
+      "avg_revenue_per_prospect_eur": 1241.83,
+      "walk_away_rate_pct": 25,
+      "top_walk_away_reasons": [
+        {
+          "reason": "price outside acceptable range",
+          "count": 2
+        },
+        {
+          "reason": "price too high for perceived value",
+          "count": 1
+        }
+      ]
+    }
+  ],
+  "scores": {
+    "composite": {
+      "rate_accuracy_score": 0.172,
+      "rate_accuracy_pct": 17.2,
+      "verdict": "DRIFT",
+      "weights": {
+        "shape": 0.4,
+        "spearman": 0.35,
+        "pearson": 0.2,
+        "peak": 0.05
+      },
+      "component_scores": {
+        "shape": 0.43,
+        "spearman": 0,
+        "pearson": 0,
+        "peak": 0
+      }
+    },
+    "pearson_r": -0.748,
+    "spearman_r": -0.764,
+    "shape": {
+      "l1_distance": 3.992,
+      "similarity": 0.43,
+      "normalized_predicted": [
+        0.715,
+        1,
+        0.715,
+        0,
+        0,
+        0.429,
+        0.571
+      ],
+      "normalized_actual": [
+        0,
+        0.387,
+        0.645,
+        0.935,
+        1,
+        0.71,
+        0.194
+      ]
+    },
+    "peak_trough": {
+      "predicted_peak": "may",
+      "actual_peak": "aug",
+      "peak_match": false,
+      "predicted_trough": "jul",
+      "actual_trough": "apr",
+      "trough_match": false
+    },
+    "per_period": [
+      {
+        "period": "apr",
+        "predicted_pct": 41.7,
+        "actual_pct": 62,
+        "abs_delta_pp": 20.3,
+        "normalized_predicted": 0.715,
+        "normalized_actual": 0
+      },
+      {
+        "period": "may",
+        "predicted_pct": 58.3,
+        "actual_pct": 74,
+        "abs_delta_pp": 15.7,
+        "normalized_predicted": 1,
+        "normalized_actual": 0.387
+      },
+      {
+        "period": "jun",
+        "predicted_pct": 41.7,
+        "actual_pct": 82,
+        "abs_delta_pp": 40.3,
+        "normalized_predicted": 0.715,
+        "normalized_actual": 0.645
+      },
+      {
+        "period": "jul",
+        "predicted_pct": 0,
+        "actual_pct": 91,
+        "abs_delta_pp": 91,
+        "normalized_predicted": 0,
+        "normalized_actual": 0.935
+      },
+      {
+        "period": "aug",
+        "predicted_pct": 0,
+        "actual_pct": 93,
+        "abs_delta_pp": 93,
+        "normalized_predicted": 0,
+        "normalized_actual": 1
+      },
+      {
+        "period": "sep",
+        "predicted_pct": 25,
+        "actual_pct": 84,
+        "abs_delta_pp": 59,
+        "normalized_predicted": 0.429,
+        "normalized_actual": 0.71
+      },
+      {
+        "period": "oct",
+        "predicted_pct": 33.3,
+        "actual_pct": 68,
+        "abs_delta_pp": 34.7,
+        "normalized_predicted": 0.571,
+        "normalized_actual": 0.194
+      }
+    ]
+  }
+}

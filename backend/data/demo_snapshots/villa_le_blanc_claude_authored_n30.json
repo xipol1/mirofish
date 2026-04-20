@@ -1,0 +1,852 @@
+{
+  "_demo_source": "Claude Opus 4.7 — direct authorship in session 2026-04-19",
+  "_demo_author": "claude-opus-4-7",
+  "_demo_generated": "2026-04-19T14:15:00.000Z",
+  "_demo_n_original": 31,
+  "_demo_n_sampled": 31,
+  "_demo_provenance": "Each stay personally authored by Claude Opus 4.7: persona, stage narratives, moments, predicted review — no deterministic template, no external LLM. Distribution calibrated to Villa Le Blanc real corpus (572 TripAdvisor + Booking reviews, 4.65★ / 77% 5★).",
+  "mode": "stay_experience",
+  "provider": "claude-opus-4-7-direct",
+  "industry": "hospitality",
+  "property": {
+    "name": "Gran Meliá Villa Le Blanc",
+    "brand": "Gran Meliá",
+    "slug": "gran-melia-villa-le-blanc",
+    "tier": "luxury",
+    "id": "inline-claude-n30"
+  },
+  "audience_vector": {
+    "vertical": "hospitality",
+    "guest_mix": "luxury leisure couples, honeymooners, Meliá Rewards loyalty, limited business extension, international with UK and DACH lead",
+    "trip_purpose_primary": "leisure_couples",
+    "price_sensitivity": "luxury",
+    "origin_geography": "international_european_lead"
+  },
+  "personas": [],
+  "stays_sample": [
+    {
+      "archetype_id": "honeymooner",
+      "stay_length_nights": 5,
+      "trip_purpose": "honeymoon",
+      "target_star_rating": 5,
+      "persona_full": {
+        "name": "Emma & James Williamson",
+        "age": 34,
+        "nationality": "UK",
+        "archetype_id": "honeymooner",
+        "archetype_label": "Honeymooner",
+        "loyalty_tier": "melia_silver",
+        "bio": "Just married in Dorset, picked Villa Le Blanc over Santorini after Emma's sister raved about Cap Rocat. Emma is a GP, James is in sustainable finance; both have complicated breakfasts and strong opinions on tea."
+      },
+      "cultural_context": { "culture_cluster": "anglo_uk_ireland", "origin_country_iso": "GB", "native_language": "en" },
+      "booking_context": { "price_tier": "luxury", "rate_paid_eur": 720, "booking_channel": "direct_web", "loyalty_tier": "melia_silver", "lead_time_days": 143 },
+      "stages": [
+        { "stage": "arrival", "night_number": 1,
+          "narrative": "We arrived just after three, slightly fried from the Gatwick → Mahón connection, and were somehow de-stressed before we'd finished the welcome vermouth. Núria at the desk asked whether we'd prefer tea or something colder — small question, but the question itself read the room perfectly. Rooms were ready; bags beat us to the suite.",
+          "moments_positive": ["Núria greeted us by name within seconds", "welcome vermouth in handblown glass — unexpectedly good", "valet had our bags up before we'd sat down"],
+          "moments_negative": []
+        },
+        { "stage": "room_first_impression", "night_number": 1,
+          "narrative": "The suite — God. Travertine bathroom, linen curtains catching the late light, a sea-facing terrace the size of our London flat. GM had left a handwritten note with two champagne flutes; didn't feel transactional. Emma cried. Good start.",
+          "moments_positive": ["handwritten note from the GM with two champagne flutes", "sea-facing terrace larger than expected", "blackout curtains actually work and the bed is exactly right"],
+          "moments_negative": []
+        },
+        { "stage": "dinner", "night_number": 1,
+          "narrative": "La Sal — seven courses, wine pairing, the chef came out to explain the langoustines were from a fishing cooperative four miles east. Service was the 'attentive but invisible' trick that most places botch. Two and a half hours later we hadn't noticed time passing.",
+          "moments_positive": ["tasting menu at La Sal — 7 courses, each better than the last", "biodynamic local rosé we'd never have ordered on our own", "chef came out to explain the Menorcan provenance of the langoustines"],
+          "moments_negative": []
+        },
+        { "stage": "daytime_activity", "night_number": 2,
+          "narrative": "Adults-only rooftop pool, cabana, rosé, cold towels every twenty minutes. The concierge arranged a half-day sail to Cala Galdana on literally thirty minutes' notice. Pool attendant Marco moved our umbrella as the sun moved without being asked.",
+          "moments_positive": ["private cabana by the adult pool with chilled rosé and cold towels every 20 min", "concierge arranged a sailing trip to Cala Galdana at short notice", "pool attendant Marco proactively adjusted our umbrella as the sun moved"],
+          "moments_negative": []
+        },
+        { "stage": "afternoon_activity", "night_number": 3,
+          "narrative": "Thai spa. Couple's massage. I'll be honest — I've had better technical massages in Bangkok, but the hydrothermal circuit + the post-treatment lavender infusion tipped the scales. Emma nearly moved in.",
+          "moments_positive": ["Thai spa with hydrothermal circuit — best spa facility on the island", "therapist Lin was technically superb and intuitive about pressure", "lavender-and-honey infusion waiting in the relaxation room"],
+          "moments_negative": []
+        },
+        { "stage": "checkout", "night_number": 5,
+          "narrative": "Bill matched the quote exactly, which at a property of this price bracket is embarrassingly rare. Bellman Javi walked us to the transfer car with our luggage and handed over a bottle of local olive oil. Emma's already looking at flights for our first anniversary.",
+          "moments_positive": ["checkout was frictionless; the bill matched exactly what we expected", "handwritten thank-you note from the concierge slipped into the luggage", "bottle of local olive oil at departure"],
+          "moments_negative": []
+        }
+      ],
+      "sensation_summary": {
+        "stars": 5, "nps": 95, "raw_score": 87,
+        "final_state": { "comfort_physical": 96, "cleanliness": 97, "service_quality": 98, "speed": 88, "personalization": 95, "value": 82, "authenticity": 92, "modernity": 84, "amenity_usability": 90, "crowd": 85, "culinary": 96, "safety": 92, "aesthetic": 98, "sustainability_awareness": 88 }
+      },
+      "predicted_review": {
+        "will_write_review": true, "platform": "tripadvisor", "star_rating": 5, "nps": 95,
+        "title": "All things considered, rather lovely",
+        "body": "Right, where to start. We picked this over Santorini on the strength of a family recommendation and now owe the sister in question approximately everything. The check-in was unhurried, the suite was bigger than our flat, La Sal was genuinely the best meal we've had in a hotel restaurant since our honeymoon over at Aman last time around. A few quiet notes: the rooftop bar closes at 23:00 rather than 00:00 which caught us out one night, and there's a €45 resort fee that wasn't wildly obvious at booking — not ruinous, but worth knowing. Would we return? In a heartbeat. Marco, Núria, Lin, Javi — all worth the ticket. Good thing we are coming back next year.",
+        "themes": ["location", "service", "food", "aesthetic", "design_aesthetic", "spa"], "would_recommend": true, "would_repeat": true, "social_media_share_probability": 0.6
+      },
+      "total_spend_eur": 1420,
+      "property_name": "Gran Meliá Villa Le Blanc"
+    },
+
+    {
+      "archetype_id": "honeymooner", "stay_length_nights": 4, "trip_purpose": "honeymoon", "target_star_rating": 5,
+      "persona_full": { "name": "Charlotte Pembroke & Rupert Ashby", "age": 36, "nationality": "UK", "archetype_id": "honeymooner", "archetype_label": "Honeymooner", "loyalty_tier": null, "bio": "Hampshire wedding in May, four-night post-bloc honeymoon before family duties resume. Charlotte is a barrister; Rupert runs a small vineyard in Sussex." },
+      "cultural_context": { "culture_cluster": "anglo_uk_ireland", "origin_country_iso": "GB", "native_language": "en" },
+      "booking_context": { "price_tier": "luxury", "rate_paid_eur": 680, "booking_channel": "direct_web", "loyalty_tier": null, "lead_time_days": 98 },
+      "stages": [
+        { "stage": "arrival", "night_number": 1, "narrative": "Unhurried, warm. A welcome drink that turned into two. Rupert, a man who judges hotels on the wine list within the first ten minutes, pronounced himself satisfied within three.",
+          "moments_positive": ["the lobby opened onto a breathtaking view of the Mediterranean", "bartender Alejandro made us a custom cocktail", "staff had read the 'honeymoon' flag on booking and acted on it without asking"], "moments_negative": [] },
+        { "stage": "dinner", "night_number": 1, "narrative": "La Sal. I am not easily impressed and I was impressed. The sommelier's wine list has a deep Spanish bias which, as it should at a property in Menorca.",
+          "moments_positive": ["tasting menu at La Sal — 7 courses, each better than the last", "wine pairing educated without lecturing"], "moments_negative": [] },
+        { "stage": "daytime_activity", "night_number": 2, "narrative": "Sailing to Cala Galdana. Private charter, concierge arranged within the hour. Lunch on deck, a bottle of albariño, swimming in water so clear it looked actively photoshopped.",
+          "moments_positive": ["concierge arranged a sailing charter within the hour", "lunch on deck with a chilled albariño", "Cala Galdana water absurdly clear"], "moments_negative": [] },
+        { "stage": "morning_routine", "night_number": 3, "narrative": "Breakfast on the terrace. Tomato bread, Menorcan cheeses, fresh pastries. Coffee with the barista who remembered our order from yesterday.",
+          "moments_positive": ["tomato bread, local cheeses, fresh pastries", "barista remembered our coffee preference from yesterday", "slow, lingering breakfast on the terrace with no one rushing us"], "moments_negative": [] },
+        { "stage": "checkout", "night_number": 4, "narrative": "GM stopped by the lobby to thank us personally. Not a scripted line — he'd remembered that we'd mentioned the vineyard over dinner on night two and asked how harvest was looking.",
+          "moments_positive": ["GM remembered our dinner conversation from night two", "checkout frictionless", "departure gift of local olive oil"], "moments_negative": [] }
+      ],
+      "sensation_summary": { "stars": 5, "nps": 92, "raw_score": 85, "final_state": { "comfort_physical": 94, "cleanliness": 96, "service_quality": 98, "speed": 84, "personalization": 96, "value": 80, "authenticity": 94, "modernity": 80, "amenity_usability": 88, "crowd": 86, "culinary": 97, "safety": 90, "aesthetic": 96, "sustainability_awareness": 88 } },
+      "predicted_review": { "will_write_review": true, "platform": "tripadvisor", "star_rating": 5, "nps": 92, "title": "Everything we hoped it would be", "body": "Four-night honeymoon, booked direct, and every single touchpoint was as considered as the last. Núria at the desk, Alejandro behind the bar, the GM who remembered our vineyard from dinner on night two — this is a property that reads guests with the kind of attention that doesn't survive scale in most places. La Sal is worth the trip on its own. The wine list has a proper Spanish bias rather than the boring international tasting-menu defaults. Not a cheap stay, but we're not sure where we would go next time that would feel better. Thank you.", "themes": ["service", "food", "wine", "location", "design_aesthetic"], "would_recommend": true, "would_repeat": true, "social_media_share_probability": 0.45 },
+      "total_spend_eur": 1280,
+      "property_name": "Gran Meliá Villa Le Blanc"
+    },
+
+    {
+      "archetype_id": "luxury_seeker", "stay_length_nights": 5, "trip_purpose": "anniversary", "target_star_rating": 5,
+      "persona_full": { "name": "Thomas & Ellie Fletcher", "age": 41, "nationality": "UK", "archetype_id": "luxury_seeker", "archetype_label": "Luxury Seeker", "loyalty_tier": "melia_gold", "bio": "Returning guests — third Gran Meliá in eighteen months. Stayed at Canaves Oia last July, Passalacqua the summer before. Thomas is a private equity partner; Ellie runs a foundation." },
+      "cultural_context": { "culture_cluster": "anglo_uk_ireland", "origin_country_iso": "GB", "native_language": "en" },
+      "booking_context": { "price_tier": "luxury", "rate_paid_eur": 650, "booking_channel": "booking_com", "loyalty_tier": "melia_gold", "lead_time_days": 62 },
+      "stages": [
+        { "stage": "arrival", "night_number": 1, "narrative": "Arrival is the tell. Here, they recognised us on name, noted returning-guest status, and had the upgraded terrace suite ready. That's twice now.",
+          "moments_positive": ["recognised as returning guests without prompting", "terrace suite upgrade without having to ask", "Núria remembered us from last September"], "moments_negative": [] },
+        { "stage": "room_first_impression", "night_number": 1, "narrative": "The suite has been subtly refreshed since last year — new linens, the same excellent bathroom. Amenities personalised to our noted preferences.",
+          "moments_positive": ["amenity selection felt personal", "suite had been refreshed since last year", "details of our last stay had been carried forward"], "moments_negative": [] },
+        { "stage": "dinner", "night_number": 2, "narrative": "La Sal again, different tasting menu. Compared to Passalacqua's Michelin run last year, genuinely in the same league — and the pricing is more humane.",
+          "moments_positive": ["in the same league as Passalacqua at half the euro", "wine pairing deeply Mediterranean", "chef did another cooperative-provenance tour"], "moments_negative": [] },
+        { "stage": "afternoon_activity", "night_number": 3, "narrative": "Thai spa. Ellie booked the full-day circuit. I am still marginally convinced she'd have paid twice the price.",
+          "moments_positive": ["Thai spa hydrothermal circuit", "therapist Lin — ask for her"], "moments_negative": [] },
+        { "stage": "checkout", "night_number": 5, "narrative": "Bill, bellman, GM, olive oil. Same playbook, still faultless on third visit. We'll be back.",
+          "moments_positive": ["bill matched", "GM said goodbye personally", "local olive oil departure gift"], "moments_negative": [] }
+      ],
+      "sensation_summary": { "stars": 5, "nps": 90, "raw_score": 86, "final_state": { "comfort_physical": 95, "cleanliness": 97, "service_quality": 96, "speed": 85, "personalization": 97, "value": 84, "authenticity": 90, "modernity": 82, "amenity_usability": 90, "crowd": 87, "culinary": 95, "safety": 90, "aesthetic": 94, "sustainability_awareness": 86 } },
+      "predicted_review": { "will_write_review": true, "platform": "booking.com", "star_rating": 5, "nps": 90, "title": "Third stay — still our benchmark Mediterranean property", "body": "Third visit in eighteen months. We've tried the usual alternatives — Santorini, Lake Como, Positano — and keep coming back here. The consistency at a five-star across multiple visits is rarer than you'd think. They remembered our preferences from last year without us having to cue them. La Sal is genuinely in the Michelin conversation at less than Michelin pricing. Spa is the best facility on the island, and the therapist Lin is worth requesting by name. We'll be booking a fourth visit before the end of the year.", "themes": ["service", "food", "spa", "personalization", "location"], "would_recommend": true, "would_repeat": true, "social_media_share_probability": 0.3 },
+      "total_spend_eur": 1580,
+      "property_name": "Gran Meliá Villa Le Blanc"
+    },
+
+    {
+      "archetype_id": "loyalty_maximizer", "stay_length_nights": 6, "trip_purpose": "leisure_solo_working", "target_star_rating": 5,
+      "persona_full": { "name": "Oliver Ashworth", "age": 45, "nationality": "UK", "archetype_id": "loyalty_maximizer", "archetype_label": "Loyalty Maximizer", "loyalty_tier": "melia_ambassador", "bio": "Ambassador tier since 2019, working between Menorca and London for the week. Wants quiet, wants WiFi, wants the bill to match the quote." },
+      "cultural_context": { "culture_cluster": "anglo_uk_ireland", "origin_country_iso": "GB", "native_language": "en" },
+      "booking_context": { "price_tier": "luxury", "rate_paid_eur": 680, "booking_channel": "direct_app", "loyalty_tier": "melia_ambassador", "lead_time_days": 24 },
+      "stages": [
+        { "stage": "arrival", "night_number": 1, "narrative": "Ambassador recognition at the desk without having to flash the app — increasingly rare at the tier. Luggage beat me to the room.",
+          "moments_positive": ["Ambassador status recognised at the desk without prompting", "room ready on arrival", "welcome gift reflected tier level"], "moments_negative": [] },
+        { "stage": "room_first_impression", "night_number": 1, "narrative": "Requested-amenity pack was complete — noise-cancelling pillow, second desk lamp, the power-strip with UK plugs. Someone reads the notes.",
+          "moments_positive": ["every special-request amenity on arrival", "WiFi tested 180/180 Mbps, consistent for six nights", "quiet zone as requested"], "moments_negative": [] },
+        { "stage": "dinner", "night_number": 3, "narrative": "Worked through dinner at Cru — small plates, consistent. Late-night kitchen ticket honoured at 22:30 no raised eyebrow.",
+          "moments_positive": ["Cru kept the kitchen open for late arrival", "consistency of F&B across all outlets over six days"], "moments_negative": [] },
+        { "stage": "last_morning", "night_number": 6, "narrative": "Same breakfast standard on day six as on day one. Not a given, even in this bracket.",
+          "moments_positive": ["breakfast standards consistent over 6 days"], "moments_negative": [] },
+        { "stage": "checkout", "night_number": 6, "narrative": "Bill matched app quote to the euro including the four spa add-ons. Paperwork at Ambassador tier is where most brands silently fail; here it didn't.",
+          "moments_positive": ["bill matched the app quote to the euro", "loyalty benefit invoicing applied correctly"], "moments_negative": [] }
+      ],
+      "sensation_summary": { "stars": 5, "nps": 88, "raw_score": 84, "final_state": { "comfort_physical": 92, "cleanliness": 94, "service_quality": 95, "speed": 88, "personalization": 95, "value": 82, "authenticity": 86, "modernity": 86, "amenity_usability": 92, "crowd": 88, "culinary": 90, "safety": 92, "aesthetic": 92, "sustainability_awareness": 86 } },
+      "predicted_review": { "will_write_review": true, "platform": "tripadvisor", "star_rating": 5, "nps": 88, "title": "A property that actually honours the tier card", "body": "Six nights, half-working half-leisure. Ambassador recognition at the desk without having to surface the app, every amenity note on the booking actually actioned, and the bill at checkout matched the quote to the euro including the spa add-ons. This is the part most loyalty programmes quietly botch. La Sal was very strong, Cru held up at 22:30 on a Tuesday without any friction, WiFi was the best I've had in a hotel in two years. I notice this property is growing on me. I'll be on a plane back within six months.", "themes": ["loyalty_recognition", "service", "wifi", "room_size", "consistency"], "would_recommend": true, "would_repeat": true, "social_media_share_probability": 0.25 },
+      "total_spend_eur": 1820,
+      "property_name": "Gran Meliá Villa Le Blanc"
+    },
+
+    {
+      "archetype_id": "honeymooner", "stay_length_nights": 4, "trip_purpose": "honeymoon", "target_star_rating": 5,
+      "persona_full": { "name": "Priya & Nikhil Sharma", "age": 31, "nationality": "UK (British-Indian)", "archetype_id": "honeymooner", "archetype_label": "Honeymooner", "loyalty_tier": null, "bio": "London-based doctors, vegetarian, both honeymoon phase of arranged-then-love marriage. Picked the property partly because her cousin had it on Instagram." },
+      "cultural_context": { "culture_cluster": "anglo_uk_ireland", "origin_country_iso": "GB", "native_language": "en" },
+      "booking_context": { "price_tier": "luxury", "rate_paid_eur": 700, "booking_channel": "direct_web", "loyalty_tier": null, "lead_time_days": 118 },
+      "stages": [
+        { "stage": "arrival", "night_number": 1, "narrative": "I'd flagged vegetarian on booking and was braced for the usual 'we'll ask the chef' improvisation. Instead, Núria had a two-page dietary sheet the restaurant teams had prepared. In twelve years of travel nobody has done this.",
+          "moments_positive": ["vegetarian note from booking had been fully planned for across F&B", "Núria had a two-page dietary sheet ready", "the welcome fruit plate was actually thoughtful, not default"], "moments_negative": [] },
+        { "stage": "dinner", "night_number": 1, "narrative": "La Sal improvised a full vegetarian tasting menu without making us feel like an annex. Nikhil nearly cried at the saffron rice course.",
+          "moments_positive": ["full vegetarian tasting menu, not an afterthought", "saffron rice course", "sommelier paired around the menu beautifully"], "moments_negative": [] },
+        { "stage": "morning_routine", "night_number": 2, "narrative": "Breakfast: dosa on the buffet because someone had read my note that it was our wedding breakfast at home. Absurd.",
+          "moments_positive": ["fresh dosa on the buffet — someone had read the wedding note on our booking", "fresh fruit selection actually fresh"], "moments_negative": [] },
+        { "stage": "dinner", "night_number": 3, "narrative": "Cru for something casual. Vegetarian sushi was more effort than most omakase restaurants I've been to make for vegetarians.",
+          "moments_positive": ["vegetarian sushi with real variety at Cru", "Alejandro's custom cocktail"], "moments_negative": [] },
+        { "stage": "checkout", "night_number": 4, "narrative": "They packed a picnic for our airport leg — vegetarian, labelled. Nobody does this.",
+          "moments_positive": ["vegetarian picnic box for the airport, labelled", "handwritten note from the chef"], "moments_negative": [] }
+      ],
+      "sensation_summary": { "stars": 5, "nps": 98, "raw_score": 90, "final_state": { "comfort_physical": 94, "cleanliness": 95, "service_quality": 98, "speed": 86, "personalization": 99, "value": 86, "authenticity": 92, "modernity": 84, "amenity_usability": 90, "crowd": 84, "culinary": 98, "safety": 92, "aesthetic": 95, "sustainability_awareness": 84 } },
+      "predicted_review": { "will_write_review": true, "platform": "tripadvisor", "star_rating": 5, "nps": 98, "title": "The only hotel in twelve years that has actually thought about vegetarian guests", "body": "Four-night honeymoon. I flag vegetarian on every booking and brace for the usual ad-lib. Villa Le Blanc had a two-page dietary sheet ready at arrival, all three restaurants had prepared vegetarian adaptations in advance, La Sal improvised a full vegetarian tasting menu that was genuinely the best meal of our trip, and when we left they packed us a labelled vegetarian picnic for the airport. Nikhil nearly cried at the saffron rice course. These are the small things that make a five-star actually a five-star. We're already planning a return for our first anniversary.", "themes": ["dietary_accommodation", "service", "food", "personalization"], "would_recommend": true, "would_repeat": true, "social_media_share_probability": 0.85 },
+      "total_spend_eur": 1150,
+      "property_name": "Gran Meliá Villa Le Blanc"
+    },
+
+    {
+      "archetype_id": "honeymooner", "stay_length_nights": 6, "trip_purpose": "delayed_honeymoon", "target_star_rating": 5,
+      "persona_full": { "name": "Harriet Clifford & Edward Marsden", "age": 38, "nationality": "UK", "archetype_id": "honeymooner", "archetype_label": "Honeymooner", "loyalty_tier": null, "bio": "Long-delayed honeymoon after two years of IVF and a successful pregnancy at 20 weeks. This trip matters — and they've told no one." },
+      "cultural_context": { "culture_cluster": "anglo_uk_ireland", "origin_country_iso": "GB", "native_language": "en" },
+      "booking_context": { "price_tier": "luxury", "rate_paid_eur": 720, "booking_channel": "direct_web", "loyalty_tier": null, "lead_time_days": 185 },
+      "stages": [
+        { "stage": "arrival", "night_number": 1, "narrative": "Slow. Unhurried. Staff read that we'd been on the road and didn't push the tour. Edward later said it was the first hotel check-in he hadn't found stressful since Gstaad in 2018.",
+          "moments_positive": ["staff read exhaustion and didn't push the welcome tour", "blackout curtains in the suite actually work", "late check-in flexibility"], "moments_negative": [] },
+        { "stage": "room_first_impression", "night_number": 1, "narrative": "Pregnancy pillow request — they'd remembered. Non-alcoholic welcome drink was thoughtful, not patronising. Edward noted it was the first hotel in the world that hadn't brought us champagne unprompted.",
+          "moments_positive": ["pregnancy pillow had been pre-placed on the bed", "non-alcoholic welcome drink option was thoughtful", "amenities non-floral per preference"], "moments_negative": [] },
+        { "stage": "daytime_activity", "night_number": 2, "narrative": "Adults-only pool, private cabana, an infuriatingly good book from the lobby library. Pool attendant Marco moved our umbrella and brought virgin mojitos without us asking for the third round.",
+          "moments_positive": ["adults-only pool absurdly quiet even mid-high-season", "Marco the pool attendant intuited our pace", "library has actually good fiction"], "moments_negative": [] },
+        { "stage": "dinner", "night_number": 3, "narrative": "La Sal. Non-alcoholic pairing was considered, not afterthought. I hadn't cried at dinner since we'd been told the first IVF cycle had failed. Tonight I did.",
+          "moments_positive": ["non-alcoholic pairing at La Sal fully considered", "seven-course tasting menu", "chef came out"], "moments_negative": [] },
+        { "stage": "checkout", "night_number": 6, "narrative": "Edward had mentioned in passing that Harriet collects ceramics. A small piece from a local Mahón potter was in the luggage at checkout — thirty euros of gesture, incalculable impact.",
+          "moments_positive": ["a small piece of local ceramics left with our luggage at checkout", "GM farewell personal", "bill matched"], "moments_negative": [] }
+      ],
+      "sensation_summary": { "stars": 5, "nps": 100, "raw_score": 92, "final_state": { "comfort_physical": 96, "cleanliness": 96, "service_quality": 99, "speed": 88, "personalization": 100, "value": 85, "authenticity": 92, "modernity": 82, "amenity_usability": 90, "crowd": 88, "culinary": 95, "safety": 95, "aesthetic": 96, "sustainability_awareness": 86 } },
+      "predicted_review": { "will_write_review": true, "platform": "booking.com", "star_rating": 5, "nps": 100, "title": "The most thoughtful stay of our married life", "body": "Our honeymoon was delayed two years by IVF and, when it finally happened, we picked this property on a sister's recommendation. I'd flagged pregnancy and non-alcoholic preference on the booking notes. They had read it, actioned it, and not once made a performance of it. The suite had a pregnancy pillow, the welcome drink had a non-alcoholic option, La Sal's tasting menu had a real non-alcoholic pairing rather than iced tea. On the last day they noted my ceramics habit from one overheard comment and left a piece from a Mahón potter in our luggage. I don't know how to rate this. Nothing has come close since our wedding.", "themes": ["personalization", "service", "dietary_accommodation", "aesthetic"], "would_recommend": true, "would_repeat": true, "social_media_share_probability": 0.1 },
+      "total_spend_eur": 1780,
+      "property_name": "Gran Meliá Villa Le Blanc"
+    },
+
+    {
+      "archetype_id": "luxury_seeker", "stay_length_nights": 5, "trip_purpose": "leisure_couples", "target_star_rating": 5,
+      "persona_full": { "name": "Sophie Laurent & Pierre Moreau", "age": 35, "nationality": "France", "archetype_id": "luxury_seeker", "archetype_label": "Luxury Seeker", "loyalty_tier": null, "bio": "Parisian, culturally demanding. Sophie writes for Le Figaro Madame on gastronomy. Pierre is a lawyer. They book five-star on the assumption that the restaurant is the point." },
+      "cultural_context": { "culture_cluster": "french", "origin_country_iso": "FR", "native_language": "fr" },
+      "booking_context": { "price_tier": "luxury", "rate_paid_eur": 680, "booking_channel": "booking_com", "loyalty_tier": null, "lead_time_days": 76 },
+      "stages": [
+        { "stage": "arrival", "night_number": 1, "narrative": "Arrivée sans friction. L'accueil de Núria était professionnel sans familiarité excessive, ce qui est français de sa part.",
+          "moments_positive": ["accueil sans familiarité excessive", "apéritif de vermouth local en verre soufflé", "discrétion du service"], "moments_negative": [] },
+        { "stage": "dinner", "night_number": 1, "narrative": "La Sal. Le sommelier avait un avis plutôt qu'une liste, ce qui est devenu rare. La technique est solide, la créativité est méditerranéenne plus que cosmopolite — ce qui est, à Menorca, la bonne décision.",
+          "moments_positive": ["sommelier avec un vrai point de vue", "technique solide, pas de tape-à-l'œil", "respect du produit menorquin"], "moments_negative": [] },
+        { "stage": "daytime_activity", "night_number": 2, "narrative": "Piscine adulte, quiet. Pas d'enfants, pas de musique trop forte. Marco a anticipé nos déplacements au soleil sans que nous ayons à demander.",
+          "moments_positive": ["piscine adultes effectivement silencieuse", "Marco a anticipé le soleil", "cabana privée"], "moments_negative": [] },
+        { "stage": "afternoon_activity", "night_number": 3, "narrative": "Le spa thaï. Étonnant pour une île de 700km². Le circuit hydrothermal vaut le détour.",
+          "moments_positive": ["circuit hydrothermal étonnant pour une île de cette taille", "thérapeute Lin techniquement impeccable", "retour à la salle de détente avec infusion"], "moments_negative": [] },
+        { "stage": "checkout", "night_number": 5, "narrative": "La facture correspondait au devis. Petit cadeau d'huile d'olive. Nous reviendrons pour une anniversaire de mariage.",
+          "moments_positive": ["facture conforme au devis", "petit cadeau de départ en huile d'olive locale", "adieux du DG personnels"], "moments_negative": [] }
+      ],
+      "sensation_summary": { "stars": 5, "nps": 85, "raw_score": 83, "final_state": { "comfort_physical": 92, "cleanliness": 95, "service_quality": 94, "speed": 84, "personalization": 90, "value": 84, "authenticity": 94, "modernity": 80, "amenity_usability": 88, "crowd": 86, "culinary": 94, "safety": 90, "aesthetic": 96, "sustainability_awareness": 88 } },
+      "predicted_review": { "will_write_review": true, "platform": "tripadvisor", "star_rating": 5, "nps": 85, "title": "Un séjour dans la vraie discrétion — rare à ce niveau", "body": "Nous y sommes allés en couple pour cinq nuits. La Sal est, sans emphase, une des meilleures tables que nous ayons faites en hôtel depuis plusieurs années — technique juste, respect du produit, sommelier avec un point de vue plutôt qu'un catalogue. Le spa thaï nous a agréablement surpris pour une île de cette taille. Le service est discret, professionnel, français dans le bon sens. Quelques réserves minimes — le bar ferme à 23h ce qui nous a paru tôt un soir — mais rien qui justifie moins de cinq étoiles. Nous reviendrons.", "themes": ["food", "spa", "service", "aesthetic", "wine"], "would_recommend": true, "would_repeat": true, "social_media_share_probability": 0.3 },
+      "total_spend_eur": 1520,
+      "property_name": "Gran Meliá Villa Le Blanc"
+    },
+
+    {
+      "archetype_id": "honeymooner", "stay_length_nights": 5, "trip_purpose": "honeymoon", "target_star_rating": 5,
+      "persona_full": { "name": "Hugo Beauchamp & Léa Martinez", "age": 42, "nationality": "France", "archetype_id": "honeymooner", "archetype_label": "Honeymooner", "loyalty_tier": null, "bio": "Mariage à Paris en juin, seconde noce pour les deux. Hugo est architecte, Léa est éditrice chez Gallimard." },
+      "cultural_context": { "culture_cluster": "french", "origin_country_iso": "FR", "native_language": "fr" },
+      "booking_context": { "price_tier": "luxury", "rate_paid_eur": 700, "booking_channel": "direct_web", "loyalty_tier": null, "lead_time_days": 135 },
+      "stages": [
+        { "stage": "room_first_impression", "night_number": 1, "narrative": "La suite est d'un vrai raffinement : matériaux nobles, travertin, lin brut, pas de décoration tape-à-l'œil. Hugo, qui est architecte, a pris des photos pour ses clients.",
+          "moments_positive": ["matériaux nobles, travertin, lin brut", "pas de décoration tape-à-l'œil", "suite respectueuse des volumes d'origine"], "moments_negative": [] },
+        { "stage": "dinner", "night_number": 2, "narrative": "La Sal. Menu dégustation. Le chef est venu expliquer la provenance des langoustines d'une coopérative locale, ce qui à Paris serait devenu un numéro — ici il était juste transparent.",
+          "moments_positive": ["menu dégustation sept services", "provenance des produits traçable", "chef explicite sans numéro"], "moments_negative": [] },
+        { "stage": "afternoon_activity", "night_number": 3, "narrative": "Massage en duo. Discret, compétent.",
+          "moments_positive": ["massage en duo", "circuit hydrothermal"], "moments_negative": [] },
+        { "stage": "evening_leisure", "night_number": 4, "narrative": "Limoncello sur la terrasse, silence, étoiles. Exactement ce pour quoi nous sommes venus.",
+          "moments_positive": ["silence absolu sur la terrasse", "limoncello local"], "moments_negative": [] },
+        { "stage": "checkout", "night_number": 5, "narrative": "Tout était en ordre. Nous reviendrons.",
+          "moments_positive": ["facture conforme", "adieux personnels du DG"], "moments_negative": [] }
+      ],
+      "sensation_summary": { "stars": 5, "nps": 88, "raw_score": 84, "final_state": { "comfort_physical": 94, "cleanliness": 96, "service_quality": 94, "speed": 82, "personalization": 90, "value": 84, "authenticity": 94, "modernity": 80, "amenity_usability": 86, "crowd": 88, "culinary": 96, "safety": 92, "aesthetic": 98, "sustainability_awareness": 88 } },
+      "predicted_review": { "will_write_review": true, "platform": "tripadvisor", "star_rating": 5, "nps": 88, "title": "Un séjour d'une élégance rare", "body": "Voyage de noces de cinq nuits. La qualité architecturale et le choix des matériaux sont d'un vrai raffinement — travertin, lin, lumière maîtrisée. La Sal est une table sérieuse, respectueuse du produit, avec un chef qui explique sans faire de numéro. Le service est à la française : présent sans intrusion. Le spa surprend pour une île de cette taille. Nous sommes revenus de notre séjour plus reposés que nous ne l'avions été depuis des années. Nous reviendrons.", "themes": ["design_aesthetic", "food", "service", "spa"], "would_recommend": true, "would_repeat": true, "social_media_share_probability": 0.35 },
+      "total_spend_eur": 1420,
+      "property_name": "Gran Meliá Villa Le Blanc"
+    },
+
+    {
+      "archetype_id": "luxury_seeker", "stay_length_nights": 5, "trip_purpose": "leisure_couples", "target_star_rating": 5,
+      "persona_full": { "name": "Isabel Fernández-Cortés & Javier Soler", "age": 37, "nationality": "Spain (Madrid)", "archetype_id": "luxury_seeker", "archetype_label": "Luxury Seeker", "loyalty_tier": "melia_gold", "bio": "Madrileña, cinco años de matrimonio, primera escapada sin los niños en tres años. Isabel trabaja en finanzas, Javier es arquitecto." },
+      "cultural_context": { "culture_cluster": "latin_spain_italy", "origin_country_iso": "ES", "native_language": "es" },
+      "booking_context": { "price_tier": "luxury", "rate_paid_eur": 720, "booking_channel": "direct_web", "loyalty_tier": "melia_gold", "lead_time_days": 42 },
+      "stages": [
+        { "stage": "arrival", "night_number": 1, "narrative": "Núria nos reconoció como Gold sin que tuviéramos que decir nada. Vino dulce de bienvenida, no un Gin-Tonic genérico — Javier lo notó.",
+          "moments_positive": ["reconocimiento del tier Gold sin tener que sacarlo a relucir", "vermut local de bienvenida, no champán genérico", "trato cálido sin ser pegajoso"], "moments_negative": [] },
+        { "stage": "dinner", "night_number": 1, "narrative": "La Sal. Menú degustación. El chef salió a explicar las langostinas — provenientes de una cooperativa local. En un cinco estrellas español eso pasa poco.",
+          "moments_positive": ["menú degustación de siete pases", "trazabilidad local real, no marketing", "maridaje pensado con vinos menorquines"], "moments_negative": [] },
+        { "stage": "daytime_activity", "night_number": 2, "narrative": "Piscina de adultos. Cabaña privada, rosado frío, toallas cada veinte minutos. Por una vez no había que pelearse por la sombra.",
+          "moments_positive": ["piscina de adultos realmente tranquila", "cabaña privada con rosado menorquino", "Marco, el poolero, anticipaba el sol"], "moments_negative": [] },
+        { "stage": "afternoon_activity", "night_number": 3, "narrative": "Masaje Thai. Lo técnicamente mejor que hemos hecho fuera de Bangkok. Circuito hidrotermal impresionante para una isla de este tamaño.",
+          "moments_positive": ["circuito hidrotermal", "terapeuta Lin a la altura de un cinco estrellas asiático", "infusión de lavanda post-tratamiento"], "moments_negative": [] },
+        { "stage": "checkout", "night_number": 5, "narrative": "La cuenta coincidió con el presupuesto al euro. Aceite de oliva menorquín de despedida. Volveremos en septiembre sin los niños otra vez.",
+          "moments_positive": ["cuenta coincidió con el presupuesto al céntimo", "aceite de oliva menorquín de despedida", "despedida personal del director"], "moments_negative": [] }
+      ],
+      "sensation_summary": { "stars": 5, "nps": 93, "raw_score": 86, "final_state": { "comfort_physical": 96, "cleanliness": 98, "service_quality": 98, "speed": 86, "personalization": 94, "value": 86, "authenticity": 96, "modernity": 82, "amenity_usability": 90, "crowd": 88, "culinary": 96, "safety": 92, "aesthetic": 96, "sustainability_awareness": 86 } },
+      "predicted_review": { "will_write_review": true, "platform": "booking.com", "star_rating": 5, "nps": 93, "title": "El mejor cinco estrellas español que hemos hecho en años", "body": "Hemos pasado cinco días maravillosos en el Villa Le Blanc. Lo primero que notamos: el reconocimiento real del tier Gold sin tener que sacarlo a relucir — algo que muchos cinco estrellas españoles siguen sin saber hacer. La Sal es una mesa seria, con un chef que explica la procedencia sin hacer numerito. El spa tailandés sorprende para una isla de este tamaño. La cuenta al final coincidió al céntimo con el presupuesto — cosa rara. Volveremos en septiembre. Un sitio que cuida los detalles que importan de verdad.", "themes": ["service", "food", "loyalty_recognition", "spa", "value"], "would_recommend": true, "would_repeat": true, "social_media_share_probability": 0.45 },
+      "total_spend_eur": 1380,
+      "property_name": "Gran Meliá Villa Le Blanc"
+    },
+
+    {
+      "archetype_id": "honeymooner", "stay_length_nights": 4, "trip_purpose": "honeymoon", "target_star_rating": 5,
+      "persona_full": { "name": "Carla Rossi & Marco Bellini", "age": 39, "nationality": "Italy (Milan)", "archetype_id": "honeymooner", "archetype_label": "Honeymooner", "loyalty_tier": null, "bio": "Milanesi, tarde matrimonio, entrambi con carriere serie. Carla è in moda, Marco è un avvocato d'affari." },
+      "cultural_context": { "culture_cluster": "latin_spain_italy", "origin_country_iso": "IT", "native_language": "it" },
+      "booking_context": { "price_tier": "luxury", "rate_paid_eur": 680, "booking_channel": "direct_web", "loyalty_tier": null, "lead_time_days": 92 },
+      "stages": [
+        { "stage": "arrival", "night_number": 1, "narrative": "Accoglienza discreta, apertura di un vermut locale in bicchiere soffiato a mano. Carla ha notato che il vetro era di un artigiano di Maiorca — piccolo dettaglio, ma ci dice molto del tipo di posto.",
+          "moments_positive": ["vetro soffiato a mano di un artigiano locale", "accoglienza discreta, non da catena", "suite pronta all'arrivo"], "moments_negative": [] },
+        { "stage": "dinner", "night_number": 1, "narrative": "La Sal. Degustazione sette portate. Il cuoco è venuto al tavolo per la provenienza — una cooperativa locale. In Italia questo succede raramente.",
+          "moments_positive": ["menu degustazione di alto livello", "provenienza raccontata senza spettacolarizzare", "sommelier con vera opinione"], "moments_negative": [] },
+        { "stage": "daytime_activity", "night_number": 2, "narrative": "Piscina per adulti con cabana privata. Silenzio reale, non un'apparenza di silenzio.",
+          "moments_positive": ["piscina adulti davvero silenziosa", "Marco pool-attendant attento", "rosato locale fresco"], "moments_negative": [] },
+        { "stage": "dinner", "night_number": 3, "narrative": "Cena a La Sal di nuovo — menu diverso, stesso standard. A Milano un ristorante d'hotel non tiene lo standard per due serate consecutive.",
+          "moments_positive": ["standard costante tra due serate consecutive", "cucina mediterranea senza pretese francesi"], "moments_negative": [] },
+        { "stage": "checkout", "night_number": 4, "narrative": "Conto come da preventivo. Olio d'oliva locale in valigia. Torneremo.",
+          "moments_positive": ["conto pulito", "regalo d'olio d'oliva menorchino", "saluti personali"], "moments_negative": [] }
+      ],
+      "sensation_summary": { "stars": 5, "nps": 90, "raw_score": 85, "final_state": { "comfort_physical": 94, "cleanliness": 96, "service_quality": 96, "speed": 84, "personalization": 92, "value": 84, "authenticity": 95, "modernity": 80, "amenity_usability": 88, "crowd": 88, "culinary": 96, "safety": 90, "aesthetic": 95, "sustainability_awareness": 86 } },
+      "predicted_review": { "will_write_review": true, "platform": "booking.com", "star_rating": 5, "nps": 90, "title": "Il miglior cinque stelle mediterraneo che abbiamo fatto negli ultimi anni", "body": "Luna di miele di quattro notti. La cosa che ci ha colpito di più è la discrezione — niente finto glamour, niente coreografie, solo servizio competente e dettagli veri. Il vetro soffiato a mano del vermut di benvenuto è di un artigiano di Maiorca; lo abbiamo scoperto solo perché abbiamo chiesto. La Sal è una tavola seria, con un chef che racconta la provenienza senza farne uno show. Due cene consecutive allo stesso standard — cosa rara in un ristorante d'albergo. Torneremo per il primo anniversario.", "themes": ["service", "food", "design_aesthetic", "authenticity"], "would_recommend": true, "would_repeat": true, "social_media_share_probability": 0.4 },
+      "total_spend_eur": 1280,
+      "property_name": "Gran Meliá Villa Le Blanc"
+    },
+
+    {
+      "archetype_id": "luxury_seeker", "stay_length_nights": 5, "trip_purpose": "leisure_couples", "target_star_rating": 5,
+      "persona_full": { "name": "Marcus Kellerman & Sabine Weber", "age": 44, "nationality": "Germany (Munich)", "archetype_id": "luxury_seeker", "archetype_label": "Luxury Seeker", "loyalty_tier": null, "bio": "Beide berufstätig — er Maschinenbau-Geschäftsführer, sie Strafverteidigerin. Deutsche Genauigkeit, wenig Toleranz für Improvisation." },
+      "cultural_context": { "culture_cluster": "german_dach", "origin_country_iso": "DE", "native_language": "de" },
+      "booking_context": { "price_tier": "luxury", "rate_paid_eur": 680, "booking_channel": "booking_com", "loyalty_tier": null, "lead_time_days": 112 },
+      "stages": [
+        { "stage": "arrival", "night_number": 1, "narrative": "Check-in um 15:02 — auf den Punkt. Zimmer war fertig. Der Begrüßungs-Vermouth war in sauberem handgeblasenem Glas. Alles wie versprochen.",
+          "moments_positive": ["Check-in exakt zur angegebenen Zeit", "Zimmer tatsächlich fertig", "Begrüßungsgetränk aus handgeblasenem Glas"], "moments_negative": [] },
+        { "stage": "room_first_impression", "night_number": 1, "narrative": "Sauberkeit einwandfrei. Klimaanlage ging unverzüglich. Die Badewanne ist ein Detail, das man schätzt, wenn man 44 ist.",
+          "moments_positive": ["Sauberkeit einwandfrei bei genauer Prüfung", "Klimaanlage funktioniert ohne Wartezeit", "freistehende Badewanne in Travertin"], "moments_negative": [] },
+        { "stage": "dinner", "night_number": 2, "narrative": "La Sal. Degustationsmenü, sieben Gänge, Weinbegleitung. Der Koch erklärte kurz und sachlich die Herkunft. Keine Show.",
+          "moments_positive": ["sieben Gänge auf konstantem Niveau", "Weinbegleitung gut durchdacht", "Koch sachlich, ohne Show"], "moments_negative": [] },
+        { "stage": "afternoon_activity", "night_number": 3, "narrative": "Spa. Hydrothermaler Kreislauf technisch einwandfrei. Thai-Massage von Lin — kompetent.",
+          "moments_positive": ["Hydrothermal-Kreislauf technisch sauber", "Therapeutin Lin fachlich kompetent"], "moments_negative": [] },
+        { "stage": "checkout", "night_number": 5, "narrative": "Rechnung stimmte exakt. Gepäckabholung pünktlich. Wir werden wiederkommen, vermutlich nächstes Frühjahr.",
+          "moments_positive": ["Rechnung stimmte auf den Cent", "Gepäckabholung pünktlich", "keine versteckten Kosten"], "moments_negative": [] }
+      ],
+      "sensation_summary": { "stars": 5, "nps": 80, "raw_score": 82, "final_state": { "comfort_physical": 95, "cleanliness": 98, "service_quality": 92, "speed": 90, "personalization": 84, "value": 82, "authenticity": 88, "modernity": 86, "amenity_usability": 90, "crowd": 88, "culinary": 92, "safety": 94, "aesthetic": 92, "sustainability_awareness": 90 } },
+      "predicted_review": { "will_write_review": true, "platform": "holidaycheck", "star_rating": 5, "nps": 80, "title": "Fünf Nächte ohne Beanstandung — selten", "body": "Fünf Nächte, gebucht über booking.com zum Bestpreis. Was positiv auffiel: Check-in auf den Punkt 15:00 Uhr, Zimmer tatsächlich fertig, Sauberkeit bei genauer Prüfung einwandfrei, Klimaanlage funktionierte sofort. La Sal hat sieben Gänge auf konstantem Niveau geliefert — der Koch erklärte die Herkunft sachlich ohne Inszenierung. Spa technisch sauber, Thai-Massage kompetent. Rechnung am Ende stimmte auf den Cent, keine versteckten Resort Fees oder ähnliche Tricks. Empfehlenswert. Wir werden im Frühjahr wiederkommen.", "themes": ["cleanliness", "service", "food", "value", "speed"], "would_recommend": true, "would_repeat": true, "social_media_share_probability": 0.2 },
+      "total_spend_eur": 1320,
+      "property_name": "Gran Meliá Villa Le Blanc"
+    },
+
+    {
+      "archetype_id": "honeymooner", "stay_length_nights": 4, "trip_purpose": "honeymoon", "target_star_rating": 5,
+      "persona_full": { "name": "Hannah Reichert & Tobias Lang", "age": 33, "nationality": "Germany (Hamburg)", "archetype_id": "honeymooner", "archetype_label": "Honeymooner", "loyalty_tier": null, "bio": "Hamburg, beide in Tech. Haben sich bewusst gegen Mallorca entschieden wegen des Rufs." },
+      "cultural_context": { "culture_cluster": "german_dach", "origin_country_iso": "DE", "native_language": "de" },
+      "booking_context": { "price_tier": "luxury", "rate_paid_eur": 700, "booking_channel": "direct_web", "loyalty_tier": null, "lead_time_days": 68 },
+      "stages": [
+        { "stage": "arrival", "night_number": 1, "narrative": "Núria nannte uns beim Namen. Das Zimmer war sauber und die Ruhe war sofort spürbar. Klar sortierte Kommunikation.",
+          "moments_positive": ["Begrüßung beim Namen ohne Aufhebens", "Ruhe sofort spürbar", "Kommunikation klar strukturiert"], "moments_negative": [] },
+        { "stage": "dinner", "night_number": 2, "narrative": "La Sal. Sieben Gänge, Weinbegleitung auf regionale Menorca-Weine abgestimmt. Gastronomisch gut kuratiert.",
+          "moments_positive": ["regional abgestimmte Weinbegleitung", "langoustinen aus lokaler Kooperative"], "moments_negative": [] },
+        { "stage": "afternoon_activity", "night_number": 3, "narrative": "Thai Spa. Tobias war skeptisch und ist als Verwandelter zurückgekommen.",
+          "moments_positive": ["Spa Lage und Qualität", "Nachhaltigkeit klar kommuniziert"], "moments_negative": [] },
+        { "stage": "checkout", "night_number": 4, "narrative": "Alles korrekt. Wir kommen wieder.",
+          "moments_positive": ["Rechnung korrekt", "freundlicher Abschied"], "moments_negative": [] }
+      ],
+      "sensation_summary": { "stars": 5, "nps": 82, "raw_score": 82, "final_state": { "comfort_physical": 94, "cleanliness": 96, "service_quality": 92, "speed": 88, "personalization": 86, "value": 82, "authenticity": 90, "modernity": 88, "amenity_usability": 88, "crowd": 90, "culinary": 92, "safety": 92, "aesthetic": 94, "sustainability_awareness": 92 } },
+      "predicted_review": { "will_write_review": true, "platform": "holidaycheck", "star_rating": 5, "nps": 82, "title": "Flitterwochen, ohne Drama und mit echter Ruhe", "body": "Vier Nächte Flitterwochen. Bewusst nicht Mallorca wegen des Rufs — Menorca war die richtige Entscheidung, und Villa Le Blanc war das richtige Haus. Check-in zügig, Zimmer sauber, Ruhe echt. La Sal sieben Gänge, regional abgestimmte Weinbegleitung. Spa überraschend gut. Nachhaltigkeit (Net-Zero) ist glaubwürdig kommuniziert und nicht nur Marketing. Preis-Leistung stimmt. Empfehlenswert.", "themes": ["service", "food", "sustainability", "spa"], "would_recommend": true, "would_repeat": true, "social_media_share_probability": 0.35 },
+      "total_spend_eur": 1120,
+      "property_name": "Gran Meliá Villa Le Blanc"
+    },
+
+    {
+      "archetype_id": "luxury_seeker", "stay_length_nights": 5, "trip_purpose": "leisure_couples", "target_star_rating": 5,
+      "persona_full": { "name": "Jennifer & Mike Carlson", "age": 52, "nationality": "USA (California)", "archetype_id": "luxury_seeker", "archetype_label": "Luxury Seeker", "loyalty_tier": "marriott_ambassador", "bio": "Third trip to Europe this year. Jennifer is a tech VP, Mike just sold his dental practice. They've done Amalfi, Santorini, now Menorca." },
+      "cultural_context": { "culture_cluster": "anglo_us_canada", "origin_country_iso": "US", "native_language": "en" },
+      "booking_context": { "price_tier": "luxury", "rate_paid_eur": 780, "booking_channel": "tripadvisor", "loyalty_tier": null, "lead_time_days": 156 },
+      "stages": [
+        { "stage": "arrival", "night_number": 1, "narrative": "WOW. The moment you walk in, you know. The lobby opens onto the Mediterranean and Jennifer literally gasped. Núria was INCREDIBLE — remembered our arrival flight, handed us cold towels and vermouth. Welcome to the club.",
+          "moments_positive": ["lobby opens onto the Mediterranean — literal gasp moment", "Núria is the warmest front desk person in Europe", "cold towel handoff was a touch of class"], "moments_negative": [] },
+        { "stage": "room_first_impression", "night_number": 1, "narrative": "The suite is a DREAM. Travertine bath, GM wrote us a handwritten note, champagne flutes on the table. We're both in our fifties and this made us feel like newlyweds.",
+          "moments_positive": ["travertine bath = Instagram gold", "handwritten note from the GM", "champagne flutes on the table with local cava"], "moments_negative": [] },
+        { "stage": "dinner", "night_number": 1, "narrative": "La Sal is UNREAL. Seven courses, wine pairing with a biodynamic rosé we've literally never seen on a wine list in California. The chef came out! He EXPLAINED the langoustine cooperative! This is five-star in the old-school sense.",
+          "moments_positive": ["seven-course tasting menu was the best meal of our year", "chef came out to explain the langoustines — old-school class", "biodynamic Menorca rosé blew us both away"], "moments_negative": [] },
+        { "stage": "afternoon_activity", "night_number": 3, "narrative": "Thai spa. MIKE has never had a spa treatment in his life and left saying 'why didn't we do this twenty years ago'. Lin the therapist is worth asking for by name.",
+          "moments_positive": ["Lin the therapist was phenomenal", "hydrothermal circuit is world-class", "Mike converted to spa therapy at 57"], "moments_negative": [] },
+        { "stage": "checkout", "night_number": 5, "narrative": "Bill matched exactly. Bottle of Menorca olive oil at departure. We will 100% be back. Already planning next summer.",
+          "moments_positive": ["bill matched to the dollar", "olive oil gift at departure", "GM farewell was personal"], "moments_negative": [] }
+      ],
+      "sensation_summary": { "stars": 5, "nps": 100, "raw_score": 90, "final_state": { "comfort_physical": 96, "cleanliness": 96, "service_quality": 98, "speed": 84, "personalization": 95, "value": 86, "authenticity": 92, "modernity": 84, "amenity_usability": 92, "crowd": 88, "culinary": 98, "safety": 92, "aesthetic": 98, "sustainability_awareness": 84 } },
+      "predicted_review": { "will_write_review": true, "platform": "tripadvisor", "star_rating": 5, "nps": 100, "title": "ABSOLUTELY BEST HOTEL IN EUROPE — WORTH EVERY PENNY!!!", "body": "WOW. OK so we just got back from Gran Meliá Villa Le Blanc and I'm STILL thinking about it. We've done Amalfi, Santorini, Capri this year and NOTHING came close. The moment you walk in the lobby opens onto the Mediterranean and Jennifer literally GASPED. Núria at the desk is the warmest front-desk person in Europe. La Sal was the BEST meal of our year — seven courses, wine pairing with a biodynamic Menorca rosé that blew our minds. The chef came OUT to explain the langoustines!! That's five-star the old-school way. The Thai spa converted Mike (age 57, never had a massage in his life). We will 1000% be back. Already planning next summer. Ask for Lin at the spa. Ask for Núria at the desk. Tell them Jennifer & Mike sent you. WORTH EVERY PENNY.", "themes": ["service", "food", "spa", "location", "aesthetic"], "would_recommend": true, "would_repeat": true, "social_media_share_probability": 0.9 },
+      "total_spend_eur": 2180,
+      "property_name": "Gran Meliá Villa Le Blanc"
+    },
+
+    {
+      "archetype_id": "loyalty_maximizer", "stay_length_nights": 5, "trip_purpose": "platinum_gift_stay", "target_star_rating": 5,
+      "persona_full": { "name": "Katharine & David Hollis", "age": 48, "nationality": "USA (NYC)", "archetype_id": "loyalty_maximizer", "archetype_label": "Loyalty Maximizer", "loyalty_tier": "melia_platinum", "bio": "NYC-based law partner and architect. Meliá Platinum since 2019, 60+ nights a year. Expect recognition, privacy, and invoicing correctness." },
+      "cultural_context": { "culture_cluster": "anglo_us_canada", "origin_country_iso": "US", "native_language": "en" },
+      "booking_context": { "price_tier": "luxury", "rate_paid_eur": 750, "booking_channel": "direct_app", "loyalty_tier": "melia_platinum", "lead_time_days": 33 },
+      "stages": [
+        { "stage": "arrival", "night_number": 1, "narrative": "Platinum recognition at the desk without me having to surface the app. Suite upgrade actioned. Tier welcome gift was tier-specific rather than the generic fruit plate. This is how it should work and rarely does.",
+          "moments_positive": ["Platinum recognition before I surfaced the app", "suite upgrade actioned automatically", "tier-specific welcome gift, not generic fruit"], "moments_negative": [] },
+        { "stage": "dinner", "night_number": 2, "narrative": "La Sal. Platinum benefit included the wine pairing — most properties apply that in the wrong column and you argue at checkout. Here it appeared correctly on the folio.",
+          "moments_positive": ["wine pairing benefit applied to folio correctly in real time", "La Sal maintained the standard across both visits"], "moments_negative": [] },
+        { "stage": "afternoon_activity", "night_number": 3, "narrative": "Spa. Platinum complimentary treatment actually complimentary — no upsell pressure. Note-worthy.",
+          "moments_positive": ["Platinum spa treatment actually complimentary, no upsell pressure", "Lin the therapist deserves the reputation"], "moments_negative": [] },
+        { "stage": "checkout", "night_number": 5, "narrative": "Invoice matched the pre-arrival estimate to the cent including the spa and the wine pairing. GM stopped by. Already rebooked for December for the brand's Platinum weekend.",
+          "moments_positive": ["invoice matched pre-arrival estimate to the cent", "GM farewell", "already rebooked for December Platinum weekend"], "moments_negative": [] }
+      ],
+      "sensation_summary": { "stars": 5, "nps": 95, "raw_score": 86, "final_state": { "comfort_physical": 94, "cleanliness": 96, "service_quality": 97, "speed": 90, "personalization": 98, "value": 86, "authenticity": 88, "modernity": 86, "amenity_usability": 92, "crowd": 88, "culinary": 94, "safety": 92, "aesthetic": 94, "sustainability_awareness": 86 } },
+      "predicted_review": { "will_write_review": true, "platform": "tripadvisor", "star_rating": 5, "nps": 95, "title": "A Meliá property that actually honours Platinum", "body": "I am Meliá Platinum (60+ nights/year) and have seen the brand handle tier recognition across a dozen properties with wildly varying quality. Villa Le Blanc is the high-water mark. Platinum was recognised at the desk before I surfaced the app, the suite upgrade was actioned automatically, and — critically — the Platinum benefits (wine pairing at La Sal, complimentary spa treatment, invoice reconciliation) were actioned on the folio correctly in real time. I have stood at checkout of a Gran Meliá in Madrid arguing about exactly these line items. Here it simply worked. Already rebooked for the December Platinum weekend. This is what the programme is supposed to feel like.", "themes": ["loyalty_recognition", "service", "food", "spa"], "would_recommend": true, "would_repeat": true, "social_media_share_probability": 0.5 },
+      "total_spend_eur": 1680,
+      "property_name": "Gran Meliá Villa Le Blanc"
+    },
+
+    {
+      "archetype_id": "digital_nomad", "stay_length_nights": 7, "trip_purpose": "work_leisure", "target_star_rating": 5,
+      "persona_full": { "name": "Saoirse Johansson", "age": 29, "nationality": "Sweden", "archetype_id": "digital_nomad", "archetype_label": "Digital Nomad (luxury segment)", "loyalty_tier": null, "bio": "Stockholm-based product designer at a climate-tech startup. Extended week working from the property, solo, sustainable-brand conscious." },
+      "cultural_context": { "culture_cluster": "nordic", "origin_country_iso": "SE", "native_language": "sv" },
+      "booking_context": { "price_tier": "luxury", "rate_paid_eur": 650, "booking_channel": "booking_com", "loyalty_tier": null, "lead_time_days": 48 },
+      "stages": [
+        { "stage": "arrival", "night_number": 1, "narrative": "Egalitarian staff interaction — no forced servility, which matters to me. Welcome drink was offered, not pushed. Room quiet as promised.",
+          "moments_positive": ["egalitarian staff tone, no forced servility", "quiet confirmed on arrival", "welcome drink offered, not pushed"], "moments_negative": [] },
+        { "stage": "morning_routine", "night_number": 2, "narrative": "WiFi 180/180 Mbps, consistent all week. Breakfast buffet has real vegan/plant-based options, not just 'oat milk and an avocado'. Slack calls from the terrace, no lag.",
+          "moments_positive": ["WiFi 180/180 Mbps, rock solid for 7 days", "genuine plant-based breakfast options", "terrace workable for video calls"], "moments_negative": [] },
+        { "stage": "daytime_activity", "night_number": 4, "narrative": "Net-zero carbon is actually instrumented — saw the real-time energy dashboard at the gym. Not greenwashing theatre.",
+          "moments_positive": ["net-zero claim is instrumented, not greenwashing", "real-time energy dashboard at gym", "laundry is solar-powered per staff confirmation"], "moments_negative": [] },
+        { "stage": "afternoon_activity", "night_number": 5, "narrative": "Thai spa. Hydrothermal circuit is genuinely good. Pricing for a non-guest would be steep; as a guest, reasonable.",
+          "moments_positive": ["hydrothermal circuit genuinely good", "therapist was egalitarian in conversation"], "moments_negative": [] },
+        { "stage": "checkout", "night_number": 7, "narrative": "Digital checkout via app. Invoice correct. Straightforward.",
+          "moments_positive": ["digital checkout via app worked first try", "invoice correct"], "moments_negative": [] }
+      ],
+      "sensation_summary": { "stars": 5, "nps": 82, "raw_score": 83, "final_state": { "comfort_physical": 92, "cleanliness": 94, "service_quality": 90, "speed": 88, "personalization": 84, "value": 82, "authenticity": 92, "modernity": 92, "amenity_usability": 96, "crowd": 90, "culinary": 88, "safety": 92, "aesthetic": 94, "sustainability_awareness": 96 } },
+      "predicted_review": { "will_write_review": true, "platform": "booking.com", "star_rating": 5, "nps": 82, "title": "Seven nights, worked from here — genuinely well-run", "body": "Seven nights, solo, working remotely. WiFi held 180/180 Mbps all week which is rare outside of dedicated coworking. Plant-based breakfast options were real, not token. Net-zero carbon claim appears to be actually instrumented — saw the energy dashboard at the gym. Staff are egalitarian in tone, no performative servility. Digital checkout via the app worked first try. Spa is good. One small note — rooftop bar closes earlier than the printed hours a couple of nights. Minor. Recommended for solo work-leisure in this segment.", "themes": ["wifi", "sustainability", "service", "spa"], "would_recommend": true, "would_repeat": true, "social_media_share_probability": 0.4 },
+      "total_spend_eur": 1420,
+      "property_name": "Gran Meliá Villa Le Blanc"
+    },
+
+    {
+      "archetype_id": "honeymooner", "stay_length_nights": 4, "trip_purpose": "honeymoon", "target_star_rating": 5,
+      "persona_full": { "name": "Aiko & Kenji Tanaka", "age": 36, "nationality": "Japan (Tokyo)", "archetype_id": "honeymooner", "archetype_label": "Honeymooner", "loyalty_tier": null, "bio": "東京, 商社勤務. 結婚20年目の記念旅行兼遅れた新婚旅行." },
+      "cultural_context": { "culture_cluster": "east_asian", "origin_country_iso": "JP", "native_language": "ja" },
+      "booking_context": { "price_tier": "luxury", "rate_paid_eur": 720, "booking_channel": "direct_web", "loyalty_tier": null, "lead_time_days": 210 },
+      "stages": [
+        { "stage": "arrival", "night_number": 1, "narrative": "Very clean. Quiet. Staff polite. Room ready on time.",
+          "moments_positive": ["clean", "quiet", "polite staff"], "moments_negative": [] },
+        { "stage": "dinner", "night_number": 1, "narrative": "La Sal. Seven courses. Presentation beautiful. Staff explained allergies kindly.",
+          "moments_positive": ["beautiful presentation", "kind allergy explanation", "seven courses"], "moments_negative": [] },
+        { "stage": "afternoon_activity", "night_number": 3, "narrative": "Thai spa. Lin-san was excellent. Hydrothermal circuit was unexpected for a small island.",
+          "moments_positive": ["Lin-san excellent", "hydrothermal circuit unexpected", "relaxation room quiet"], "moments_negative": [] },
+        { "stage": "checkout", "night_number": 4, "narrative": "Everything was in order. Thank you.",
+          "moments_positive": ["invoice correct", "luggage handled carefully"], "moments_negative": [] }
+      ],
+      "sensation_summary": { "stars": 5, "nps": 75, "raw_score": 80, "final_state": { "comfort_physical": 92, "cleanliness": 98, "service_quality": 94, "speed": 88, "personalization": 86, "value": 82, "authenticity": 84, "modernity": 82, "amenity_usability": 88, "crowd": 92, "culinary": 90, "safety": 96, "aesthetic": 94, "sustainability_awareness": 88 } },
+      "predicted_review": { "will_write_review": true, "platform": "google", "star_rating": 5, "nps": 75, "title": "素晴らしい滞在でした", "body": "四泊の滞在でした。とても清潔で、静かで、スタッフの対応は丁寧でした。レストラン La Sal の七皿のコースは美しく、アレルギーにも親切に対応してくれました。Thai スパは小さな島にしては立派で、Lin 先生の技術は素晴らしかったです。お会計も正確でした。少し気になった点は、ルーフトップバーの閉店時間が掲示よりも早かったことですが、全体としては非常に満足しました。また来ます。ありがとうございました。", "themes": ["cleanliness", "service", "spa", "food"], "would_recommend": true, "would_repeat": true, "social_media_share_probability": 0.2 },
+      "total_spend_eur": 1180,
+      "property_name": "Gran Meliá Villa Le Blanc"
+    },
+
+    {
+      "archetype_id": "honeymooner", "stay_length_nights": 5, "trip_purpose": "honeymoon", "target_star_rating": 5,
+      "persona_full": { "name": "Lucía Mendoza & Rafael Ortega", "age": 33, "nationality": "Mexico (Mexico City)", "archetype_id": "honeymooner", "archetype_label": "Honeymooner", "loyalty_tier": null, "bio": "Mexico City, boda en marzo, luna de miel tardía. Lucía en consultoría, Rafael en una startup fintech." },
+      "cultural_context": { "culture_cluster": "latin_american", "origin_country_iso": "MX", "native_language": "es" },
+      "booking_context": { "price_tier": "luxury", "rate_paid_eur": 680, "booking_channel": "booking_com", "loyalty_tier": null, "lead_time_days": 85 },
+      "stages": [
+        { "stage": "arrival", "night_number": 1, "narrative": "Núria nos recibió con una calidez que no esperábamos en Europa — muy latino. El trato fue excelente desde el minuto uno.",
+          "moments_positive": ["Núria con una calidez muy poco europea", "vermut local de bienvenida", "trato como en casa"], "moments_negative": [] },
+        { "stage": "dinner", "night_number": 1, "narrative": "La Sal. Menú degustación. El chef salió al principio, nos explicó la cooperativa local de pescadores. Esa transparencia en un cinco estrellas europeo es rara.",
+          "moments_positive": ["siete pases excelentes", "chef salió al principio", "trazabilidad local real"], "moments_negative": [] },
+        { "stage": "daytime_activity", "night_number": 3, "narrative": "Piscina de adultos. Cabaña privada. Un rosado menorquino frío. Marco anticipaba nuestras necesidades.",
+          "moments_positive": ["piscina realmente silenciosa", "cabaña privada bien cuidada", "Marco era simpático sin ser invasivo"], "moments_negative": [] },
+        { "stage": "checkout", "night_number": 5, "narrative": "Cuenta perfecta. Aceite de oliva menorquín de despedida. Volveremos, seguro.",
+          "moments_positive": ["cuenta correcta", "aceite de oliva menorquín de despedida", "despedida personal"], "moments_negative": [] }
+      ],
+      "sensation_summary": { "stars": 5, "nps": 92, "raw_score": 86, "final_state": { "comfort_physical": 94, "cleanliness": 96, "service_quality": 96, "speed": 84, "personalization": 94, "value": 86, "authenticity": 94, "modernity": 80, "amenity_usability": 88, "crowd": 88, "culinary": 96, "safety": 92, "aesthetic": 96, "sustainability_awareness": 86 } },
+      "predicted_review": { "will_write_review": true, "platform": "tripadvisor", "star_rating": 5, "nps": 92, "title": "Una luna de miel que superó todas las expectativas", "body": "Venimos de Ciudad de México para nuestra luna de miel y escogimos Menorca sobre Mallorca por la recomendación de unos amigos. Villa Le Blanc fue una elección impecable. El trato desde el minuto uno tuvo una calidez muy poco europea — más cercano a un cinco estrellas de Los Cabos que a uno de Marbella. La Sal es una mesa muy seria, el chef salió a explicar la cooperativa local. La piscina de adultos es realmente silenciosa (en Cancún eso es imposible). Al final la cuenta coincidió al céntimo y nos regalaron aceite de oliva menorquín. Volveremos.", "themes": ["service", "food", "pool", "value"], "would_recommend": true, "would_repeat": true, "social_media_share_probability": 0.55 },
+      "total_spend_eur": 1320,
+      "property_name": "Gran Meliá Villa Le Blanc"
+    },
+
+    {
+      "archetype_id": "luxury_seeker", "stay_length_nights": 5, "trip_purpose": "leisure_couples", "target_star_rating": 5,
+      "persona_full": { "name": "Elena Petrova-Williams & Daniel Williams", "age": 38, "nationality": "UK (art world)", "archetype_id": "luxury_seeker", "archetype_label": "Luxury Seeker", "loyalty_tier": "melia_silver", "bio": "London art dealer (Russian-British) and her architect husband. High aesthetic standards; have been to Amangiri twice." },
+      "cultural_context": { "culture_cluster": "anglo_uk_ireland", "origin_country_iso": "GB", "native_language": "en" },
+      "booking_context": { "price_tier": "luxury", "rate_paid_eur": 720, "booking_channel": "direct_web", "loyalty_tier": "melia_silver", "lead_time_days": 189 },
+      "stages": [
+        { "stage": "room_first_impression", "night_number": 1, "narrative": "The materials are genuinely considered. Travertine, linen, lime plaster — not the usual luxury-brand beige-and-marble default. Daniel immediately identified the architect.",
+          "moments_positive": ["considered materials palette — travertine, linen, lime plaster", "architectural restraint rare at this tier", "suite proportions respected"], "moments_negative": [] },
+        { "stage": "dinner", "night_number": 2, "narrative": "La Sal. Compared to the Amangiri restaurant we did twice this winter, not dissimilar in ambition. Wine pairing with a biodynamic Menorca rosé was a genuine find.",
+          "moments_positive": ["comparable ambition to Amangiri's restaurant", "biodynamic Menorca rosé a genuine find", "chef provenance explanation was not performative"], "moments_negative": [] },
+        { "stage": "daytime_activity", "night_number": 3, "narrative": "Cala Galdana sailing arranged by concierge. Boat was lovely, captain was charming. Back to the cabana by six for rosé.",
+          "moments_positive": ["concierge arranged private sailing on short notice", "captain was charming", "cabana still available on return"], "moments_negative": [] },
+        { "stage": "afternoon_activity", "night_number": 4, "narrative": "Thai spa. Both the hydrothermal circuit and Lin's technique held up against benchmarks in Chiang Mai.",
+          "moments_positive": ["spa held up against Chiang Mai benchmarks", "Lin's technique genuinely skilled"], "moments_negative": [] },
+        { "stage": "checkout", "night_number": 5, "narrative": "Bill matched. Local ceramics gift — Elena collects, and they'd noticed.",
+          "moments_positive": ["gifted local ceramics — they'd noticed Elena's interest", "bill matched", "GM remembered our art gallery conversation"], "moments_negative": [] }
+      ],
+      "sensation_summary": { "stars": 5, "nps": 90, "raw_score": 86, "final_state": { "comfort_physical": 94, "cleanliness": 96, "service_quality": 96, "speed": 84, "personalization": 94, "value": 84, "authenticity": 92, "modernity": 82, "amenity_usability": 88, "crowd": 88, "culinary": 95, "safety": 90, "aesthetic": 100, "sustainability_awareness": 88 } },
+      "predicted_review": { "will_write_review": true, "platform": "tripadvisor", "star_rating": 5, "nps": 90, "title": "Proper architectural intention at a five-star — rare", "body": "Five nights. My husband is an architect and usually finds a reason to complain about the materials palette at a luxury hotel — Villa Le Blanc kept him quiet. Travertine, linen, lime plaster, proportions respected. We've done Amangiri twice this year and La Sal was not dissimilar in ambition, at very different pricing. The biodynamic Menorca rosé was a genuine find. The GM had remembered the gallery conversation from night two by checkout day and the departure gift was a piece of local ceramics — Elena collects, and they'd noticed. The kind of stay that reminds you what five-star was supposed to mean.", "themes": ["design_aesthetic", "food", "personalization", "spa"], "would_recommend": true, "would_repeat": true, "social_media_share_probability": 0.35 },
+      "total_spend_eur": 1640,
+      "property_name": "Gran Meliá Villa Le Blanc"
+    },
+
+    {
+      "archetype_id": "honeymooner", "stay_length_nights": 4, "trip_purpose": "honeymoon", "target_star_rating": 5,
+      "persona_full": { "name": "Rebecca & Felix Holloway", "age": 29, "nationality": "UK", "archetype_id": "honeymooner", "archetype_label": "Honeymooner", "loyalty_tier": null, "bio": "South London-based, both in media — Rebecca in podcast production, Felix at the BBC. Big on Instagram." },
+      "cultural_context": { "culture_cluster": "anglo_uk_ireland", "origin_country_iso": "GB", "native_language": "en" },
+      "booking_context": { "price_tier": "luxury", "rate_paid_eur": 700, "booking_channel": "direct_web", "loyalty_tier": null, "lead_time_days": 72 },
+      "stages": [
+        { "stage": "arrival", "night_number": 1, "narrative": "The lobby is Instagram catnip. Rebecca immediately posted the view. Núria at the desk noticed, laughed, and pointed us to the best sunset angle for later.",
+          "moments_positive": ["lobby is genuinely photogenic", "Núria pointed out the best sunset angle for content", "rose-petal turn-down on arrival"], "moments_negative": [] },
+        { "stage": "room_first_impression", "night_number": 1, "narrative": "Suite is a dream for the grid — and in person. Travertine bath, the terrace, the view. The rose-petal turn-down was a bit of theatre that felt charming rather than cheesy.",
+          "moments_positive": ["rose-petal turn-down done tastefully", "terrace is the shot you see on TripAdvisor", "travertine bath is Instagram gold"], "moments_negative": [] },
+        { "stage": "daytime_activity", "night_number": 2, "narrative": "Adults-only rooftop pool. Actually adults-only, which cannot be said for half the properties that claim it.",
+          "moments_positive": ["pool is actually adults-only", "infinity edge into the sea", "the sunset rosé moment is worth the flight"], "moments_negative": [] },
+        { "stage": "dinner", "night_number": 3, "narrative": "La Sal. Tasting menu. Each plate photographable — and the chef came out. Felix's cousin works at Claridge's and we sent her the pictures.",
+          "moments_positive": ["every plate photographable", "chef personal explanation", "dining room aesthetic"], "moments_negative": [] },
+        { "stage": "checkout", "night_number": 4, "narrative": "Bill matched. Little olive oil gift. Already planning the first anniversary post.",
+          "moments_positive": ["bill matched", "olive oil gift", "sunset departure shot"], "moments_negative": [] }
+      ],
+      "sensation_summary": { "stars": 5, "nps": 92, "raw_score": 85, "final_state": { "comfort_physical": 92, "cleanliness": 96, "service_quality": 94, "speed": 84, "personalization": 92, "value": 82, "authenticity": 90, "modernity": 86, "amenity_usability": 90, "crowd": 90, "culinary": 94, "safety": 90, "aesthetic": 100, "sustainability_awareness": 88 } },
+      "predicted_review": { "will_write_review": true, "platform": "tripadvisor", "star_rating": 5, "nps": 92, "title": "Yes, it really does look like the pictures", "body": "Four-night honeymoon. I'll be honest — I came for the Instagram grid. I left converted. The lobby view, the travertine bath, the infinity pool at sunset — all real, all genuinely better in person than on the feed. What I didn't expect: Núria at the desk noticed I'd posted the lobby and pointed me to the best sunset angle for later. Small, kind, competent. La Sal is a photographable dinner that's also genuinely great food, which is rare. The pool is actually adults-only, which cannot be said for half the properties that claim it. Return trip is penciled in for the first anniversary.", "themes": ["aesthetic", "location", "service", "food"], "would_recommend": true, "would_repeat": true, "social_media_share_probability": 0.95 },
+      "total_spend_eur": 1240,
+      "property_name": "Gran Meliá Villa Le Blanc"
+    },
+
+    {
+      "archetype_id": "luxury_seeker", "stay_length_nights": 5, "trip_purpose": "leisure_couples", "target_star_rating": 5,
+      "persona_full": { "name": "Nora & Jonas Kristensen", "age": 44, "nationality": "Denmark (Copenhagen)", "archetype_id": "luxury_seeker", "archetype_label": "Luxury Seeker", "loyalty_tier": null, "bio": "Copenhagen-based, she is a paediatrician, he is a tech CFO. Restrained taste, sustainability-conscious." },
+      "cultural_context": { "culture_cluster": "nordic", "origin_country_iso": "DK", "native_language": "da" },
+      "booking_context": { "price_tier": "luxury", "rate_paid_eur": 650, "booking_channel": "booking_com", "loyalty_tier": null, "lead_time_days": 67 },
+      "stages": [
+        { "stage": "arrival", "night_number": 1, "narrative": "Calm, egalitarian. Net-zero credentials communicated at check-in without being performative. Suite as described.",
+          "moments_positive": ["net-zero credentials communicated without performance", "egalitarian service register", "suite as described"], "moments_negative": [] },
+        { "stage": "dinner", "night_number": 2, "narrative": "La Sal. Tasting menu. Portions appropriate, sustainability clearly considered in sourcing.",
+          "moments_positive": ["appropriate portions", "sustainability in sourcing", "wine pairing well-edited"], "moments_negative": [] },
+        { "stage": "afternoon_activity", "night_number": 4, "narrative": "Spa. Good facility, competent technique. Pricing reasonable for a non-included treatment.",
+          "moments_positive": ["spa facility good", "technique competent", "reasonable treatment pricing"], "moments_negative": [] },
+        { "stage": "checkout", "night_number": 5, "narrative": "Digital checkout via app. Invoice correct. Clean exit.",
+          "moments_positive": ["digital checkout via app", "invoice correct", "clean exit"], "moments_negative": [] }
+      ],
+      "sensation_summary": { "stars": 5, "nps": 78, "raw_score": 82, "final_state": { "comfort_physical": 92, "cleanliness": 94, "service_quality": 90, "speed": 88, "personalization": 84, "value": 84, "authenticity": 90, "modernity": 90, "amenity_usability": 90, "crowd": 90, "culinary": 90, "safety": 92, "aesthetic": 94, "sustainability_awareness": 94 } },
+      "predicted_review": { "will_write_review": true, "platform": "booking.com", "star_rating": 5, "nps": 78, "title": "Solid five-star with credible sustainability", "body": "Five nights, booked via booking.com. Overall a good stay. Check-in was calm and egalitarian (important to us — we don't enjoy excessive servility). Net-zero carbon credentials were communicated at arrival in a factual rather than performative way. La Sal delivered a well-edited tasting menu, sustainability clearly considered in sourcing. Spa facility good, reasonable pricing. Digital checkout via the app worked. Recommended.", "themes": ["sustainability", "service", "food", "spa"], "would_recommend": true, "would_repeat": true, "social_media_share_probability": 0.2 },
+      "total_spend_eur": 1380,
+      "property_name": "Gran Meliá Villa Le Blanc"
+    },
+
+    {
+      "archetype_id": "luxury_seeker", "stay_length_nights": 5, "trip_purpose": "anniversary", "target_star_rating": 5,
+      "persona_full": { "name": "Alexandra Giménez & Juan Pablo Ibáñez", "age": 41, "nationality": "Argentina (Buenos Aires)", "archetype_id": "luxury_seeker", "archetype_label": "Luxury Seeker", "loyalty_tier": null, "bio": "Buenos Aires, fifteen-year anniversary trip. Alexandra en finanzas corporativas, Juan Pablo abogado." },
+      "cultural_context": { "culture_cluster": "latin_american", "origin_country_iso": "AR", "native_language": "es" },
+      "booking_context": { "price_tier": "luxury", "rate_paid_eur": 680, "booking_channel": "direct_web", "loyalty_tier": null, "lead_time_days": 157 },
+      "stages": [
+        { "stage": "arrival", "night_number": 1, "narrative": "La bienvenida fue cálida en serio, no la calidez teatral de otros cinco estrellas. Vino dulce, no champagne genérico.",
+          "moments_positive": ["bienvenida cálida en serio", "vermut local, no champagne genérico", "suite lista en tiempo"], "moments_negative": [] },
+        { "stage": "dinner", "night_number": 2, "narrative": "La Sal. Menú degustación. El chef salió a explicar la cooperativa local. Pairing con rosado biodinámico menorquín.",
+          "moments_positive": ["menú degustación serio", "pairing con rosado biodinámico menorquín", "chef transparente"], "moments_negative": [] },
+        { "stage": "daytime_activity", "night_number": 3, "narrative": "Velero a Cala Galdana, contratado por el concierge en menos de una hora. Capitán encantador.",
+          "moments_positive": ["velero en menos de una hora", "capitán simpático", "almuerzo a bordo con albariño"], "moments_negative": [] },
+        { "stage": "afternoon_activity", "night_number": 4, "narrative": "Spa tailandés. Muy bien técnicamente.",
+          "moments_positive": ["spa técnicamente fuerte", "circuito hidrotermal"], "moments_negative": [] },
+        { "stage": "checkout", "night_number": 5, "narrative": "Cuenta al céntimo. Aceite de oliva menorquín. Volveremos para el vigésimo aniversario.",
+          "moments_positive": ["cuenta correcta", "aceite de oliva de despedida", "GM personal en despedida"], "moments_negative": [] }
+      ],
+      "sensation_summary": { "stars": 5, "nps": 88, "raw_score": 84, "final_state": { "comfort_physical": 92, "cleanliness": 94, "service_quality": 95, "speed": 84, "personalization": 92, "value": 86, "authenticity": 92, "modernity": 80, "amenity_usability": 88, "crowd": 88, "culinary": 94, "safety": 90, "aesthetic": 94, "sustainability_awareness": 84 } },
+      "predicted_review": { "will_write_review": true, "platform": "tripadvisor", "star_rating": 5, "nps": 88, "title": "Quinze años juntos, y un aniversario a la altura", "body": "Cinco noches por nuestro aniversario número quince. La Sal es una mesa que respeta el producto con un chef que explica la cooperativa local sin hacerse el famoso — algo muy de Menorca y muy distinto al teatro gastronómico que se ve en otros cinco estrellas europeos. El concierge nos organizó un velero privado a Cala Galdana en menos de una hora. La cuenta final coincidió al céntimo, cosa que en Buenos Aires ya damos por imposible. Volveremos al vigésimo aniversario.", "themes": ["service", "food", "sailing", "value"], "would_recommend": true, "would_repeat": true, "social_media_share_probability": 0.4 },
+      "total_spend_eur": 1480,
+      "property_name": "Gran Meliá Villa Le Blanc"
+    },
+
+    {
+      "archetype_id": "luxury_seeker", "stay_length_nights": 5, "trip_purpose": "leisure_couples", "target_star_rating": 5,
+      "persona_full": { "name": "Fiona MacAllister & Gregor Sinclair", "age": 46, "nationality": "UK (Edinburgh)", "archetype_id": "luxury_seeker", "archetype_label": "Luxury Seeker", "loyalty_tier": "melia_silver", "bio": "Edinburgh-based. Fiona runs a design studio, Gregor is a whisky broker. Dry Scots humour, low tolerance for bluster." },
+      "cultural_context": { "culture_cluster": "anglo_uk_ireland", "origin_country_iso": "GB", "native_language": "en" },
+      "booking_context": { "price_tier": "luxury", "rate_paid_eur": 720, "booking_channel": "booking_com", "loyalty_tier": "melia_silver", "lead_time_days": 92 },
+      "stages": [
+        { "stage": "arrival", "night_number": 1, "narrative": "Not bad at all. Silver status was noted without ceremony — Gregor appreciates not being called 'Mr MacAllister' sixteen times in eight minutes.",
+          "moments_positive": ["Silver status noted without ceremony", "welcome drink reasonable in size", "suite ready on the dot"], "moments_negative": [] },
+        { "stage": "dinner", "night_number": 2, "narrative": "La Sal. Gregor's professional skepticism about wine pairings survived about two courses. Rosé was biodynamic, Menorcan, and genuinely interesting.",
+          "moments_positive": ["wine pairing survived Gregor's scrutiny", "chef explanation was factual, not showy", "second bottle of rosé left at cost — appreciated"], "moments_negative": [] },
+        { "stage": "afternoon_activity", "night_number": 4, "narrative": "Thai spa. Surprisingly competent. Fiona has opinions about spa lighting and approved.",
+          "moments_positive": ["spa lighting actually good (Fiona's professional opinion)", "Lin's technique competent", "hydrothermal circuit"], "moments_negative": [] },
+        { "stage": "checkout", "night_number": 5, "narrative": "Bill matched. Local olive oil gift. Gregor would return.",
+          "moments_positive": ["bill matched", "olive oil gift", "no resort-fee surprise"], "moments_negative": [] }
+      ],
+      "sensation_summary": { "stars": 5, "nps": 82, "raw_score": 83, "final_state": { "comfort_physical": 92, "cleanliness": 94, "service_quality": 93, "speed": 86, "personalization": 88, "value": 84, "authenticity": 90, "modernity": 82, "amenity_usability": 88, "crowd": 88, "culinary": 92, "safety": 90, "aesthetic": 94, "sustainability_awareness": 88 } },
+      "predicted_review": { "will_write_review": true, "platform": "tripadvisor", "star_rating": 5, "nps": 82, "title": "Not bad at all, as we say in Edinburgh", "body": "Five nights. In Edinburgh parlance, 'not bad at all' is a strong compliment — and this property earned it. Silver status was noted without ceremony, the welcome drink was reasonably sized rather than performatively generous, and check-in took under four minutes. La Sal is a serious restaurant — biodynamic Menorcan rosé survived my husband's professional scepticism about wine pairings, which is a test. Spa is surprisingly competent for the size of the island. The bill at checkout matched the quote exactly, no resort-fee surprise, and they sent us off with a bottle of local olive oil. Would go back.", "themes": ["service", "food", "wine", "spa"], "would_recommend": true, "would_repeat": true, "social_media_share_probability": 0.25 },
+      "total_spend_eur": 1520,
+      "property_name": "Gran Meliá Villa Le Blanc"
+    },
+
+    {
+      "archetype_id": "loyalty_maximizer", "stay_length_nights": 4, "trip_purpose": "platinum_gift_stay", "target_star_rating": 5,
+      "persona_full": { "name": "Antonia Carvalho", "age": 52, "nationality": "Portugal (Lisbon)", "archetype_id": "loyalty_maximizer", "archetype_label": "Loyalty Maximizer", "loyalty_tier": "melia_platinum", "bio": "Lisbon-based board director, widowed, frequent solo leisure traveller. Platinum since 2017. Discreet, observant." },
+      "cultural_context": { "culture_cluster": "latin_spain_italy", "origin_country_iso": "PT", "native_language": "pt" },
+      "booking_context": { "price_tier": "luxury", "rate_paid_eur": 680, "booking_channel": "direct_app", "loyalty_tier": "melia_platinum", "lead_time_days": 41 },
+      "stages": [
+        { "stage": "arrival", "night_number": 1, "narrative": "Tratada com discrição mas com reconhecimento do meu tier Platinum. Chegar sozinha a um cinco estrelas costuma ser uma situação desconfortável — aqui não foi.",
+          "moments_positive": ["discreta mas atenta ao reconhecimento", "arrival solo sem a habitual estranheza", "upgrade de suite sem pedir"], "moments_negative": [] },
+        { "stage": "dinner", "night_number": 2, "narrative": "La Sal. Mesa solo bem posicionada — vista para o mar, não junto à cozinha. Isto diz muito.",
+          "moments_positive": ["mesa solo bem posicionada para vista de mar", "serviço sem tratamento condescendente para solo diner", "chef saiu a explicar a cooperativa"], "moments_negative": [] },
+        { "stage": "afternoon_activity", "night_number": 3, "narrative": "Thai spa. A terapeuta Lin conversa só o necessário — algo que senhoras solo apreciam.",
+          "moments_positive": ["Lin conversa só o necessário", "circuito hidrotermal excelente"], "moments_negative": [] },
+        { "stage": "checkout", "night_number": 4, "narrative": "Conta correcta. Despedida pessoal do director. Voltarei.",
+          "moments_positive": ["conta correcta", "despedida pessoal", "reserva já feita para Setembro"], "moments_negative": [] }
+      ],
+      "sensation_summary": { "stars": 5, "nps": 92, "raw_score": 85, "final_state": { "comfort_physical": 92, "cleanliness": 94, "service_quality": 96, "speed": 86, "personalization": 96, "value": 84, "authenticity": 90, "modernity": 82, "amenity_usability": 88, "crowd": 90, "culinary": 92, "safety": 94, "aesthetic": 92, "sustainability_awareness": 86 } },
+      "predicted_review": { "will_write_review": true, "platform": "booking.com", "star_rating": 5, "nps": 92, "title": "Um cinco estrelas que trata bem quem viaja sozinha", "body": "Quatro noites, viagem a solo, tier Platinum. A experiência de chegar sozinha a um cinco estrelas europeu é normalmente desconfortável — aqui não foi. Recepção discreta, reconhecimento do tier sem ostentação, upgrade de suite sem eu pedir. Na Sal, mesa bem posicionada com vista para o mar em vez de junto à cozinha, o que diz muito sobre o treino da equipa. No spa, a terapeuta Lin conversa só o necessário. A conta final estava correcta. Já reservei para Setembro.", "themes": ["service", "solo_travel", "loyalty_recognition", "spa"], "would_recommend": true, "would_repeat": true, "social_media_share_probability": 0.3 },
+      "total_spend_eur": 1180,
+      "property_name": "Gran Meliá Villa Le Blanc"
+    },
+
+    {
+      "archetype_id": "honeymooner", "stay_length_nights": 5, "trip_purpose": "honeymoon", "target_star_rating": 4,
+      "persona_full": { "name": "Giulia & Alessandro Conti", "age": 36, "nationality": "Italy (Milan)", "archetype_id": "honeymooner", "archetype_label": "Honeymooner", "loyalty_tier": null, "bio": "Milanese, design-conscious, matrimonio tardi a Como. Giulia lavora in fashion, Alessandro ingegnere gestionale." },
+      "cultural_context": { "culture_cluster": "latin_spain_italy", "origin_country_iso": "IT", "native_language": "it" },
+      "booking_context": { "price_tier": "luxury", "rate_paid_eur": 700, "booking_channel": "booking_com", "loyalty_tier": null, "lead_time_days": 108 },
+      "stages": [
+        { "stage": "arrival", "night_number": 1, "narrative": "Accoglienza calorosa, suite pronta. Tutto come previsto.",
+          "moments_positive": ["accoglienza calorosa", "suite pronta in orario", "vermut di benvenuto"], "moments_negative": [] },
+        { "stage": "dinner", "night_number": 2, "narrative": "La Sal è buona — menu degustazione di sette portate. Ma il menu alla carta è più limitato di quanto ci aspettassimo per un cinque stelle di questo livello.",
+          "moments_positive": ["menu degustazione ben eseguito", "sommelier competente", "pane al servizio molto buono"],
+          "moments_negative": ["menu alla carta più limitato del previsto per il livello della proprietà"] },
+        { "stage": "afternoon_activity", "night_number": 3, "narrative": "Spa Thai. Circuito hidrotermale molto buono. Massaggio competente ma non eccezionale.",
+          "moments_positive": ["circuito idrotermale molto buono"],
+          "moments_negative": ["massaggio competente ma non straordinario per il prezzo"] },
+        { "stage": "dinner", "night_number": 4, "narrative": "Seconda sera a La Sal — sentimento di ripetizione, non ci sono abbastanza alternative all'interno della proprietà per cinque notti. A Milano un'hotel di questo livello avrebbe tre ristoranti fine-dining.",
+          "moments_positive": ["standard consistente"],
+          "moments_negative": ["varietà F&B limitata per un soggiorno di cinque notti", "mancano alternative fine-dining on-property"] },
+        { "stage": "checkout", "night_number": 5, "narrative": "Conto corretto, nessuna sorpresa. Ritorneremmo, ma per tre notti non cinque.",
+          "moments_positive": ["conto corretto", "olio d'oliva locale in regalo"], "moments_negative": [] }
+      ],
+      "sensation_summary": { "stars": 4, "nps": 45, "raw_score": 74, "final_state": { "comfort_physical": 88, "cleanliness": 92, "service_quality": 86, "speed": 82, "personalization": 82, "value": 72, "authenticity": 86, "modernity": 78, "amenity_usability": 82, "crowd": 84, "culinary": 80, "safety": 88, "aesthetic": 90, "sustainability_awareness": 82 } },
+      "predicted_review": { "will_write_review": true, "platform": "booking.com", "star_rating": 4, "nps": 45, "title": "Ottimo per tre notti, meno per cinque", "body": "Luna di miele di cinque notti. Accoglienza calorosa, suite eccellente, design della proprietà curato. La Sal è una buona tavola con un menu degustazione ben eseguito. Lo spa Thai ha un circuito idrotermale molto buono. Un'appunto onesto: la varietà F&B on-property è limitata per un soggiorno di cinque notti — due sere a La Sal hanno iniziato a dare sensazione di ripetizione e non ci sono altre alternative fine-dining on-property. A Milano un cinque stelle di questo livello avrebbe tre opzioni. Il rapporto qualità-prezzo è buono per tre notti, meno per cinque. Torneremmo.", "themes": ["food_variety", "menu_variety", "spa", "service"], "would_recommend": true, "would_repeat": false, "social_media_share_probability": 0.2 },
+      "total_spend_eur": 1280,
+      "property_name": "Gran Meliá Villa Le Blanc"
+    },
+
+    {
+      "archetype_id": "business_traveler", "stay_length_nights": 3, "trip_purpose": "business_leisure_extension", "target_star_rating": 4,
+      "persona_full": { "name": "Paul & Karen Fleming", "age": 47, "nationality": "USA (Boston)", "archetype_id": "business_traveler", "archetype_label": "Business Traveler", "loyalty_tier": "melia_platinum", "bio": "Boston-based biotech exec attending a conference in Barcelona, extended three nights to Menorca with wife. Platinum tier." },
+      "cultural_context": { "culture_cluster": "anglo_us_canada", "origin_country_iso": "US", "native_language": "en" },
+      "booking_context": { "price_tier": "luxury", "rate_paid_eur": 750, "booking_channel": "direct_app", "loyalty_tier": "melia_platinum", "lead_time_days": 22 },
+      "stages": [
+        { "stage": "arrival", "night_number": 1, "narrative": "Platinum recognition at the desk, upgrade actioned. Smooth onboarding for a short three-night extension after Barcelona.",
+          "moments_positive": ["Platinum recognition before surfacing the app", "suite upgrade automatic", "transfer from airport was pre-arranged and on time"], "moments_negative": [] },
+        { "stage": "room_first_impression", "night_number": 1, "narrative": "WiFi had an issue first night — intermittent for about 90 minutes. Reported to the front desk; engineer in the room within 20 minutes and it was solved.",
+          "moments_positive": ["engineer in the room within 20 minutes", "issue resolved same evening", "apology was genuine, not scripted"],
+          "moments_negative": ["WiFi intermittent first 90 minutes of the stay"] },
+        { "stage": "dinner", "night_number": 1, "narrative": "La Sal tasting menu. Strong. Paul had pending work emails; the staff helped him set up the terrace with a second drink and let him cut the pairing short without a fuss.",
+          "moments_positive": ["staff accommodated working dinner with no judgment", "pairing cut short gracefully"], "moments_negative": [] },
+        { "stage": "checkout", "night_number": 3, "narrative": "Invoice correct, Platinum benefits applied. WiFi incident was noted on the folio with a credit we didn't ask for.",
+          "moments_positive": ["credit for WiFi incident applied without us asking", "invoice correct", "GM personally apologised for first-night issue at checkout"], "moments_negative": [] }
+      ],
+      "sensation_summary": { "stars": 4, "nps": 55, "raw_score": 76, "final_state": { "comfort_physical": 88, "cleanliness": 92, "service_quality": 92, "speed": 80, "personalization": 88, "value": 78, "authenticity": 82, "modernity": 82, "amenity_usability": 80, "crowd": 88, "culinary": 88, "safety": 90, "aesthetic": 88, "sustainability_awareness": 80 } },
+      "predicted_review": { "will_write_review": true, "platform": "tripadvisor", "star_rating": 4, "nps": 55, "title": "Great recovery from a WiFi hiccup", "body": "Three-night leisure extension from Barcelona. Platinum recognition at arrival was immediate, suite upgrade actioned without asking. One issue: WiFi was intermittent the first 90 minutes, which for a working traveller matters. But an engineer was in the room within 20 minutes, the issue was fully solved, the apology was genuine, and — importantly — at checkout the folio had a credit applied for the incident without me having to raise it. That is the sort of recovery that should happen at five-star everywhere and actually only happens at a handful. La Sal tasting menu is strong. Would come back.", "themes": ["wifi", "recovery", "loyalty_recognition", "service"], "would_recommend": true, "would_repeat": true, "social_media_share_probability": 0.35 },
+      "total_spend_eur": 980,
+      "property_name": "Gran Meliá Villa Le Blanc"
+    },
+
+    {
+      "archetype_id": "luxury_seeker", "stay_length_nights": 5, "trip_purpose": "leisure_couples", "target_star_rating": 4,
+      "persona_full": { "name": "Klaus Weber", "age": 52, "nationality": "Germany (Stuttgart)", "archetype_id": "luxury_seeker", "archetype_label": "Luxury Seeker", "loyalty_tier": null, "bio": "Stuttgart-based, Maschinenbau-Geschäftsführer. Alleinreisender Witwer, sechs Monate nach dem Verlust seiner Frau — erster längerer Urlaub seither." },
+      "cultural_context": { "culture_cluster": "german_dach", "origin_country_iso": "DE", "native_language": "de" },
+      "booking_context": { "price_tier": "luxury", "rate_paid_eur": 680, "booking_channel": "booking_com", "loyalty_tier": null, "lead_time_days": 55 },
+      "stages": [
+        { "stage": "arrival", "night_number": 1, "narrative": "Check-in sachlich. Zimmer wie gebucht.",
+          "moments_positive": ["Check-in sachlich", "Zimmer wie gebucht"],
+          "moments_negative": ["keine besondere Aufmerksamkeit für Alleinreisenden älter als 50"] },
+        { "stage": "room_first_impression", "night_number": 1, "narrative": "Klimaanlage in der ersten Nacht laut — nicht defekt, aber im Schlafzimmer störend. Wechsel des Zimmers am Folgetag auf Anfrage.",
+          "moments_positive": ["Zimmerwechsel am Folgetag ohne Diskussion", "zweites Zimmer ruhiger"],
+          "moments_negative": ["Klimaanlage erstes Zimmer akustisch störend"] },
+        { "stage": "dinner", "night_number": 2, "narrative": "La Sal. Technisch gut. Als Alleinessender gibt es wenig ansprechende Option — der Tisch war in der Mitte des Saals, nicht seitlich.",
+          "moments_positive": ["technische Ausführung gut", "Weinbegleitung angemessen"],
+          "moments_negative": ["Tischplatzierung als Alleinessender nicht optimal", "wenig Atmosphäre für Solo-Gäste"] },
+        { "stage": "afternoon_activity", "night_number": 3, "narrative": "Spa Thai. Kompetent. Lin sprach nur das Nötigste — wurde geschätzt.",
+          "moments_positive": ["Lin sprach nur das Nötigste", "Hydrothermalkreislauf"], "moments_negative": [] },
+        { "stage": "checkout", "night_number": 5, "narrative": "Rechnung korrekt. Zimmerwechsel-Kompensation wurde angeboten — 10 % auf eine Nacht. Angemessen.",
+          "moments_positive": ["Kompensation für Zimmerwechsel angeboten", "Rechnung korrekt"], "moments_negative": [] }
+      ],
+      "sensation_summary": { "stars": 4, "nps": 35, "raw_score": 72, "final_state": { "comfort_physical": 82, "cleanliness": 94, "service_quality": 86, "speed": 82, "personalization": 72, "value": 78, "authenticity": 86, "modernity": 82, "amenity_usability": 84, "crowd": 86, "culinary": 86, "safety": 90, "aesthetic": 88, "sustainability_awareness": 86 } },
+      "predicted_review": { "will_write_review": true, "platform": "holidaycheck", "star_rating": 4, "nps": 35, "title": "Technisch gut, für Alleinreisende eingeschränkt", "body": "Fünf Nächte als Alleinreisender. Check-in sachlich, Zimmer wie gebucht. Ein Punkt: Klimaanlage im ersten Zimmer akustisch störend — Zimmerwechsel am Folgetag ohne Diskussion, Kompensation von 10 % auf eine Nacht wurde angeboten. Das ist angemessen. La Sal ist gastronomisch gut, aber die Tischplatzierung für Alleinessende mitten im Saal war nicht ideal. Spa kompetent, Lin sprach nur das Nötigste, was geschätzt wurde. Insgesamt ein solides Vier-Sterne-Erlebnis bei Fünf-Sterne-Preis. Würde wiederkommen, aber mit Begleitung.", "themes": ["solo_travel", "ac_noise", "recovery", "spa"], "would_recommend": false, "would_repeat": false, "social_media_share_probability": 0.2 },
+      "total_spend_eur": 1120,
+      "property_name": "Gran Meliá Villa Le Blanc"
+    },
+
+    {
+      "archetype_id": "luxury_seeker", "stay_length_nights": 4, "trip_purpose": "leisure_couples", "target_star_rating": 4,
+      "persona_full": { "name": "Margaux Dubois & Vincent Rossignol", "age": 39, "nationality": "France (Paris)", "archetype_id": "luxury_seeker", "archetype_label": "Luxury Seeker", "loyalty_tier": null, "bio": "Parisiens exigeants, gastronomie-centrés, Margaux critique d'art et Vincent banquier privé." },
+      "cultural_context": { "culture_cluster": "french", "origin_country_iso": "FR", "native_language": "fr" },
+      "booking_context": { "price_tier": "luxury", "rate_paid_eur": 680, "booking_channel": "booking_com", "loyalty_tier": null, "lead_time_days": 83 },
+      "stages": [
+        { "stage": "arrival", "night_number": 1, "narrative": "Accueil correct, sans plus. Le personnel parle espagnol et anglais, français plus approximatif qu'attendu pour un établissement de ce niveau qui communique en France.",
+          "moments_positive": ["accueil correct", "suite en état"],
+          "moments_negative": ["français parlé au personnel plus approximatif qu'attendu"] },
+        { "stage": "dinner", "night_number": 2, "narrative": "La Sal. Le menu dégustation est correct sans être mémorable. La technique est juste, la créativité plus méditerranéenne que gastronomique au sens français.",
+          "moments_positive": ["technique juste", "respect du produit local"],
+          "moments_negative": ["manque de créativité gastronomique au sens français", "pairing correct sans être éducatif"] },
+        { "stage": "afternoon_activity", "night_number": 3, "narrative": "Spa thaï. Correct pour une île de cette taille. Pas au niveau d'un vrai spa hôtelier parisien.",
+          "moments_positive": ["spa correct pour la taille de l'île"],
+          "moments_negative": ["pas au niveau d'un vrai spa 5★ parisien"] },
+        { "stage": "checkout", "night_number": 4, "narrative": "Facture correcte. Petit cadeau d'huile d'olive. Nous ne reviendrons probablement pas — préférons un rapport qualité-prix plus cher mais plus abouti.",
+          "moments_positive": ["facture correcte", "petit cadeau d'huile d'olive"],
+          "moments_negative": ["rapport qualité-prix discutable sur la gastronomie"] }
+      ],
+      "sensation_summary": { "stars": 4, "nps": 30, "raw_score": 71, "final_state": { "comfort_physical": 86, "cleanliness": 92, "service_quality": 84, "speed": 82, "personalization": 78, "value": 72, "authenticity": 84, "modernity": 78, "amenity_usability": 82, "crowd": 86, "culinary": 76, "safety": 88, "aesthetic": 90, "sustainability_awareness": 82 } },
+      "predicted_review": { "will_write_review": true, "platform": "tripadvisor", "star_rating": 4, "nps": 30, "title": "Un séjour correct sans être mémorable", "body": "Quatre nuits. L'accueil était correct sans plus, le français parlé par le personnel plus approximatif qu'attendu pour un établissement de ce niveau qui communique en France. La Sal — technique juste, respect du produit local, mais manque de créativité gastronomique au sens français. Le pairing était correct sans être éducatif. Le spa est correct pour une île de cette taille mais pas au niveau d'un vrai 5★ parisien. La facture était correcte, cela mérite d'être dit. À ce prix-là, on pouvait s'attendre à mieux sur le plan gastronomique. Nous ne reviendrons probablement pas.", "themes": ["gastronomy_expectation", "language_friction", "spa"], "would_recommend": false, "would_repeat": false, "social_media_share_probability": 0.15 },
+      "total_spend_eur": 1180,
+      "property_name": "Gran Meliá Villa Le Blanc"
+    },
+
+    {
+      "archetype_id": "family_vacationer", "stay_length_nights": 4, "trip_purpose": "couples_escape_from_kids", "target_star_rating": 4,
+      "persona_full": { "name": "Ben & Rachel Thornton", "age": 34, "nationality": "UK", "archetype_id": "family_vacationer", "archetype_label": "Family Vacationer (on adults-only escape)", "loyalty_tier": null, "bio": "Two kids at home with grandparents, four-night escape for the first time since kids were born. London-based, Ben in consulting, Rachel in publishing." },
+      "cultural_context": { "culture_cluster": "anglo_uk_ireland", "origin_country_iso": "GB", "native_language": "en" },
+      "booking_context": { "price_tier": "luxury", "rate_paid_eur": 680, "booking_channel": "direct_web", "loyalty_tier": null, "lead_time_days": 61 },
+      "stages": [
+        { "stage": "arrival", "night_number": 1, "narrative": "First time off-kids in six years. Staff read the 'first escape' note on the booking and actioned it — we had genuine privacy from minute one.",
+          "moments_positive": ["staff read the 'first escape' note on the booking", "adults-only genuinely enforced", "rose on the bed without being cheesy"], "moments_negative": [] },
+        { "stage": "daytime_activity", "night_number": 2, "narrative": "Pool. Actually no children. Do you know how rare this is in August? Marco brought us cold towels every twenty minutes.",
+          "moments_positive": ["adults-only genuinely enforced in August", "Marco the pool attendant was perfect", "cabana was quiet"], "moments_negative": [] },
+        { "stage": "dinner", "night_number": 2, "narrative": "La Sal. Very good. Wine pairing went down like a dream after six years of not finishing a bottle at dinner.",
+          "moments_positive": ["La Sal delivered on the hype", "wine pairing went down without interruption", "chef explanation a nice touch"], "moments_negative": [] },
+        { "stage": "checkout", "night_number": 4, "narrative": "Bill was correct, but the €45/night resort fee was a slightly bigger surprise than we'd wanted. Should have been more obvious at booking.",
+          "moments_positive": ["bill was correct otherwise", "olive oil gift", "personal farewell"],
+          "moments_negative": ["€45/night resort fee was not obvious at booking", "four nights × €45 = €180 surprise"] }
+      ],
+      "sensation_summary": { "stars": 4, "nps": 50, "raw_score": 76, "final_state": { "comfort_physical": 90, "cleanliness": 94, "service_quality": 90, "speed": 84, "personalization": 86, "value": 70, "authenticity": 86, "modernity": 82, "amenity_usability": 88, "crowd": 94, "culinary": 90, "safety": 90, "aesthetic": 92, "sustainability_awareness": 82 } },
+      "predicted_review": { "will_write_review": true, "platform": "tripadvisor", "star_rating": 4, "nps": 50, "title": "Parents' first escape — mostly excellent, one gripe", "body": "Four-night escape from our two kids after six years of not doing this. Staff read the 'first time off-kids' note on the booking and delivered actual privacy. The pool is genuinely adults-only, even in August — rarer than you'd think. La Sal was the best meal we've had in years. Marco at the pool is worth the cabana fee alone. My one gripe: the €45/night resort fee was a bit of a surprise at checkout, adding up to €180 over four nights. That should be much more obvious at booking. Otherwise, a stay we needed and will remember. Likely back for our ten-year anniversary.", "themes": ["adults_only", "resort_fee", "food", "pool"], "would_recommend": true, "would_repeat": true, "social_media_share_probability": 0.3 },
+      "total_spend_eur": 1080,
+      "property_name": "Gran Meliá Villa Le Blanc"
+    },
+
+    {
+      "archetype_id": "luxury_seeker", "stay_length_nights": 4, "trip_purpose": "leisure_solo", "target_star_rating": 3,
+      "persona_full": { "name": "Sarah-Jane Morrison", "age": 58, "nationality": "UK (Sussex)", "archetype_id": "luxury_seeker", "archetype_label": "Luxury Seeker (solo, older female)", "loyalty_tier": null, "bio": "Sussex, divorced two years, first solo luxury trip since. Retired solicitor. Cautious, observant." },
+      "cultural_context": { "culture_cluster": "anglo_uk_ireland", "origin_country_iso": "GB", "native_language": "en" },
+      "booking_context": { "price_tier": "luxury", "rate_paid_eur": 680, "booking_channel": "booking_com", "loyalty_tier": null, "lead_time_days": 38 },
+      "stages": [
+        { "stage": "arrival", "night_number": 1, "narrative": "Check-in efficient. Room as described. I was not given the same level of welcome as the couples around me — a slight, but real, sense of being a less interesting guest.",
+          "moments_positive": ["check-in efficient", "room as described"],
+          "moments_negative": ["felt less catered to than the couples around me at check-in"] },
+        { "stage": "dinner", "night_number": 2, "narrative": "La Sal. Food is very good. But being placed at a central table as the only solo diner was exposed — I would have preferred a side table with a view.",
+          "moments_positive": ["food was very good technically"],
+          "moments_negative": ["solo diner placement felt exposed", "tasting menu is engineered for couples"] },
+        { "stage": "daytime_activity", "night_number": 3, "narrative": "Pool. Couples everywhere. Staff were friendly but the atmosphere is not built for solo. I spent the afternoon in the library.",
+          "moments_positive": ["library was a good quiet space", "staff individually friendly"],
+          "moments_negative": ["pool atmosphere entirely couple-oriented", "felt like an anomaly rather than a guest"] },
+        { "stage": "checkout", "night_number": 4, "narrative": "Bill correct. Friendly departure but no personal farewell. I don't think I'd come back alone.",
+          "moments_positive": ["bill correct"],
+          "moments_negative": ["no personal farewell", "not a property for solo older women"] }
+      ],
+      "sensation_summary": { "stars": 3, "nps": -20, "raw_score": 62, "final_state": { "comfort_physical": 80, "cleanliness": 90, "service_quality": 76, "speed": 80, "personalization": 60, "value": 62, "authenticity": 82, "modernity": 76, "amenity_usability": 78, "crowd": 70, "culinary": 84, "safety": 86, "aesthetic": 88, "sustainability_awareness": 80 } },
+      "predicted_review": { "will_write_review": true, "platform": "tripadvisor", "star_rating": 3, "nps": -20, "title": "A lovely property, but not built for solo women over 50", "body": "Four nights. The property itself is beautiful, the staff are individually friendly, and the food at La Sal is technically very good. But the entire experience is engineered for couples. As a divorced 58-year-old travelling alone I felt like an anomaly — the pool is couples-couples-couples, La Sal seated me at a central table where I was slightly on display, the welcome drink felt less considered than those offered to the couples around me. Nobody was rude, nothing was done wrong — it's that the default guest here is a couple, and solo older women are simply outside the target. I would not return alone. If you are a couple, this is probably a five-star. For me, three.", "themes": ["solo_travel", "demographic_fit", "service"], "would_recommend": false, "would_repeat": false, "social_media_share_probability": 0.15 },
+      "total_spend_eur": 820,
+      "property_name": "Gran Meliá Villa Le Blanc"
+    },
+
+    {
+      "archetype_id": "business_traveler", "stay_length_nights": 4, "trip_purpose": "business_extension", "target_star_rating": 3,
+      "persona_full": { "name": "Lars Andersen", "age": 43, "nationality": "Norway (Oslo)", "archetype_id": "business_traveler", "archetype_label": "Business Traveler (solo extension)", "loyalty_tier": null, "bio": "Oslo-based fintech exec. Barcelona conference extension, four nights alone. Efficient, digital-self-service preference." },
+      "cultural_context": { "culture_cluster": "nordic", "origin_country_iso": "NO", "native_language": "no" },
+      "booking_context": { "price_tier": "luxury", "rate_paid_eur": 650, "booking_channel": "booking_com", "loyalty_tier": null, "lead_time_days": 18 },
+      "stages": [
+        { "stage": "arrival", "night_number": 1, "narrative": "Check-in manual — no digital self-service option at the desk, which is a step backward from Copenhagen properties I've been at in the same bracket.",
+          "moments_positive": ["lobby atmosphere calm", "room as described"],
+          "moments_negative": ["no digital self-service check-in option"] },
+        { "stage": "morning_routine", "night_number": 2, "narrative": "Gym was at capacity at 08:00 — too small for the property size. Wellness area (sauna, steam) felt cramped when shared with four other guests.",
+          "moments_positive": ["gym equipment modern"],
+          "moments_negative": ["gym undersized for property", "wellness area cramped at peak hours"] },
+        { "stage": "dinner", "night_number": 2, "narrative": "La Sal. Technically good. Solo diner placement was fine. But I prefer to eat early and the kitchen doesn't open until 20:00, which is aggressive for a Nordic guest.",
+          "moments_positive": ["food technically good", "sommelier knowledgeable"],
+          "moments_negative": ["dinner opens 20:00 — late for Nordic guests", "no earlier alternative on-property"] },
+        { "stage": "checkout", "night_number": 4, "narrative": "Digital checkout via app worked. Invoice correct. Competent, but I would not describe this as a particularly modern operation.",
+          "moments_positive": ["digital checkout via app worked"],
+          "moments_negative": ["operation not as digitally modern as the tier implies"] }
+      ],
+      "sensation_summary": { "stars": 3, "nps": -10, "raw_score": 64, "final_state": { "comfort_physical": 80, "cleanliness": 88, "service_quality": 80, "speed": 76, "personalization": 70, "value": 70, "authenticity": 80, "modernity": 64, "amenity_usability": 70, "crowd": 72, "culinary": 82, "safety": 86, "aesthetic": 86, "sustainability_awareness": 84 } },
+      "predicted_review": { "will_write_review": true, "platform": "booking.com", "star_rating": 3, "nps": -10, "title": "Good property, operationally less modern than expected", "body": "Four nights, solo, business extension from Barcelona. The property itself is beautifully designed and the F&B is technically strong. But operationally it is less modern than I would expect at this tier. No digital self-service check-in option. The gym is undersized for the property — at capacity at 08:00. The wellness area feels cramped when shared. Dinner doesn't open until 20:00, which is aggressive for Nordic guests. The digital checkout via the app worked, which partly redeemed the operation. Competent but not particularly modern. I would not return unless there are operational upgrades.", "themes": ["modernity", "digital_self_service", "gym_size", "dinner_hours"], "would_recommend": false, "would_repeat": false, "social_media_share_probability": 0.15 },
+      "total_spend_eur": 820,
+      "property_name": "Gran Meliá Villa Le Blanc"
+    },
+
+    {
+      "archetype_id": "loyalty_maximizer", "stay_length_nights": 5, "trip_purpose": "platinum_gift_stay_escalated", "target_star_rating": 2,
+      "persona_full": { "name": "Werner & Ingrid Fischer", "age": 58, "nationality": "Germany (Munich)", "archetype_id": "loyalty_maximizer", "archetype_label": "Loyalty Maximizer (escalated)", "loyalty_tier": "melia_platinum", "bio": "Munich-based, both retired lawyers. Meliá Platinum for 11 years, 80+ nights annually across the brand. Expect exact invoicing and tier privilege execution. Low tolerance for management defensiveness." },
+      "cultural_context": { "culture_cluster": "german_dach", "origin_country_iso": "DE", "native_language": "de" },
+      "booking_context": { "price_tier": "luxury", "rate_paid_eur": 720, "booking_channel": "booking_com", "loyalty_tier": "melia_platinum", "lead_time_days": 89 },
+      "stages": [
+        { "stage": "arrival", "night_number": 1, "narrative": "Wir hatten eine Junior-Suite gebucht. Bei Ankunft teilte uns die Rezeption mit, die Suite sei 'nicht verfügbar' — wir bekamen ein Standardzimmer mit kleinerer Fläche. Keine sofortige Kompensation angeboten, keine klare Erklärung.",
+          "moments_positive": [],
+          "moments_negative": ["gebuchte Junior-Suite 'nicht verfügbar' ohne vorherige Kommunikation", "Downgrade in Standardzimmer ohne sofortige Kompensation", "keine klare Erklärung der Überbuchung"] },
+        { "stage": "room_first_impression", "night_number": 1, "narrative": "Zimmer war sauber, aber deutlich kleiner. Platinum-Tier-Welcome-Gift war die Standard-Version, nicht die tier-spezifische.",
+          "moments_positive": ["Zimmer war sauber"],
+          "moments_negative": ["deutlich kleinerer Grundriss als gebucht", "Platinum-Welcome-Gift war Standard-Version"] },
+        { "stage": "dinner", "night_number": 2, "narrative": "La Sal. Essen technisch gut. Aber die Platinum-Weinbegleitung wurde auf der Rechnung nicht angewendet — wir mussten es anmerken und das Personal wurde defensiv.",
+          "moments_positive": ["Essen technisch gut"],
+          "moments_negative": ["Platinum-Weinbegleitungs-Vorteil nicht angewendet", "Personal defensiv bei der Reklamation"] },
+        { "stage": "dinner", "night_number": 3, "narrative": "Wir baten um ein Gespräch mit dem Duty Manager wegen des Zimmer-Downgrades. Das Gespräch dauerte 40 Minuten, endete mit 15 % Rabatt auf die Nacht — angemessen, aber die Art und Weise war nicht Platinum-würdig.",
+          "moments_positive": ["15 % Rabatt auf eine Nacht angeboten"],
+          "moments_negative": ["Duty Manager erst am zweiten Abend erreichbar", "40 Minuten Gespräch mit defensiver Haltung", "keine GM-Eskalation angeboten"] },
+        { "stage": "checkout", "night_number": 5, "narrative": "Rechnung korrekt (nach zweimaliger Nachfrage). Kein Farewell vom GM trotz unserer Beschwerden. Wir werden den Aufenthalt bei Meliá Rewards melden und die Zukunft der Platinum-Buchungen überdenken.",
+          "moments_positive": ["Rechnung final korrekt nach zweimaliger Nachfrage"],
+          "moments_negative": ["kein GM-Farewell trotz Eskalation", "Platinum-Vertrauen beschädigt"] }
+      ],
+      "sensation_summary": { "stars": 2, "nps": -60, "raw_score": 45, "final_state": { "comfort_physical": 70, "cleanliness": 86, "service_quality": 58, "speed": 68, "personalization": 40, "value": 52, "authenticity": 72, "modernity": 70, "amenity_usability": 74, "crowd": 76, "culinary": 80, "safety": 86, "aesthetic": 82, "sustainability_awareness": 76 } },
+      "predicted_review": { "will_write_review": true, "platform": "holidaycheck", "star_rating": 2, "nps": -60, "title": "Platinum-Mitglieder, enttäuschendes Überbuchungsmanagement", "body": "Fünf Nächte als Meliá Platinum (11 Jahre, 80+ Nächte/Jahr). Bei Ankunft wurde uns mitgeteilt, die gebuchte Junior-Suite sei 'nicht verfügbar' — ohne vorherige Kommunikation und ohne sofortige Kompensation. Das Standardzimmer war deutlich kleiner. Das Platinum-Welcome-Gift war die Standard-Version, nicht die tier-spezifische. Bei La Sal wurde die Platinum-Weinbegleitung nicht auf der Rechnung angewendet; als wir es ansprachen, wurde das Personal defensiv. Ein Duty-Manager-Gespräch am zweiten Abend endete mit 15 % Rabatt auf eine Nacht — angemessen, aber die Art und Weise war nicht Platinum-würdig. Kein GM-Farewell. Für ein Fünf-Sterne-Haus dieser Kategorie und Platinum-Buchung inakzeptabel. Wir werden den Fall bei Meliá Rewards melden.", "themes": ["overbooking", "loyalty_recognition_failure", "management_defensiveness", "platinum"], "would_recommend": false, "would_repeat": false, "social_media_share_probability": 0.65 },
+      "total_spend_eur": 980,
+      "property_name": "Gran Meliá Villa Le Blanc"
+    }
+  ],
+  "calibration": {
+    "property_name": "Gran Meliá Villa Le Blanc",
+    "property_slug": "gran-melia-villa-le-blanc",
+    "sourced_from": ["TripAdvisor (305 reviews)", "Booking.com (267 reviews)"],
+    "generated_at": "2026-04-18T11:45:00.000Z",
+    "calibration_version": "2.0",
+    "avg_rating": 4.65,
+    "review_count": 572,
+    "star_distribution_pct": { "1": 1, "2": 2, "3": 5, "4": 15, "5": 77 },
+    "positive_negative_moment_ratio": 4.5,
+    "top_positive_themes": ["location", "design_aesthetic", "staff_warmth", "breakfast", "sustainability", "dining_variety"],
+    "top_negative_themes": ["value_price_concern", "fb_slow_service", "menu_variety"]
+  },
+  "summary": {
+    "modality": "stay_experience",
+    "total_stays": 31,
+    "avg_stars": 4.61,
+    "avg_nps": 71,
+    "net_promoter_score": 71,
+    "avg_spend_eur": 1336,
+    "avg_spend_by_category": { "dinner": 420, "spa": 240, "activities": 180, "lunch": 120, "bar": 65 },
+    "would_repeat_pct": 84,
+    "would_recommend_pct": 87,
+    "reviews_generated": 31,
+    "predicted_review_platform_mix": { "tripadvisor": 16, "booking.com": 9, "holidaycheck": 4, "google": 1, "le_routard": 1 },
+    "top_predicted_themes": [
+      { "theme": "service", "count": 23 },
+      { "theme": "food", "count": 20 },
+      { "theme": "spa", "count": 15 },
+      { "theme": "design_aesthetic", "count": 8 },
+      { "theme": "loyalty_recognition", "count": 6 },
+      { "theme": "location", "count": 5 },
+      { "theme": "value", "count": 5 },
+      { "theme": "sustainability", "count": 3 }
+    ],
+    "realized_star_distribution": { "1": 0, "2": 1, "3": 2, "4": 5, "5": 23 },
+    "realized_star_distribution_pct": { "1": 0, "2": 3, "3": 6, "4": 16, "5": 74 },
+    "target_star_match_rate_pct": 94,
+    "adversarial_events_triggered": { "wifi_intermittent": 1, "ac_noise_first_night": 1, "surprise_resort_fee": 1, "overbooking_downgrade": 1, "solo_dining_placement": 1 },
+    "adversarial_events_total": 5,
+    "avg_room_rate_paid_eur": 696,
+    "culture_distribution": { "anglo_uk_ireland": 11, "german_dach": 4, "latin_spain_italy": 4, "french": 3, "anglo_us_canada": 3, "latin_american": 2, "nordic": 3, "east_asian": 1 },
+    "booking_channel_distribution": { "direct_web": 13, "booking_com": 12, "direct_app": 3, "tripadvisor": 3 },
+    "price_tier_distribution": { "luxury": 31 },
+    "loyalty_recognition_expected_pct": 32,
+    "post_stay": {
+      "checkout_style_distribution": { "front_desk_full": 18, "express_mobile": 9, "bell_service": 3 },
+      "checkout_bill_dispute_pct": 3,
+      "departure_gesture_offered_pct": 80,
+      "avg_post_stay_nps_delta": -2,
+      "avg_review_write_delay_days": 5.4,
+      "avg_return_intent_12m": 0.77,
+      "word_of_mouth_shared_pct": 83,
+      "word_of_mouth_social_post_pct": 37
+    },
+    "avg_staff_rapport": 3.9,
+    "avg_stars_ci": { "value": 4.61, "ci_low": 4.43, "ci_high": 4.79, "std": 0.13, "n": 31 },
+    "avg_nps_ci": { "value": 71, "ci_low": 54, "ci_high": 88, "std": 12.6, "n": 31 },
+    "avg_spend_eur_ci": { "value": 1336, "ci_low": 1229, "ci_high": 1443, "std": 77, "n": 31 },
+    "avg_room_rate_paid_eur_ci": { "value": 696, "ci_low": 676, "ci_high": 716, "std": 14, "n": 31 },
+    "would_repeat_pct_ci": { "value": 84, "ci_low": 71, "ci_high": 97, "std": 9, "n": 31 },
+    "would_recommend_pct_ci": { "value": 87, "ci_low": 75, "ci_high": 99, "std": 9, "n": 31 },
+    "net_promoter_score_ci": { "value": 71, "ci_low": 54, "ci_high": 88, "std": 12.6, "n": 31 },
+    "realized_star_distribution_pct_ci": {
+      "1": { "value": 0, "ci_low": 0, "ci_high": 6, "std": 3, "n": 31 },
+      "2": { "value": 3, "ci_low": 0, "ci_high": 10, "std": 3.5, "n": 31 },
+      "3": { "value": 6, "ci_low": 0, "ci_high": 15, "std": 4.5, "n": 31 },
+      "4": { "value": 16, "ci_low": 3, "ci_high": 29, "std": 6.5, "n": 31 },
+      "5": { "value": 74, "ci_low": 59, "ci_high": 89, "std": 8.0, "n": 31 }
+    },
+    "avg_return_intent_12m_ci": { "value": 0.77, "ci_low": 0.67, "ci_high": 0.87, "std": 0.07, "n": 31 }
+  }
+}

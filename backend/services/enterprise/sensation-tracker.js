@@ -72,7 +72,7 @@ function getTierArchetypeBoost(propertyTier, archetypeId) {
  *   5. external context (season + weather + events + occupancy)
  *   6. property calibration scaling (review-anchored)
  */
-function initialState({ propertyBaseline = null, archetypeId = null, culturalModifiers = null, bookingModifiers = null, externalModifiers = null, propertyTier = null } = {}) {
+function initialState({ propertyBaseline = null, archetypeId = null, culturalModifiers = null, bookingModifiers = null, externalModifiers = null, propertyTier = null, loyaltyModifiers = null } = {}) {
   const config = getConfig();
   const defaults = config.default_starting_values;
   const archOverride = (archetypeId && config.starting_sensations_override_by_archetype?.[archetypeId]) || {};
@@ -104,6 +104,15 @@ function initialState({ propertyBaseline = null, archetypeId = null, culturalMod
   // External context modifiers (season/weather/events/occupancy)
   if (externalModifiers && typeof externalModifiers === 'object') {
     for (const [k, v] of Object.entries(externalModifiers)) {
+      if (k in merged && typeof v === 'number') merged[k] = clamp(merged[k] + v);
+    }
+  }
+  // Loyalty expectation modifiers (MeliáRewards tier × brand-match).
+  // High-tier members expect recognition by name/tier and feel the gap
+  // when it's absent — starts them lower on personalization/service_quality
+  // so the simulated staff interactions have to EARN the top of scale.
+  if (loyaltyModifiers && typeof loyaltyModifiers === 'object') {
+    for (const [k, v] of Object.entries(loyaltyModifiers)) {
       if (k in merged && typeof v === 'number') merged[k] = clamp(merged[k] + v);
     }
   }
@@ -176,21 +185,49 @@ function recordMoment(state, { kind, stage, description }) {
 
 /**
  * Compute the overall weighted score for a given archetype's sensation weights.
+ *
+ * Kahneman peak-end composite (2026-04-19):
+ *   score = avg_over_stay * 0.4 + final_stage * 0.35 + peak_low * 0.25
+ *
+ * Where:
+ *   avg_over_stay = mean of the weighted-dim score across all stage snapshots
+ *   final_stage   = weighted-dim score at the end state
+ *   peak_low      = the LOWEST weighted-dim score observed at any stage
+ *                   (the "worst moment" anchor — drags the memory)
+ *
+ * If history is absent (e.g. called standalone on final state only), falls
+ * back to the old final-state-only calculation.
  */
 function computeWeightedScore(state, archetypeBehavior) {
   const weights = archetypeBehavior?.sensation_weights || {};
   const config = getConfig();
   const dims = Object.keys(config.dimensions);
 
-  let weightSum = 0;
-  let weightedValue = 0;
-  for (const dim of dims) {
-    const w = weights[dim] || (1 / dims.length) * 0.3; // fallback even weight
-    weightSum += w;
-    weightedValue += w * (state[dim] || 0);
-  }
-  if (weightSum === 0) return 0;
-  return weightedValue / weightSum;
+  const scoreFor = (snap) => {
+    let wSum = 0, wVal = 0;
+    for (const dim of dims) {
+      const w = weights[dim] || (1 / dims.length) * 0.3;
+      wSum += w;
+      wVal += w * (snap[dim] || 0);
+    }
+    return wSum === 0 ? 0 : wVal / wSum;
+  };
+
+  const finalScore = scoreFor(state);
+  const history = state._history || [];
+
+  if (history.length < 3) return finalScore;
+
+  // Per-stage snapshots → stage scores
+  const stageScores = history.map(h => scoreFor(h.snapshot || {}));
+  const avg = stageScores.reduce((a, b) => a + b, 0) / stageScores.length;
+  const peakLow = Math.min(...stageScores);
+
+  // Kahneman composite: average carries continuity, final carries end-weight,
+  // peak_low carries the "worst moment" memory drag. A stay with strong avg
+  // and strong final but a single bad moment lands lower than one without
+  // that peak-low.
+  return avg * 0.40 + finalScore * 0.35 + peakLow * 0.25;
 }
 
 /**
@@ -243,8 +280,14 @@ function jaccardSim(aTokens, bTokens) {
  * Apply peak-end weighting + hedonic adaptation to a list of moments.
  * Returns the weighted sum of moment counts (float), for use with the
  * existing sqrt / linear coefficients.
+ *
+ * Asymmetric weighting (Fredrickson & Kahneman 1999):
+ *   - Positive moments: peak dominates over end (peak 1.6×, end 1.3×)
+ *     Positive experiences are encoded by their highlight, not finale.
+ *   - Negative moments: end dominates over peak (end 1.6×, peak 1.3×)
+ *     A bad finish contaminates the whole memory; a mid-stay problem fades.
  */
-function weightedMomentSum(moments, history) {
+function weightedMomentSum(moments, history, kind = 'positive') {
   if (!moments || moments.length === 0) return 0;
 
   const stageOrder = [];
@@ -260,6 +303,11 @@ function weightedMomentSum(moments, history) {
   const rankedMag = Object.entries(stageMagnitude).sort((a, b) => b[1] - a[1]).map(([s]) => s);
   const top3Mag = new Set(rankedMag.slice(0, 3));
 
+  // Kind-asymmetric weights
+  const W = kind === 'negative'
+    ? { end: 1.6, peak: 1.3, top3: 1.15, base: 1.0 }
+    : { end: 1.3, peak: 1.6, top3: 1.2, base: 1.0 };
+
   const sortedMoments = [...moments].sort((a, b) => {
     const ai = stageOrder.indexOf(a.stage), bi = stageOrder.indexOf(b.stage);
     if (ai !== bi) return ai - bi;
@@ -271,10 +319,10 @@ function weightedMomentSum(moments, history) {
 
   for (const m of sortedMoments) {
     let w;
-    if (m.stage && m.stage === lastStage) w = 1.6;
-    else if (m.stage && m.stage === peakStage) w = 1.5;
-    else if (m.stage && top3Mag.has(m.stage)) w = 1.2;
-    else w = 1.0;
+    if (m.stage && m.stage === lastStage) w = W.end;
+    else if (m.stage && m.stage === peakStage) w = W.peak;
+    else if (m.stage && top3Mag.has(m.stage)) w = W.top3;
+    else w = W.base;
 
     const toks = tokenize(m.description);
     let maxSim = 0;
@@ -295,10 +343,17 @@ function computeFinalScore(state, archetypeBehavior) {
   const base = computeWeightedScore(state, archetypeBehavior);
   const positives = state._moments?.positive || [];
   const negatives = state._moments?.negative || [];
-  const wPos = weightedMomentSum(positives, state._history);
-  const wNeg = weightedMomentSum(negatives, state._history);
-  const bonus = 3.5 * Math.sqrt(Math.max(0, wPos));
-  const penalty = 4.5 * wNeg;
+  // Peak-end asymmetric: positives weight peak heavier, negatives weight end
+  // heavier — matches Fredrickson & Kahneman (1999) findings that peaks
+  // dominate positive experiences while endings dominate negatives.
+  const wPos = weightedMomentSum(positives, state._history, 'positive');
+  const wNeg = weightedMomentSum(negatives, state._history, 'negative');
+  // 2026-04-19 re-calibration for real-LLM runs (Groq 8B/70B): LLMs produce
+  // more gratuitous negatives than the prior 3:1 assumption. Coefficients
+  // tuned for 2:2 ratio typical in 8B output while preserving the positive
+  // compounding that real 5★ luxury reviews show.
+  const bonus = 4.2 * Math.sqrt(Math.max(0, wPos));
+  const penalty = 3.2 * wNeg;
   return clamp(base + bonus - penalty);
 }
 

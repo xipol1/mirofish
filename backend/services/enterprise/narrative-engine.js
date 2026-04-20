@@ -14,11 +14,80 @@
 
 const { callAIJSON } = require('../ai');
 const datasets = require('../datasets');
+const { getResearchBackedSpendRange } = require('./expense-tracker');
+const { buildMetaIdentity, buildSelfAuditBlock } = require('./meta-identity');
+const { temperatureForAgent } = require('./temperature-mapper');
+const { renderMemoryBlock } = require('./episodic-memory');
+const { renderImpulseBlock } = require('./pre-arrival-impulse');
 const path = require('path');
 const fs = require('fs');
 
 const BEHAVIORS_PATH = path.join(__dirname, '..', '..', 'data', 'industries', 'hospitality', 'stay_behaviors.json');
 const SENSATION_PATH = path.join(__dirname, '..', '..', 'data', 'industries', 'hospitality', 'sensation_dimensions.json');
+
+// Stage → spend category map. Each stage primarily drives one category so the
+// LLM can be told what realistic magnitude looks like.
+const STAGE_SPEND_CATEGORIES = {
+  arrival:               { primary: null, secondary: null },
+  room_first_impression: { primary: null, secondary: null },
+  evening_1:             { primary: 'bar', secondary: 'dining' },
+  morning_routine:       { primary: 'dining', secondary: null },
+  daytime_activity:      { primary: 'activities', secondary: 'bar' },
+  lunch:                 { primary: 'dining', secondary: null },
+  afternoon_activity:    { primary: 'spa', secondary: 'activities' },
+  dinner:                { primary: 'dining', secondary: 'bar' },
+  evening_leisure:       { primary: 'bar', secondary: null },
+  last_morning:          { primary: 'dining', secondary: null },
+  checkout:              { primary: null, secondary: null },
+};
+
+// Per-stage fraction of the 5-night total the stage typically absorbs
+// (calibrated so dinner×2 ≈ 40% of dining, lunch×2 ≈ 22%, breakfast ×2 ≈ 20%)
+const STAGE_CATEGORY_SHARE = {
+  dining:     { dinner: 0.20, lunch: 0.11, morning_routine: 0.08, evening_1: 0.05, last_morning: 0.04 },
+  bar:        { evening_1: 0.28, evening_leisure: 0.22, dinner: 0.18, daytime_activity: 0.08 },
+  spa:        { afternoon_activity: 0.45 },
+  activities: { daytime_activity: 0.35, afternoon_activity: 0.12 },
+  kids_club:  { daytime_activity: 0.30, afternoon_activity: 0.25 },
+  upsell:     { arrival: 0.20, room_first_impression: 0.25, dinner: 0.15 },
+};
+
+/**
+ * Build a research-backed spend-guidance block for this stage. The block
+ * tells the LLM the realistic €-band per category for this archetype ×
+ * cultural cluster, scaled to the per-stage share.
+ *
+ * Returns an empty string if no calibration available (falls back to LLM
+ * free-form).
+ */
+function buildSpendGuidanceBlock({ stage_label, archetypeId, culturalCluster }) {
+  if (!archetypeId) return '';
+  const stageCats = STAGE_SPEND_CATEGORIES[stage_label];
+  if (!stageCats || (!stageCats.primary && !stageCats.secondary)) return '';
+
+  const lines = [];
+  for (const slot of ['primary', 'secondary']) {
+    const cat = stageCats[slot];
+    if (!cat) continue;
+    const range = getResearchBackedSpendRange({ archetypeId, category: cat, culturalCluster });
+    if (!range) continue;
+    const share = STAGE_CATEGORY_SHARE[cat]?.[stage_label] || 0.1;
+    const stageMin = Math.round(range.min * share);
+    const stageMedian = Math.round(range.median * share);
+    const stageMax = Math.round(range.max * share);
+    if (stageMax < 5) continue; // skip categories with negligible stage spend
+    lines.push(`  • ${cat}: realistic spend €${stageMin}-€${stageMax} (median €${stageMedian})`);
+  }
+  if (lines.length === 0) return '';
+  return `
+=== CALIBRATED SPEND RANGES FOR THIS STAGE (research-backed) ===
+Research sources: U.S. BLS Consumer Expenditure Survey + Eurostat Tourism + Virtuoso Luxe Report 2024.
+For a ${archetypeId}${culturalCluster ? ` from ${culturalCluster}` : ''} at ${stage_label.replace(/_/g, ' ')}:
+${lines.join('\n')}
+Generate expenses WITHIN these bands unless the narrative specifically justifies an outlier (e.g. surprise fee, unusual upsell accepted). Do NOT exceed the max band.
+`;
+}
+
 
 let _behaviors = null, _sensations = null;
 function behaviors() { if (!_behaviors) _behaviors = JSON.parse(fs.readFileSync(BEHAVIORS_PATH, 'utf-8')); return _behaviors; }
@@ -77,7 +146,9 @@ async function simulateStage(ctx) {
     stage_external_block,
   });
 
-  const result = await callAIJSON(prompt, { maxTokens: 1400, temperature: 0.8 });
+  const system = buildMetaIdentity(persona, cultural_context, property);
+  const temperature = temperatureForAgent(persona, stage_label);
+  const result = await callAIJSON(prompt, { system, maxTokens: 1400, temperature });
   return normalizeStageOutput(result, stage_label);
 }
 
@@ -194,11 +265,14 @@ Your stage output must be consistent with this overall target. Over the course o
     property,
   });
 
-  const system = `You are simulating a real hotel guest's experience. You must stay in character as this persona and describe what they actually experience in first-person present tense. Be specific about sensory details, staff interactions, decisions made, and money spent. Do not break character.`;
+  // Episodic memories + pre-arrival impulse (populated upstream when
+  // ENABLE_INSIGHTS_V2=true). Both blocks are empty strings when absent so
+  // they costlessly degrade on baseline runs.
+  const episodicBlock = persona?.episodic_memories ? renderMemoryBlock(persona.episodic_memories) : '';
+  const impulseBlock  = persona?.pre_arrival ? renderImpulseBlock(persona.pre_arrival) : '';
+  const selfAuditTail = buildSelfAuditBlock(persona, cultural_context);
 
-  return `${system}
-
-=== PERSONA (you ARE this guest) ===
+  return `=== PERSONA (you ARE this guest) ===
 Name: ${persona.name}
 Age: ${persona.age}
 Role: ${persona.role} at ${persona.company_description || 'their company'}
@@ -224,6 +298,8 @@ ${physicalBlock || ''}
 ${companionBlock || ''}
 ${personaTraitsBlock || ''}
 ${themeScopeBlock || ''}
+${episodicBlock || ''}
+${impulseBlock || ''}
 === PROPERTY DATA (real info about this hotel) ===
 ${propertySummary}
 
@@ -245,6 +321,7 @@ Memorable-moment triggers for this archetype:
 Upsell acceptance probabilities (0-1): ${JSON.stringify(upsellProbs)}
 
 Typical spending ranges in EUR for this archetype (min-max): ${JSON.stringify(spendingRanges)}
+${buildSpendGuidanceBlock({ stage_label, archetypeId: persona.archetype_id || persona._archetype_id, culturalCluster: cultural_context?.culture_cluster })}
 
 === YOUR CURRENT SENSATION STATE (0-100) ===
 ${JSON.stringify(currentSensations, null, 2)}
@@ -312,7 +389,8 @@ Return this JSON:
   "abandonment_signal": boolean (true only if they'd leave the hotel early — rare)
 }
 
-Only include sensation_deltas for dimensions that change during this stage. Zero out or omit others. Be calibrated — most stages produce deltas of 3-8, not 20.`;
+Only include sensation_deltas for dimensions that change during this stage. Zero out or omit others. Be calibrated — most stages produce deltas of 3-8, not 20.
+${selfAuditTail}`;
 }
 
 function buildPropertySummary(property) {

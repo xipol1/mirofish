@@ -19,6 +19,8 @@
 const { callAIJSON } = require('../ai');
 const datasets = require('../datasets');
 const { injectImperfections } = require('./review-imperfection');
+const { buildMetaIdentity } = require('./meta-identity');
+const { temperatureForAgent } = require('./temperature-mapper');
 const path = require('path');
 const fs = require('fs');
 
@@ -109,7 +111,15 @@ async function predictReview({ stay, persona, property = null, dataset_phrase_ba
   const reviewLangName = LANGUAGE_NAMES[reviewLangCode] || 'English';
   const nationality = ctxCulture?.nationality || ctxCulture?.culture_cluster || 'international';
 
-  const willWrite = shouldWriteReview(archetypeId);
+  // Tension resolution from PASO 4a forces the outcome of the "write or stay
+  // silent" decision. "silent" → no public review. "review_only" / "combo" →
+  // guaranteed review. Other actions fall back to the archetype probability.
+  const tensionAction = stay.tension_resolution?.action_chosen || null;
+  const willWrite = tensionAction === 'silent'
+    ? false
+    : (tensionAction === 'review_only' || tensionAction === 'combo')
+      ? true
+      : shouldWriteReview(archetypeId);
   const sensationSummary = stay.sensation_summary || {};
   const stars = sensationSummary.stars || 3;
   const nps = sensationSummary.nps ?? 0;
@@ -239,6 +249,19 @@ Platform conventions: ${JSON.stringify(calibration().review_structure_by_platfor
 
 === REAL REVIEW PHRASES FROM ARCHETYPE (reference — do not copy verbatim, adapt) ===
 ${samplePhrases.join('\n')}
+${stay.tension_resolution ? `
+=== YOUR POST-STAY TENSION DECISION (already committed, do not contradict) ===
+Action chosen: ${stay.tension_resolution.action_chosen} → target: ${stay.tension_resolution.action_target}.
+Friction intensity you felt: ${stay.tension_resolution.friction_points_ranked?.[0]?.intensity ?? 0}/100.
+Pre-committed rating shift: ${stay.tension_resolution.will_affect_final_rating_by_stars >= 0 ? '+' : ''}${stay.tension_resolution.will_affect_final_rating_by_stars || 0}★.
+This review MUST respect action_chosen. If "silent" or "email_after", do NOT narrate confronting staff in the lobby. If "review_only", this review IS the release — let the emotion show without apology. If "complain_in_person" already happened in narrative, only reference it briefly — do not re-litigate.` : ''}
+
+=== FORCED COMMITMENT (avoid post-hoc drift) ===
+BEFORE writing the body, commit in your head to:
+  • star_rating = ${stars} (non-negotiable — the sensation math already produced it)
+  • word_count_target ≈ ${Math.round((lenMin + lenMax) / 2)}
+  • tone balance = ${stars >= 4 ? 'positive-leaning (match your actual experience, do not pad negatives for "balance")' : stars <= 2 ? 'negative-leaning (do not soften — the stay earned this)' : 'balanced (honest pros + cons in your cultural register)'}
+Then write the body consistent with that commitment. If you find yourself drifting toward a more moderate tone than the commitment warrants, rewrite.
 
 === YOUR TASK ===
 Write the review in first person, past tense, matching the platform + identity + cultural voice. Weight moments by their consolidation tags (AMPLIFIED/FADED/DRAMATIZED). Include:
@@ -264,12 +287,23 @@ Return this JSON:
 
   let result;
   try {
-    result = await callAIJSON(prompt, { maxTokens: 900, temperature: 0.75 });
+    const system = buildMetaIdentity(persona, ctxCulture, property);
+    const temperature = temperatureForAgent(persona, 'review_writing');
+    result = await callAIJSON(prompt, { system, maxTokens: 1200, temperature });
   } catch (err) {
     console.error('[review-predictor] LLM failed:', err.message.substring(0, 120));
+    // Build a minimal but coherent body from moment descriptions (strings, not
+    // object literals — the old fallback printed "[object Object]" because
+    // positiveMoments was already a formatted bullet list but we concatenated
+    // raw moment objects instead of their descriptions).
+    const posLines = (stay.moments_positive || []).slice(0, 3).map(m => String(m.description || m)).join('. ');
+    const negLines = (stay.moments_negative || []).slice(0, 2).map(m => String(m.description || m)).join('. ');
+    const bodyParts = [`Overall a ${stars}-star stay.`];
+    if (posLines) bodyParts.push(`Highlights: ${posLines}.`);
+    if (negLines) bodyParts.push(`What didn't work: ${negLines}.`);
     result = {
       title: `${stars}-star stay`,
-      body: `Overall a ${stars}-star experience. ${positiveMoments.substring(0, 200)}. ${negativeMoments.substring(0, 200)}`,
+      body: bodyParts.join(' '),
       star_rating: stars,
       nps,
       themes: [],
