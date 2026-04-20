@@ -268,10 +268,14 @@ export default function ScenarioEditor() {
       <div style={{ maxWidth: 1500, margin: '0 auto', padding: '20px 22px 100px' }}>
         <TopBar scenario={scenario} setScenario={setScenario} runFullSim={runFullSim} running={running} />
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 420px', gap: 20, marginTop: 20, alignItems: 'start' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 380px', gap: 20, marginTop: 20, alignItems: 'start' }}>
           <div>
             <ExampleBar onLoad={loadExample} />
             <DecisionBox decision={scenario.decision} setDecision={setDecision} updateDecision={updateDecision} />
+
+            {/* Prominent insights panel — sensitivity + segments with full width */}
+            <DecisionInsightsPanel scenario={scenario} preview={preview} loading={previewLoading} />
+
             <PropertyContext
               property={scenario.property}
               updateProperty={updateProperty}
@@ -915,39 +919,8 @@ function LivePreview({ scenario, preview, loading, error, decision, onRunFull, r
     return `${sign}€${abs}`;
   };
 
-  // ── Sensitivity sweep (lazy — only when requested) ─────────────────
-  const [sensitivityOpen, setSensitivityOpen] = useState(false);
-  const [sensitivityData, setSensitivityData] = useState(null);
-  const [sensitivityLoading, setSensitivityLoading] = useState(false);
-  const sweepReqRef = useRef(null);
-  useEffect(() => {
-    if (!sensitivityOpen) return;
-    clearTimeout(sweepReqRef.current);
-    sweepReqRef.current = setTimeout(async () => {
-      setSensitivityLoading(true);
-      try {
-        const res = await fetch(`${API_URL}/api/scenario-sensitivity`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ property: scenario.property, audience: scenario.audience, decision: scenario.decision }),
-        });
-        const data = await res.json();
-        setSensitivityData(data);
-      } catch (err) {
-        setSensitivityData({ error: err.message });
-      } finally {
-        setSensitivityLoading(false);
-      }
-    }, 300);
-    return () => clearTimeout(sweepReqRef.current);
-  }, [sensitivityOpen, scenario]);
-
   // ── Explainability modal ───────────────────────────────────────────
   const [explainOpen, setExplainOpen] = useState(false);
-
-  // ── Expand segment → show narratives + interview ───────────────────
-  const [expandedSegment, setExpandedSegment] = useState(null);
-  const [interviewMap, setInterviewMap] = useState({});
 
   return (
     <div style={{ position: 'sticky', top: 20 }}>
@@ -994,96 +967,6 @@ function LivePreview({ scenario, preview, loading, error, decision, onRunFull, r
           <MetricMini label="Booking Δ" value={preview?.booking_delta_pct != null ? `${preview.booking_delta_pct >= 0 ? '+' : ''}${preview.booking_delta_pct.toFixed(1)}%` : '—'} color={(preview?.booking_delta_pct ?? 0) >= 0 ? '#0a8754' : '#b91c1c'} />
         </div>
 
-        {/* Sensitivity sweep toggle */}
-        <div style={{ padding: '10px 20px', borderBottom: '1px solid #f0f1f4', background: sensitivityOpen ? '#f6f7f9' : 'white' }}>
-          <button
-            onClick={() => setSensitivityOpen((v) => !v)}
-            style={{
-              width: '100%', background: 'transparent', border: 0, padding: '6px 0',
-              fontSize: 12, color: '#0F4C75', fontWeight: 600, cursor: 'pointer', textAlign: 'left',
-              display: 'flex', alignItems: 'center', gap: 8,
-            }}
-          >
-            <span style={{ transform: sensitivityOpen ? 'rotate(90deg)' : 'none', transition: 'transform 0.15s' }}>▸</span>
-            <span>📈 Sensitivity sweep — where does this decision break?</span>
-          </button>
-          {sensitivityOpen && (
-            <SensitivityChart data={sensitivityData} loading={sensitivityLoading} />
-          )}
-        </div>
-
-        {/* Segments — expandable with narratives + interview */}
-        {preview?.segments?.length > 0 && (
-          <div style={{ padding: '14px 20px', borderBottom: '1px solid #f0f1f4' }}>
-            <div style={{ fontSize: 10, letterSpacing: 1.2, textTransform: 'uppercase', color: '#6b7888', fontWeight: 700, marginBottom: 8 }}>
-              Segments most affected · click to expand
-            </div>
-            {preview.segments.slice(0, 5).map((s) => {
-              const isNeg = s.delta_pct < 0;
-              const maxAbs = Math.max(...preview.segments.map(x => Math.abs(x.delta_pct || 0)), 1);
-              const barW = (Math.abs(s.delta_pct || 0) / maxAbs) * 100;
-              const color = isNeg ? '#b91c1c' : '#0a8754';
-              const isExpanded = expandedSegment === s.segment;
-              const topCluster = Object.entries(scenario?.audience?.cultural_mix || {})
-                .sort((a, b) => b[1] - a[1])[0]?.[0] || 'anglo_uk_ireland';
-
-              return (
-                <div key={s.segment} style={{ marginBottom: 6 }}>
-                  <button
-                    onClick={() => setExpandedSegment(isExpanded ? null : s.segment)}
-                    style={{
-                      width: '100%', display: 'flex', alignItems: 'center', gap: 8,
-                      padding: '5px 6px', background: isExpanded ? '#eef2ff' : 'transparent',
-                      border: 0, borderRadius: 4, cursor: 'pointer', fontSize: 12,
-                    }}
-                  >
-                    <span style={{ fontSize: 10, color: isExpanded ? '#0F4C75' : '#6b7888', transform: isExpanded ? 'rotate(90deg)' : 'none', transition: 'transform 0.15s' }}>▸</span>
-                    <span style={{ flex: 1, color: '#374151', textAlign: 'left' }}>{s.segment.replace(/_/g, ' ')}</span>
-                    <div style={{ width: 80, height: 5, background: '#f0f1f4', borderRadius: 3, overflow: 'hidden' }}>
-                      <div style={{ height: '100%', width: `${barW}%`, background: color, marginLeft: isNeg ? `${100 - barW}%` : 0 }} />
-                    </div>
-                    <span style={{ width: 56, textAlign: 'right', fontWeight: 600, color, fontSize: 11 }}>
-                      {s.delta_pct >= 0 ? '+' : ''}{(s.delta_pct || 0).toFixed(1)}%
-                    </span>
-                  </button>
-
-                  {isExpanded && (
-                    <SegmentDrilldown
-                      segment={s}
-                      archetype={s.segment}
-                      topCluster={topCluster}
-                      interviewMessages={interviewMap[s.segment] || []}
-                      onAskQuestion={async (question) => {
-                        const msgs = interviewMap[s.segment] || [];
-                        const userMsg = { role: 'user', text: question, ts: Date.now() };
-                        setInterviewMap({ ...interviewMap, [s.segment]: [...msgs, userMsg] });
-                        try {
-                          const res = await fetch(`${API_URL}/api/scenario-interview`, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ question, archetype: s.segment, cluster: topCluster }),
-                          });
-                          const data = await res.json();
-                          setInterviewMap((prev) => ({
-                            ...prev,
-                            [s.segment]: [...(prev[s.segment] || []), {
-                              role: 'agent', text: data.answer || 'No response', speaker: data.name, age: data.age, ts: Date.now(),
-                            }],
-                          }));
-                        } catch (err) {
-                          setInterviewMap((prev) => ({
-                            ...prev,
-                            [s.segment]: [...(prev[s.segment] || []), { role: 'agent', text: 'Connection error.', ts: Date.now() }],
-                          }));
-                        }
-                      }}
-                    />
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        )}
 
         {/* Complaints */}
         {preview?.complaints?.length > 0 && (
@@ -1186,7 +1069,431 @@ function verdictToBg(v) {
   }
 }
 
-// ══════════════════ SensitivityChart ══════════════════════════════════
+// ══════════════════ DecisionInsightsPanel (PROMINENT) ════════════════
+//
+// Lives below the DecisionBox and is the visual hero of the workbench.
+// Two sections stacked:
+//   1) Sensitivity sweep — large chart showing where the decision breaks
+//   2) Segment reactions — per-archetype impact + expandable narrative/chat
+
+function DecisionInsightsPanel({ scenario, preview, loading }) {
+  // Sensitivity state
+  const [sensitivityData, setSensitivityData] = useState(null);
+  const [sensitivityLoading, setSensitivityLoading] = useState(false);
+  const sweepRef = useRef(null);
+
+  useEffect(() => {
+    if (!scenario?.decision?.type) return;
+    clearTimeout(sweepRef.current);
+    sweepRef.current = setTimeout(async () => {
+      setSensitivityLoading(true);
+      try {
+        const res = await fetch(`${API_URL}/api/scenario-sensitivity`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ property: scenario.property, audience: scenario.audience, decision: scenario.decision }),
+        });
+        const data = await res.json();
+        setSensitivityData(data);
+      } catch (err) {
+        setSensitivityData({ error: err.message });
+      } finally {
+        setSensitivityLoading(false);
+      }
+    }, 400);
+    return () => clearTimeout(sweepRef.current);
+  }, [scenario]);
+
+  // Segment expansion + interview state
+  const [expandedSegment, setExpandedSegment] = useState(null);
+  const [interviewMap, setInterviewMap] = useState({});
+
+  const askSegment = async (archetype, topCluster, question) => {
+    const key = archetype;
+    const msgs = interviewMap[key] || [];
+    const userMsg = { role: 'user', text: question, ts: Date.now() };
+    setInterviewMap({ ...interviewMap, [key]: [...msgs, userMsg] });
+    try {
+      const res = await fetch(`${API_URL}/api/scenario-interview`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ question, archetype, cluster: topCluster }),
+      });
+      const data = await res.json();
+      setInterviewMap((prev) => ({
+        ...prev,
+        [key]: [...(prev[key] || []), {
+          role: 'agent', text: data.answer || 'No response', speaker: data.name, age: data.age, ts: Date.now(),
+        }],
+      }));
+    } catch (err) {
+      setInterviewMap((prev) => ({
+        ...prev,
+        [key]: [...(prev[key] || []), { role: 'agent', text: 'Connection error.', ts: Date.now() }],
+      }));
+    }
+  };
+
+  const topCluster = Object.entries(scenario?.audience?.cultural_mix || {})
+    .sort((a, b) => b[1] - a[1])[0]?.[0] || 'anglo_uk_ireland';
+
+  return (
+    <div style={{ marginBottom: 16 }}>
+      {/* ─────── Sensitivity sweep (FULL WIDTH, hero chart) ─────── */}
+      <div style={{
+        background: 'white', border: '1px solid #e5e7eb', borderRadius: 10,
+        padding: '20px 24px', marginBottom: 16,
+        boxShadow: '0 2px 6px rgba(0,0,0,0.05)',
+      }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 10 }}>
+          <div>
+            <div style={{ fontSize: 11, letterSpacing: 1.4, textTransform: 'uppercase', color: '#6b7888', fontWeight: 700 }}>
+              Sensitivity sweep
+            </div>
+            <h3 style={{ margin: '4px 0 0', fontSize: 17, fontWeight: 800, color: '#0A3558' }}>
+              Where does this decision break?
+            </h3>
+            <div style={{ fontSize: 12, color: '#6b7888', marginTop: 3 }}>
+              Sweeps the decision parameter across its range and plots Net LTV. Highlights the optimal point and the verdict-flip threshold.
+            </div>
+          </div>
+          {sensitivityLoading && (
+            <div style={{ fontSize: 11, color: '#6b7888', fontStyle: 'italic' }}>re-sweeping…</div>
+          )}
+        </div>
+
+        <BigSensitivityChart data={sensitivityData} loading={sensitivityLoading} />
+      </div>
+
+      {/* ─────── Segment reactions (FULL WIDTH, with drilldowns) ─── */}
+      <div style={{
+        background: 'white', border: '1px solid #e5e7eb', borderRadius: 10,
+        padding: '20px 24px',
+        boxShadow: '0 2px 6px rgba(0,0,0,0.05)',
+      }}>
+        <div style={{ marginBottom: 14 }}>
+          <div style={{ fontSize: 11, letterSpacing: 1.4, textTransform: 'uppercase', color: '#6b7888', fontWeight: 700 }}>
+            Segment reactions
+          </div>
+          <h3 style={{ margin: '4px 0 0', fontSize: 17, fontWeight: 800, color: '#0A3558' }}>
+            How each traveler profile responds
+          </h3>
+          <div style={{ fontSize: 12, color: '#6b7888', marginTop: 3 }}>
+            Click any segment to see <strong>3 sample traveler quotes</strong> (citable in your client report) and chat with a synthetic guest.
+          </div>
+        </div>
+
+        {!preview?.segments?.length && (
+          <div style={{ fontSize: 12, color: '#6b7888', padding: '18px 0', textAlign: 'center' }}>
+            {loading ? 'Computing…' : 'Configure a decision to see segment reactions.'}
+          </div>
+        )}
+
+        {preview?.segments?.map((s) => {
+          const isNeg = s.delta_pct < 0;
+          const maxAbs = Math.max(...preview.segments.map(x => Math.abs(x.delta_pct || 0)), 1);
+          const barW = (Math.abs(s.delta_pct || 0) / maxAbs) * 100;
+          const color = isNeg ? '#b91c1c' : '#0a8754';
+          const isExpanded = expandedSegment === s.segment;
+          const archLabel = ARCHETYPES.find(a => a.id === s.segment)?.label || s.segment.replace(/_/g, ' ');
+          const archColor = ARCHETYPES.find(a => a.id === s.segment)?.color || '#6b7888';
+          const weight = s.weight_pct != null ? `${s.weight_pct}%` : '';
+
+          return (
+            <div key={s.segment} style={{
+              marginBottom: 8,
+              border: `1px solid ${isExpanded ? '#0F4C75' : '#e5e7eb'}`,
+              borderRadius: 8, overflow: 'hidden',
+              background: isExpanded ? '#f9fafb' : 'white',
+            }}>
+              <button
+                onClick={() => setExpandedSegment(isExpanded ? null : s.segment)}
+                style={{
+                  width: '100%', display: 'flex', alignItems: 'center', gap: 14,
+                  padding: '14px 16px', background: 'transparent', border: 0,
+                  cursor: 'pointer', textAlign: 'left',
+                }}
+              >
+                <span style={{
+                  width: 28, height: 28, borderRadius: '50%', background: archColor,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  color: 'white', fontWeight: 800, fontSize: 13, flexShrink: 0,
+                }}>{archLabel.charAt(0)}</span>
+
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: 14, fontWeight: 700, color: '#1a1d23' }}>
+                    {archLabel}
+                    {weight && <span style={{ fontSize: 11, color: '#6b7888', fontWeight: 500, marginLeft: 8 }}>· {weight} of audience</span>}
+                  </div>
+                  <div style={{ fontSize: 11, color: '#6b7888', marginTop: 2 }}>
+                    {s.sample_narratives?.length > 0 ? `${s.sample_narratives.length} sample narratives · ask any question →` : 'expand for details'}
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <div style={{ width: 140, height: 8, background: '#f0f1f4', borderRadius: 4, overflow: 'hidden', position: 'relative' }}>
+                    <div style={{
+                      position: 'absolute', top: 0, height: '100%',
+                      width: `${barW}%`, background: color,
+                      left: isNeg ? `${100 - barW}%` : 0,
+                    }} />
+                  </div>
+                  <span style={{ fontSize: 16, fontWeight: 800, color, minWidth: 62, textAlign: 'right' }}>
+                    {s.delta_pct >= 0 ? '+' : ''}{(s.delta_pct || 0).toFixed(1)}%
+                  </span>
+                  <span style={{ fontSize: 14, color: '#6b7888', transform: isExpanded ? 'rotate(90deg)' : 'none', transition: 'transform 0.15s' }}>▸</span>
+                </div>
+              </button>
+
+              {isExpanded && (
+                <div style={{ padding: '0 16px 18px 16px', borderTop: '1px dashed #d1d5db' }}>
+                  <SegmentDrilldownRich
+                    segment={s}
+                    archetype={s.segment}
+                    topCluster={topCluster}
+                    interviewMessages={interviewMap[s.segment] || []}
+                    onAskQuestion={(q) => askSegment(s.segment, topCluster, q)}
+                  />
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ══════════════════ BigSensitivityChart (prominent) ══════════════════
+
+function BigSensitivityChart({ data, loading }) {
+  if (!data && loading) {
+    return <div style={{ padding: 40, fontSize: 12, color: '#6b7888', textAlign: 'center' }}>Sweeping parameter range…</div>;
+  }
+  if (!data || data.error) {
+    return <div style={{ padding: 40, fontSize: 12, color: '#b91c1c', textAlign: 'center' }}>{data?.error || 'No data yet — adjust the decision to trigger a sweep'}</div>;
+  }
+  const points = data.points || [];
+  if (points.length === 0) return null;
+
+  const maxY = Math.max(...points.map(p => Math.abs(p.net_eur)), 1);
+  const w = 700;
+  const h = 280;
+  const padL = 60, padR = 30, padT = 24, padB = 44;
+  const plotW = w - padL - padR;
+  const plotH = h - padT - padB;
+  const xScale = (i) => padL + (i / (points.length - 1)) * plotW;
+  const yScale = (v) => padT + plotH / 2 - (v / maxY) * (plotH / 2);
+
+  const path = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${xScale(i)} ${yScale(p.net_eur)}`).join(' ');
+  const currentIdx = points.findIndex(p => p.x === data.current_value);
+  const verdictColors = { HIGH_PRIORITY: '#0a8754', PROCEED: '#22c55e', CAUTION: '#d97706', NOT_RECOMMENDED: '#b91c1c' };
+  const verdictLabels = { HIGH_PRIORITY: 'HIGH PRIORITY', PROCEED: 'PROCEED', CAUTION: 'CAUTION', NOT_RECOMMENDED: 'NOT RECOMMENDED' };
+
+  const paramLabel = {
+    magnitude_pct: 'Magnitude (%)',
+    price_delta_eur: 'Price delta (€)',
+    cost_per_stay_eur: 'Cost per stay (€)',
+    ratio_delta_pct: 'Staff ratio delta (%)',
+    cost_per_member_eur: 'Cost per member (€)',
+    discount_pct: 'Discount (%)',
+  }[data.sweep_param] || data.sweep_param;
+
+  return (
+    <div>
+      <svg width="100%" viewBox={`0 0 ${w} ${h}`} style={{ display: 'block' }}>
+        {/* Verdict background zones */}
+        {points.map((p, i) => {
+          if (i === points.length - 1) return null;
+          const x1 = xScale(i);
+          const x2 = xScale(i + 1);
+          return <rect key={i} x={x1} y={padT} width={x2 - x1} height={plotH} fill={verdictColors[p.verdict] || '#e5e7eb'} fillOpacity="0.1" />;
+        })}
+
+        {/* Zero line */}
+        <line x1={padL} y1={yScale(0)} x2={w - padR} y2={yScale(0)} stroke="#9ca3af" strokeWidth="1" strokeDasharray="4,4" />
+
+        {/* Y grid (top/bottom) */}
+        <line x1={padL} y1={padT} x2={w - padR} y2={padT} stroke="#f0f1f4" strokeWidth="1" />
+        <line x1={padL} y1={h - padB} x2={w - padR} y2={h - padB} stroke="#f0f1f4" strokeWidth="1" />
+
+        {/* Line */}
+        <path d={path} stroke="#0F4C75" strokeWidth="2.5" fill="none" />
+
+        {/* Points */}
+        {points.map((p, i) => {
+          const isCurrent = i === currentIdx;
+          return (
+            <g key={i}>
+              <circle cx={xScale(i)} cy={yScale(p.net_eur)} r={isCurrent ? 8 : 4.5}
+                fill={verdictColors[p.verdict] || '#6b7888'} stroke="white" strokeWidth={isCurrent ? 3 : 1.5} />
+              {isCurrent && (
+                <>
+                  <line x1={xScale(i)} y1={yScale(p.net_eur) + 14} x2={xScale(i)} y2={h - padB + 12} stroke="#0F4C75" strokeWidth="1" strokeDasharray="2,2" />
+                  <text x={xScale(i)} y={h - padB + 28} fontSize="11" fill="#0F4C75" textAnchor="middle" fontWeight="700">your input</text>
+                </>
+              )}
+            </g>
+          );
+        })}
+
+        {/* Optimal marker */}
+        {data.optimal && (
+          <g>
+            <circle cx={xScale(points.findIndex(p => p.x === data.optimal.x))} cy={yScale(data.optimal.net_eur)} r="10" fill="none" stroke="#22c55e" strokeWidth="2.5" strokeDasharray="3,2" />
+            <text x={xScale(points.findIndex(p => p.x === data.optimal.x))} y={yScale(data.optimal.net_eur) - 18} fontSize="11" fill="#0a8754" textAnchor="middle" fontWeight="700">★ optimal</text>
+          </g>
+        )}
+
+        {/* Y axis labels */}
+        <text x={padL - 6} y={yScale(0) + 4} fontSize="11" fill="#6b7888" textAnchor="end">€0</text>
+        <text x={padL - 6} y={padT + 8} fontSize="11" fill="#6b7888" textAnchor="end">+€{(maxY / 1_000_000).toFixed(1)}M</text>
+        <text x={padL - 6} y={h - padB - 2} fontSize="11" fill="#6b7888" textAnchor="end">−€{(maxY / 1_000_000).toFixed(1)}M</text>
+        <text x={14} y={padT + plotH / 2} fontSize="10" fill="#6b7888" textAnchor="middle" transform={`rotate(-90, 14, ${padT + plotH / 2})`}>Net LTV</text>
+
+        {/* X axis labels (first, current, last) */}
+        <text x={padL} y={h - padB + 16} fontSize="11" fill="#6b7888">{points[0].x}</text>
+        <text x={w - padR} y={h - padB + 16} fontSize="11" fill="#6b7888" textAnchor="end">{points[points.length - 1].x}</text>
+        <text x={padL + plotW / 2} y={h - 4} fontSize="11" fill="#6b7888" textAnchor="middle" fontWeight="600">{paramLabel}</text>
+      </svg>
+
+      {/* Annotations */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12, marginTop: 14 }}>
+        <AnnotationCard
+          label="★ Optimal"
+          value={`${data.optimal.x}`}
+          sub={`net ${data.optimal.net_eur >= 0 ? '+' : '−'}€${(Math.abs(data.optimal.net_eur) / 1000).toFixed(0)}K · ${verdictLabels[data.optimal.verdict] || data.optimal.verdict}`}
+          color="#0a8754"
+        />
+        <AnnotationCard
+          label="Break point"
+          value={data.break_point ? `≈ ${data.break_point.estimated}` : '—'}
+          sub={data.break_point ? `verdict flips between ${data.break_point.between[0]} and ${data.break_point.between[1]}` : 'no inflection in range'}
+          color="#d97706"
+        />
+        <AnnotationCard
+          label="Your input"
+          value={`${data.current_value}`}
+          sub={`${paramLabel} currently configured`}
+          color="#0F4C75"
+        />
+      </div>
+    </div>
+  );
+}
+
+function AnnotationCard({ label, value, sub, color }) {
+  return (
+    <div style={{
+      background: 'white', border: '1px solid #e5e7eb', borderLeft: `3px solid ${color}`,
+      borderRadius: 6, padding: '10px 12px',
+    }}>
+      <div style={{ fontSize: 10, letterSpacing: 1.2, textTransform: 'uppercase', color: '#6b7888', fontWeight: 700 }}>{label}</div>
+      <div style={{ fontSize: 18, fontWeight: 800, color: '#1a1d23', marginTop: 2 }}>{value}</div>
+      <div style={{ fontSize: 10, color: '#6b7888', marginTop: 2, lineHeight: 1.4 }}>{sub}</div>
+    </div>
+  );
+}
+
+// ══════════════════ SegmentDrilldownRich (for DecisionInsightsPanel) ═══
+
+function SegmentDrilldownRich({ segment, archetype, topCluster, interviewMessages, onAskQuestion }) {
+  const [q, setQ] = useState('');
+  const [asking, setAsking] = useState(false);
+  const send = async () => {
+    if (!q.trim() || asking) return;
+    setAsking(true);
+    const cur = q;
+    setQ('');
+    await onAskQuestion(cur);
+    setAsking(false);
+  };
+
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, paddingTop: 14 }}>
+      {/* Left: narratives */}
+      <div>
+        <div style={{ fontSize: 10, letterSpacing: 1, textTransform: 'uppercase', color: '#6b7888', fontWeight: 700, marginBottom: 8 }}>
+          Sample traveler quotes · copy into client report
+        </div>
+        {segment.sample_narratives?.length > 0 ? (
+          segment.sample_narratives.map((n, i) => (
+            <div key={i} style={{
+              padding: '10px 12px', marginBottom: 6, background: 'white',
+              borderLeft: '3px solid #c084fc', borderRadius: 4,
+              fontSize: 12, color: '#374151', fontStyle: 'italic', lineHeight: 1.55,
+            }}>
+              "{n}"
+            </div>
+          ))
+        ) : (
+          <div style={{ fontSize: 12, color: '#9ca3af', fontStyle: 'italic' }}>No narratives available yet.</div>
+        )}
+      </div>
+
+      {/* Right: interview chat */}
+      <div>
+        <div style={{ fontSize: 10, letterSpacing: 1, textTransform: 'uppercase', color: '#6b7888', fontWeight: 700, marginBottom: 8 }}>
+          Ask this synthetic guest anything
+        </div>
+        <div style={{
+          background: 'white', border: '1px solid #e5e7eb', borderRadius: 6,
+          padding: 10, minHeight: 120,
+        }}>
+          {interviewMessages.length === 0 && (
+            <div style={{ fontSize: 11, color: '#9ca3af', fontStyle: 'italic', padding: '8px 0' }}>
+              Try: "what if we raised the rate 8%?" or "would breakfast be enough to change your mind?"
+            </div>
+          )}
+          {interviewMessages.map((m, i) => (
+            <div key={i} style={{
+              fontSize: 12, padding: '6px 10px', marginBottom: 6, borderRadius: 4,
+              background: m.role === 'user' ? '#e0e7ff' : '#f0fdf4',
+              color: m.role === 'user' ? '#312e81' : '#064e3b',
+              borderLeft: m.role === 'user' ? '2px solid #4f46e5' : '2px solid #0a8754',
+              lineHeight: 1.55,
+            }}>
+              {m.role === 'user' ? (
+                <><strong style={{ fontSize: 9, letterSpacing: 0.5, textTransform: 'uppercase', color: '#4338ca' }}>You:</strong> {m.text}</>
+              ) : (
+                <>
+                  {m.speaker && <div style={{ fontSize: 10, color: '#0a8754', fontWeight: 700, marginBottom: 3 }}>{m.speaker}, {m.age}:</div>}
+                  {m.text}
+                </>
+              )}
+            </div>
+          ))}
+        </div>
+        <div style={{ display: 'flex', gap: 6, marginTop: 8 }}>
+          <input
+            type="text"
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            onKeyDown={(e) => { if (e.key === 'Enter') send(); }}
+            placeholder="type a question…"
+            style={{
+              flex: 1, padding: '8px 10px', fontSize: 12, border: '1px solid #d1d5db',
+              borderRadius: 4, background: 'white',
+            }}
+          />
+          <button
+            onClick={send}
+            disabled={asking || !q.trim()}
+            style={{
+              padding: '8px 16px', background: asking || !q.trim() ? '#9ca3af' : '#0F4C75',
+              color: 'white', border: 0, borderRadius: 4, fontSize: 12, fontWeight: 600,
+              cursor: asking || !q.trim() ? 'not-allowed' : 'pointer',
+            }}
+          >
+            {asking ? '…' : 'Ask'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ══════════════════ SensitivityChart (legacy small version) ══════════
 
 function SensitivityChart({ data, loading }) {
   if (loading && !data) {
