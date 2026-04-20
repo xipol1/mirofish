@@ -274,7 +274,7 @@ export default function ScenarioEditor() {
             <DecisionBox decision={scenario.decision} setDecision={setDecision} updateDecision={updateDecision} />
 
             {/* Prominent insights panel — sensitivity + segments with full width */}
-            <DecisionInsightsPanel scenario={scenario} preview={preview} loading={previewLoading} />
+            <DecisionInsightsPanel scenario={scenario} preview={preview} loading={previewLoading} updateDecision={updateDecision} />
 
             <PropertyContext
               property={scenario.property}
@@ -1076,7 +1076,7 @@ function verdictToBg(v) {
 //   1) Sensitivity sweep — large chart showing where the decision breaks
 //   2) Segment reactions — per-archetype impact + expandable narrative/chat
 
-function DecisionInsightsPanel({ scenario, preview, loading }) {
+function DecisionInsightsPanel({ scenario, preview, loading, updateDecision }) {
   // Sensitivity state
   const [sensitivityData, setSensitivityData] = useState(null);
   const [sensitivityLoading, setSensitivityLoading] = useState(false);
@@ -1162,7 +1162,13 @@ function DecisionInsightsPanel({ scenario, preview, loading }) {
           )}
         </div>
 
-        <BigSensitivityChart data={sensitivityData} loading={sensitivityLoading} />
+        <BigSensitivityChart
+          data={sensitivityData}
+          loading={sensitivityLoading}
+          onSelectValue={(param, value) => {
+            if (updateDecision && param) updateDecision({ [param]: value });
+          }}
+        />
       </div>
 
       {/* ─────── Segment reactions (FULL WIDTH, with drilldowns) ─── */}
@@ -1264,116 +1270,336 @@ function DecisionInsightsPanel({ scenario, preview, loading }) {
   );
 }
 
-// ══════════════════ BigSensitivityChart (prominent) ══════════════════
+// ══════════════════ BigSensitivityChart (hero, interactive) ═══════════
+//
+// Reactive chart: hover anywhere to see a contextual tooltip explaining the
+// point, click to scrub the decision to that value. Smooth curve with
+// gradient fill, color-coded verdict bands, optimal + break point markers.
 
-function BigSensitivityChart({ data, loading }) {
+const VERDICT_COLORS = {
+  HIGH_PRIORITY:   '#059669',
+  PROCEED:         '#22c55e',
+  CAUTION:         '#d97706',
+  NOT_RECOMMENDED: '#dc2626',
+};
+const VERDICT_LABELS = {
+  HIGH_PRIORITY: 'HIGH PRIORITY',
+  PROCEED: 'PROCEED',
+  CAUTION: 'CAUTION',
+  NOT_RECOMMENDED: 'NOT RECOMMENDED',
+};
+
+const PARAM_LABEL = {
+  magnitude_pct: 'Rate change',
+  price_delta_eur: 'Price delta',
+  cost_per_stay_eur: 'Cost per stay',
+  ratio_delta_pct: 'Staff ratio change',
+  cost_per_member_eur: 'Cost per member',
+  discount_pct: 'Discount',
+};
+const PARAM_UNIT = {
+  magnitude_pct: '%',
+  price_delta_eur: '€',
+  cost_per_stay_eur: '€',
+  ratio_delta_pct: '%',
+  cost_per_member_eur: '€',
+  discount_pct: '%',
+};
+
+function catmullRomToBezier(points) {
+  // Build a smooth path via Catmull-Rom conversion to cubic Beziers.
+  if (points.length < 2) return '';
+  let d = `M ${points[0][0]} ${points[0][1]}`;
+  for (let i = 0; i < points.length - 1; i++) {
+    const p0 = points[i - 1] || points[i];
+    const p1 = points[i];
+    const p2 = points[i + 1];
+    const p3 = points[i + 2] || p2;
+    const cp1x = p1[0] + (p2[0] - p0[0]) / 6;
+    const cp1y = p1[1] + (p2[1] - p0[1]) / 6;
+    const cp2x = p2[0] - (p3[0] - p1[0]) / 6;
+    const cp2y = p2[1] - (p3[1] - p1[1]) / 6;
+    d += ` C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${p2[0]} ${p2[1]}`;
+  }
+  return d;
+}
+
+function contextualExplanation({ point, data, isOptimal, isBreakPoint, isCurrent, paramKey }) {
+  const unit = PARAM_UNIT[paramKey] || '';
+  const sign = point.net_eur >= 0 ? '+' : '−';
+  const absMoney = (Math.abs(point.net_eur) / 1_000_000).toFixed(2);
+  const netStr = `${sign}€${absMoney}M`;
+
+  if (isCurrent) {
+    return {
+      title: 'Your current configuration',
+      body: `This is exactly what you have set in the decision box. Net LTV ${netStr}. Click any other point to test an alternative magnitude.`,
+      tone: 'primary',
+    };
+  }
+  if (isOptimal) {
+    return {
+      title: '★ Optimal point',
+      body: `At ${point.x}${unit}, the decision produces the best net LTV (${netStr}). Click to jump here.`,
+      tone: 'positive',
+    };
+  }
+  if (isBreakPoint) {
+    return {
+      title: '⚠ Verdict flip zone',
+      body: `The decision switches from positive to negative (or vice-versa) near ${point.x}${unit}. Small changes here have big consequences.`,
+      tone: 'warn',
+    };
+  }
+  if (point.verdict === 'HIGH_PRIORITY') {
+    return {
+      title: 'High-priority zone',
+      body: `At ${point.x}${unit}, Net LTV ${netStr}. This is a strong positive region — the decision creates real value.`,
+      tone: 'positive',
+    };
+  }
+  if (point.verdict === 'PROCEED') {
+    return {
+      title: 'Proceed zone',
+      body: `At ${point.x}${unit}, Net LTV ${netStr}. Mildly positive — safe to proceed but room to optimise.`,
+      tone: 'positive',
+    };
+  }
+  if (point.verdict === 'CAUTION') {
+    return {
+      title: 'Caution zone',
+      body: `At ${point.x}${unit}, Net LTV ${netStr}. The decision hurts LTV modestly — weigh short-term upside carefully.`,
+      tone: 'warn',
+    };
+  }
+  return {
+    title: 'Not-recommended zone',
+    body: `At ${point.x}${unit}, Net LTV ${netStr}. This value destroys long-term value. Short-term revenue may still look positive — don't be fooled.`,
+    tone: 'negative',
+  };
+}
+
+function BigSensitivityChart({ data, loading, onSelectValue }) {
+  const [hoverIdx, setHoverIdx] = useState(null);
+  const [hoverPos, setHoverPos] = useState({ x: 0, y: 0 });
+  const svgRef = useRef(null);
+
   if (!data && loading) {
-    return <div style={{ padding: 40, fontSize: 12, color: '#6b7888', textAlign: 'center' }}>Sweeping parameter range…</div>;
+    return <div style={{ padding: 40, fontSize: 13, color: '#6b7888', textAlign: 'center', fontStyle: 'italic' }}>Sweeping parameter range…</div>;
   }
   if (!data || data.error) {
-    return <div style={{ padding: 40, fontSize: 12, color: '#b91c1c', textAlign: 'center' }}>{data?.error || 'No data yet — adjust the decision to trigger a sweep'}</div>;
+    return <div style={{ padding: 40, fontSize: 13, color: '#b91c1c', textAlign: 'center' }}>{data?.error || 'Adjust the decision to trigger a sweep'}</div>;
   }
+
   const points = data.points || [];
   if (points.length === 0) return null;
 
-  const maxY = Math.max(...points.map(p => Math.abs(p.net_eur)), 1);
-  const w = 700;
-  const h = 280;
-  const padL = 60, padR = 30, padT = 24, padB = 44;
+  const w = 820;
+  const h = 340;
+  const padL = 76, padR = 36, padT = 40, padB = 56;
   const plotW = w - padL - padR;
   const plotH = h - padT - padB;
+
+  const maxY = Math.max(...points.map((p) => Math.abs(p.net_eur)), 1);
   const xScale = (i) => padL + (i / (points.length - 1)) * plotW;
   const yScale = (v) => padT + plotH / 2 - (v / maxY) * (plotH / 2);
 
-  const path = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${xScale(i)} ${yScale(p.net_eur)}`).join(' ');
-  const currentIdx = points.findIndex(p => p.x === data.current_value);
-  const verdictColors = { HIGH_PRIORITY: '#0a8754', PROCEED: '#22c55e', CAUTION: '#d97706', NOT_RECOMMENDED: '#b91c1c' };
-  const verdictLabels = { HIGH_PRIORITY: 'HIGH PRIORITY', PROCEED: 'PROCEED', CAUTION: 'CAUTION', NOT_RECOMMENDED: 'NOT RECOMMENDED' };
+  const coords = points.map((p, i) => [xScale(i), yScale(p.net_eur)]);
+  const smoothPath = catmullRomToBezier(coords);
+  const areaPath = `${smoothPath} L ${coords[coords.length - 1][0]} ${yScale(0)} L ${coords[0][0]} ${yScale(0)} Z`;
 
-  const paramLabel = {
-    magnitude_pct: 'Magnitude (%)',
-    price_delta_eur: 'Price delta (€)',
-    cost_per_stay_eur: 'Cost per stay (€)',
-    ratio_delta_pct: 'Staff ratio delta (%)',
-    cost_per_member_eur: 'Cost per member (€)',
-    discount_pct: 'Discount (%)',
-  }[data.sweep_param] || data.sweep_param;
+  const currentIdx = points.findIndex((p) => p.x === data.current_value);
+  const optimalIdx = data.optimal ? points.findIndex((p) => p.x === data.optimal.x) : -1;
+  const breakPointX = data.break_point?.estimated;
+  const breakPointIdx = breakPointX != null ? points.reduce((best, p, i) => (Math.abs(p.x - breakPointX) < Math.abs(points[best].x - breakPointX) ? i : best), 0) : -1;
+
+  const paramKey = data.sweep_param;
+  const paramLabel = PARAM_LABEL[paramKey] || paramKey;
+  const paramUnit = PARAM_UNIT[paramKey] || '';
+
+  const handleMouseMove = (e) => {
+    const rect = svgRef.current.getBoundingClientRect();
+    const scaleX = w / rect.width;
+    const svgX = (e.clientX - rect.left) * scaleX;
+    // Find nearest point index
+    if (svgX < padL || svgX > w - padR) {
+      setHoverIdx(null);
+      return;
+    }
+    const t = (svgX - padL) / plotW;
+    const idx = Math.round(t * (points.length - 1));
+    const safe = Math.max(0, Math.min(points.length - 1, idx));
+    setHoverIdx(safe);
+    setHoverPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+  };
+  const handleMouseLeave = () => setHoverIdx(null);
+  const handleClick = () => {
+    if (hoverIdx == null || !onSelectValue || !paramKey) return;
+    onSelectValue(paramKey, points[hoverIdx].x);
+  };
+
+  const hovered = hoverIdx != null ? points[hoverIdx] : null;
+  const explain = hovered ? contextualExplanation({
+    point: hovered,
+    data,
+    isOptimal: hoverIdx === optimalIdx,
+    isBreakPoint: breakPointIdx >= 0 && Math.abs(hoverIdx - breakPointIdx) <= 1,
+    isCurrent: hoverIdx === currentIdx,
+    paramKey,
+  }) : null;
+
+  const gradientId = 'sens-grad-' + paramKey;
 
   return (
-    <div>
-      <svg width="100%" viewBox={`0 0 ${w} ${h}`} style={{ display: 'block' }}>
-        {/* Verdict background zones */}
-        {points.map((p, i) => {
-          if (i === points.length - 1) return null;
+    <div style={{ position: 'relative' }}>
+      <svg
+        ref={svgRef}
+        width="100%"
+        viewBox={`0 0 ${w} ${h}`}
+        style={{ display: 'block', cursor: onSelectValue ? 'crosshair' : 'default' }}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        onClick={handleClick}
+      >
+        <defs>
+          {/* Gradient under the curve: green above zero, red below */}
+          <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#22c55e" stopOpacity="0.35" />
+            <stop offset="50%" stopColor="#22c55e" stopOpacity="0" />
+            <stop offset="50%" stopColor="#dc2626" stopOpacity="0" />
+            <stop offset="100%" stopColor="#dc2626" stopOpacity="0.35" />
+          </linearGradient>
+        </defs>
+
+        {/* Verdict zone BANDS (vertical strips) with subtle color */}
+        {points.slice(0, -1).map((p, i) => {
           const x1 = xScale(i);
           const x2 = xScale(i + 1);
-          return <rect key={i} x={x1} y={padT} width={x2 - x1} height={plotH} fill={verdictColors[p.verdict] || '#e5e7eb'} fillOpacity="0.1" />;
+          return <rect key={`z-${i}`} x={x1} y={padT} width={x2 - x1} height={plotH} fill={VERDICT_COLORS[p.verdict]} fillOpacity="0.06" />;
         })}
+
+        {/* Verdict band labels (only when zone is ≥2 points wide) */}
+        {(() => {
+          const zones = [];
+          let cur = null;
+          points.forEach((p, i) => {
+            if (!cur || cur.verdict !== p.verdict) {
+              if (cur) cur.end = i - 1;
+              cur = { verdict: p.verdict, start: i };
+              zones.push(cur);
+            }
+          });
+          if (cur) cur.end = points.length - 1;
+          return zones
+            .filter((z) => z.end - z.start >= 1)
+            .map((z, i) => {
+              const mid = (xScale(z.start) + xScale(z.end)) / 2;
+              return (
+                <text key={`zl-${i}`} x={mid} y={padT - 10} fontSize="10" fill={VERDICT_COLORS[z.verdict]} fontWeight="700" textAnchor="middle" opacity="0.8" letterSpacing="1">
+                  {VERDICT_LABELS[z.verdict]}
+                </text>
+              );
+            });
+        })()}
 
         {/* Zero line */}
-        <line x1={padL} y1={yScale(0)} x2={w - padR} y2={yScale(0)} stroke="#9ca3af" strokeWidth="1" strokeDasharray="4,4" />
+        <line x1={padL} y1={yScale(0)} x2={w - padR} y2={yScale(0)} stroke="#94a3b8" strokeWidth="1" strokeDasharray="3,4" />
 
-        {/* Y grid (top/bottom) */}
-        <line x1={padL} y1={padT} x2={w - padR} y2={padT} stroke="#f0f1f4" strokeWidth="1" />
-        <line x1={padL} y1={h - padB} x2={w - padR} y2={h - padB} stroke="#f0f1f4" strokeWidth="1" />
+        {/* Plot border */}
+        <rect x={padL} y={padT} width={plotW} height={plotH} fill="none" stroke="#e2e8f0" strokeWidth="1" />
 
-        {/* Line */}
-        <path d={path} stroke="#0F4C75" strokeWidth="2.5" fill="none" />
+        {/* Area under curve (gradient green/red) */}
+        <path d={areaPath} fill={`url(#${gradientId})`} />
 
-        {/* Points */}
-        {points.map((p, i) => {
-          const isCurrent = i === currentIdx;
-          return (
-            <g key={i}>
-              <circle cx={xScale(i)} cy={yScale(p.net_eur)} r={isCurrent ? 8 : 4.5}
-                fill={verdictColors[p.verdict] || '#6b7888'} stroke="white" strokeWidth={isCurrent ? 3 : 1.5} />
-              {isCurrent && (
-                <>
-                  <line x1={xScale(i)} y1={yScale(p.net_eur) + 14} x2={xScale(i)} y2={h - padB + 12} stroke="#0F4C75" strokeWidth="1" strokeDasharray="2,2" />
-                  <text x={xScale(i)} y={h - padB + 28} fontSize="11" fill="#0F4C75" textAnchor="middle" fontWeight="700">your input</text>
-                </>
-              )}
-            </g>
-          );
-        })}
+        {/* Smooth line */}
+        <path d={smoothPath} stroke="#0F4C75" strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round" />
 
-        {/* Optimal marker */}
-        {data.optimal && (
+        {/* All points (subtle) */}
+        {points.map((p, i) => (
+          <circle key={`pt-${i}`} cx={xScale(i)} cy={yScale(p.net_eur)} r="3.5"
+            fill={VERDICT_COLORS[p.verdict]} stroke="white" strokeWidth="1.5" />
+        ))}
+
+        {/* Optimal marker (golden star circle) */}
+        {optimalIdx >= 0 && (
           <g>
-            <circle cx={xScale(points.findIndex(p => p.x === data.optimal.x))} cy={yScale(data.optimal.net_eur)} r="10" fill="none" stroke="#22c55e" strokeWidth="2.5" strokeDasharray="3,2" />
-            <text x={xScale(points.findIndex(p => p.x === data.optimal.x))} y={yScale(data.optimal.net_eur) - 18} fontSize="11" fill="#0a8754" textAnchor="middle" fontWeight="700">★ optimal</text>
+            <circle cx={xScale(optimalIdx)} cy={yScale(data.optimal.net_eur)} r="11" fill="none" stroke="#f59e0b" strokeWidth="2.5" />
+            <circle cx={xScale(optimalIdx)} cy={yScale(data.optimal.net_eur)} r="5" fill="#f59e0b" stroke="white" strokeWidth="1.5" />
+            <text x={xScale(optimalIdx)} y={yScale(data.optimal.net_eur) - 22} fontSize="11" fill="#b45309" fontWeight="800" textAnchor="middle">★ optimal</text>
+          </g>
+        )}
+
+        {/* Break point marker (warning triangle) */}
+        {breakPointIdx >= 0 && breakPointIdx !== optimalIdx && breakPointIdx !== currentIdx && (
+          <g>
+            <line x1={xScale(breakPointIdx)} y1={padT} x2={xScale(breakPointIdx)} y2={h - padB} stroke="#d97706" strokeWidth="1.5" strokeDasharray="4,3" opacity="0.6" />
+            <text x={xScale(breakPointIdx)} y={padT - 24} fontSize="11" fill="#b45309" fontWeight="700" textAnchor="middle">⚠ flip</text>
+          </g>
+        )}
+
+        {/* Current input marker (thick) */}
+        {currentIdx >= 0 && (
+          <g>
+            <circle cx={xScale(currentIdx)} cy={yScale(points[currentIdx].net_eur)} r="8" fill="#0F4C75" stroke="white" strokeWidth="3" />
+            <line x1={xScale(currentIdx)} y1={yScale(points[currentIdx].net_eur) + 14} x2={xScale(currentIdx)} y2={h - padB + 10} stroke="#0F4C75" strokeWidth="1.5" strokeDasharray="3,3" />
+            <text x={xScale(currentIdx)} y={h - padB + 26} fontSize="11" fill="#0F4C75" textAnchor="middle" fontWeight="800">
+              YOU · {points[currentIdx].x}{paramUnit}
+            </text>
+          </g>
+        )}
+
+        {/* Hover crosshair + highlight */}
+        {hoverIdx != null && (
+          <g>
+            <line x1={xScale(hoverIdx)} y1={padT} x2={xScale(hoverIdx)} y2={h - padB} stroke="#1e293b" strokeWidth="1" strokeDasharray="2,3" opacity="0.4" />
+            <line x1={padL} y1={yScale(points[hoverIdx].net_eur)} x2={w - padR} y2={yScale(points[hoverIdx].net_eur)} stroke="#1e293b" strokeWidth="1" strokeDasharray="2,3" opacity="0.25" />
+            <circle cx={xScale(hoverIdx)} cy={yScale(points[hoverIdx].net_eur)} r="8" fill="white" stroke={VERDICT_COLORS[points[hoverIdx].verdict]} strokeWidth="3" />
           </g>
         )}
 
         {/* Y axis labels */}
-        <text x={padL - 6} y={yScale(0) + 4} fontSize="11" fill="#6b7888" textAnchor="end">€0</text>
-        <text x={padL - 6} y={padT + 8} fontSize="11" fill="#6b7888" textAnchor="end">+€{(maxY / 1_000_000).toFixed(1)}M</text>
-        <text x={padL - 6} y={h - padB - 2} fontSize="11" fill="#6b7888" textAnchor="end">−€{(maxY / 1_000_000).toFixed(1)}M</text>
-        <text x={14} y={padT + plotH / 2} fontSize="10" fill="#6b7888" textAnchor="middle" transform={`rotate(-90, 14, ${padT + plotH / 2})`}>Net LTV</text>
+        <text x={padL - 10} y={yScale(0) + 4} fontSize="12" fill="#475569" textAnchor="end" fontWeight="600">€0</text>
+        <text x={padL - 10} y={padT + 8} fontSize="11" fill="#6b7888" textAnchor="end">+€{(maxY / 1_000_000).toFixed(1)}M</text>
+        <text x={padL - 10} y={h - padB - 2} fontSize="11" fill="#6b7888" textAnchor="end">−€{(maxY / 1_000_000).toFixed(1)}M</text>
+        <text x={20} y={padT + plotH / 2} fontSize="11" fill="#475569" textAnchor="middle" fontWeight="600" transform={`rotate(-90, 20, ${padT + plotH / 2})`}>Net LTV (€)</text>
 
-        {/* X axis labels (first, current, last) */}
-        <text x={padL} y={h - padB + 16} fontSize="11" fill="#6b7888">{points[0].x}</text>
-        <text x={w - padR} y={h - padB + 16} fontSize="11" fill="#6b7888" textAnchor="end">{points[points.length - 1].x}</text>
-        <text x={padL + plotW / 2} y={h - 4} fontSize="11" fill="#6b7888" textAnchor="middle" fontWeight="600">{paramLabel}</text>
+        {/* X axis labels (every other point to avoid clutter) */}
+        {points.map((p, i) => (i % 2 === 0 || i === points.length - 1) && (
+          <text key={`x-${i}`} x={xScale(i)} y={h - padB + 14} fontSize="10" fill="#64748b" textAnchor="middle">{p.x}{paramUnit}</text>
+        ))}
+        <text x={padL + plotW / 2} y={h - 10} fontSize="12" fill="#475569" textAnchor="middle" fontWeight="700">{paramLabel} ({paramUnit})</text>
+
+        {/* Click-to-scrub hint */}
+        {onSelectValue && (
+          <text x={w - padR} y={padT - 22} fontSize="10" fill="#6b7888" textAnchor="end" fontStyle="italic">
+            hover to inspect · click to set as input
+          </text>
+        )}
       </svg>
 
-      {/* Annotations */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12, marginTop: 14 }}>
+      {/* Floating tooltip */}
+      {hovered && explain && (
+        <HoverTooltip pos={hoverPos} point={hovered} explain={explain} paramUnit={paramUnit} onSelect={() => onSelectValue && onSelectValue(paramKey, hovered.x)} />
+      )}
+
+      {/* Persistent annotation cards */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12, marginTop: 16 }}>
         <AnnotationCard
           label="★ Optimal"
-          value={`${data.optimal.x}`}
-          sub={`net ${data.optimal.net_eur >= 0 ? '+' : '−'}€${(Math.abs(data.optimal.net_eur) / 1000).toFixed(0)}K · ${verdictLabels[data.optimal.verdict] || data.optimal.verdict}`}
-          color="#0a8754"
+          value={data.optimal ? `${data.optimal.x}${paramUnit}` : '—'}
+          sub={data.optimal ? `net ${data.optimal.net_eur >= 0 ? '+' : '−'}€${(Math.abs(data.optimal.net_eur) / 1000).toFixed(0)}K · ${VERDICT_LABELS[data.optimal.verdict] || data.optimal.verdict}` : ''}
+          color="#f59e0b"
+          onClick={data.optimal && onSelectValue ? () => onSelectValue(paramKey, data.optimal.x) : null}
         />
         <AnnotationCard
-          label="Break point"
-          value={data.break_point ? `≈ ${data.break_point.estimated}` : '—'}
-          sub={data.break_point ? `verdict flips between ${data.break_point.between[0]} and ${data.break_point.between[1]}` : 'no inflection in range'}
+          label="⚠ Break point"
+          value={data.break_point ? `≈ ${data.break_point.estimated}${paramUnit}` : '—'}
+          sub={data.break_point ? `verdict flips between ${data.break_point.between[0]}${paramUnit} and ${data.break_point.between[1]}${paramUnit}` : 'no inflection in sweep range'}
           color="#d97706"
         />
         <AnnotationCard
-          label="Your input"
-          value={`${data.current_value}`}
+          label="● Your input"
+          value={`${data.current_value}${paramUnit}`}
           sub={`${paramLabel} currently configured`}
           color="#0F4C75"
         />
@@ -1382,15 +1608,92 @@ function BigSensitivityChart({ data, loading }) {
   );
 }
 
-function AnnotationCard({ label, value, sub, color }) {
+function HoverTooltip({ pos, point, explain, paramUnit, onSelect }) {
+  const toneColor = {
+    positive: '#059669',
+    warn: '#d97706',
+    negative: '#dc2626',
+    primary: '#0F4C75',
+  }[explain.tone] || '#0F4C75';
+  const toneBg = {
+    positive: '#ecfdf5',
+    warn: '#fef7e0',
+    negative: '#fef2f2',
+    primary: '#eef2ff',
+  }[explain.tone] || '#f6f7f9';
+
+  const fmt = (n) => {
+    if (n == null) return '—';
+    const s = n >= 0 ? '+' : '−';
+    const a = Math.abs(n);
+    if (a >= 1_000_000) return `${s}€${(a / 1_000_000).toFixed(2)}M`;
+    if (a >= 1_000) return `${s}€${(a / 1_000).toFixed(0)}K`;
+    return `${s}€${Math.round(a)}`;
+  };
+
+  // Position: above-right of cursor, clamp to container
+  const left = Math.min(pos.x + 14, 520);
+  const top = Math.max(pos.y - 140, 10);
+
   return (
     <div style={{
-      background: 'white', border: '1px solid #e5e7eb', borderLeft: `3px solid ${color}`,
-      borderRadius: 6, padding: '10px 12px',
+      position: 'absolute', left, top, pointerEvents: 'none',
+      background: 'white', border: `1px solid ${toneColor}55`,
+      borderLeft: `4px solid ${toneColor}`,
+      borderRadius: 8, padding: '12px 14px',
+      boxShadow: '0 10px 28px rgba(0,0,0,0.18)',
+      minWidth: 260, maxWidth: 320,
+      fontSize: 12, zIndex: 100,
     }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
+        <span style={{
+          fontSize: 10, letterSpacing: 1, textTransform: 'uppercase', fontWeight: 800,
+          color: toneColor, background: toneBg, padding: '2px 8px', borderRadius: 10,
+        }}>{explain.title}</span>
+        <span style={{ fontSize: 11, color: '#6b7888', fontWeight: 600 }}>{point.x}{paramUnit}</span>
+      </div>
+      <div style={{ fontSize: 11, color: '#374151', lineHeight: 1.5, marginBottom: 10 }}>{explain.body}</div>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 6, fontSize: 11 }}>
+        <div>
+          <div style={{ fontSize: 9, color: '#6b7888', letterSpacing: 0.5, textTransform: 'uppercase' }}>Short-term</div>
+          <div style={{ fontWeight: 700, color: point.short_term_eur >= 0 ? '#059669' : '#dc2626' }}>{fmt(point.short_term_eur)}</div>
+        </div>
+        <div>
+          <div style={{ fontSize: 9, color: '#6b7888', letterSpacing: 0.5, textTransform: 'uppercase' }}>Long-term</div>
+          <div style={{ fontWeight: 700, color: point.long_term_eur >= 0 ? '#059669' : '#dc2626' }}>{fmt(point.long_term_eur)}</div>
+        </div>
+        <div>
+          <div style={{ fontSize: 9, color: '#6b7888', letterSpacing: 0.5, textTransform: 'uppercase' }}>Net</div>
+          <div style={{ fontWeight: 800, color: point.net_eur >= 0 ? '#059669' : '#dc2626' }}>{fmt(point.net_eur)}</div>
+        </div>
+      </div>
+      {onSelect && (
+        <div style={{ marginTop: 8, fontSize: 10, color: toneColor, fontWeight: 600, textAlign: 'center' }}>
+          click to jump to this magnitude →
+        </div>
+      )}
+    </div>
+  );
+}
+
+function AnnotationCard({ label, value, sub, color, onClick }) {
+  const interactive = typeof onClick === 'function';
+  return (
+    <div
+      onClick={onClick}
+      style={{
+        background: 'white', border: '1px solid #e5e7eb', borderLeft: `3px solid ${color}`,
+        borderRadius: 6, padding: '10px 12px',
+        cursor: interactive ? 'pointer' : 'default',
+        transition: 'transform 0.1s, box-shadow 0.1s',
+      }}
+      onMouseEnter={interactive ? (e) => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 4px 10px rgba(0,0,0,0.08)'; } : undefined}
+      onMouseLeave={interactive ? (e) => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; } : undefined}
+    >
       <div style={{ fontSize: 10, letterSpacing: 1.2, textTransform: 'uppercase', color: '#6b7888', fontWeight: 700 }}>{label}</div>
       <div style={{ fontSize: 18, fontWeight: 800, color: '#1a1d23', marginTop: 2 }}>{value}</div>
       <div style={{ fontSize: 10, color: '#6b7888', marginTop: 2, lineHeight: 1.4 }}>{sub}</div>
+      {interactive && <div style={{ fontSize: 9, color, fontWeight: 700, marginTop: 4 }}>click to set as input →</div>}
     </div>
   );
 }
