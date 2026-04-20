@@ -12,8 +12,16 @@
 import Head from 'next/head';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL
-  || (typeof window !== 'undefined' && window.location.hostname !== 'localhost' ? '' : 'http://localhost:5001');
+// In production / Vercel, always use same-origin (relative URL) so we hit
+// /api/scenario-preview in this Next.js app. Only fall back to the legacy
+// backend URL in local dev.
+const API_URL = (() => {
+  if (typeof window === 'undefined') return '';
+  if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    return 'http://localhost:5001';
+  }
+  return '';
+})();
 
 // ─── Archetypes & clusters (match backend) ─────────────────────────────
 const ARCHETYPES = [
