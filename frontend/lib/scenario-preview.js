@@ -148,35 +148,56 @@ function computeRateChange({ magnitude_pct = 0, timing = 'peak', scope = { type:
     culturalReviewImpact += clusterW * coef.review_impact;
   }
 
-  // Per-archetype booking response
+  // Per-archetype booking response + explain trace
   let aggregateBookingDelta = 0;
   let aggregateReviewDelta = 0;
   const segments = [];
+  const explainSteps = [];
   for (const [archId, archW] of Object.entries(archMix)) {
     if (archW === 0) continue;
     if (scope.type === 'archetype' && scope.value !== archId) continue;
     const coef = ARCHETYPE_COEFS[archId];
     if (!coef) continue;
 
-    // booking delta = elasticity × relative_price_change. Cultural cushion is a
-    // dampener proportional to price change magnitude — no price change → 0 impact.
     const priceDelta = magnitude_pct / 100;
     const elasticityEffect = coef.elasticity * priceDelta;
     const culturalCushion = culturalBookDelta * Math.abs(priceDelta) * 2;
     const bookingDelta = elasticityEffect + culturalCushion;
     aggregateBookingDelta += archW * bookingDelta;
 
-    // Review delta: rate hikes hurt value perception. Scales with magnitude
-    // and inversely with the archetype's review_resilience.
     const reviewDelta = -Math.abs(priceDelta) * (1 - coef.review_resilience) * culturalReviewImpact * Math.sign(priceDelta);
-    // (negative when price up, positive when price down)
-    const effectiveReviewDelta = priceDelta > 0 ? reviewDelta : -reviewDelta * 0.3; // downward pricing helps less than upward hurts
+    const effectiveReviewDelta = priceDelta > 0 ? reviewDelta : -reviewDelta * 0.3;
     aggregateReviewDelta += archW * effectiveReviewDelta;
+
+    // Build sample narratives for this segment
+    const sample_narratives = buildSegmentNarratives({
+      archId, clusterMix, bookingDelta, magnitude_pct, decision_type: 'rate_change',
+    });
 
     segments.push({
       segment: archId,
+      weight_pct: Math.round(archW * 1000) / 10,
       delta_pct: Math.round(bookingDelta * 1000) / 10,
       review_delta: Math.round(effectiveReviewDelta * 100) / 100,
+      sample_narratives,
+      // Per-archetype explain line
+      explain: {
+        weight_pct: Math.round(archW * 1000) / 10,
+        elasticity: coef.elasticity,
+        price_delta_pct: magnitude_pct,
+        elasticity_effect_pct: Math.round(elasticityEffect * 1000) / 10,
+        cultural_cushion_pct: Math.round(culturalCushion * 1000) / 10,
+        booking_delta_pct: Math.round(bookingDelta * 1000) / 10,
+        contribution_to_aggregate_pct: Math.round(archW * bookingDelta * 1000) / 10,
+      },
+    });
+
+    explainSteps.push({
+      archetype: archId,
+      weight: Math.round(archW * 1000) / 10 + '%',
+      elasticity: coef.elasticity,
+      formula: `${(archW*100).toFixed(1)}% × ε(${coef.elasticity.toFixed(2)}) × ${magnitude_pct >= 0 ? '+' : ''}${magnitude_pct}% + cultural(${(culturalBookDelta*100).toFixed(1)}%×|Δp|×2)`,
+      result_pct: Math.round(archW * bookingDelta * 1000) / 10,
     });
   }
 
@@ -202,6 +223,45 @@ function computeRateChange({ magnitude_pct = 0, timing = 'peak', scope = { type:
 
   const complaints = buildComplaintsForRateChange(magnitude_pct, segments);
 
+  const explain = {
+    inputs: {
+      magnitude_pct,
+      timing,
+      scope,
+      baseline_annual_revenue_eur: Math.round(baselineRev),
+      timing_revenue_share_pct: Math.round(timingShare * 1000) / 10,
+      cultural_book_delta_pct: Math.round(culturalBookDelta * 1000) / 10,
+      cultural_review_impact: Math.round(culturalReviewImpact * 100) / 100,
+    },
+    archetype_steps: explainSteps,
+    aggregate: {
+      aggregate_booking_delta_pct: Math.round(aggregateBookingDelta * 1000) / 10,
+      aggregate_review_delta: Math.round(aggregateReviewDelta * 100) / 100,
+    },
+    short_term_derivation: {
+      formula: 'baseline_rev × timing_share × ((1+Δp) × (1+ΔbookingAggregate) − 1)',
+      new_rate_factor: Math.round(newRate * 1000) / 1000,
+      new_bookings_factor: Math.round(newBookings * 1000) / 1000,
+      revenue_change_pct: Math.round(revenueChangePct * 1000) / 10,
+      result_eur: Math.round(shortTermEur),
+    },
+    long_term_derivation: {
+      weighted_repeat_base_pct: Math.round(weightedRepeatBase * 1000) / 10,
+      weighted_viral_pct: Math.round(weightedViral * 1000) / 10,
+      nps_delta: Math.round(npsDelta * 10) / 10,
+      repeat_rate_delta_pct: Math.round(repeatRateDelta * 1000) / 10,
+      three_year_ltv_via_repeat_eur: Math.round(threeYearLtvImpact),
+      viral_ltv_eur: Math.round(viralLtvImpact),
+      result_eur: Math.round(longTermEur),
+    },
+    final: {
+      formula: 'Net LTV = short_term + long_term',
+      short_term_eur: Math.round(shortTermEur),
+      long_term_eur: Math.round(longTermEur),
+      net_eur: Math.round(netEur),
+    },
+  };
+
   return {
     short_term_eur: Math.round(shortTermEur),
     long_term_eur: Math.round(longTermEur),
@@ -214,6 +274,7 @@ function computeRateChange({ magnitude_pct = 0, timing = 'peak', scope = { type:
     verdict: verdictFromNetLtv(netEur),
     short_term_label: magnitude_pct > 0 ? 'Revenue from higher rate' : 'Revenue give-up',
     long_term_label: 'LTV via review & repeat shift',
+    explain,
   };
 }
 
@@ -511,8 +572,376 @@ function computeScenarioPreview(scenario) {
   return result;
 }
 
+// ══════════════════════ Narrative generator ══════════════════════════
+//
+// Deterministic template-based narratives per archetype × cluster × decision.
+// Used by the scenario editor's "expand segment" feature so consultants can
+// paste concrete citable quotes into their client-facing reports.
+
+const CLUSTER_LABEL = {
+  anglo_uk_ireland: 'UK',
+  german_dach: 'German',
+  anglo_us_canada: 'US',
+  french: 'French',
+  latin_spain_italy: 'Spanish/Italian',
+  nordic: 'Nordic',
+  latin_american: 'Latin American',
+  middle_east_gcc: 'GCC',
+  east_asian: 'East Asian',
+  chinese_mainland: 'Chinese',
+};
+
+const NAMES_BY_CLUSTER = {
+  anglo_uk_ireland: [['Oliver', 'Mitchell'], ['Emma', 'Wilson'], ['James', 'Brown'], ['Sophie', 'Taylor'], ['Harry', 'Davies']],
+  german_dach: [['Lukas', 'Weber'], ['Marie', 'Schmidt'], ['Leon', 'Fischer'], ['Hannah', 'Bauer'], ['Felix', 'Müller']],
+  anglo_us_canada: [['Ethan', 'Parker'], ['Ava', 'Johnson'], ['Mason', 'Clark'], ['Mia', 'Anderson'], ['Logan', 'Wright']],
+  french: [['Gabriel', 'Martin'], ['Chloé', 'Dubois'], ['Arthur', 'Moreau'], ['Alice', 'Laurent'], ['Louis', 'Bernard']],
+  latin_spain_italy: [['Marco', 'Rossi'], ['Sofia', 'Bianchi'], ['Pablo', 'García'], ['Lucía', 'Fernández'], ['Alessandro', 'Ricci']],
+  nordic: [['Emil', 'Andersson'], ['Freja', 'Jensen'], ['Oscar', 'Lindström'], ['Alva', 'Berg'], ['William', 'Nilsen']],
+  latin_american: [['Santiago', 'Ramírez'], ['Valentina', 'Silva'], ['Mateo', 'Torres'], ['Camila', 'Morales']],
+  middle_east_gcc: [['Mohammed', 'Al-Saud'], ['Fatima', 'Al-Mansouri'], ['Ali', 'Al-Nahyan']],
+  east_asian: [['Haru', 'Tanaka'], ['Yui', 'Sato'], ['Minjun', 'Kim']],
+  chinese_mainland: [['Wei', 'Zhang'], ['Yan', 'Chen'], ['Ming', 'Li']],
+};
+
+const ARCHETYPE_CONTEXT = {
+  luxury_seeker: { party: 'couple', age_range: [35, 58], context: 'design-led luxury' },
+  honeymooner: { party: 'couple', age_range: [28, 38], context: 'honeymoon' },
+  family_vacationer: { party: 'family', age_range: [34, 48], context: 'family holiday' },
+  business_traveler: { party: 'solo', age_range: [30, 52], context: 'business trip' },
+  digital_nomad: { party: 'solo', age_range: [26, 38], context: 'remote work stay' },
+  budget_optimizer: { party: 'solo/couple', age_range: [24, 42], context: 'value-conscious break' },
+  loyalty_maximizer: { party: 'couple', age_range: [40, 62], context: 'Platinum-tier return guest' },
+  event_attendee: { party: 'solo', age_range: [32, 50], context: 'event attendance' },
+};
+
+// Rival / reference properties the archetype might compare against.
+const RIVAL_REFERENCES = {
+  luxury_seeker: ['Aman Kyoto', 'Four Seasons Bora Bora', 'Cap Juluca', 'Belmond Splendido'],
+  honeymooner: ['Ikos Dassia Corfu', 'Santorini Grace', 'Amanzoe', 'Anassa Cyprus'],
+  family_vacationer: ['Grecotel Kos', 'Ikos Aria', 'Camp de Mar Mallorca', 'Forte Village Sardinia'],
+  business_traveler: ['Hyatt Regency Barcelona', 'Palácio do Governador Lisbon'],
+  digital_nomad: ['Selina Medellín', 'Outsite Lisbon', 'Mondrian Ibiza'],
+  budget_optimizer: ['Riu Palace Benidorm', 'Iberostar Málaga', 'Meliá Costa del Sol'],
+  loyalty_maximizer: ['Gran Meliá Don Pepe', 'Marriott Bonvoy Palma', 'Paradisus Cancún'],
+  event_attendee: ['W Barcelona', 'NH Collection Paseo del Prado'],
+};
+
+function seeded(seed) {
+  let x = seed >>> 0;
+  x = Math.imul(x, 2654435761) >>> 0;
+  x ^= x >>> 16;
+  x = Math.imul(x, 2246822507) >>> 0;
+  return (x >>> 0) / 0x100000000;
+}
+
+function pickSeeded(arr, seed) {
+  if (!arr || arr.length === 0) return null;
+  const idx = Math.floor(seeded(seed) * arr.length) % arr.length;
+  return arr[idx];
+}
+
+function hashString(s) {
+  let h = 0;
+  for (let i = 0; i < s.length; i++) h = ((h << 5) - h + s.charCodeAt(i)) | 0;
+  return h;
+}
+
+function buildSegmentNarratives({ archId, clusterMix, bookingDelta, magnitude_pct, decision_type }) {
+  // Pick the top 3 clusters by weight for this segment (that's who they are)
+  const topClusters = Object.entries(clusterMix)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 3)
+    .map(([id]) => id);
+
+  const ctx = ARCHETYPE_CONTEXT[archId] || { party: 'solo', age_range: [30, 50], context: 'leisure' };
+
+  // Generate one narrative per top cluster (up to 3)
+  return topClusters.map((clusterId, i) => {
+    const seed = Math.abs(hashString(`${archId}_${clusterId}_${magnitude_pct}_${i}`));
+    const name = pickSeeded(NAMES_BY_CLUSTER[clusterId] || NAMES_BY_CLUSTER.anglo_uk_ireland, seed);
+    const nameStr = name ? `${name[0]} ${name[1]}` : 'Anonymous';
+    const age = ctx.age_range[0] + Math.floor(seeded(seed + 7) * (ctx.age_range[1] - ctx.age_range[0]));
+    const clusterLabel = CLUSTER_LABEL[clusterId] || clusterId;
+    const rival = pickSeeded(RIVAL_REFERENCES[archId] || ['Four Seasons'], seed + 13);
+
+    return narrativeForDecision({
+      name: nameStr, age, archId, clusterLabel, bookingDelta, magnitude_pct, decision_type, rival, seed,
+    });
+  });
+}
+
+function narrativeForDecision({ name, age, archId, clusterLabel, bookingDelta, magnitude_pct, decision_type, rival, seed }) {
+  const deltaAbs = Math.abs(magnitude_pct);
+  const up = magnitude_pct > 0;
+  const bookingAbs = Math.abs(bookingDelta);
+
+  // RATE CHANGE narratives
+  if (decision_type === 'rate_change') {
+    if (up && bookingDelta < -0.10) {
+      const pool = [
+        `${name}, ${age}, ${clusterLabel} ${archId.replace(/_/g, ' ')} — at +${deltaAbs}% this jumps above my budget ceiling. ${rival} offers comparable product for less; I'd book there.`,
+        `${name}, ${age}, ${clusterLabel} ${archId.replace(/_/g, ' ')} — +${deltaAbs}% without added value feels like a cash grab. Last year's price justified the stay; this doesn't.`,
+        `${name}, ${age}, ${clusterLabel} ${archId.replace(/_/g, ' ')} — at this new price I'd expect butler service and private beach. If neither is included, I'll look at ${rival}.`,
+      ];
+      return pool[Math.floor(seeded(seed) * pool.length)];
+    }
+    if (up && bookingDelta < -0.03) {
+      const pool = [
+        `${name}, ${age}, ${clusterLabel} ${archId.replace(/_/g, ' ')} — +${deltaAbs}% is a stretch but I'd still book if the value narrative holds. I'll watch closely for any service drops.`,
+        `${name}, ${age}, ${clusterLabel} ${archId.replace(/_/g, ' ')} — I notice the increase. I'd compare harder against ${rival} this time before committing.`,
+        `${name}, ${age}, ${clusterLabel} ${archId.replace(/_/g, ' ')} — the price hurts but I've stayed here before and trust the experience. Borderline decision.`,
+      ];
+      return pool[Math.floor(seeded(seed) * pool.length)];
+    }
+    if (up && bookingDelta >= -0.03) {
+      return `${name}, ${age}, ${clusterLabel} ${archId.replace(/_/g, ' ')} — +${deltaAbs}% is absorbed comfortably. I'd book as planned; price is not the deciding factor for my profile.`;
+    }
+    if (!up && deltaAbs >= 15) {
+      return `${name}, ${age}, ${clusterLabel} ${archId.replace(/_/g, ' ')} — −${deltaAbs}% feels suspicious for a 5-star. I'd Google why it dropped before booking; might doubt quality.`;
+    }
+    if (!up) {
+      return `${name}, ${age}, ${clusterLabel} ${archId.replace(/_/g, ' ')} — −${deltaAbs}% makes this a clear value pick; I'd book and probably extend by 1-2 nights.`;
+    }
+  }
+
+  // SERVICE INTERVENTION
+  if (decision_type === 'service_intervention') {
+    return `${name}, ${age}, ${clusterLabel} ${archId.replace(/_/g, ' ')} — a thoughtful day-2 intervention would push my review from 4★ to 5★ and I'd recommend to 3 friends. That's where NPS breaks.`;
+  }
+
+  // STAFF CHANGE (cuts)
+  if (decision_type === 'staff_change' && magnitude_pct < 0) {
+    return `${name}, ${age}, ${clusterLabel} ${archId.replace(/_/g, ' ')} — at peak season slower F&B service means a 45-min wait. The stay becomes "beautiful but poorly staffed" in my review, and I don't come back.`;
+  }
+
+  // PACKAGE CHANGE
+  if (decision_type === 'package_change') {
+    return `${name}, ${age}, ${clusterLabel} ${archId.replace(/_/g, ' ')} — the package shift changes the value equation. I'd re-evaluate whether this still matches my expectation vs ${rival}.`;
+  }
+
+  // LOYALTY
+  if (decision_type === 'loyalty') {
+    return `${name}, ${age}, ${clusterLabel} ${archId.replace(/_/g, ' ')} — tangible loyalty benefit moves me from occasional to repeat. If it feels real (not token), I extend by one stay a year.`;
+  }
+
+  // PROMO
+  if (decision_type === 'promo') {
+    return `${name}, ${age}, ${clusterLabel} ${archId.replace(/_/g, ' ')} — the promo gets me through the door, but if I got it once I'll wait for it next year. Locks in price expectations.`;
+  }
+
+  return `${name}, ${age}, ${clusterLabel} ${archId.replace(/_/g, ' ')} — evaluating this decision based on my archetype's typical preferences.`;
+}
+
+// ══════════════════════ Sensitivity sweep ══════════════════════════════
+//
+// Varies one parameter of the decision (magnitude or discount) across a
+// range and returns { points, optimal } so the UI can plot the curve and
+// highlight the inflection point.
+
+function runSensitivitySweep(scenario, { range = 'auto', steps = 13 } = {}) {
+  if (!scenario || !scenario.decision || !scenario.decision.type) {
+    return { error: 'decision.type required' };
+  }
+  const decision = scenario.decision;
+  // Which parameter to sweep per type
+  const sweepParam = {
+    rate_change: 'magnitude_pct',
+    package_change: 'price_delta_eur',
+    service_intervention: 'cost_per_stay_eur',
+    staff_change: 'ratio_delta_pct',
+    loyalty: 'cost_per_member_eur',
+    promo: 'discount_pct',
+  }[decision.type];
+
+  if (!sweepParam) return { error: 'unsweepable decision type' };
+
+  // Determine range for this parameter
+  const defaultRange = {
+    magnitude_pct: [-30, 30],
+    price_delta_eur: [-300, 300],
+    cost_per_stay_eur: [0, 150],
+    ratio_delta_pct: [-30, 30],
+    cost_per_member_eur: [0, 400],
+    discount_pct: [0, 40],
+  }[sweepParam] || [-30, 30];
+  const [minV, maxV] = range === 'auto' ? defaultRange : range;
+  const stepSize = (maxV - minV) / (steps - 1);
+
+  const points = [];
+  for (let i = 0; i < steps; i++) {
+    const v = Math.round((minV + i * stepSize) * 10) / 10;
+    const mutatedDecision = { ...decision, [sweepParam]: v };
+    const result = computeScenarioPreview({ ...scenario, decision: mutatedDecision });
+    points.push({
+      x: v,
+      short_term_eur: result.short_term_eur,
+      long_term_eur: result.long_term_eur,
+      net_eur: result.net_eur,
+      verdict: result.verdict,
+    });
+  }
+
+  // Find optimal (max net_eur)
+  const optimal = points.reduce((best, p) => (p.net_eur > best.net_eur ? p : best), points[0]);
+  // Find "breaking point" (first point where net crosses from positive to negative)
+  let breakPoint = null;
+  for (let i = 1; i < points.length; i++) {
+    if (points[i - 1].net_eur > 0 && points[i].net_eur <= 0) {
+      breakPoint = { between: [points[i - 1].x, points[i].x], estimated: Math.round(((points[i - 1].x + points[i].x) / 2) * 10) / 10 };
+      break;
+    }
+    if (points[i - 1].net_eur < 0 && points[i].net_eur >= 0) {
+      breakPoint = { between: [points[i - 1].x, points[i].x], estimated: Math.round(((points[i - 1].x + points[i].x) / 2) * 10) / 10 };
+      break;
+    }
+  }
+
+  return {
+    sweep_param: sweepParam,
+    range: [minV, maxV],
+    steps,
+    points,
+    optimal,
+    break_point: breakPoint,
+    current_value: decision[sweepParam],
+  };
+}
+
+// ══════════════════════ Agent interview (offline Q&A pool) ═════════════
+//
+// Pool-based. Matches the consultant's question against keyword categories
+// and picks a response in-character for the target archetype × cluster.
+// Deterministic (seeded) so the same question always gets the same answer —
+// good for demoing live.
+
+const QA_CATEGORIES = [
+  { id: 'price',     keywords: /price|rate|expensive|cost|cheap|pago|precio|tarifa|caro/i },
+  { id: 'value',     keywords: /value|worth|worthwhile|justifies|merece|vale la pena/i },
+  { id: 'service',   keywords: /service|staff|concierge|butler|personal/i },
+  { id: 'food',      keywords: /food|restaurant|breakfast|dinner|comida|desayuno/i },
+  { id: 'location',  keywords: /location|beach|pool|ubicación|playa|piscina/i },
+  { id: 'family',    keywords: /family|kids|children|niños|familia/i },
+  { id: 'compare',   keywords: /compare|alternative|other|competitor|comparar|alternativa/i },
+  { id: 'recommend', keywords: /recommend|return|repeat|recomiendo|volver/i },
+];
+
+const QA_RESPONSES_BY_ARCHETYPE = {
+  luxury_seeker: {
+    price: [
+      'Price is contextual for me — I look at what the rate buys versus what ${rival} charges. If the design and service are genuinely uncompromised, I pay.',
+      'I notice the number but I don\'t lead with it. I lead with whether the property delivers the story I came for.',
+    ],
+    value: [
+      'Value isn\'t cheap — it\'s whether the experience leaves a memory worth the price. A €1,600 night that doesn\'t move me is expensive. A €1,200 night that does is a bargain.',
+    ],
+    service: [
+      'Service is the entire product for me at this tier. If the bellman doesn\'t remember my name on night 2, the whole thesis collapses.',
+    ],
+    compare: [
+      'My reference set is Aman, Belmond, LHW. If ${rival} delivers that narrative cheaper, I switch. If you do it better, I stay loyal.',
+    ],
+  },
+  honeymooner: {
+    price: [
+      'Price matters but the occasion matters more. I\'d rather pay extra for a stay I\'ll remember than save €200 on a forgettable one.',
+    ],
+    service: [
+      'A handwritten note on day 1, champagne without asking, remembering we\'re newlyweds — those are the moments I post on Instagram. Miss them and I feel invisible.',
+    ],
+    recommend: [
+      'If day-2 is magic I tell 20 friends. If it\'s cold I don\'t come back and write a lukewarm review. The middle days are where the hotel wins or loses.',
+    ],
+  },
+  family_vacationer: {
+    price: [
+      'With two kids and 10 nights I calculate every €. If breakfast isn\'t included I need to add €200/day to my mental budget. Packaging matters.',
+    ],
+    family: [
+      'Kids club quality and pool safety are non-negotiable. I\'ll pay more for a place that actually has trained staff, not just a painted room.',
+    ],
+    food: [
+      'Buffet quality + kids menu variety defines whether we come back. Day 4 the kids are tired of the same pasta — that\'s when a mediocre operation shows.',
+    ],
+  },
+  business_traveler: {
+    price: [
+      'I\'m on per diem. Within policy, price is almost invisible. Over policy, I need explicit approval — friction I avoid.',
+    ],
+    service: [
+      'Wi-Fi speed, late check-out, quiet room — that\'s my stack. If those three work, the rest is bonus.',
+    ],
+  },
+  digital_nomad: {
+    price: [
+      'I stay 2-4 weeks — per-night price matters less than cumulative. A €250 spot with reliable coworking beats a €150 spot where Wi-Fi dies at 3pm.',
+    ],
+  },
+  budget_optimizer: {
+    price: [
+      'Every € above expectation requires justification. I\'ll book the €120 room over the €180 one unless the €180 includes something I actually use.',
+    ],
+    compare: [
+      'I run 3-4 comparisons before booking. If your property is 15% more than ${rival} and the offer isn\'t 15% better, I go with the competitor.',
+    ],
+  },
+  loyalty_maximizer: {
+    service: [
+      'Status recognition is what keeps me. If I\'m Platinum and check-in treats me like anyone else, I stop caring about the tier. Then I shop on price like everyone else.',
+    ],
+    recommend: [
+      'Loyalty is brand, not property. If Gran Meliá delivers at any of their hotels, I book the chain. If one property fails, the whole chain feels suspect.',
+    ],
+  },
+  event_attendee: {
+    price: [
+      'Event dates dictate — I pay what the market demands for proximity. But if it\'s 30% over normal peak I grumble in the post-stay review.',
+    ],
+  },
+};
+
+function generateInterviewAnswer({ question, archId, clusterId }) {
+  if (!question || typeof question !== 'string') return { error: 'question required' };
+  // Match first category
+  let matchedCategory = 'compare';
+  for (const cat of QA_CATEGORIES) {
+    if (cat.keywords.test(question)) {
+      matchedCategory = cat.id;
+      break;
+    }
+  }
+  const archPool = QA_RESPONSES_BY_ARCHETYPE[archId] || QA_RESPONSES_BY_ARCHETYPE.luxury_seeker;
+  const poolForCategory = archPool[matchedCategory] || archPool.price || ['I\'d need to think about that in context of my specific trip needs.'];
+  const seed = hashString(`${archId}_${clusterId}_${question}`);
+  const rawAnswer = poolForCategory[Math.abs(seed) % poolForCategory.length];
+
+  // Generate a matching name/age
+  const names = NAMES_BY_CLUSTER[clusterId] || NAMES_BY_CLUSTER.anglo_uk_ireland;
+  const name = names[Math.abs(seed) % names.length];
+  const nameStr = name ? `${name[0]} ${name[1]}` : 'Guest';
+  const ctx = ARCHETYPE_CONTEXT[archId] || { age_range: [30, 50] };
+  const age = ctx.age_range[0] + (Math.abs(seed) % (ctx.age_range[1] - ctx.age_range[0]));
+  const rival = pickSeeded(RIVAL_REFERENCES[archId] || ['Four Seasons'], seed);
+
+  // Replace ${rival} placeholder
+  const answer = rawAnswer.replace(/\$\{rival\}/g, rival);
+
+  return {
+    name: nameStr,
+    age,
+    archetype: archId,
+    cluster: clusterId,
+    cluster_label: CLUSTER_LABEL[clusterId] || clusterId,
+    question,
+    matched_category: matchedCategory,
+    answer,
+  };
+}
+
 module.exports = {
   computeScenarioPreview,
+  runSensitivitySweep,
+  generateInterviewAnswer,
   ALL_ARCHETYPES,
   ALL_CLUSTERS,
   ARCHETYPE_COEFS,

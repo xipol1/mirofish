@@ -286,6 +286,7 @@ export default function ScenarioEditor() {
           </div>
 
           <LivePreview
+            scenario={scenario}
             preview={preview}
             loading={previewLoading}
             error={previewError}
@@ -901,7 +902,7 @@ function MixEditor({ title, items, values, total, onChange }) {
 
 // ══════════════════ LivePreview ═══════════════════════════════════════
 
-function LivePreview({ preview, loading, error, decision, onRunFull, running }) {
+function LivePreview({ scenario, preview, loading, error, decision, onRunFull, running }) {
   const verdict = preview?.verdict || 'PROCEED';
   const verdictColor = verdictToColor(verdict);
   const verdictBg = verdictToBg(verdict);
@@ -913,6 +914,40 @@ function LivePreview({ preview, loading, error, decision, onRunFull, running }) 
     if (abs >= 1_000) return `${sign}€${(abs / 1_000).toFixed(0)}K`;
     return `${sign}€${abs}`;
   };
+
+  // ── Sensitivity sweep (lazy — only when requested) ─────────────────
+  const [sensitivityOpen, setSensitivityOpen] = useState(false);
+  const [sensitivityData, setSensitivityData] = useState(null);
+  const [sensitivityLoading, setSensitivityLoading] = useState(false);
+  const sweepReqRef = useRef(null);
+  useEffect(() => {
+    if (!sensitivityOpen) return;
+    clearTimeout(sweepReqRef.current);
+    sweepReqRef.current = setTimeout(async () => {
+      setSensitivityLoading(true);
+      try {
+        const res = await fetch(`${API_URL}/api/scenario-sensitivity`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ property: scenario.property, audience: scenario.audience, decision: scenario.decision }),
+        });
+        const data = await res.json();
+        setSensitivityData(data);
+      } catch (err) {
+        setSensitivityData({ error: err.message });
+      } finally {
+        setSensitivityLoading(false);
+      }
+    }, 300);
+    return () => clearTimeout(sweepReqRef.current);
+  }, [sensitivityOpen, scenario]);
+
+  // ── Explainability modal ───────────────────────────────────────────
+  const [explainOpen, setExplainOpen] = useState(false);
+
+  // ── Expand segment → show narratives + interview ───────────────────
+  const [expandedSegment, setExpandedSegment] = useState(null);
+  const [interviewMap, setInterviewMap] = useState({});
 
   return (
     <div style={{ position: 'sticky', top: 20 }}>
@@ -942,12 +977,14 @@ function LivePreview({ preview, loading, error, decision, onRunFull, running }) 
           }} />}
         </div>
 
-        {/* Big numbers */}
+        {/* Big numbers — Net LTV is clickable to open explain */}
         <div style={{ padding: '16px 20px', borderBottom: '1px solid #f0f1f4' }}>
           <NumberBlock label="Short-term" value={fmtEur(preview?.short_term_eur)} sub={preview?.short_term_label || 'direct impact'} color={(preview?.short_term_eur ?? 0) >= 0 ? '#0a8754' : '#b91c1c'} />
           <NumberBlock label="Long-term (LTV)" value={fmtEur(preview?.long_term_eur)} sub={preview?.long_term_label || '3-year horizon'} color={(preview?.long_term_eur ?? 0) >= 0 ? '#0a8754' : '#b91c1c'} />
-          <div style={{ borderTop: '2px solid #1a1d23', marginTop: 10, paddingTop: 10 }}>
-            <NumberBlock label="Net LTV impact" value={fmtEur(preview?.net_eur)} sub={null} color={(preview?.net_eur ?? 0) >= 0 ? '#0a8754' : '#b91c1c'} big />
+          <div style={{ borderTop: '2px solid #1a1d23', marginTop: 10, paddingTop: 10, position: 'relative' }}>
+            <div onClick={() => preview?.explain && setExplainOpen(true)} style={{ cursor: preview?.explain ? 'pointer' : 'default' }}>
+              <NumberBlock label="Net LTV impact" value={fmtEur(preview?.net_eur)} sub={preview?.explain ? 'click to see math breakdown →' : null} color={(preview?.net_eur ?? 0) >= 0 ? '#0a8754' : '#b91c1c'} big />
+            </div>
           </div>
         </div>
 
@@ -957,26 +994,91 @@ function LivePreview({ preview, loading, error, decision, onRunFull, running }) 
           <MetricMini label="Booking Δ" value={preview?.booking_delta_pct != null ? `${preview.booking_delta_pct >= 0 ? '+' : ''}${preview.booking_delta_pct.toFixed(1)}%` : '—'} color={(preview?.booking_delta_pct ?? 0) >= 0 ? '#0a8754' : '#b91c1c'} />
         </div>
 
-        {/* Segments */}
+        {/* Sensitivity sweep toggle */}
+        <div style={{ padding: '10px 20px', borderBottom: '1px solid #f0f1f4', background: sensitivityOpen ? '#f6f7f9' : 'white' }}>
+          <button
+            onClick={() => setSensitivityOpen((v) => !v)}
+            style={{
+              width: '100%', background: 'transparent', border: 0, padding: '6px 0',
+              fontSize: 12, color: '#0F4C75', fontWeight: 600, cursor: 'pointer', textAlign: 'left',
+              display: 'flex', alignItems: 'center', gap: 8,
+            }}
+          >
+            <span style={{ transform: sensitivityOpen ? 'rotate(90deg)' : 'none', transition: 'transform 0.15s' }}>▸</span>
+            <span>📈 Sensitivity sweep — where does this decision break?</span>
+          </button>
+          {sensitivityOpen && (
+            <SensitivityChart data={sensitivityData} loading={sensitivityLoading} />
+          )}
+        </div>
+
+        {/* Segments — expandable with narratives + interview */}
         {preview?.segments?.length > 0 && (
           <div style={{ padding: '14px 20px', borderBottom: '1px solid #f0f1f4' }}>
             <div style={{ fontSize: 10, letterSpacing: 1.2, textTransform: 'uppercase', color: '#6b7888', fontWeight: 700, marginBottom: 8 }}>
-              Segments most affected
+              Segments most affected · click to expand
             </div>
             {preview.segments.slice(0, 5).map((s) => {
               const isNeg = s.delta_pct < 0;
               const maxAbs = Math.max(...preview.segments.map(x => Math.abs(x.delta_pct || 0)), 1);
               const barW = (Math.abs(s.delta_pct || 0) / maxAbs) * 100;
               const color = isNeg ? '#b91c1c' : '#0a8754';
+              const isExpanded = expandedSegment === s.segment;
+              const topCluster = Object.entries(scenario?.audience?.cultural_mix || {})
+                .sort((a, b) => b[1] - a[1])[0]?.[0] || 'anglo_uk_ireland';
+
               return (
-                <div key={s.segment} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4, fontSize: 12 }}>
-                  <span style={{ flex: 1, color: '#374151' }}>{s.segment.replace(/_/g, ' ')}</span>
-                  <div style={{ width: 80, height: 5, background: '#f0f1f4', borderRadius: 3, overflow: 'hidden' }}>
-                    <div style={{ height: '100%', width: `${barW}%`, background: color, marginLeft: isNeg ? `${100 - barW}%` : 0 }} />
-                  </div>
-                  <span style={{ width: 56, textAlign: 'right', fontWeight: 600, color, fontSize: 11 }}>
-                    {s.delta_pct >= 0 ? '+' : ''}{(s.delta_pct || 0).toFixed(1)}%
-                  </span>
+                <div key={s.segment} style={{ marginBottom: 6 }}>
+                  <button
+                    onClick={() => setExpandedSegment(isExpanded ? null : s.segment)}
+                    style={{
+                      width: '100%', display: 'flex', alignItems: 'center', gap: 8,
+                      padding: '5px 6px', background: isExpanded ? '#eef2ff' : 'transparent',
+                      border: 0, borderRadius: 4, cursor: 'pointer', fontSize: 12,
+                    }}
+                  >
+                    <span style={{ fontSize: 10, color: isExpanded ? '#0F4C75' : '#6b7888', transform: isExpanded ? 'rotate(90deg)' : 'none', transition: 'transform 0.15s' }}>▸</span>
+                    <span style={{ flex: 1, color: '#374151', textAlign: 'left' }}>{s.segment.replace(/_/g, ' ')}</span>
+                    <div style={{ width: 80, height: 5, background: '#f0f1f4', borderRadius: 3, overflow: 'hidden' }}>
+                      <div style={{ height: '100%', width: `${barW}%`, background: color, marginLeft: isNeg ? `${100 - barW}%` : 0 }} />
+                    </div>
+                    <span style={{ width: 56, textAlign: 'right', fontWeight: 600, color, fontSize: 11 }}>
+                      {s.delta_pct >= 0 ? '+' : ''}{(s.delta_pct || 0).toFixed(1)}%
+                    </span>
+                  </button>
+
+                  {isExpanded && (
+                    <SegmentDrilldown
+                      segment={s}
+                      archetype={s.segment}
+                      topCluster={topCluster}
+                      interviewMessages={interviewMap[s.segment] || []}
+                      onAskQuestion={async (question) => {
+                        const msgs = interviewMap[s.segment] || [];
+                        const userMsg = { role: 'user', text: question, ts: Date.now() };
+                        setInterviewMap({ ...interviewMap, [s.segment]: [...msgs, userMsg] });
+                        try {
+                          const res = await fetch(`${API_URL}/api/scenario-interview`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ question, archetype: s.segment, cluster: topCluster }),
+                          });
+                          const data = await res.json();
+                          setInterviewMap((prev) => ({
+                            ...prev,
+                            [s.segment]: [...(prev[s.segment] || []), {
+                              role: 'agent', text: data.answer || 'No response', speaker: data.name, age: data.age, ts: Date.now(),
+                            }],
+                          }));
+                        } catch (err) {
+                          setInterviewMap((prev) => ({
+                            ...prev,
+                            [s.segment]: [...(prev[s.segment] || []), { role: 'agent', text: 'Connection error.', ts: Date.now() }],
+                          }));
+                        }
+                      }}
+                    />
+                  )}
                 </div>
               );
             })}
@@ -1030,6 +1132,11 @@ function LivePreview({ preview, loading, error, decision, onRunFull, running }) 
           100% { background-position: 200% 0; }
         }
       `}</style>
+
+      {/* Explainability modal */}
+      {explainOpen && preview?.explain && (
+        <ExplainModal explain={preview.explain} onClose={() => setExplainOpen(false)} />
+      )}
     </div>
   );
 }
@@ -1077,4 +1184,306 @@ function verdictToBg(v) {
     case 'NOT_RECOMMENDED': return '#fef2f2';
     default: return '#f6f7f9';
   }
+}
+
+// ══════════════════ SensitivityChart ══════════════════════════════════
+
+function SensitivityChart({ data, loading }) {
+  if (loading && !data) {
+    return <div style={{ padding: '14px 0', fontSize: 11, color: '#6b7888' }}>Sweeping parameter range…</div>;
+  }
+  if (!data || data.error) {
+    return <div style={{ padding: '14px 0', fontSize: 11, color: '#b91c1c' }}>{data?.error || 'No data'}</div>;
+  }
+  const points = data.points || [];
+  if (points.length === 0) return null;
+  const maxY = Math.max(...points.map(p => Math.abs(p.net_eur)), 1);
+  const w = 320;
+  const h = 120;
+  const padL = 32, padR = 10, padT = 8, padB = 20;
+  const plotW = w - padL - padR;
+  const plotH = h - padT - padB;
+  const xScale = (i) => padL + (i / (points.length - 1)) * plotW;
+  const yScale = (v) => padT + plotH / 2 - (v / maxY) * (plotH / 2);
+
+  // Build path for net_eur line
+  const path = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${xScale(i)} ${yScale(p.net_eur)}`).join(' ');
+  // Current value marker
+  const currentIdx = points.findIndex(p => p.x === data.current_value);
+  const colors = { HIGH_PRIORITY: '#0a8754', PROCEED: '#22c55e', CAUTION: '#d97706', NOT_RECOMMENDED: '#b91c1c' };
+
+  return (
+    <div style={{ marginTop: 10 }}>
+      <svg width="100%" viewBox={`0 0 ${w} ${h}`} style={{ display: 'block' }}>
+        {/* Zero line */}
+        <line x1={padL} y1={yScale(0)} x2={w - padR} y2={yScale(0)} stroke="#d1d5db" strokeWidth="1" strokeDasharray="3,3" />
+        {/* Color-coded background bands (verdict zones) */}
+        {points.map((p, i) => {
+          if (i === points.length - 1) return null;
+          const x1 = xScale(i);
+          const x2 = xScale(i + 1);
+          return <rect key={i} x={x1} y={padT} width={x2 - x1} height={plotH} fill={colors[p.verdict] || '#e5e7eb'} fillOpacity="0.08" />;
+        })}
+        {/* Path */}
+        <path d={path} stroke="#0F4C75" strokeWidth="2" fill="none" />
+        {/* Points */}
+        {points.map((p, i) => (
+          <circle key={i} cx={xScale(i)} cy={yScale(p.net_eur)} r={i === currentIdx ? 5 : 3}
+            fill={colors[p.verdict] || '#6b7888'} stroke="white" strokeWidth={i === currentIdx ? 2 : 0} />
+        ))}
+        {/* X axis labels */}
+        <text x={padL} y={h - 4} fontSize="9" fill="#6b7888">{points[0].x}</text>
+        <text x={w - padR} y={h - 4} fontSize="9" fill="#6b7888" textAnchor="end">{points[points.length - 1].x}</text>
+        {/* Y axis labels */}
+        <text x={padL - 4} y={yScale(0) + 3} fontSize="9" fill="#6b7888" textAnchor="end">€0</text>
+        <text x={padL - 4} y={padT + 6} fontSize="9" fill="#6b7888" textAnchor="end">+{(maxY / 1_000_000).toFixed(1)}M</text>
+        <text x={padL - 4} y={h - padB - 4} fontSize="9" fill="#6b7888" textAnchor="end">−{(maxY / 1_000_000).toFixed(1)}M</text>
+      </svg>
+      <div style={{ fontSize: 11, color: '#374151', marginTop: 8, lineHeight: 1.5 }}>
+        <div><strong>Optimal:</strong> {data.sweep_param} = {data.optimal.x} → net {data.optimal.net_eur >= 0 ? '+' : '−'}€{(Math.abs(data.optimal.net_eur) / 1000).toFixed(0)}K · <span style={{ color: colors[data.optimal.verdict] }}>{data.optimal.verdict.replace('_', ' ')}</span></div>
+        {data.break_point && (
+          <div style={{ marginTop: 2 }}>
+            <strong>Breaks at:</strong> {data.sweep_param} ≈ {data.break_point.estimated} (between {data.break_point.between[0]} and {data.break_point.between[1]})
+          </div>
+        )}
+        <div style={{ marginTop: 4, fontSize: 10, color: '#6b7888' }}>
+          Your current input: {data.sweep_param} = {data.current_value}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ══════════════════ ExplainModal ══════════════════════════════════════
+
+function ExplainModal({ explain, onClose }) {
+  const fmtEur = (n) => {
+    if (n == null) return '—';
+    const sign = n >= 0 ? '+' : '−';
+    const abs = Math.abs(n);
+    if (abs >= 1_000_000) return `${sign}€${(abs / 1_000_000).toFixed(2)}M`;
+    if (abs >= 1_000) return `${sign}€${(abs / 1_000).toFixed(0)}K`;
+    return `${sign}€${Math.round(abs)}`;
+  };
+
+  return (
+    <div onClick={onClose} style={{
+      position: 'fixed', inset: 0, background: 'rgba(10,13,20,0.65)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      zIndex: 9998, backdropFilter: 'blur(4px)',
+    }}>
+      <div onClick={(e) => e.stopPropagation()} style={{
+        background: 'white', borderRadius: 12, padding: '22px 26px',
+        maxWidth: 720, width: '92%', maxHeight: '90vh', overflowY: 'auto',
+        boxShadow: '0 25px 60px rgba(0,0,0,0.4)',
+      }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 16 }}>
+          <div>
+            <div style={{ fontSize: 10, letterSpacing: 1.4, textTransform: 'uppercase', color: '#6b7888', fontWeight: 700 }}>
+              Math breakdown
+            </div>
+            <div style={{ fontSize: 20, fontWeight: 800, color: '#0A3558', marginTop: 4 }}>
+              How we computed Net LTV = {fmtEur(explain.final?.net_eur)}
+            </div>
+          </div>
+          <button onClick={onClose} style={{ background: 'transparent', border: 0, fontSize: 22, cursor: 'pointer', color: '#6b7888' }}>×</button>
+        </div>
+
+        {/* Inputs */}
+        <Section title="1. Inputs">
+          <KV label="Decision magnitude" value={`${explain.inputs?.magnitude_pct >= 0 ? '+' : ''}${explain.inputs?.magnitude_pct}%`} />
+          <KV label="Timing" value={explain.inputs?.timing} />
+          <KV label="Scope" value={explain.inputs?.scope?.type === 'all' ? 'All guests' : `${explain.inputs?.scope?.type}: ${explain.inputs?.scope?.value}`} />
+          <KV label="Baseline annual revenue" value={`€${(explain.inputs?.baseline_annual_revenue_eur / 1_000_000).toFixed(2)}M`} />
+          <KV label="Timing revenue share" value={`${explain.inputs?.timing_revenue_share_pct}%`} />
+          <KV label="Cultural book delta (audience-weighted)" value={`${explain.inputs?.cultural_book_delta_pct >= 0 ? '+' : ''}${explain.inputs?.cultural_book_delta_pct}%`} />
+        </Section>
+
+        {/* Per-archetype */}
+        <Section title="2. Per-archetype response">
+          <div style={{ fontSize: 11, color: '#6b7888', marginBottom: 6 }}>
+            Each archetype responds to the price change through its own elasticity ε, weighted by its share of the cohort.
+          </div>
+          <table style={{ width: '100%', fontSize: 12, borderCollapse: 'collapse' }}>
+            <thead>
+              <tr style={{ background: '#f6f7f9', fontSize: 10, textTransform: 'uppercase', letterSpacing: 0.6 }}>
+                <th style={{ textAlign: 'left', padding: 6 }}>Archetype</th>
+                <th style={{ textAlign: 'right', padding: 6 }}>Weight</th>
+                <th style={{ textAlign: 'right', padding: 6 }}>ε</th>
+                <th style={{ textAlign: 'left', padding: 6 }}>Formula</th>
+                <th style={{ textAlign: 'right', padding: 6 }}>Contribution</th>
+              </tr>
+            </thead>
+            <tbody>
+              {(explain.archetype_steps || []).map((s, i) => (
+                <tr key={i} style={{ borderBottom: '1px solid #f0f1f4' }}>
+                  <td style={{ padding: 6 }}>{s.archetype.replace(/_/g, ' ')}</td>
+                  <td style={{ padding: 6, textAlign: 'right' }}>{s.weight}</td>
+                  <td style={{ padding: 6, textAlign: 'right' }}>{s.elasticity}</td>
+                  <td style={{ padding: 6, fontFamily: 'Consolas, Monaco, monospace', fontSize: 10, color: '#4b5563' }}>{s.formula}</td>
+                  <td style={{ padding: 6, textAlign: 'right', fontWeight: 600, color: s.result_pct < 0 ? '#b91c1c' : '#0a8754' }}>
+                    {s.result_pct >= 0 ? '+' : ''}{s.result_pct}%
+                  </td>
+                </tr>
+              ))}
+              <tr style={{ background: '#eef2ff', fontWeight: 700 }}>
+                <td colSpan="4" style={{ padding: 6, textAlign: 'right' }}>Aggregate booking Δ:</td>
+                <td style={{ padding: 6, textAlign: 'right' }}>{explain.aggregate?.aggregate_booking_delta_pct >= 0 ? '+' : ''}{explain.aggregate?.aggregate_booking_delta_pct}%</td>
+              </tr>
+            </tbody>
+          </table>
+        </Section>
+
+        {/* Short-term derivation */}
+        <Section title="3. Short-term revenue derivation">
+          <div style={{ fontSize: 11, fontFamily: 'Consolas, Monaco, monospace', background: '#f6f7f9', padding: '8px 10px', borderRadius: 4, color: '#374151' }}>
+            {explain.short_term_derivation?.formula}
+          </div>
+          <KV label="new_rate_factor" value={explain.short_term_derivation?.new_rate_factor} />
+          <KV label="new_bookings_factor" value={explain.short_term_derivation?.new_bookings_factor} />
+          <KV label="revenue_change_pct" value={`${explain.short_term_derivation?.revenue_change_pct >= 0 ? '+' : ''}${explain.short_term_derivation?.revenue_change_pct}%`} />
+          <KV label="Short-term result" value={fmtEur(explain.short_term_derivation?.result_eur)} bold />
+        </Section>
+
+        {/* Long-term */}
+        <Section title="4. Long-term (LTV) derivation">
+          <div style={{ fontSize: 11, color: '#6b7888', marginBottom: 6 }}>
+            Price changes hit reviews → reviews shift star/NPS → NPS shifts repeat rate and viral share → LTV impact over 3 years.
+          </div>
+          <KV label="Weighted repeat base" value={`${explain.long_term_derivation?.weighted_repeat_base_pct}%`} />
+          <KV label="Weighted viral coefficient" value={`${explain.long_term_derivation?.weighted_viral_pct}%`} />
+          <KV label="ΔNPS (all segments)" value={`${explain.long_term_derivation?.nps_delta >= 0 ? '+' : ''}${explain.long_term_derivation?.nps_delta}`} />
+          <KV label="Repeat rate delta" value={`${explain.long_term_derivation?.repeat_rate_delta_pct >= 0 ? '+' : ''}${explain.long_term_derivation?.repeat_rate_delta_pct}%`} />
+          <KV label="3-yr LTV via repeat" value={fmtEur(explain.long_term_derivation?.three_year_ltv_via_repeat_eur)} />
+          <KV label="LTV via viral share" value={fmtEur(explain.long_term_derivation?.viral_ltv_eur)} />
+          <KV label="Long-term total" value={fmtEur(explain.long_term_derivation?.result_eur)} bold />
+        </Section>
+
+        {/* Final */}
+        <Section title="5. Final">
+          <div style={{ fontSize: 11, fontFamily: 'Consolas, Monaco, monospace', background: '#f6f7f9', padding: '8px 10px', borderRadius: 4, color: '#374151' }}>
+            Net LTV = {fmtEur(explain.final?.short_term_eur)} + {fmtEur(explain.final?.long_term_eur)} = <strong>{fmtEur(explain.final?.net_eur)}</strong>
+          </div>
+        </Section>
+
+        <div style={{ marginTop: 14, padding: '10px 12px', background: '#fef7e0', border: '1px solid #fde68a', borderRadius: 4, fontSize: 11, color: '#78350f' }}>
+          <strong>Note.</strong> All coefficients (elasticity, cultural modifiers, viral share, repeat rate) are published values from
+          Cornell HQ, Vives &amp; Jacob 2023, Garín-Muñoz, and INE EGATUR 2024 — not tuned to produce a specific result.
+          The full benchmark provenance is in Section 07 of the validation report.
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Section({ title, children }) {
+  return (
+    <div style={{ marginBottom: 14 }}>
+      <div style={{ fontSize: 11, letterSpacing: 1, textTransform: 'uppercase', color: '#0A3558', fontWeight: 700, marginBottom: 8 }}>
+        {title}
+      </div>
+      {children}
+    </div>
+  );
+}
+
+function KV({ label, value, bold = false }) {
+  return (
+    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, padding: '4px 0', borderBottom: '1px solid #f0f1f4' }}>
+      <span style={{ color: '#6b7888' }}>{label}</span>
+      <span style={{ fontWeight: bold ? 700 : 500, color: '#1a1d23' }}>{value}</span>
+    </div>
+  );
+}
+
+// ══════════════════ SegmentDrilldown ══════════════════════════════════
+
+function SegmentDrilldown({ segment, archetype, topCluster, interviewMessages, onAskQuestion }) {
+  const [q, setQ] = useState('');
+  const [asking, setAsking] = useState(false);
+  const send = async () => {
+    if (!q.trim() || asking) return;
+    setAsking(true);
+    const cur = q;
+    setQ('');
+    await onAskQuestion(cur);
+    setAsking(false);
+  };
+
+  return (
+    <div style={{ margin: '6px 0 12px 24px', padding: '10px 12px', background: '#f9fafb', borderRadius: 6, borderLeft: '3px solid #0F4C75' }}>
+      {/* Narrative samples */}
+      {segment.sample_narratives?.length > 0 && (
+        <div style={{ marginBottom: 10 }}>
+          <div style={{ fontSize: 10, letterSpacing: 1, textTransform: 'uppercase', color: '#6b7888', fontWeight: 700, marginBottom: 6 }}>
+            Sample traveler narratives · citable quotes
+          </div>
+          {segment.sample_narratives.map((n, i) => (
+            <div key={i} style={{
+              padding: '6px 10px', marginBottom: 4, background: 'white',
+              borderLeft: '2px solid #c084fc', borderRadius: 3,
+              fontSize: 11, color: '#374151', fontStyle: 'italic', lineHeight: 1.5,
+            }}>
+              "{n}"
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Interview chat */}
+      <div style={{ marginTop: 8 }}>
+        <div style={{ fontSize: 10, letterSpacing: 1, textTransform: 'uppercase', color: '#6b7888', fontWeight: 700, marginBottom: 6 }}>
+          Ask this synthetic guest anything
+        </div>
+        {interviewMessages.length > 0 && (
+          <div style={{ maxHeight: 220, overflowY: 'auto', marginBottom: 6 }}>
+            {interviewMessages.map((m, i) => (
+              <div key={i} style={{
+                fontSize: 11, padding: '5px 8px', marginBottom: 4, borderRadius: 4,
+                background: m.role === 'user' ? '#e0e7ff' : 'white',
+                color: m.role === 'user' ? '#312e81' : '#1a1d23',
+                borderLeft: m.role === 'user' ? '2px solid #4f46e5' : '2px solid #0a8754',
+                lineHeight: 1.5,
+              }}>
+                {m.role === 'user' ? (
+                  <>
+                    <strong style={{ fontSize: 9, letterSpacing: 0.5, textTransform: 'uppercase' }}>You:</strong> {m.text}
+                  </>
+                ) : (
+                  <>
+                    {m.speaker && <div style={{ fontSize: 9, color: '#0a8754', fontWeight: 700, marginBottom: 2 }}>{m.speaker}, {m.age}:</div>}
+                    {m.text}
+                  </>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+        <div style={{ display: 'flex', gap: 6 }}>
+          <input
+            type="text"
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            onKeyDown={(e) => { if (e.key === 'Enter') send(); }}
+            placeholder="e.g. what would you do if we raised the rate 8%?"
+            style={{
+              flex: 1, padding: '6px 10px', fontSize: 11, border: '1px solid #d1d5db',
+              borderRadius: 4, background: 'white',
+            }}
+          />
+          <button
+            onClick={send}
+            disabled={asking || !q.trim()}
+            style={{
+              padding: '6px 12px', background: asking || !q.trim() ? '#9ca3af' : '#0F4C75',
+              color: 'white', border: 0, borderRadius: 4, fontSize: 11, fontWeight: 600,
+              cursor: asking || !q.trim() ? 'not-allowed' : 'pointer',
+            }}
+          >
+            {asking ? '...' : 'Ask'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 }
