@@ -1,0 +1,16 @@
+{
+  "name": "synthetic-users-suite-monorepo",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Monorepo wrapper for Vercel deployment. Real app lives in frontend/.",
+  "scripts": {
+    "build": "cd frontend && npm install && npm run build",
+    "dev": "cd frontend && npm run dev",
+    "start": "cd frontend && npm start"
+  },
+  "dependencies": {
+    "next": "^14.2.15",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  }
+}
