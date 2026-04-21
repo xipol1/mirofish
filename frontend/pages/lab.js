@@ -1280,7 +1280,14 @@ function ExecutiveView({
           ))}
         </nav>
 
-        <div style={{ marginTop: 28, padding: '0 10px 6px', fontSize: 10, letterSpacing: 1.4, color: BRAND.subtle, textTransform: 'uppercase' }}>Support</div>
+        <div style={{ marginTop: 24, padding: '0 10px 6px', fontSize: 10, letterSpacing: 1.4, color: BRAND.subtle, textTransform: 'uppercase' }}>Tools</div>
+        <nav style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <SidebarLink icon="🛠" label="Scenario Editor" onClick={() => { if (typeof window !== 'undefined') window.location.href = '/scenario'; }} />
+          <SidebarLink icon="📑" label="Validation Report" onClick={() => { if (typeof window !== 'undefined') window.location.href = '/validation'; }} />
+          <SidebarLink icon="📰" label="One-pager (ES)" onClick={() => { if (typeof window !== 'undefined') window.location.href = '/onepager-es'; }} />
+        </nav>
+
+        <div style={{ marginTop: 18, padding: '0 10px 6px', fontSize: 10, letterSpacing: 1.4, color: BRAND.subtle, textTransform: 'uppercase' }}>Support</div>
         <nav style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
           <SidebarLink icon="🧭" label="Get Started"
             active={activeSection === 'getstarted'} onClick={() => onSectionChange('getstarted')} />
@@ -2264,10 +2271,29 @@ function SubAccordion({ label, detail, open, onToggle, children }) {
 function ScenariosSection({ presets = [], summary = {}, scenarioResult, applyScenario, resetBaseline, loadingScenario, activeScenarioId }) {
   return (
     <div>
-      <div style={{ marginBottom: 18 }}>
-        <h1 style={{ margin: 0, fontSize: 24, fontWeight: 700, color: BRAND.navy }}>Scenarios</h1>
-        <div style={{ fontSize: 12, color: BRAND.muted, marginTop: 2 }}>
-          Revenue & NPS levers · baseline: {summary.avg_stars?.toFixed?.(2) || '—'}★ · NPS {summary.net_promoter_score > 0 ? '+' : ''}{summary.net_promoter_score || '—'} · €{summary.avg_spend_eur || '—'} spend
+      <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 14, marginBottom: 18, flexWrap: 'wrap' }}>
+        <div>
+          <h1 style={{ margin: 0, fontSize: 24, fontWeight: 700, color: BRAND.navy }}>Scenarios</h1>
+          <div style={{ fontSize: 12, color: BRAND.muted, marginTop: 2 }}>
+            Revenue & NPS levers · baseline: {summary.avg_stars?.toFixed?.(2) || '—'}★ · NPS {summary.net_promoter_score > 0 ? '+' : ''}{summary.net_promoter_score || '—'} · €{summary.avg_spend_eur || '—'} spend
+          </div>
+        </div>
+        <a href="/scenario" style={{
+          display: 'inline-flex', alignItems: 'center', gap: 8,
+          padding: '10px 18px', background: BRAND.accent, color: 'white',
+          borderRadius: 10, fontSize: 13, fontWeight: 600, textDecoration: 'none',
+          boxShadow: `0 2px 8px ${BRAND.accent}33`,
+        }}>
+          <span>🛠</span>
+          <span>Open full Scenario Editor</span>
+          <span style={{ opacity: 0.7 }}>→</span>
+        </a>
+      </div>
+
+      <div style={{ padding: '12px 16px', background: BRAND.accentSoft, border: `1px solid ${BRAND.accent}33`, borderRadius: 10, marginBottom: 16, fontSize: 12, color: BRAND.navy, display: 'flex', alignItems: 'center', gap: 12 }}>
+        <span style={{ fontSize: 18 }}>💡</span>
+        <div>
+          The 6 quick levers below run against the current cohort baseline for instant €/NPS projection. For a <strong>full custom scenario</strong> (any decision, any segment, any palanca) with live preview &lt;500ms, use the <a href="/scenario" style={{ color: BRAND.accent, fontWeight: 600 }}>Scenario Editor →</a> and then the <a href="/validation" style={{ color: BRAND.accent, fontWeight: 600 }}>Validation Report</a>.
         </div>
       </div>
 
