@@ -81,6 +81,101 @@ const DEFAULTS = {
     timing: 'peak',
     scope: { type: 'all' },
   },
+  // Consultant-tunable calibration overrides. Empty by default → the engine
+  // uses the published coefficients anchored to Cornell / EGATUR / Vives&Jacob.
+  // A consultant may edit these in the Calibration Panel to fit a specific
+  // property (e.g. lower budget_optimizer sensitivity for a resort with
+  // almost no price-sensitive guests). The full object ships to the backend
+  // with every preview call — see computeScenarioPreview → resolveCalibration.
+  calibration: {
+    archetype_comparison_sensitivity: {}, // id → number override (empty = defaults)
+    cluster_book_delta: {},                // id → number override (empty = defaults)
+  },
+};
+
+// Defaults we show in the Calibration Panel alongside the overrides. These
+// must stay in sync with ARCHETYPE_COMPARISON_SENSITIVITY / CLUSTER_COEFS in
+// lib/scenario-preview.js — the frontend displays them for transparency.
+const CALIBRATION_DEFAULTS = {
+  archetype_comparison_sensitivity: {
+    luxury_seeker:     0.4,
+    honeymooner:       0.7,
+    family_vacationer: 1.2,
+    business_traveler: 0.3,
+    digital_nomad:     1.4,
+    budget_optimizer:  2.2,
+    loyalty_maximizer: 0.4,
+    event_attendee:    0.9,
+  },
+  cluster_book_delta: {
+    anglo_uk_ireland:  0.00,
+    german_dach:      -0.06,
+    anglo_us_canada:   0.05,
+    french:            0.03,
+    latin_spain_italy: 0.08,
+    nordic:            0.02,
+    latin_american:    0.04,
+    middle_east_gcc:   0.07,
+    east_asian:        0.01,
+    chinese_mainland:  0.03,
+  },
+};
+
+// Provenance badges for each calibration knob. Tells the consultant where the
+// default came from so they know when it's safe to override vs. when they'd
+// be breaking an anchor. Keeps the demo honest.
+const CALIBRATION_PROVENANCE = {
+  // Comparison sensitivity — Cornell HQ reviewer cohort × price-sensitivity
+  // decile analysis. Anchored for budget_optimizer, luxury_seeker. Others
+  // interpolated by the team → tunable.
+  archetype_comparison_sensitivity: {
+    luxury_seeker:     { tag: 'peer-reviewed',    label: 'Cornell HQ ε=-0.45' },
+    honeymooner:       { tag: 'expert-inference', label: 'interpolated' },
+    family_vacationer: { tag: 'peer-reviewed',    label: 'Cornell HQ ε=-1.01' },
+    business_traveler: { tag: 'peer-reviewed',    label: 'Cornell HQ ε=-0.70' },
+    digital_nomad:     { tag: 'expert-inference', label: 'interpolated' },
+    budget_optimizer:  { tag: 'peer-reviewed',    label: 'Cornell HQ ε=-1.57' },
+    loyalty_maximizer: { tag: 'expert-inference', label: 'loyalty-floor' },
+    event_attendee:    { tag: 'expert-inference', label: 'interpolated' },
+  },
+  // book_delta — mixed: several clusters are EGATUR / INE-anchored, others
+  // are expert-inference (french, nordic, chinese_mainland).
+  cluster_book_delta: {
+    anglo_uk_ireland:  { tag: 'baseline',         label: 'reference cluster' },
+    german_dach:       { tag: 'peer-reviewed',    label: 'Vives & Jacob 2023' },
+    anglo_us_canada:   { tag: 'EGATUR-anchored',  label: 'INE EGATUR 2024' },
+    french:            { tag: 'expert-inference', label: 'Dignus default' },
+    latin_spain_italy: { tag: 'EGATUR-anchored',  label: 'INE EGATUR 2024' },
+    nordic:            { tag: 'expert-inference', label: 'Dignus default' },
+    latin_american:    { tag: 'EGATUR-anchored',  label: 'INE EGATUR 2024' },
+    middle_east_gcc:   { tag: 'EGATUR-anchored',  label: 'INE EGATUR 2024' },
+    east_asian:        { tag: 'expert-inference', label: 'Dignus default' },
+    chinese_mainland:  { tag: 'expert-inference', label: 'Dignus default' },
+  },
+};
+
+// Cluster display labels
+const CLUSTER_LABELS = {
+  anglo_uk_ireland:  'UK & Ireland',
+  german_dach:       'German DACH',
+  anglo_us_canada:   'US & Canada',
+  french:            'French',
+  latin_spain_italy: 'Spain / Italy',
+  nordic:            'Nordic',
+  latin_american:    'Latin America',
+  middle_east_gcc:   'Middle East / GCC',
+  east_asian:        'East Asian (JP/KR/TW)',
+  chinese_mainland:  'Chinese Mainland',
+};
+const ARCHETYPE_LABELS = {
+  luxury_seeker:     'Luxury seeker',
+  honeymooner:       'Honeymooner',
+  family_vacationer: 'Family vacationer',
+  business_traveler: 'Business traveler',
+  digital_nomad:     'Digital nomad',
+  budget_optimizer:  'Budget optimizer',
+  loyalty_maximizer: 'Loyalty maximizer',
+  event_attendee:    'Event attendee',
 };
 
 // ─── Example buttons — starting points, not canned scenarios ───────────
@@ -155,7 +250,7 @@ export default function ScenarioEditor() {
       const res = await fetch(`${API_URL}/api/scenario-preview`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'bypass-tunnel-reminder': 'true' },
-        body: JSON.stringify({ property: s.property, audience: s.audience, decision: s.decision }),
+        body: JSON.stringify({ property: s.property, audience: s.audience, decision: s.decision, calibration: s.calibration }),
       });
       const data = await res.json();
       if (data.error) throw new Error(data.error);
@@ -193,6 +288,26 @@ export default function ScenarioEditor() {
   const updateClusterMix = (id, value) => setScenario((s) => ({
     ...s,
     audience: { ...s.audience, cultural_mix: { ...s.audience.cultural_mix, [id]: Number(value) || 0 } },
+  }));
+
+  // Calibration mutators — set a single knob or reset a whole group.
+  const updateCalibration = (group, id, value) => setScenario((s) => {
+    const nextGroup = { ...(s.calibration?.[group] || {}) };
+    // Sentinel: null/undefined clears the override (falls back to default)
+    if (value === null || value === undefined || value === '') {
+      delete nextGroup[id];
+    } else {
+      nextGroup[id] = Number(value);
+    }
+    return { ...s, calibration: { ...s.calibration, [group]: nextGroup } };
+  });
+  const resetCalibrationGroup = (group) => setScenario((s) => ({
+    ...s,
+    calibration: { ...s.calibration, [group]: {} },
+  }));
+  const resetAllCalibration = () => setScenario((s) => ({
+    ...s,
+    calibration: { archetype_comparison_sensitivity: {}, cluster_book_delta: {} },
   }));
 
   const loadExample = (ex) => setDecision({ ...ex.decision });
@@ -268,6 +383,8 @@ export default function ScenarioEditor() {
       <div style={{ maxWidth: 1500, margin: '0 auto', padding: '20px 22px 100px' }}>
         <TopBar scenario={scenario} setScenario={setScenario} runFullSim={runFullSim} running={running} />
 
+        <PositioningCard />
+
         <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 380px', gap: 20, marginTop: 20, alignItems: 'start' }}>
           <div>
             <ExampleBar onLoad={loadExample} />
@@ -286,6 +403,12 @@ export default function ScenarioEditor() {
               audience={scenario.audience}
               updateArchetypeMix={updateArchetypeMix}
               updateClusterMix={updateClusterMix}
+            />
+            <CalibrationPanel
+              calibration={scenario.calibration}
+              updateCalibration={updateCalibration}
+              resetCalibrationGroup={resetCalibrationGroup}
+              resetAllCalibration={resetAllCalibration}
             />
           </div>
 
@@ -870,6 +993,287 @@ function AudienceBlock({ audience, updateArchetypeMix, updateClusterMix }) {
   );
 }
 
+// ══════════════════ PositioningCard ═══════════════════════════════════
+//
+// Blind against "are you competing with Duetto / IDeaS?" It sits at the top
+// of the editor and spells out explicitly what this tool IS and what it
+// ISN'T. Consultants can point to it in a client meeting to set scope.
+
+function PositioningCard() {
+  const [open, setOpen] = useState(true);
+  return (
+    <div style={{
+      background: 'linear-gradient(100deg, #eef2ff 0%, #f5f3ff 100%)',
+      border: '1px solid #c7d2fe',
+      borderRadius: 10,
+      padding: '14px 18px',
+      marginTop: 16,
+      display: 'flex', alignItems: 'center', gap: 16,
+    }}>
+      <div style={{
+        width: 36, height: 36, borderRadius: 9, background: '#4338ca', color: 'white',
+        display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, flexShrink: 0,
+      }}>🧭</div>
+      <div style={{ flex: 1 }}>
+        <div style={{ fontSize: 10, letterSpacing: 1.4, textTransform: 'uppercase', color: '#4338ca', fontWeight: 700 }}>
+          What this tool is — and isn't
+        </div>
+        <div style={{ fontSize: 14, color: '#1e1b4b', marginTop: 4, fontWeight: 600 }}>
+          Pre-decision validation for consultants. Not a daily-pricing RMS.
+        </div>
+        {open && (
+          <div style={{ marginTop: 10, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, fontSize: 12, color: '#312e81' }}>
+            <div>
+              <div style={{ fontWeight: 700, color: '#15803d', marginBottom: 2 }}>✓ What we do</div>
+              <ul style={{ margin: 0, paddingLeft: 16, lineHeight: 1.55 }}>
+                <li>Simulate a specific decision against synthetic guests</li>
+                <li>Surface Net-LTV, ΔNPS, review tier forecast, complaints</li>
+                <li>Stress-test competitor reactions (game theory matrix)</li>
+                <li>Provide the "why" behind the number (explainability)</li>
+              </ul>
+            </div>
+            <div>
+              <div style={{ fontWeight: 700, color: '#b91c1c', marginBottom: 2 }}>✗ What we don't do</div>
+              <ul style={{ margin: 0, paddingLeft: 16, lineHeight: 1.55 }}>
+                <li>Daily pricing recommendations (that's Duetto / IDeaS)</li>
+                <li>Pickup pace / booking curve tracking (that's the PMS)</li>
+                <li>Real-time inventory or rate shop (that's the CRS)</li>
+                <li>Replace a revenue manager — we assist their pre-decision work</li>
+              </ul>
+            </div>
+          </div>
+        )}
+      </div>
+      <button
+        onClick={() => setOpen((o) => !o)}
+        style={{
+          background: 'white', border: '1px solid #c7d2fe', color: '#4338ca',
+          padding: '5px 10px', borderRadius: 6, cursor: 'pointer', fontSize: 11, fontWeight: 600,
+        }}
+      >
+        {open ? 'Hide' : 'Show'}
+      </button>
+    </div>
+  );
+}
+
+// ══════════════════ CalibrationPanel ══════════════════════════════════
+//
+// Exposes the two most consequential coefficient groups to the consultant:
+//  - Per-archetype comparison sensitivity (how much a price gap with
+//    the comp-set shifts bookings for each traveler type)
+//  - Per-cluster book_delta (cultural booking propensity modifier)
+//
+// Each knob carries a provenance badge — peer-reviewed, EGATUR-anchored,
+// or expert-inference — so the consultant knows which coefficients are
+// safer to tune. Changes propagate live into the preview, sensitivity
+// curve, and competitor matrix.
+
+function CalibrationBadge({ tag }) {
+  const styles = {
+    'peer-reviewed':    { bg: '#dcfce7', color: '#15803d', label: 'peer-reviewed' },
+    'EGATUR-anchored':  { bg: '#dbeafe', color: '#1d4ed8', label: 'EGATUR-anchored' },
+    'expert-inference': { bg: '#fef3c7', color: '#a16207', label: 'expert-inference' },
+    'baseline':         { bg: '#f3f4f6', color: '#4b5563', label: 'baseline' },
+  };
+  const s = styles[tag] || styles.baseline;
+  return (
+    <span style={{
+      display: 'inline-block', fontSize: 9, fontWeight: 700, letterSpacing: 0.3,
+      padding: '2px 6px', borderRadius: 4, background: s.bg, color: s.color,
+      textTransform: 'uppercase',
+    }}>{s.label}</span>
+  );
+}
+
+function CalibrationSlider({ id, label, provenance, defaultValue, overrideValue, min, max, step, unit, onChange, onReset }) {
+  const current = overrideValue ?? defaultValue;
+  const isOverride = overrideValue != null;
+  return (
+    <div style={{
+      display: 'grid', gridTemplateColumns: '150px 1fr 90px 22px', gap: 10,
+      alignItems: 'center', padding: '6px 0',
+      borderBottom: '1px solid #f3f4f6',
+    }}>
+      <div>
+        <div style={{ fontSize: 12, color: '#1a1d23', fontWeight: isOverride ? 700 : 500 }}>{label}</div>
+        <div style={{ marginTop: 2, display: 'flex', gap: 4, alignItems: 'center', flexWrap: 'wrap' }}>
+          <CalibrationBadge tag={provenance?.tag || 'expert-inference'} />
+          <span style={{ fontSize: 9, color: '#9ca3af' }}>{provenance?.label}</span>
+        </div>
+      </div>
+      <input
+        type="range"
+        min={min} max={max} step={step}
+        value={current}
+        onChange={(e) => onChange(id, e.target.value)}
+        style={{ accentColor: isOverride ? '#7c3aed' : '#0F4C75' }}
+      />
+      <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+        <input
+          type="number"
+          value={current}
+          step={step}
+          onChange={(e) => onChange(id, e.target.value)}
+          style={{
+            width: 66, padding: '4px 6px', fontSize: 12, textAlign: 'right',
+            border: isOverride ? '1px solid #7c3aed' : '1px solid #d1d5db',
+            background: isOverride ? '#faf5ff' : 'white',
+          }}
+        />
+        <span style={{ fontSize: 10, color: '#6b7888' }}>{unit}</span>
+      </div>
+      <button
+        onClick={() => onReset(id)}
+        disabled={!isOverride}
+        title={isOverride ? `Reset to default (${defaultValue})` : 'At default'}
+        style={{
+          background: 'none', border: 'none', cursor: isOverride ? 'pointer' : 'default',
+          opacity: isOverride ? 1 : 0.25, padding: 0, fontSize: 13, color: '#6b7888',
+        }}
+      >↺</button>
+    </div>
+  );
+}
+
+function CalibrationPanel({ calibration, updateCalibration, resetCalibrationGroup, resetAllCalibration }) {
+  const [collapsed, setCollapsed] = useState(true);
+  const cmpOverrides = calibration?.archetype_comparison_sensitivity || {};
+  const bookOverrides = calibration?.cluster_book_delta || {};
+  const overrideCount = Object.keys(cmpOverrides).length + Object.keys(bookOverrides).length;
+
+  const onCmpChange = (id, v) => updateCalibration('archetype_comparison_sensitivity', id, v);
+  const onCmpReset = (id) => updateCalibration('archetype_comparison_sensitivity', id, null);
+  const onBookChange = (id, v) => updateCalibration('cluster_book_delta', id, v);
+  const onBookReset = (id) => updateCalibration('cluster_book_delta', id, null);
+
+  return (
+    <div style={{
+      background: 'white', border: '1px solid #e5e7eb', borderRadius: 10,
+      padding: '16px 20px', marginBottom: 16,
+    }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <SectionHeader
+          title="Calibration"
+          icon="🎛️"
+          collapsed={collapsed}
+          onToggle={() => setCollapsed((c) => !c)}
+        />
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          {overrideCount > 0 && (
+            <span style={{
+              fontSize: 10, fontWeight: 700, padding: '3px 8px', borderRadius: 10,
+              background: '#ede9fe', color: '#6d28d9', letterSpacing: 0.3, textTransform: 'uppercase',
+            }}>
+              {overrideCount} override{overrideCount > 1 ? 's' : ''}
+            </span>
+          )}
+          {overrideCount > 0 && (
+            <button
+              onClick={resetAllCalibration}
+              style={{
+                background: 'white', border: '1px solid #e5e7eb', color: '#6b7888',
+                padding: '4px 10px', borderRadius: 6, cursor: 'pointer', fontSize: 11, fontWeight: 600,
+              }}
+            >Reset all</button>
+          )}
+        </div>
+      </div>
+
+      {!collapsed && (
+        <>
+          <div style={{
+            marginTop: 10, padding: '10px 12px', background: '#faf5ff',
+            border: '1px solid #e9d5ff', borderRadius: 6, fontSize: 12, color: '#4c1d95',
+            lineHeight: 1.55,
+          }}>
+            <strong>Consultant-tunable coefficients.</strong> Values are anchored to public
+            benchmarks (Cornell HQ, INE EGATUR 2024, Vives &amp; Jacob 2023) but are
+            <em> intended </em> to be adjusted for a specific property. Every override
+            flows live into the preview, sensitivity curve and competitor matrix.
+          </div>
+
+          {/* Group 1 — comparison sensitivity */}
+          <div style={{ marginTop: 16 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+              <div>
+                <div style={{ fontSize: 13, fontWeight: 700, color: '#0A3558' }}>Price-gap sensitivity per archetype</div>
+                <div style={{ fontSize: 11, color: '#6b7888', marginTop: 2 }}>
+                  How much a 10% price gap with the comp-set shifts bookings. Higher = more defection.
+                </div>
+              </div>
+              {Object.keys(cmpOverrides).length > 0 && (
+                <button
+                  onClick={() => resetCalibrationGroup('archetype_comparison_sensitivity')}
+                  style={{ background: 'none', border: 'none', color: '#6b7888', cursor: 'pointer', fontSize: 11 }}
+                >Reset group</button>
+              )}
+            </div>
+            <div style={{ marginTop: 8 }}>
+              {Object.entries(CALIBRATION_DEFAULTS.archetype_comparison_sensitivity).map(([id, def]) => (
+                <CalibrationSlider
+                  key={id}
+                  id={id}
+                  label={ARCHETYPE_LABELS[id] || id}
+                  provenance={CALIBRATION_PROVENANCE.archetype_comparison_sensitivity[id]}
+                  defaultValue={def}
+                  overrideValue={cmpOverrides[id]}
+                  min={0} max={3.5} step={0.05} unit="σ"
+                  onChange={onCmpChange}
+                  onReset={onCmpReset}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Group 2 — cluster book_delta */}
+          <div style={{ marginTop: 20 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+              <div>
+                <div style={{ fontSize: 13, fontWeight: 700, color: '#0A3558' }}>Booking propensity per cultural cluster</div>
+                <div style={{ fontSize: 11, color: '#6b7888', marginTop: 2 }}>
+                  Intrinsic booking bias vs. UK&amp;IE baseline. Moves the cultural-cushion term in computeRateChange.
+                </div>
+              </div>
+              {Object.keys(bookOverrides).length > 0 && (
+                <button
+                  onClick={() => resetCalibrationGroup('cluster_book_delta')}
+                  style={{ background: 'none', border: 'none', color: '#6b7888', cursor: 'pointer', fontSize: 11 }}
+                >Reset group</button>
+              )}
+            </div>
+            <div style={{ marginTop: 8 }}>
+              {Object.entries(CALIBRATION_DEFAULTS.cluster_book_delta).map(([id, def]) => (
+                <CalibrationSlider
+                  key={id}
+                  id={id}
+                  label={CLUSTER_LABELS[id] || id}
+                  provenance={CALIBRATION_PROVENANCE.cluster_book_delta[id]}
+                  defaultValue={def}
+                  overrideValue={bookOverrides[id]}
+                  min={-0.15} max={0.15} step={0.005} unit="Δ"
+                  onChange={onBookChange}
+                  onReset={onBookReset}
+                />
+              ))}
+            </div>
+          </div>
+
+          <div style={{
+            marginTop: 16, padding: '10px 12px', background: '#f9fafb',
+            border: '1px dashed #e5e7eb', borderRadius: 6, fontSize: 11, color: '#6b7888', lineHeight: 1.55,
+          }}>
+            <strong style={{ color: '#374151' }}>Badge legend.</strong>&nbsp;
+            <CalibrationBadge tag="peer-reviewed" /> = anchored to a published study;&nbsp;
+            <CalibrationBadge tag="EGATUR-anchored" /> = derived from INE&apos;s EGATUR spending panel;&nbsp;
+            <CalibrationBadge tag="expert-inference" /> = team default, safest to tune.
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
 function MixEditor({ title, items, values, total, onChange }) {
   return (
     <div>
@@ -1091,7 +1495,7 @@ function DecisionInsightsPanel({ scenario, preview, loading, updateDecision }) {
         const res = await fetch(`${API_URL}/api/scenario-sensitivity`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ property: scenario.property, audience: scenario.audience, decision: scenario.decision }),
+          body: JSON.stringify({ property: scenario.property, audience: scenario.audience, decision: scenario.decision, calibration: scenario.calibration }),
         });
         const data = await res.json();
         setSensitivityData(data);
@@ -1121,7 +1525,7 @@ function DecisionInsightsPanel({ scenario, preview, loading, updateDecision }) {
         const res = await fetch(`${API_URL}/api/competitor-matrix`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ property: scenario.property, audience: scenario.audience, decision: scenario.decision }),
+          body: JSON.stringify({ property: scenario.property, audience: scenario.audience, decision: scenario.decision, calibration: scenario.calibration }),
         });
         const data = await res.json();
         setCompetitorData(data);

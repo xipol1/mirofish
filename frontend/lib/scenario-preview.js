@@ -50,6 +50,20 @@ const CLUSTER_COEFS = {
   chinese_mainland:   { book_delta: +0.03, walk_bias: 0.95, spend_mult: 1.05, review_impact: 1.05 },
 };
 
+// Comparison sensitivity per archetype — how much a 10% relative-price gap
+// with the comp-set shifts booking. Higher = more defection.
+// Hoisted here so computeRateChange's calibration-resolver can see it.
+const ARCHETYPE_COMPARISON_SENSITIVITY = {
+  luxury_seeker:     0.4,   // low — brand over price
+  honeymooner:       0.7,
+  family_vacationer: 1.2,
+  business_traveler: 0.3,
+  digital_nomad:     1.4,
+  budget_optimizer:  2.2,   // high — shops harder
+  loyalty_maximizer: 0.4,
+  event_attendee:    0.9,
+};
+
 const ALL_ARCHETYPES = Object.keys(ARCHETYPE_COEFS);
 const ALL_CLUSTERS = Object.keys(CLUSTER_COEFS);
 
@@ -111,7 +125,28 @@ function verdictFromNetLtv(netEur) {
 
 // ══════════════════════ 6 decision type handlers ══════════════════════
 
-function computeRateChange({ magnitude_pct = 0, timing = 'peak', scope = { type: 'all' } }, { property, audience }) {
+// Apply optional calibration overrides from the consultant. Overrides are
+// merged on top of the published defaults — if a value is missing the default
+// applies. Keeps the engine consultant-adjustable while preserving the
+// anchored baseline.
+function resolveCalibration(calibration) {
+  const cal = calibration || {};
+  const cmpSens = Object.fromEntries(
+    Object.entries(ARCHETYPE_COMPARISON_SENSITIVITY).map(([id, v]) => [id, Number(cal?.archetype_comparison_sensitivity?.[id] ?? v)])
+  );
+  const clusterWalkBias = Object.fromEntries(
+    Object.entries(CLUSTER_COEFS).map(([id, c]) => [id, Number(cal?.cluster_walk_bias?.[id] ?? c.walk_bias)])
+  );
+  const clusterSpendMult = Object.fromEntries(
+    Object.entries(CLUSTER_COEFS).map(([id, c]) => [id, Number(cal?.cluster_spend_mult?.[id] ?? c.spend_mult)])
+  );
+  const clusterBookDelta = Object.fromEntries(
+    Object.entries(CLUSTER_COEFS).map(([id, c]) => [id, Number(cal?.cluster_book_delta?.[id] ?? c.book_delta)])
+  );
+  return { cmpSens, clusterWalkBias, clusterSpendMult, clusterBookDelta };
+}
+
+function computeRateChange({ magnitude_pct = 0, timing = 'peak', scope = { type: 'all' } }, { property, audience, calibration }) {
   // Softcap extreme magnitudes. Real-world rate decisions rarely exceed ±40%.
   // Anything beyond is likely a typo or test; we cap to avoid nonsense €M figures.
   const cappedMagnitude = Math.max(-60, Math.min(60, Number(magnitude_pct) || 0));
@@ -137,6 +172,7 @@ function computeRateChange({ magnitude_pct = 0, timing = 'peak', scope = { type:
 
   const baselineRev = baselineAnnualRevenue(property);
   const timingShare = timingRevenueShare(property, timing);
+  const cal = resolveCalibration(calibration);
 
   // Cultural-weighted book_delta for the cohort
   let culturalBookDelta = 0;
@@ -144,7 +180,8 @@ function computeRateChange({ magnitude_pct = 0, timing = 'peak', scope = { type:
   for (const [clusterId, clusterW] of Object.entries(clusterMix)) {
     if (scope.type === 'cluster' && scope.value !== clusterId) continue;
     const coef = CLUSTER_COEFS[clusterId] || CLUSTER_COEFS.anglo_uk_ireland;
-    culturalBookDelta += clusterW * coef.book_delta;
+    const effectiveBookDelta = cal.clusterBookDelta[clusterId] ?? coef.book_delta;
+    culturalBookDelta += clusterW * effectiveBookDelta;
     culturalReviewImpact += clusterW * coef.review_impact;
   }
 
@@ -566,7 +603,7 @@ function computeScenarioPreview(scenario) {
   const property = scenario.property || {};
   const audience = scenario.audience || { archetype_mix: {}, cultural_mix: {} };
 
-  const result = handler(scenario.decision, { property, audience });
+  const result = handler(scenario.decision, { property, audience, calibration: scenario.calibration });
   // Always attach a review forecast so consultants can cite in client reports.
   try {
     result.review_forecast = generateReviewForecast({
@@ -1275,17 +1312,6 @@ function generateReviewForecast({ scenario, preview, property, audience, decisio
 
 // Comparison sensitivity per archetype — how much a 10% relative-price gap
 // with the comp-set shifts booking. Higher = more defection.
-const ARCHETYPE_COMPARISON_SENSITIVITY = {
-  luxury_seeker:     0.4,   // low — brand over price
-  honeymooner:       0.7,
-  family_vacationer: 1.2,
-  business_traveler: 0.3,
-  digital_nomad:     1.4,
-  budget_optimizer:  2.2,   // high — shops harder
-  loyalty_maximizer: 0.4,
-  event_attendee:    0.9,
-};
-
 function computeRateChangeWithCompetitor(decision, context, competitor_rate_delta_pct = 0) {
   // Modifies computeRateChange to factor in a competitor rate change. The
   // relative price gap (your_change − competitor_change) drives extra
@@ -1293,7 +1319,8 @@ function computeRateChangeWithCompetitor(decision, context, competitor_rate_delt
   const baseRate = computeRateChange(decision, context);
   if (!competitor_rate_delta_pct) return baseRate;
 
-  const { audience, property } = context;
+  const { audience, property, calibration } = context;
+  const cal = resolveCalibration(calibration);
   const archMix = normalizeMix(audience.archetype_mix || {});
   const yourMagnitude = Number(decision.magnitude_pct) || 0;
   const gap = yourMagnitude - competitor_rate_delta_pct; // positive = you more expensive than comp
@@ -1302,10 +1329,10 @@ function computeRateChangeWithCompetitor(decision, context, competitor_rate_delt
   const baselineRev = baselineAnnualRevenue(property);
   const timingShare = timingRevenueShare(property, decision.timing || 'all');
 
-  // Extra defection from the gap
+  // Extra defection from the gap — use consultant-adjusted sensitivities
   let extraDefectionPct = 0;
   for (const [id, w] of Object.entries(archMix)) {
-    const sensitivity = ARCHETYPE_COMPARISON_SENSITIVITY[id] || 1.0;
+    const sensitivity = cal.cmpSens[id] ?? ARCHETYPE_COMPARISON_SENSITIVITY[id] ?? 1.0;
     extraDefectionPct += w * sensitivity * (gap / 100) * 0.5;
   }
 
@@ -1360,7 +1387,7 @@ function runCompetitorMatrix(scenario, { yourOptions = null, competitorReactions
   const matrix = youOpts.map((you) => compOpts.map((comp) => {
     const r = computeRateChangeWithCompetitor(
       { ...scenario.decision, magnitude_pct: you.magnitude },
-      { property, audience },
+      { property, audience, calibration: scenario.calibration },
       comp.delta,
     );
     return {
