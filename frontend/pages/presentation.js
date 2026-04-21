@@ -485,10 +485,10 @@ function CtaSlide() {
           </a>
         ))}
       </div>
-      <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '12px 24px', background: BRAND.accent, color: 'white', borderRadius: 10, fontSize: 14, fontWeight: 600, boxShadow: `0 8px 32px ${BRAND.accent}44` }}>
+      <a href="mailto:rafaferrer43@gmail.com?subject=Synthetic%20Users%20%C3%97%20Dignus%20%E2%80%94%20pilot%20request" style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '12px 24px', background: BRAND.accent, color: 'white', borderRadius: 10, fontSize: 14, fontWeight: 600, boxShadow: `0 8px 32px ${BRAND.accent}44`, textDecoration: 'none' }}>
         <span>📅</span>
-        <span>Book a pilot · hello@syntheticusers.ai</span>
-      </div>
+        <span>Book a pilot · rafaferrer43@gmail.com</span>
+      </a>
     </div>
   );
 }

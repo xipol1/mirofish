@@ -1,660 +1,369 @@
-import { useState, useRef, useEffect } from 'react';
-import { useRouter } from 'next/router';
+/**
+ * Synthetic Users × Dignus — product suite landing page.
+ *
+ * The entry point to the entire suite. Dignus visits this page, sees the value
+ * in 15 seconds, and clicks through to either:
+ *   - /presentation (12-slide walkthrough)
+ *   - /lab (live calibrated dashboard · Villa Le Blanc case study)
+ *   - /scenario (consultant workbench)
+ *   - /validation (client-facing report)
+ *
+ * The old lead-generation form (landing-page simulator) is archived as
+ * /_index.saas.js.bak for reference.
+ */
+
 import Head from 'next/head';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || (typeof window !== 'undefined' && window.location.hostname !== 'localhost' ? '' : 'http://localhost:5001');
-
-function apiFetch(path, options = {}) {
-  const headers = { ...options.headers, 'bypass-tunnel-reminder': 'true' };
-  return fetch(`${API_URL}${path}`, { ...options, headers });
-}
-
-const EXAMPLE_CONTENT = `Hero: "ProjectFlow — Ship products faster"
-Subheadline: "The modern project management tool for agile teams"
-CTA: "Start Free Trial"
-
-Features:
-- Sprint Planning: Drag-and-drop sprint boards with automated velocity tracking
-- Roadmap View: Real-time product roadmap that syncs with your sprints
-- Team Analytics: See who's blocked, what's on track, and where to focus
-- Integrations: Connect with GitHub, Slack, Figma, and 50+ tools
-
-Pricing:
-- Starter: $0/month — Up to 5 users, basic boards, 1 project
-- Pro: $12/user/month — Unlimited projects, roadmaps, analytics, integrations
-- Enterprise: $29/user/month — SSO, audit logs, priority support, custom fields
-
-Social Proof: None visible
-Trust Signals: "14-day free trial, no credit card required"
-Footer: Standard links, no testimonials or case studies`;
-
-const EXAMPLE_AUDIENCE = 'Product managers and engineering leads at B2B SaaS companies with 20-200 employees, evaluating project management tools to replace Jira or spreadsheets';
-
-/* ============================================================
-   LANDING PAGE — Synthetic Users Platform
-   ============================================================ */
+const BRAND = {
+  bg: '#0B1220',
+  bgSoft: '#111827',
+  card: '#1F2937',
+  border: '#374151',
+  text: '#F9FAFB',
+  muted: '#9CA3AF',
+  subtle: '#6B7280',
+  accent: '#3B82F6',
+  accentSoft: '#1E3A8A',
+  good: '#10B981',
+  warn: '#F59E0B',
+  gold: '#FCD34D',
+  purple: '#A78BFA',
+};
 
 export default function Home() {
-  const router = useRouter();
-  const formRef = useRef(null);
-  const [content, setContent] = useState('');
-  const [audience, setAudience] = useState('');
-  const [goal, setGoal] = useState('');
-  const [taskType, setTaskType] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [config, setConfig] = useState(null);
-  const [agentCount, setAgentCount] = useState(25);
-
-  useEffect(() => {
-    apiFetch('/api/config').then(r => r.json()).then((c) => {
-      setConfig(c);
-      if (c?.agents) setAgentCount(c.agents);
-    }).catch(() => {});
-  }, []);
-
-  const isDemo = config?.mode === 'demo';
-
-  const scrollToForm = () => {
-    formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError(null);
-    setLoading(true);
-    try {
-      const body = { audience };
-      const trimmed = content.trim();
-      if (/^https?:\/\//i.test(trimmed) && !trimmed.includes('\n')) {
-        body.url = trimmed;
-      } else {
-        body.content = content;
-      }
-      if (goal && goal.trim()) body.goal = goal.trim();
-      if (taskType) body.taskType = taskType;
-      if (Number.isFinite(agentCount) && agentCount > 0) body.agentCount = agentCount;
-
-      const res = await apiFetch('/api/simulate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-      });
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || 'Simulation failed to start');
-      }
-      const data = await res.json();
-      router.push(`/results/${data.simulationId}`);
-    } catch (err) {
-      setError(err.message);
-      setLoading(false);
-    }
-  };
-
-  const loadExample = () => {
-    setContent(EXAMPLE_CONTENT);
-    setAudience(EXAMPLE_AUDIENCE);
-  };
-
   return (
     <>
       <Head>
-        <title>Synthetic Users — Test your product on simulated users before you launch</title>
-        <meta name="description" content="Simulate 25 realistic users on your landing page. Get specific, actionable recommendations in 60 seconds. Stop guessing, start knowing." />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Synthetic Users × Dignus · Pre-decision validation suite</title>
+        <meta name="description" content="The invisible engine behind every Dignus recommendation. Four tools that let consultants validate any client decision against a calibrated synthetic guest cohort — before recommending." />
+        <style dangerouslySetInnerHTML={{ __html: `body{margin:0;background:${BRAND.bg};}a{text-decoration:none;}*,*::before,*::after{box-sizing:border-box;}` }} />
       </Head>
 
-      <div className="min-h-screen bg-[#08080e] text-gray-100 antialiased">
-
-        {/* ─── NAV ─── */}
-        <nav className="fixed top-0 w-full z-50 border-b border-white/5 bg-[#08080e]/80 backdrop-blur-xl">
-          <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center text-white font-bold text-xs">SU</div>
-              <span className="font-semibold text-white text-lg tracking-tight">Synthetic Users</span>
+      <div style={{ minHeight: '100vh', background: BRAND.bg, color: BRAND.text, fontFamily: 'system-ui, -apple-system, "Segoe UI", sans-serif', lineHeight: 1.55 }}>
+        {/* NAV */}
+        <nav style={{ position: 'sticky', top: 0, zIndex: 10, background: `${BRAND.bg}ee`, backdropFilter: 'blur(12px)', borderBottom: `1px solid ${BRAND.border}55` }}>
+          <div style={{ maxWidth: 1200, margin: '0 auto', padding: '16px 32px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <div style={{ width: 30, height: 30, borderRadius: 8, background: `linear-gradient(135deg, ${BRAND.accent}, #7C3AED)`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 800, fontSize: 14 }}>S</div>
+              <span style={{ fontSize: 15, fontWeight: 700, letterSpacing: 0.3 }}>Synthetic Users</span>
+              <span style={{ color: BRAND.subtle, fontSize: 12 }}>×</span>
+              <span style={{ fontSize: 13, color: BRAND.muted, fontWeight: 500 }}>Dignus</span>
             </div>
-            <div className="hidden md:flex items-center gap-8 text-sm text-gray-400">
-              <a href="#suite" className="hover:text-white transition-colors">Suite</a>
-              <a href="#how" className="hover:text-white transition-colors">How it works</a>
-              <a href="#pricing" className="hover:text-white transition-colors">Pricing</a>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <NavLink href="/presentation">Deck</NavLink>
+              <NavLink href="/scenario">Scenario</NavLink>
+              <NavLink href="/validation">Validation</NavLink>
+              <NavLink href="/onepager-es">One-pager</NavLink>
+              <a href="/lab" style={{
+                marginLeft: 8, padding: '8px 16px', background: BRAND.accent, color: 'white',
+                borderRadius: 8, fontSize: 13, fontWeight: 600,
+                boxShadow: `0 4px 12px ${BRAND.accent}44`,
+              }}>Open dashboard →</a>
             </div>
-            <button onClick={scrollToForm} className="bg-white text-black text-sm font-semibold px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors">
-              Try free
-            </button>
           </div>
         </nav>
 
-        {/* ─── HERO ─── */}
-        <section className="relative pt-32 pb-20 md:pt-44 md:pb-32 overflow-hidden">
-          {/* Glow */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-gradient-to-b from-violet-600/20 via-indigo-600/10 to-transparent rounded-full blur-3xl pointer-events-none" />
+        {/* HERO */}
+        <section style={{ maxWidth: 1200, margin: '0 auto', padding: '100px 32px 60px', textAlign: 'center' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '6px 16px', background: BRAND.accentSoft, border: `1px solid ${BRAND.accent}`, borderRadius: 999, marginBottom: 28, fontSize: 11, letterSpacing: 1.6, textTransform: 'uppercase', color: BRAND.accent, fontWeight: 600 }}>
+            PRE-DECISION VALIDATION · FOR HOSPITALITY CONSULTANTS
+          </div>
+          <h1 style={{ margin: 0, fontSize: 72, lineHeight: 1.02, fontWeight: 800, letterSpacing: -1.5, color: BRAND.text }}>
+            The invisible engine<br />
+            <span style={{ background: `linear-gradient(90deg, ${BRAND.accent}, ${BRAND.purple})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>behind every Dignus recommendation.</span>
+          </h1>
+          <p style={{ margin: '32px auto 0', maxWidth: 760, fontSize: 20, lineHeight: 1.5, color: BRAND.muted }}>
+            Four tools that let consultants validate any client decision against a calibrated synthetic guest cohort — <strong style={{ color: BRAND.text }}>before recommending</strong>. No guesswork. No 6-month post-mortem.
+          </p>
+          <div style={{ marginTop: 44, display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap' }}>
+            <a href="/lab" style={{
+              display: 'inline-flex', alignItems: 'center', gap: 10,
+              padding: '16px 28px', background: BRAND.accent, color: 'white',
+              borderRadius: 12, fontSize: 15, fontWeight: 600,
+              boxShadow: `0 8px 24px ${BRAND.accent}55`,
+            }}>
+              🚀 Open the dashboard
+              <span style={{ opacity: 0.7 }}>→</span>
+            </a>
+            <a href="/presentation" style={{
+              display: 'inline-flex', alignItems: 'center', gap: 10,
+              padding: '16px 28px', background: 'transparent', color: BRAND.text,
+              border: `1px solid ${BRAND.border}`, borderRadius: 12, fontSize: 15, fontWeight: 500,
+            }}>
+              🎬 Watch 5-min deck
+            </a>
+          </div>
+          <div style={{ marginTop: 34, fontSize: 12, color: BRAND.subtle, letterSpacing: 0.8 }}>
+            Calibrated against 572 real reviews · 10 cultures · Δ −0.04★ vs reality
+          </div>
+        </section>
 
-          <div className="relative max-w-4xl mx-auto px-6 text-center">
-            <div className="inline-flex items-center gap-2 border border-violet-500/30 bg-violet-500/10 rounded-full px-4 py-1.5 text-sm text-violet-300 mb-8">
-              <span className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-pulse" />
-              {isDemo ? `Demo mode \u2014 ${agentCount} free agents via Ollama` : 'Now in public beta'}
+        {/* PROOF STRIP */}
+        <section style={{ background: BRAND.bgSoft, borderTop: `1px solid ${BRAND.border}44`, borderBottom: `1px solid ${BRAND.border}44`, padding: '36px 32px' }}>
+          <div style={{ maxWidth: 1100, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 24 }}>
+            {[
+              { big: '572', sub: 'real reviews calibrated' },
+              { big: '4.61★', sub: 'predicted (real 4.65)' },
+              { big: '+71', sub: 'NPS simulated · CI ±2' },
+              { big: '94%', sub: 'target-star match rate' },
+              { big: '10', sub: 'cultures · Hofstede 6-D' },
+            ].map((s) => (
+              <div key={s.big} style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: 32, fontWeight: 800, color: BRAND.gold, lineHeight: 1, fontFeatureSettings: "'tnum'" }}>{s.big}</div>
+                <div style={{ fontSize: 11, color: BRAND.muted, marginTop: 6, textTransform: 'uppercase', letterSpacing: 0.8 }}>{s.sub}</div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* PITCH */}
+        <section style={{ maxWidth: 1100, margin: '0 auto', padding: '100px 32px 60px' }}>
+          <div style={{ textAlign: 'center', marginBottom: 44 }}>
+            <div style={{ fontSize: 11, letterSpacing: 2, textTransform: 'uppercase', color: BRAND.gold, marginBottom: 14 }}>The pitch</div>
+            <h2 style={{ margin: 0, fontSize: 44, fontWeight: 700, color: BRAND.text, letterSpacing: -0.5 }}>
+              Consultants recommend.<br />
+              <span style={{ color: BRAND.accent }}>Now they can validate first.</span>
+            </h2>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
+            {[
+              { label: 'Before', col: '#EF4444', text: 'Guess → recommend → defend in board review → adjust in production. 6-month feedback cycle on a decision that was already final.' },
+              { label: 'Gap', col: BRAND.warn, text: 'No simulated ground truth between intuition and client sign-off. Every recommendation carries unquantified risk.' },
+              { label: 'After', col: BRAND.good, text: 'Simulate on synthetic cohort → validate NPS, revenue, LTV deltas → recommend with confidence intervals. Same-week turnaround.' },
+            ].map((c) => (
+              <div key={c.label} style={{ padding: 24, background: BRAND.card, border: `1px solid ${c.col}33`, borderRadius: 14 }}>
+                <div style={{ fontSize: 10, letterSpacing: 1.2, textTransform: 'uppercase', color: c.col, marginBottom: 12, fontWeight: 700 }}>{c.label}</div>
+                <div style={{ fontSize: 14, color: BRAND.muted, lineHeight: 1.6 }}>{c.text}</div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* PRODUCTS */}
+        <section style={{ maxWidth: 1200, margin: '0 auto', padding: '60px 32px' }}>
+          <div style={{ textAlign: 'center', marginBottom: 50 }}>
+            <div style={{ fontSize: 11, letterSpacing: 2, textTransform: 'uppercase', color: BRAND.accent, marginBottom: 14 }}>Four products in the suite</div>
+            <h2 style={{ margin: 0, fontSize: 44, fontWeight: 700, color: BRAND.text, letterSpacing: -0.5 }}>
+              Everything a Dignus consultant needs, end-to-end.
+            </h2>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 20 }}>
+            <ProductCard
+              num="01" icon="🛠" color={BRAND.accent}
+              title="Scenario Editor"
+              sub="Consultant workbench · &lt;500ms live preview"
+              href="/scenario"
+              bullets={[
+                'Any decision, edited freely. No pre-written scenarios — just a blank form with a coherent default.',
+                'Live impact preview on NPS, revenue, LTV, annualised — instantly, no full-sim wait.',
+                'Library with save / duplicate / rename / delete. Auto-draft persistence.',
+                'CSV import of PMS data (ADR + occupancy, EN/ES months).',
+                'A/B compare two variants side by side before committing.',
+              ]}
+            />
+            <ProductCard
+              num="02" icon="📑" color={BRAND.purple}
+              title="Validation Report"
+              sub="White-label deliverable · 7 sections · PDF export"
+              href="/validation"
+              bullets={[
+                'Executive summary with zone classification (WIN / SAFE / STRATEGIC_BET / RISKY / BAD).',
+                'Sensitivity analysis — price, volume, NPS elasticity per segment.',
+                'Review forecaster — predicted platform mix and review tone.',
+                'Competitor game-theory matrix — how rivals likely respond.',
+                'Interview deep-dive — chat with any simulated guest.',
+              ]}
+            />
+            <ProductCard
+              num="03" icon="📊" color={BRAND.good}
+              title="Synthetic Users Dashboard"
+              sub="Calibrated case study · showcase asset"
+              href="/lab"
+              bullets={[
+                'Six navigable sections: Reports, Agents, Scenarios, Library, Properties, Get Started.',
+                'Calibrated on 572 real reviews (Gran Meliá Villa Le Blanc, Menorca).',
+                '31 synthetic guests with persona + 6-stage journey + first-person review.',
+                'Click any agent → chat + 13-dim sensation radar + collapsible journey.',
+                '"Ask this agent about this moment" — seeds chat from score breakdown.',
+              ]}
+            />
+            <ProductCard
+              num="04" icon="📰" color={BRAND.gold}
+              title="One-pager · Executive Report"
+              sub="Sales collateral · A4 + DOCX, EN + ES"
+              href="/onepager-es"
+              bullets={[
+                'One-pager — A4 landscape, print-ready, EN & ES.',
+                'Executive report — 18-page DOCX, 7 sections, Word-editable.',
+                'Methodology · calibration proof · case-study numbers · pitch timeline.',
+                'Regenerable via one Node script.',
+                'Dignus-editable source, branded palette.',
+              ]}
+            />
+          </div>
+        </section>
+
+        {/* WORKFLOW */}
+        <section style={{ background: BRAND.bgSoft, padding: '80px 32px', borderTop: `1px solid ${BRAND.border}44`, borderBottom: `1px solid ${BRAND.border}44` }}>
+          <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+            <div style={{ textAlign: 'center', marginBottom: 50 }}>
+              <div style={{ fontSize: 11, letterSpacing: 2, textTransform: 'uppercase', color: BRAND.accent, marginBottom: 14 }}>The workflow</div>
+              <h2 style={{ margin: 0, fontSize: 40, fontWeight: 700, color: BRAND.text }}>
+                From client brief to signed-off memo in <span style={{ color: BRAND.accent }}>one day</span>.
+              </h2>
             </div>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, flexWrap: 'wrap' }}>
+              {[
+                { n: 1, icon: '📞', label: 'Client brief', sub: 'Decision arrives', col: BRAND.subtle },
+                { n: 2, icon: '🛠', label: 'Scenario Editor', sub: '500ms preview, iterate', col: BRAND.accent },
+                { n: 3, icon: '⚡', label: 'Run full sim', sub: '1 000-agent cohort', col: BRAND.purple },
+                { n: 4, icon: '📑', label: 'Validation Report', sub: '7 sections, white-label', col: BRAND.good },
+                { n: 5, icon: '📨', label: 'Client receives', sub: 'Signed-off memo', col: BRAND.gold },
+              ].map((s, i, arr) => (
+                <>
+                  <div key={s.n} style={{ flex: 1, textAlign: 'center', minWidth: 150 }}>
+                    <div style={{ width: 70, height: 70, margin: '0 auto 12px', borderRadius: '50%', background: `${s.col}22`, border: `2px solid ${s.col}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28 }}>{s.icon}</div>
+                    <div style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: 1.2, color: s.col, fontWeight: 700, marginBottom: 4 }}>Step {s.n}</div>
+                    <div style={{ fontSize: 14, fontWeight: 600, color: BRAND.text, marginBottom: 3 }}>{s.label}</div>
+                    <div style={{ fontSize: 11, color: BRAND.muted }}>{s.sub}</div>
+                  </div>
+                  {i < arr.length - 1 && (
+                    <div key={`arr${i}`} style={{ fontSize: 20, color: BRAND.subtle }}>→</div>
+                  )}
+                </>
+              ))}
+            </div>
+          </div>
+        </section>
 
-            <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-white leading-[1.08] mb-6">
-              Your next launch<br />
-              <span className="bg-gradient-to-r from-violet-400 via-indigo-400 to-cyan-400 bg-clip-text text-transparent">
-                doesn&apos;t have to be a guess
-              </span>
-            </h1>
-
-            <p className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed">
-              Simulate <strong className="text-white">{agentCount} realistic users</strong> on your landing page, pricing, or feature.
-              Get exact recommendations you can act on.{isDemo ? '' : <> In <strong className="text-white">60 seconds</strong>.</>}
-            </p>
-
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
-              <button onClick={scrollToForm} className="group bg-white text-black font-semibold px-8 py-4 rounded-xl text-base hover:bg-gray-100 transition-all shadow-lg shadow-white/10 hover:shadow-white/20">
-                Test your landing page free
-                <span className="ml-2 inline-block group-hover:translate-x-0.5 transition-transform">&rarr;</span>
-              </button>
-              <a href="#demo" className="text-gray-400 hover:text-white text-sm transition-colors underline underline-offset-4 decoration-gray-700 hover:decoration-gray-400">
-                See example results
+        {/* CASE STUDY */}
+        <section style={{ maxWidth: 1100, margin: '0 auto', padding: '100px 32px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 50, alignItems: 'center' }}>
+            <div>
+              <div style={{ fontSize: 11, letterSpacing: 2, textTransform: 'uppercase', color: BRAND.accent, marginBottom: 14 }}>Case study · Gran Meliá Villa Le Blanc</div>
+              <h2 style={{ margin: 0, fontSize: 40, fontWeight: 700, color: BRAND.text, marginBottom: 20, letterSpacing: -0.5 }}>
+                31 synthetic guests. 10 languages.<br />4 decisions validated in 30 minutes.
+              </h2>
+              <p style={{ margin: 0, fontSize: 16, color: BRAND.muted, lineHeight: 1.6, marginBottom: 24 }}>
+                Menorca flagship. Real 4.65★ average, 572 reviews scraped from TripAdvisor and Booking. We built a synthetic twin that landed within <strong style={{ color: BRAND.text }}>0.04 stars</strong> of reality — and used it to test raising dinner prices, cutting resort fees, and enforcing adults-only access.
+              </p>
+              <a href="/lab" style={{
+                display: 'inline-flex', alignItems: 'center', gap: 10,
+                padding: '12px 20px', background: BRAND.accent, color: 'white',
+                borderRadius: 10, fontSize: 14, fontWeight: 600,
+                boxShadow: `0 6px 18px ${BRAND.accent}44`,
+              }}>
+                See the live dashboard
+                <span style={{ opacity: 0.7 }}>→</span>
               </a>
             </div>
-            <p className="text-xs text-gray-600">3 free simulations. No credit card. No signup.</p>
-
-            {/* Hero visual — fake dashboard */}
-            <div className="mt-16 relative mx-auto max-w-3xl">
-              <div className="absolute -inset-4 bg-gradient-to-b from-violet-600/20 to-transparent rounded-3xl blur-2xl pointer-events-none" />
-              <div className="relative bg-[#0f0f18] border border-white/10 rounded-2xl p-6 md:p-8 shadow-2xl">
-                <div className="flex items-center gap-2 mb-6">
-                  <div className="w-3 h-3 rounded-full bg-red-500/60" />
-                  <div className="w-3 h-3 rounded-full bg-yellow-500/60" />
-                  <div className="w-3 h-3 rounded-full bg-green-500/60" />
-                  <span className="ml-3 text-xs text-gray-600">Synthetic Users — Simulation Results</span>
-                </div>
-
-                {/* Fake headline insight */}
-                <div className="bg-violet-500/10 border border-violet-500/20 rounded-xl p-4 mb-5">
-                  <p className="text-xs text-violet-400 font-medium mb-1">KEY FINDING</p>
-                  <p className="text-white font-semibold text-sm md:text-base">19 of 25 users bounced because they couldn&apos;t find pricing within 8 seconds.</p>
-                </div>
-
-                {/* Fake outcome bar */}
-                <div className="flex gap-3 mb-5">
-                  <div className="flex-1 bg-[#111119] rounded-lg p-3 text-center">
-                    <div className="text-2xl font-bold text-emerald-400">6</div>
-                    <div className="text-[10px] text-gray-500">Converted</div>
-                  </div>
-                  <div className="flex-1 bg-[#111119] rounded-lg p-3 text-center">
-                    <div className="text-2xl font-bold text-red-400">19</div>
-                    <div className="text-[10px] text-gray-500">Bounced</div>
-                  </div>
-                  <div className="flex-1 bg-[#111119] rounded-lg p-3 text-center">
-                    <div className="text-2xl font-bold text-amber-400">0</div>
-                    <div className="text-[10px] text-gray-500">Interested</div>
-                  </div>
-                </div>
-
-                {/* Fake recommendation */}
-                <div className="bg-[#111119] border border-white/5 rounded-xl p-4">
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="bg-emerald-500/20 text-emerald-400 text-[10px] font-bold px-2 py-0.5 rounded-full">HIGH CONFIDENCE</span>
-                    <span className="text-[10px] text-gray-600">91% confidence</span>
-                  </div>
-                  <p className="text-white text-sm font-medium mb-1">Move pricing to the hero section</p>
-                  <p className="text-gray-500 text-xs">19 of 25 users looked for pricing before engaging with features. Expected impact: +22-30% conversion.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ─── TRUST BAR ─── */}
-        <section className="border-y border-white/5 py-8">
-          <div className="max-w-4xl mx-auto px-6 flex flex-wrap items-center justify-center gap-x-10 gap-y-4 text-sm text-gray-500">
-            <span className="flex items-center gap-2"><CheckCircle />60-second results</span>
-            <span className="flex items-center gap-2"><CheckCircle />No code required</span>
-            <span className="flex items-center gap-2"><CheckCircle />25 diverse user profiles</span>
-            <span className="flex items-center gap-2"><CheckCircle />Actionable recommendations</span>
-          </div>
-        </section>
-
-        {/* ─── SIMULATION SUITE ─── */}
-        <section id="suite" className="py-20 md:py-28 relative">
-          <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-gradient-to-b from-indigo-600/5 via-violet-600/5 to-red-600/5 blur-3xl pointer-events-none" />
-          <div className="max-w-6xl mx-auto px-6 relative">
-            <SectionLabel>Three ways to simulate</SectionLabel>
-            <h2 className="text-3xl md:text-4xl font-bold text-white text-center mb-4">One engine. Three products.</h2>
-            <p className="text-gray-500 text-center max-w-2xl mx-auto mb-14">
-              Validate copy. Test real browsers at enterprise scale. Or deploy 500 adversaries against your app. Pick what you need today.
-            </p>
-
-            <div className="grid lg:grid-cols-3 gap-5">
-              {/* Starter */}
-              <ProductCard
-                href="#simulate"
-                onClick={scrollToForm}
-                tag="Starter"
-                tagColor="violet"
-                title="Landing / pricing / feature validation"
-                pitch="Paste your content, describe your audience, get 25 diverse synthetic users reading it — with ranked, actionable recommendations."
-                stats={[
-                  { k: '25', v: 'synthetic users' },
-                  { k: '60s', v: 'to insight' },
-                  { k: '$0', v: 'to try' },
-                ]}
-                accentFrom="from-violet-500"
-                accentTo="to-indigo-600"
-                cta="Run a free simulation"
-              />
-              {/* Enterprise */}
-              <ProductCard
-                href="/enterprise"
-                tag="Enterprise"
-                tagColor="violet"
-                title="Pre-launch validation at scale"
-                pitch="Real Chromium browsers per agent — scroll, hover, click, get frustrated, abandon. Journey funnels, per-segment conversion, evidence-backed recs."
-                stats={[
-                  { k: '10-500', v: 'real agents' },
-                  { k: '12+', v: 'industry packs' },
-                  { k: 'PDF', v: 'report' },
-                ]}
-                accentFrom="from-indigo-500"
-                accentTo="to-purple-600"
-                cta="Open enterprise console"
-              />
-              {/* Cyber Swarm */}
-              <ProductCard
-                href="/cybersecurity"
-                tag="Cyber Swarm"
-                tagColor="red"
-                isNew
-                title="500 adversaries stress-testing your app"
-                pitch="Eight classes of attacker — script kiddies, bug bounty hunters, botnets, insiders, APTs, scanners, supply-chain, social engineers — OWASP Top 10 coverage with CVSS-scored findings."
-                stats={[
-                  { k: '500', v: 'adversary agents' },
-                  { k: 'OWASP', v: 'Top 10 covered' },
-                  { k: 'CVSS', v: 'scored findings' },
-                ]}
-                accentFrom="from-red-500"
-                accentTo="to-rose-600"
-                cta="Launch the swarm"
-              />
-            </div>
-          </div>
-        </section>
-
-        {/* ─── HOW IT WORKS ─── */}
-        <section id="how" className="py-24 md:py-32">
-          <div className="max-w-5xl mx-auto px-6">
-            <SectionLabel>How it works</SectionLabel>
-            <h2 className="text-3xl md:text-4xl font-bold text-white text-center mb-4">From zero feedback to clear decisions.</h2>
-            <p className="text-gray-500 text-center max-w-xl mx-auto mb-16">Three steps. Under two minutes. No research team required.</p>
-
-            <div className="grid md:grid-cols-3 gap-8">
-              <StepCard
-                step="01"
-                title="Paste your content"
-                desc="Drop in your landing page copy, pricing tiers, or feature description. Plain text works. No URL required."
-              />
-              <StepCard
-                step="02"
-                title="Describe your audience"
-                desc='One sentence: "B2B SaaS founders, bootstrapped, pre-PMF." We generate 25 diverse users that match.'
-              />
-              <StepCard
-                step="03"
-                title="Get recommendations"
-                desc="Each synthetic user evaluates your page independently. You get ranked actions with confidence levels."
-              />
-            </div>
-          </div>
-        </section>
-
-        {/* ─── DEMO / RESULTS ─── */}
-        <section id="demo" className="py-24 md:py-32 bg-[#0b0b14]">
-          <div className="max-w-5xl mx-auto px-6">
-            <SectionLabel>Real output</SectionLabel>
-            <h2 className="text-3xl md:text-4xl font-bold text-white text-center mb-4">This is what you get. Not a dashboard. Decisions.</h2>
-            <p className="text-gray-500 text-center max-w-xl mx-auto mb-16">Actual simulation output from a SaaS landing page test.</p>
-
-            <div className="grid md:grid-cols-2 gap-8">
-              {/* Left — insight + metric */}
-              <div className="space-y-5">
-                <div className="bg-[#12121c] border border-white/5 rounded-xl p-5">
-                  <p className="text-xs text-violet-400 font-semibold mb-2 uppercase tracking-wider">Headline Insight</p>
-                  <p className="text-white font-semibold leading-relaxed">
-                    &quot;64% of simulated users bounced. The primary blocker was not price &mdash; it was trust. Zero social proof on the page.&quot;
-                  </p>
-                </div>
-
-                <div className="bg-[#12121c] border border-white/5 rounded-xl p-5">
-                  <p className="text-xs text-red-400 font-semibold mb-3 uppercase tracking-wider">Top Friction Point</p>
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-lg bg-red-500/10 flex items-center justify-center text-red-400 font-bold text-lg shrink-0">16</div>
-                    <div>
-                      <p className="text-white text-sm font-medium">users looked for testimonials and found none</p>
-                      <p className="text-gray-500 text-xs mt-0.5">Blocks conversion for 64% of the audience</p>
+            <div>
+              <div style={{ padding: 28, background: BRAND.card, border: `1px solid ${BRAND.border}`, borderRadius: 14, marginBottom: 14 }}>
+                <div style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: 1.2, color: BRAND.good, fontWeight: 700, marginBottom: 14 }}>Calibration match</div>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
+                  {[['4.65★', 'real'], ['4.61★', 'predicted'], ['−0.04', 'Δ']].map(([v, k]) => (
+                    <div key={k}>
+                      <div style={{ fontSize: 28, fontWeight: 800, color: BRAND.text, lineHeight: 1 }}>{v}</div>
+                      <div style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: 1, color: BRAND.muted, marginTop: 4 }}>{k}</div>
                     </div>
+                  ))}
+                </div>
+              </div>
+              <div style={{ padding: 20, background: BRAND.bgSoft, border: `1px solid ${BRAND.border}`, borderRadius: 10 }}>
+                <div style={{ fontStyle: 'italic', fontSize: 13, color: BRAND.muted, lineHeight: 1.6, marginBottom: 10 }}>
+                  &ldquo;Our honeymoon was delayed two years by IVF… They had read my note, actioned it, and not once made a performance of it.&rdquo;
+                </div>
+                <div style={{ fontSize: 11, color: BRAND.subtle, letterSpacing: 0.4 }}>— Harriet C., synthetic guest #6 · NPS +100 · Booking.com 5★</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ENGAGEMENT */}
+        <section style={{ background: BRAND.bgSoft, padding: '80px 32px', borderTop: `1px solid ${BRAND.border}44` }}>
+          <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+            <div style={{ textAlign: 'center', marginBottom: 50 }}>
+              <div style={{ fontSize: 11, letterSpacing: 2, textTransform: 'uppercase', color: BRAND.accent, marginBottom: 14 }}>Engagement model</div>
+              <h2 style={{ margin: 0, fontSize: 40, fontWeight: 700, color: BRAND.text, letterSpacing: -0.5 }}>Pick how Dignus deploys it.</h2>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
+              {[
+                { name: 'Solo Consultant', price: '€490', period: '/ month', features: ['All 4 products, single user', '500 sim-runs / month', 'Shared scenario library', 'Email support'], accent: BRAND.subtle },
+                { name: 'Firm Seat', price: '€1 990', period: '/ month', features: ['Up to 10 consultants', '5 000 sim-runs / month', 'Client workspace separation', 'Custom property calibration'], accent: BRAND.accent, featured: true },
+                { name: 'White-label', price: 'Custom', period: '', features: ['Unlimited seats', 'Your branding + domain', 'Dedicated onboarding', 'SLA + API access'], accent: BRAND.gold },
+              ].map((t) => (
+                <div key={t.name} style={{
+                  padding: 28, background: t.featured ? `${BRAND.accent}14` : BRAND.card,
+                  border: `1px solid ${t.featured ? BRAND.accent : BRAND.border}`, borderRadius: 14,
+                  boxShadow: t.featured ? `0 8px 32px ${BRAND.accent}22` : 'none', position: 'relative',
+                }}>
+                  {t.featured && (
+                    <div style={{ position: 'absolute', top: -12, left: 20, padding: '3px 12px', background: BRAND.accent, color: 'white', borderRadius: 999, fontSize: 10, fontWeight: 700, letterSpacing: 1 }}>RECOMMENDED</div>
+                  )}
+                  <div style={{ fontSize: 12, textTransform: 'uppercase', letterSpacing: 1.2, color: t.accent, fontWeight: 700, marginBottom: 10 }}>{t.name}</div>
+                  <div style={{ marginBottom: 22 }}>
+                    <span style={{ fontSize: 40, fontWeight: 800, color: BRAND.text, lineHeight: 1 }}>{t.price}</span>
+                    {t.period && <span style={{ fontSize: 14, color: BRAND.muted, marginLeft: 6 }}>{t.period}</span>}
                   </div>
+                  <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 10 }}>
+                    {t.features.map((f, i) => (
+                      <li key={i} style={{ fontSize: 13, color: BRAND.muted, display: 'flex', gap: 8, lineHeight: 1.5 }}>
+                        <span style={{ color: t.accent, fontWeight: 700 }}>✓</span>
+                        <span>{f}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-
-                <div className="bg-[#12121c] border border-white/5 rounded-xl p-5">
-                  <p className="text-xs text-amber-400 font-semibold mb-3 uppercase tracking-wider">Segment Divergence</p>
-                  <div className="space-y-2 text-sm">
-                    <div className="flex justify-between"><span className="text-gray-400">Founders (budget holders)</span><span className="text-emerald-400 font-medium">52% converted</span></div>
-                    <div className="flex justify-between"><span className="text-gray-400">Product managers</span><span className="text-red-400 font-medium">24% converted</span></div>
-                    <div className="flex justify-between"><span className="text-gray-400">Technical evaluators</span><span className="text-amber-400 font-medium">33% converted</span></div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Right — recommendations */}
-              <div className="space-y-4">
-                <RecCard
-                  n={1}
-                  confidence="92%"
-                  color="emerald"
-                  action="Add 3 customer logos and one testimonial above the fold"
-                  evidence="16 of 25 users searched for social proof. 0 found any."
-                  impact="+18-25% conversion"
-                />
-                <RecCard
-                  n={2}
-                  confidence="84%"
-                  color="emerald"
-                  action='Change hero headline from "Modern solution" to a specific pain point'
-                  evidence="21 of 25 users skipped the hero. Perceived as generic."
-                  impact="+12-18% conversion"
-                />
-                <RecCard
-                  n={3}
-                  confidence="78%"
-                  color="amber"
-                  action="Reduce pricing from 3 tiers to 2"
-                  evidence="12 users experienced choice paralysis. Pro and Enterprise overlap 80%."
-                  impact="+8-14% conversion"
-                />
-              </div>
+              ))}
             </div>
           </div>
         </section>
 
-        {/* ─── BEFORE / AFTER ─── */}
-        <section className="py-24 md:py-32">
-          <div className="max-w-5xl mx-auto px-6">
-            <SectionLabel>Value</SectionLabel>
-            <h2 className="text-3xl md:text-4xl font-bold text-white text-center mb-16">The gap between guessing and knowing</h2>
-
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="bg-[#12121c] border border-red-500/10 rounded-2xl p-8">
-                <p className="text-red-400 font-semibold text-sm mb-5 uppercase tracking-wider">Without Synthetic Users</p>
-                <ul className="space-y-4">
-                  <BeforeItem text="You launch and hope the copy works" />
-                  <BeforeItem text="Pricing is based on competitor Googling" />
-                  <BeforeItem text='Feature roadmap is based on "gut feel"' />
-                  <BeforeItem text="You find out what's broken after losing users" />
-                  <BeforeItem text="User research takes 2-4 weeks and $5K+" />
-                </ul>
-              </div>
-              <div className="bg-[#12121c] border border-emerald-500/10 rounded-2xl p-8">
-                <p className="text-emerald-400 font-semibold text-sm mb-5 uppercase tracking-wider">With Synthetic Users</p>
-                <ul className="space-y-4">
-                  <AfterItem text="You know which headline converts before going live" />
-                  <AfterItem text="Pricing validated against 25 realistic buyer profiles" />
-                  <AfterItem text="Feature prioritized by simulated adoption rate" />
-                  <AfterItem text="Friction points identified with exact root causes" />
-                  <AfterItem text="60 seconds. $0 for your first 3 tests" />
-                </ul>
-              </div>
-            </div>
+        {/* CTA */}
+        <section style={{ maxWidth: 900, margin: '0 auto', padding: '110px 32px', textAlign: 'center' }}>
+          <div style={{ fontSize: 11, letterSpacing: 2, textTransform: 'uppercase', color: BRAND.gold, marginBottom: 14 }}>Ready to try?</div>
+          <h2 style={{ margin: 0, fontSize: 52, fontWeight: 800, color: BRAND.text, letterSpacing: -1, marginBottom: 20 }}>
+            Your next recommendation.<br />
+            <span style={{ background: `linear-gradient(90deg, ${BRAND.gold}, ${BRAND.accent})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Signed off in hours, not days.</span>
+          </h2>
+          <p style={{ margin: '0 auto', maxWidth: 640, fontSize: 17, color: BRAND.muted, lineHeight: 1.55, marginBottom: 36 }}>
+            Pilot in 14 days. Every product below is live, bookmarkable, and shareable with any client today.
+          </p>
+          <div style={{ display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 26 }}>
+            <a href="/lab" style={{
+              display: 'inline-flex', alignItems: 'center', gap: 10,
+              padding: '16px 28px', background: BRAND.accent, color: 'white',
+              borderRadius: 12, fontSize: 15, fontWeight: 600,
+              boxShadow: `0 8px 24px ${BRAND.accent}55`,
+            }}>🚀 Open dashboard →</a>
+            <a href="/presentation" style={{
+              display: 'inline-flex', alignItems: 'center', gap: 10,
+              padding: '16px 28px', background: 'transparent', color: BRAND.text,
+              border: `1px solid ${BRAND.border}`, borderRadius: 12, fontSize: 15, fontWeight: 500,
+            }}>🎬 Watch the deck</a>
           </div>
+          <a href="mailto:rafaferrer43@gmail.com?subject=Synthetic%20Users%20%C3%97%20Dignus%20%E2%80%94%20pilot%20request" style={{
+            display: 'inline-flex', alignItems: 'center', gap: 10, padding: '12px 22px',
+            background: BRAND.card, color: BRAND.text, border: `1px solid ${BRAND.border}`,
+            borderRadius: 10, fontSize: 13, fontWeight: 500,
+          }}>
+            <span>📅</span>
+            <span>Book a pilot · rafaferrer43@gmail.com</span>
+          </a>
         </section>
 
-        {/* ─── USE CASES ─── */}
-        <section id="use-cases" className="py-24 md:py-32 bg-[#0b0b14]">
-          <div className="max-w-5xl mx-auto px-6">
-            <SectionLabel>Use cases</SectionLabel>
-            <h2 className="text-3xl md:text-4xl font-bold text-white text-center mb-4">Test anything that touches a user decision</h2>
-            <p className="text-gray-500 text-center max-w-xl mx-auto mb-16">Every mode simulates how real users think, react, and decide.</p>
-
-            <div className="grid md:grid-cols-3 gap-6">
-              <UseCaseCard
-                icon={<IconPage />}
-                title="Landing Page Testing"
-                desc="Find out why visitors bounce. Get specific copy, layout, and trust signal recommendations."
-                metric="Avg. finding: 3.2 friction points per page"
-              />
-              <UseCaseCard
-                icon={<IconDollar />}
-                title="Pricing Validation"
-                desc="Test willingness to pay, tier selection patterns, and price sensitivity by segment."
-                metric="Avg. finding: 1 tier is always wrong"
-              />
-              <UseCaseCard
-                icon={<IconLightning />}
-                title="Feature Validation"
-                desc='Simulate adoption before building. Know if users would switch from their current solution.'
-                metric='Avg. finding: 40% of features don&apos;t solve the stated pain'
-              />
+        {/* FOOTER */}
+        <footer style={{ borderTop: `1px solid ${BRAND.border}55`, padding: '30px 32px', background: BRAND.bgSoft }}>
+          <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 14, fontSize: 11, color: BRAND.subtle }}>
+            <div>© 2026 Synthetic Users. For Dignus consultancy. All product demos are live.</div>
+            <div style={{ display: 'flex', gap: 18 }}>
+              <a href="/lab" style={{ color: BRAND.muted }}>Dashboard</a>
+              <a href="/presentation" style={{ color: BRAND.muted }}>Deck</a>
+              <a href="/scenario" style={{ color: BRAND.muted }}>Scenario</a>
+              <a href="/validation" style={{ color: BRAND.muted }}>Validation</a>
+              <a href="/onepager-es" style={{ color: BRAND.muted }}>One-pager</a>
+              <a href="mailto:rafaferrer43@gmail.com" style={{ color: BRAND.muted }}>Contact</a>
             </div>
-          </div>
-        </section>
-
-        {/* ─── WHY NOT ALTERNATIVES ─── */}
-        <section className="py-24 md:py-32">
-          <div className="max-w-4xl mx-auto px-6">
-            <SectionLabel>Comparison</SectionLabel>
-            <h2 className="text-3xl md:text-4xl font-bold text-white text-center mb-16">The old ways are slow, expensive, or random</h2>
-
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-white/10">
-                    <th className="text-left py-4 pr-8 text-gray-500 font-medium" />
-                    <th className="text-center py-4 px-4 text-gray-500 font-medium">User Research</th>
-                    <th className="text-center py-4 px-4 text-gray-500 font-medium">A/B Testing</th>
-                    <th className="text-center py-4 px-4 text-gray-500 font-medium">Guessing</th>
-                    <th className="text-center py-4 px-4">
-                      <span className="text-violet-400 font-bold">Synthetic Users</span>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="text-gray-400">
-                  <CompRow label="Time to insight" vals={['2-4 weeks', '1-4 weeks', 'Instant', <span key="su" className="text-white font-semibold">60 seconds</span>]} />
-                  <CompRow label="Cost" vals={['$5K-20K', '$500+/mo tools', '$0', <span key="su" className="text-white font-semibold">Free to start</span>]} />
-                  <CompRow label="Requires live traffic" vals={['No', 'Yes', 'No', <span key="su" className="text-white font-semibold">No</span>]} />
-                  <CompRow label="Works pre-launch" vals={['Sort of', 'No', 'Yes (badly)', <span key="su" className="text-white font-semibold">Yes</span>]} />
-                  <CompRow label="Explains why users leave" vals={['Yes', 'No', 'No', <span key="su" className="text-white font-semibold">Yes, per user</span>]} />
-                  <CompRow label="Gives specific actions" vals={['Sometimes', 'No', 'No', <span key="su" className="text-white font-semibold">Ranked list</span>]} />
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </section>
-
-        {/* ─── PRICING ─── */}
-        <section id="pricing" className="py-24 md:py-32 bg-[#0b0b14]">
-          <div className="max-w-5xl mx-auto px-6">
-            <SectionLabel>Pricing</SectionLabel>
-            <h2 className="text-3xl md:text-4xl font-bold text-white text-center mb-4">One bad launch costs more than a year of this</h2>
-            <p className="text-gray-500 text-center max-w-xl mx-auto mb-16">Start free. Upgrade when it saves you money.</p>
-
-            <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-              <PricingCard
-                name="Starter"
-                price="0"
-                period=""
-                desc="See if it works for you"
-                features={['3 simulations / month', '25 users per simulation', 'Landing page mode', 'Top recommendation only']}
-                cta="Start free"
-                onCta={scrollToForm}
-              />
-              <PricingCard
-                name="Growth"
-                price="149"
-                period="/mo"
-                desc="For founders shipping weekly"
-                features={['30 simulations / month', '50 users per simulation', 'All modes (pricing, features, onboarding)', 'Full recommendations + alternatives', 'Re-test with changes', 'Unlimited history']}
-                cta="Start free trial"
-                featured
-                onCta={scrollToForm}
-              />
-              <PricingCard
-                name="Scale"
-                price="499"
-                period="/mo"
-                desc="For growth teams running experiments"
-                features={['Unlimited simulations', '200 users per simulation', 'Comparative A/B simulations', 'CRM data integration', 'Priority processing', 'API access']}
-                cta="Contact us"
-                onCta={scrollToForm}
-              />
-            </div>
-          </div>
-        </section>
-
-        {/* ─── SIMULATION FORM ─── */}
-        <section id="simulate" ref={formRef} className="py-24 md:py-32">
-          <div className="max-w-2xl mx-auto px-6">
-            <div className="text-center mb-10">
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">Run your first simulation</h2>
-              <p className="text-gray-500">Paste your landing page. Describe your audience. Get answers.</p>
-            </div>
-
-            <form onSubmit={handleSubmit} className="space-y-5">
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <label className="text-sm font-medium text-gray-300">Landing page content</label>
-                  <button type="button" onClick={loadExample} className="text-xs text-violet-400 hover:text-white transition-colors">Load example</button>
-                </div>
-                <textarea
-                  value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                  placeholder="Paste your landing page text here. Include headline, features, pricing, CTAs, and social proof."
-                  rows={8}
-                  required
-                  className="w-full bg-[#12121c] border border-white/10 rounded-xl px-4 py-3 text-gray-200 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500/50 resize-y text-sm font-mono"
-                />
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-gray-300 mb-2 block">Target audience</label>
-                <textarea
-                  value={audience}
-                  onChange={(e) => setAudience(e.target.value)}
-                  placeholder='e.g. "SaaS founders, bootstrapped, 10-50 employees, evaluating analytics tools"'
-                  rows={3}
-                  required
-                  className="w-full bg-[#12121c] border border-white/10 rounded-xl px-4 py-3 text-gray-200 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500/50 resize-y text-sm"
-                />
-              </div>
-
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <label className="text-sm font-medium text-gray-300 mb-2 block">
-                    Test type <span className="text-gray-600 text-xs">(optional — auto-detected)</span>
-                  </label>
-                  <select
-                    value={taskType}
-                    onChange={(e) => setTaskType(e.target.value)}
-                    className="w-full bg-[#12121c] border border-white/10 rounded-xl px-4 py-3 text-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/50 text-sm"
-                  >
-                    <option value="">Auto-detect</option>
-                    <option value="landing_page">Landing page</option>
-                    <option value="pricing">Pricing strategy</option>
-                    <option value="marketing_campaign">Marketing campaign</option>
-                    <option value="feature_validation">Feature validation</option>
-                    <option value="onboarding">Onboarding flow</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-gray-300 mb-2 block">
-                    Your goal <span className="text-gray-600 text-xs">(optional)</span>
-                  </label>
-                  <input
-                    type="text"
-                    value={goal}
-                    onChange={(e) => setGoal(e.target.value)}
-                    placeholder="e.g. Maximize signups / validate pricing / etc."
-                    className="w-full bg-[#12121c] border border-white/10 rounded-xl px-4 py-3 text-gray-200 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-violet-500/50 text-sm"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="text-sm font-medium text-gray-300 mb-2 block">
-                  Number of synthetic users <span className="text-gray-600 text-xs">(1–200 · fewer = faster)</span>
-                </label>
-                <div className="flex items-center gap-4">
-                  <input
-                    type="range"
-                    min={1}
-                    max={200}
-                    step={1}
-                    value={agentCount}
-                    onChange={(e) => setAgentCount(parseInt(e.target.value, 10))}
-                    className="flex-1 accent-violet-500"
-                  />
-                  <input
-                    type="number"
-                    min={1}
-                    max={200}
-                    value={agentCount}
-                    onChange={(e) => {
-                      const v = parseInt(e.target.value, 10);
-                      if (Number.isFinite(v)) setAgentCount(Math.max(1, Math.min(200, v)));
-                    }}
-                    className="w-20 bg-[#12121c] border border-white/10 rounded-xl px-3 py-2 text-gray-200 focus:outline-none focus:ring-2 focus:ring-violet-500/50 text-sm text-center"
-                  />
-                </div>
-              </div>
-
-              {error && (
-                <div className="bg-red-900/20 border border-red-500/20 rounded-xl px-4 py-3 text-red-400 text-sm">{error}</div>
-              )}
-
-              <button
-                type="submit"
-                disabled={loading || !content.trim() || !audience.trim()}
-                className="w-full bg-white text-black font-semibold py-4 px-6 rounded-xl text-base hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-lg shadow-white/10"
-              >
-                {loading ? (
-                  <span className="flex items-center justify-center gap-2">
-                    <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
-                    Launching {agentCount} synthetic users...
-                  </span>
-                ) : `Run Simulation \u2014 ${agentCount} Synthetic Users${isDemo ? ' (Free Demo)' : ''}`}
-              </button>
-              <p className="text-center text-xs text-gray-600">
-                {isDemo ? `Demo mode: ${agentCount} agents via Ollama (local). May take 2-3 minutes.` : 'Takes 60-90 seconds. Each user evaluates your page independently.'}
-              </p>
-            </form>
-          </div>
-        </section>
-
-        {/* ─── FINAL CTA ─── */}
-        <section className="py-24 md:py-32 bg-[#0b0b14] relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-b from-violet-600/5 to-transparent pointer-events-none" />
-          <div className="relative max-w-3xl mx-auto px-6 text-center">
-            <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-6 tracking-tight">
-              Every day you launch without data,<br />
-              <span className="bg-gradient-to-r from-violet-400 to-indigo-400 bg-clip-text text-transparent">you leave money on the table.</span>
-            </h2>
-            <p className="text-gray-400 text-lg mb-10 max-w-lg mx-auto">
-              Your competitors are guessing too. But the first one to stop guessing wins.
-            </p>
-            <button onClick={scrollToForm} className="bg-white text-black font-semibold px-10 py-4 rounded-xl text-base hover:bg-gray-100 transition-all shadow-lg shadow-white/10 hover:shadow-white/20">
-              Test your landing page now &rarr;
-            </button>
-            <p className="mt-4 text-xs text-gray-600">Free. No signup. 60 seconds to your first insight.</p>
-          </div>
-        </section>
-
-        {/* ─── FOOTER ─── */}
-        <footer className="border-t border-white/5 py-10">
-          <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-2.5">
-              <div className="w-6 h-6 rounded-md bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center text-white font-bold text-[9px]">SU</div>
-              <span className="text-gray-500 text-sm">Synthetic Users &copy; 2026</span>
-            </div>
-            <p className="text-gray-600 text-xs">Talk to your users before they exist.</p>
           </div>
         </footer>
       </div>
@@ -662,161 +371,39 @@ export default function Home() {
   );
 }
 
-
-/* ============================================================
-   COMPONENTS
-   ============================================================ */
-
-function SectionLabel({ children }) {
-  return <p className="text-xs font-semibold text-violet-400 uppercase tracking-widest text-center mb-3">{children}</p>;
-}
-
-function CheckCircle() {
+function NavLink({ href, children }) {
   return (
-    <svg className="w-4 h-4 text-violet-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-    </svg>
+    <a href={href} style={{
+      padding: '6px 10px', color: BRAND.muted, fontSize: 13, fontWeight: 500,
+      borderRadius: 6, transition: 'color 120ms',
+    }}>{children}</a>
   );
 }
 
-function StepCard({ step, title, desc }) {
+function ProductCard({ num, icon, color, title, sub, href, bullets }) {
   return (
-    <div className="bg-[#12121c] border border-white/5 rounded-2xl p-7 hover:border-violet-500/20 transition-colors">
-      <div className="text-4xl font-extrabold text-violet-500/20 mb-4">{step}</div>
-      <h3 className="text-white font-semibold text-lg mb-2">{title}</h3>
-      <p className="text-gray-500 text-sm leading-relaxed">{desc}</p>
-    </div>
-  );
-}
-
-function RecCard({ n, confidence, color, action, evidence, impact }) {
-  const colorMap = {
-    emerald: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/10',
-    amber: 'bg-amber-500/15 text-amber-400 border-amber-500/10',
-  };
-  return (
-    <div className={`border rounded-xl p-5 ${colorMap[color] || colorMap.emerald}`}>
-      <div className="flex items-center gap-2 mb-2">
-        <span className="text-xs font-bold bg-black/20 px-2 py-0.5 rounded-full">#{n}</span>
-        <span className="text-xs opacity-70">{confidence} confidence</span>
+    <a href={href} style={{
+      display: 'flex', flexDirection: 'column', gap: 14,
+      padding: 28, background: BRAND.card, border: `1px solid ${BRAND.border}`,
+      borderRadius: 16, color: BRAND.text, transition: 'all 200ms',
+    }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+        <div style={{ width: 56, height: 56, borderRadius: 14, background: `${color}22`, border: `1px solid ${color}55`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 26, flexShrink: 0 }}>{icon}</div>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: 1.2, color, fontWeight: 700, marginBottom: 4 }}>{num}</div>
+          <div style={{ fontSize: 22, fontWeight: 700, color: BRAND.text }}>{title}</div>
+          <div style={{ fontSize: 12, color: BRAND.muted, marginTop: 2 }} dangerouslySetInnerHTML={{ __html: sub }} />
+        </div>
+        <div style={{ color, fontSize: 20 }}>→</div>
       </div>
-      <p className="text-white text-sm font-semibold mb-1.5">{action}</p>
-      <p className="text-xs opacity-70 mb-2">{evidence}</p>
-      <p className="text-xs font-medium">Expected: {impact}</p>
-    </div>
-  );
-}
-
-function BeforeItem({ text }) {
-  return (
-    <li className="flex items-start gap-3 text-gray-400 text-sm">
-      <span className="text-red-500 mt-0.5 shrink-0">&times;</span>
-      {text}
-    </li>
-  );
-}
-
-function AfterItem({ text }) {
-  return (
-    <li className="flex items-start gap-3 text-gray-300 text-sm">
-      <span className="text-emerald-400 mt-0.5 shrink-0">&#10003;</span>
-      {text}
-    </li>
-  );
-}
-
-function CompRow({ label, vals }) {
-  return (
-    <tr className="border-b border-white/5">
-      <td className="py-3 pr-8 text-gray-300 font-medium">{label}</td>
-      {vals.map((v, i) => <td key={i} className="py-3 px-4 text-center">{v}</td>)}
-    </tr>
-  );
-}
-
-function UseCaseCard({ icon, title, desc, metric }) {
-  return (
-    <div className="bg-[#12121c] border border-white/5 rounded-2xl p-7 hover:border-violet-500/20 transition-colors group">
-      <div className="w-10 h-10 rounded-xl bg-violet-500/10 flex items-center justify-center text-violet-400 mb-5 group-hover:bg-violet-500/20 transition-colors">{icon}</div>
-      <h3 className="text-white font-semibold text-lg mb-2">{title}</h3>
-      <p className="text-gray-500 text-sm leading-relaxed mb-4">{desc}</p>
-      <p className="text-xs text-violet-400/80">{metric}</p>
-    </div>
-  );
-}
-
-function PricingCard({ name, price, period, desc, features, cta, featured, onCta }) {
-  return (
-    <div className={`rounded-2xl p-7 flex flex-col ${featured ? 'bg-gradient-to-b from-violet-600/20 to-[#12121c] border-2 border-violet-500/30 ring-1 ring-violet-500/10 relative' : 'bg-[#12121c] border border-white/5'}`}>
-      {featured && <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-violet-500 text-white text-xs font-bold px-3 py-1 rounded-full">Most Popular</span>}
-      <p className="text-white font-semibold text-lg mb-1">{name}</p>
-      <p className="text-gray-500 text-xs mb-5">{desc}</p>
-      <div className="mb-6">
-        <span className="text-4xl font-extrabold text-white">${price}</span>
-        <span className="text-gray-500 text-sm">{period}</span>
-      </div>
-      <ul className="space-y-2.5 mb-8 flex-1">
-        {features.map((f, i) => (
-          <li key={i} className="flex items-start gap-2 text-sm text-gray-400">
-            <svg className="w-4 h-4 text-violet-400 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
-            {f}
+      <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 8 }}>
+        {bullets.map((b, i) => (
+          <li key={i} style={{ display: 'flex', gap: 10, fontSize: 13, color: BRAND.muted, lineHeight: 1.55 }}>
+            <span style={{ color: color, flexShrink: 0, fontWeight: 700 }}>✓</span>
+            <span>{b}</span>
           </li>
         ))}
       </ul>
-      <button onClick={onCta} className={`w-full py-3 rounded-xl font-semibold text-sm transition-all ${featured ? 'bg-white text-black hover:bg-gray-100 shadow-lg shadow-white/10' : 'bg-white/5 text-white hover:bg-white/10 border border-white/10'}`}>
-        {cta}
-      </button>
-    </div>
-  );
-}
-
-function IconPage() {
-  return <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" /></svg>;
-}
-
-function IconDollar() {
-  return <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>;
-}
-
-function IconLightning() {
-  return <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" /></svg>;
-}
-
-function ProductCard({ href, onClick, tag, tagColor, isNew, title, pitch, stats, accentFrom, accentTo, cta }) {
-  const tagStyle = tagColor === 'red'
-    ? 'bg-red-500/10 text-red-300 border-red-500/20'
-    : 'bg-violet-500/10 text-violet-300 border-violet-500/20';
-  const Wrapper = ({ children }) => {
-    if (onClick) {
-      return <button type="button" onClick={onClick} className="group text-left block w-full">{children}</button>;
-    }
-    return <a href={href} className="group block">{children}</a>;
-  };
-  return (
-    <Wrapper>
-      <div className={`relative bg-[#0f0f18] border border-white/10 rounded-2xl p-6 h-full flex flex-col transition-all hover:border-white/20 hover:-translate-y-0.5`}>
-        <div className={`absolute -inset-px rounded-2xl bg-gradient-to-br ${accentFrom} ${accentTo} opacity-0 group-hover:opacity-20 blur-lg pointer-events-none transition-opacity`} />
-        <div className="relative flex-1 flex flex-col">
-          <div className="flex items-center gap-2 mb-4">
-            <span className={`text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full border ${tagStyle}`}>{tag}</span>
-            {isNew && <span className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full bg-white text-black">New</span>}
-          </div>
-          <h3 className="text-white font-bold text-xl leading-tight mb-3">{title}</h3>
-          <p className="text-gray-400 text-sm leading-relaxed mb-5 flex-1">{pitch}</p>
-          <div className="grid grid-cols-3 gap-2 mb-5">
-            {stats.map((s, i) => (
-              <div key={i} className="bg-white/5 rounded-lg px-2 py-2">
-                <div className={`text-lg font-bold bg-gradient-to-r ${accentFrom} ${accentTo} bg-clip-text text-transparent leading-tight`}>{s.k}</div>
-                <div className="text-[10px] text-gray-500 truncate">{s.v}</div>
-              </div>
-            ))}
-          </div>
-          <div className={`flex items-center justify-between text-sm font-semibold bg-gradient-to-r ${accentFrom} ${accentTo} bg-clip-text text-transparent`}>
-            <span>{cta}</span>
-            <span className="text-white group-hover:translate-x-1 transition-transform">→</span>
-          </div>
-        </div>
-      </div>
-    </Wrapper>
+    </a>
   );
 }
