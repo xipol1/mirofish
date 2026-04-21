@@ -11,6 +11,11 @@
 
 import Head from 'next/head';
 import { useCallback, useEffect, useMemo, useRef, useState, Fragment as FragmentWithKey } from 'react';
+import {
+  listScenarios, saveScenario, deleteScenario, duplicateScenario, renameScenario,
+  saveDraft, loadDraft, exportAsJson, importFromFile,
+} from '../lib/scenarios-storage';
+import { parsePropertyCsv } from '../lib/property-csv';
 
 // In production / Vercel, always use same-origin (relative URL) so we hit
 // /api/scenario-preview in this Next.js app. Only fall back to the legacy
@@ -242,6 +247,147 @@ export default function ScenarioEditor() {
   const [previewError, setPreviewError] = useState(null);
   const debounceRef = useRef(null);
 
+  // Persistence — the currently-linked saved scenario (null = draft-only)
+  const [activeScenarioId, setActiveScenarioId] = useState(null);
+  const [savedList, setSavedList] = useState([]);
+  const [lastSavedAt, setLastSavedAt] = useState(null);
+  const [restoredFromDraft, setRestoredFromDraft] = useState(false);
+  const draftTimer = useRef(null);
+  const didMount = useRef(false);
+
+  // Restore draft on first mount (browser-only)
+  useEffect(() => {
+    const draft = loadDraft();
+    if (draft?.payload) {
+      setScenario(draft.payload);
+      setRestoredFromDraft(true);
+      // Fade the banner after 6s
+      setTimeout(() => setRestoredFromDraft(false), 6000);
+    }
+    setSavedList(listScenarios());
+    didMount.current = true;
+  }, []);
+
+  // Auto-save the working draft every 800ms of inactivity
+  useEffect(() => {
+    if (!didMount.current) return;
+    clearTimeout(draftTimer.current);
+    draftTimer.current = setTimeout(() => saveDraft(scenario), 800);
+    return () => clearTimeout(draftTimer.current);
+  }, [scenario]);
+
+  const refreshSavedList = useCallback(() => setSavedList(listScenarios()), []);
+
+  const handleSave = useCallback(() => {
+    const saved = saveScenario({
+      id: activeScenarioId || undefined,
+      name: scenario.scenario_name || 'Untitled scenario',
+      client: scenario.client || '',
+      payload: scenario,
+    });
+    setActiveScenarioId(saved.id);
+    setLastSavedAt(Date.now());
+    refreshSavedList();
+  }, [activeScenarioId, scenario, refreshSavedList]);
+
+  const handleSaveAs = useCallback((newName) => {
+    const saved = saveScenario({
+      name: newName || `${scenario.scenario_name} (copy)`,
+      client: scenario.client || '',
+      payload: { ...scenario, scenario_name: newName || scenario.scenario_name },
+    });
+    setActiveScenarioId(saved.id);
+    setScenario((s) => ({ ...s, scenario_name: newName || s.scenario_name }));
+    setLastSavedAt(Date.now());
+    refreshSavedList();
+  }, [scenario, refreshSavedList]);
+
+  const handleLoad = useCallback((id) => {
+    const list = listScenarios();
+    const entry = list.find((s) => s.id === id);
+    if (!entry) return;
+    setScenario(entry.payload);
+    setActiveScenarioId(id);
+    setLastSavedAt(entry.updatedAt);
+  }, []);
+
+  const handleDelete = useCallback((id) => {
+    deleteScenario(id);
+    if (activeScenarioId === id) setActiveScenarioId(null);
+    refreshSavedList();
+  }, [activeScenarioId, refreshSavedList]);
+
+  const handleDuplicate = useCallback((id) => {
+    const dup = duplicateScenario(id);
+    if (dup) {
+      refreshSavedList();
+      setScenario(dup.payload);
+      setActiveScenarioId(dup.id);
+    }
+  }, [refreshSavedList]);
+
+  const handleRename = useCallback((id, newName) => {
+    renameScenario(id, newName);
+    if (activeScenarioId === id) setScenario((s) => ({ ...s, scenario_name: newName }));
+    refreshSavedList();
+  }, [activeScenarioId, refreshSavedList]);
+
+  const handleNewBlank = useCallback(() => {
+    setScenario(DEFAULTS);
+    setActiveScenarioId(null);
+    setLastSavedAt(null);
+  }, []);
+
+  const handleExportJson = useCallback(() => {
+    exportAsJson(scenario, { name: scenario.scenario_name, client: scenario.client });
+  }, [scenario]);
+
+  const handleImportFile = useCallback(async (file) => {
+    try {
+      const { payload, name, client } = await importFromFile(file);
+      // Merge atop DEFAULTS so missing keys don't crash the editor
+      setScenario({ ...DEFAULTS, ...payload,
+        scenario_name: name || payload.scenario_name || DEFAULTS.scenario_name,
+        client: client || payload.client || DEFAULTS.client,
+      });
+      setActiveScenarioId(null);
+    } catch (err) {
+      alert('No pude leer el archivo: ' + err.message);
+    }
+  }, []);
+
+  // Property CSV import
+  const handleImportPropertyCsv = useCallback(async (csvText) => {
+    const parsed = parsePropertyCsv(csvText);
+    if (parsed.error) return { error: parsed.error };
+    setScenario((s) => ({ ...s, property: { ...s.property, ...parsed.property } }));
+    return { ok: true, warnings: parsed.warnings || [] };
+  }, []);
+
+  // A/B Compare mode — scenarioB is a full parallel scenario (starts as a clone)
+  const [compareMode, setCompareMode] = useState(false);
+  const [scenarioB, setScenarioB] = useState(null); // null until user enables
+  const toggleCompareMode = useCallback(() => {
+    setCompareMode((on) => {
+      if (!on) {
+        // Turn ON: clone current scenario as B, but nudge decision to differentiate
+        setScenarioB((b) => {
+          if (b) return b;
+          const clone = JSON.parse(JSON.stringify(scenario));
+          if (clone.decision?.type === 'rate_change') {
+            clone.decision.magnitude_pct = Math.round(((clone.decision.magnitude_pct || 10) - 5) * 10) / 10;
+          }
+          clone.scenario_name = `${scenario.scenario_name} · variant B`;
+          return clone;
+        });
+      }
+      return !on;
+    });
+  }, [scenario]);
+  const updateScenarioB = useCallback((updater) => {
+    setScenarioB((b) => (typeof updater === 'function' ? updater(b) : updater));
+  }, []);
+
   // ── Debounced preview fetch ─────────────────────────────────────────
   const fetchPreview = useCallback(async (s) => {
     setPreviewLoading(true);
@@ -378,10 +524,48 @@ export default function ScenarioEditor() {
         input[type="range"] { width: 100%; }
         label { font-size: 11px; color: #6b7888; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; }
         .section-title { font-size: 14px; font-weight: 700; color: #0A3558; margin: 0 0 12px; }
+
+        /* Print styles — triggered by the Export PDF button */
+        @media print {
+          body { background: white !important; }
+          .no-print { display: none !important; }
+          .print-only { display: block !important; }
+          .print-page { page-break-after: always; }
+        }
+        .print-only { display: none; }
       `}</style>
 
       <div style={{ maxWidth: 1500, margin: '0 auto', padding: '20px 22px 100px' }}>
-        <TopBar scenario={scenario} setScenario={setScenario} runFullSim={runFullSim} running={running} />
+        <TopBar
+          scenario={scenario}
+          setScenario={setScenario}
+          runFullSim={runFullSim}
+          running={running}
+          activeScenarioId={activeScenarioId}
+          savedList={savedList}
+          lastSavedAt={lastSavedAt}
+          onSave={handleSave}
+          onSaveAs={handleSaveAs}
+          onLoad={handleLoad}
+          onDelete={handleDelete}
+          onDuplicate={handleDuplicate}
+          onRename={handleRename}
+          onNewBlank={handleNewBlank}
+          onExportJson={handleExportJson}
+          onImportFile={handleImportFile}
+          onImportPropertyCsv={handleImportPropertyCsv}
+          compareMode={compareMode}
+          toggleCompareMode={toggleCompareMode}
+        />
+
+        {restoredFromDraft && (
+          <div className="no-print" style={{
+            background: '#ecfdf5', border: '1px solid #86efac', color: '#14532d',
+            borderRadius: 8, padding: '8px 14px', marginTop: 10, fontSize: 12,
+          }}>
+            ✓ Restoré tu borrador de la sesión anterior. Todo lo que edites se guarda automáticamente en este navegador.
+          </div>
+        )}
 
         <PositioningCard />
 
@@ -392,6 +576,16 @@ export default function ScenarioEditor() {
 
             {/* Prominent insights panel — sensitivity + segments with full width */}
             <DecisionInsightsPanel scenario={scenario} preview={preview} loading={previewLoading} updateDecision={updateDecision} />
+
+            {compareMode && scenarioB && (
+              <CompareBPanel
+                scenarioB={scenarioB}
+                setScenarioB={updateScenarioB}
+                scenarioA={scenario}
+                previewA={preview}
+                onClose={toggleCompareMode}
+              />
+            )}
 
             <PropertyContext
               property={scenario.property}
@@ -423,9 +617,313 @@ export default function ScenarioEditor() {
           />
         </div>
 
+        {/* Hidden print-only block — styled for window.print() PDF export */}
+        <PrintReport scenario={scenario} preview={preview} />
+
         {running && <RunningOverlay stage={runStage} stages={RUN_STAGES} />}
       </div>
     </>
+  );
+}
+
+// ══════════════════ PrintReport (PDF export) ══════════════════════════
+//
+// Hidden on screen (display:none by default) and shown only on @media print.
+// Renders a clean 1-pager of the current scenario + preview for window.print().
+// Consultants hit 🖨️ Export PDF, browser opens the print dialog, they pick
+// "Save as PDF" — no server, no puppeteer, works everywhere.
+
+function PrintReport({ scenario, preview }) {
+  const fmtEur = (n) => {
+    if (n == null) return '—';
+    const sign = n >= 0 ? '+' : '−';
+    const abs = Math.abs(n);
+    if (abs >= 1_000_000) return `${sign}€${(abs / 1_000_000).toFixed(2)}M`;
+    if (abs >= 1_000) return `${sign}€${(abs / 1_000).toFixed(0)}K`;
+    return `${sign}€${abs}`;
+  };
+  const decisionSummary = describeDecision(scenario.decision);
+  const topSegments = (preview?.segments || []).slice(0, 5);
+  const topComplaints = (preview?.complaints || []).slice(0, 5);
+  const verdict = preview?.verdict || 'PROCEED';
+  const verdictColor = verdictToColor(verdict);
+
+  return (
+    <div className="print-only" style={{ background: 'white', color: '#1a1d23', padding: '20mm 18mm' }}>
+      <div style={{ borderBottom: '2px solid #0A3558', paddingBottom: 10, marginBottom: 16 }}>
+        <div style={{ fontSize: 10, letterSpacing: 1.4, textTransform: 'uppercase', color: '#6b7888', fontWeight: 600 }}>
+          Dignus · Pre-decision validation
+        </div>
+        <div style={{ fontSize: 22, fontWeight: 800, color: '#0A3558', marginTop: 4 }}>
+          {scenario.scenario_name}
+        </div>
+        <div style={{ fontSize: 13, color: '#4b5563', marginTop: 2 }}>
+          {scenario.client} · {new Date().toLocaleDateString()}
+        </div>
+      </div>
+
+      {/* Decision + verdict */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 180px', gap: 20, marginBottom: 18 }}>
+        <div>
+          <div style={{ fontSize: 10, letterSpacing: 1.2, textTransform: 'uppercase', color: '#6b7888', fontWeight: 700 }}>
+            Decision under test
+          </div>
+          <div style={{ fontSize: 16, fontWeight: 700, color: '#0A3558', marginTop: 4 }}>
+            {decisionSummary}
+          </div>
+        </div>
+        <div style={{
+          background: '#f6f7f9', border: `2px solid ${verdictColor}`, borderRadius: 6,
+          padding: 10, textAlign: 'center',
+        }}>
+          <div style={{ fontSize: 9, letterSpacing: 1.2, textTransform: 'uppercase', color: '#6b7888', fontWeight: 700 }}>
+            Verdict
+          </div>
+          <div style={{ fontSize: 15, fontWeight: 800, color: verdictColor, marginTop: 4 }}>
+            {verdict.replace('_', ' ')}
+          </div>
+        </div>
+      </div>
+
+      {/* Headline impact numbers */}
+      <div style={{ border: '1px solid #e5e7eb', borderRadius: 6, padding: 14, marginBottom: 18 }}>
+        <div style={{ fontSize: 10, letterSpacing: 1.2, textTransform: 'uppercase', color: '#6b7888', fontWeight: 700, marginBottom: 8 }}>
+          Impact forecast (formula-anchored preview)
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10 }}>
+          <PrintKV label="Short-term €" value={fmtEur(preview?.short_term_eur)} color={(preview?.short_term_eur ?? 0) >= 0 ? '#0a8754' : '#b91c1c'} />
+          <PrintKV label="Long-term LTV €" value={fmtEur(preview?.long_term_eur)} color={(preview?.long_term_eur ?? 0) >= 0 ? '#0a8754' : '#b91c1c'} />
+          <PrintKV label="Net LTV €" value={fmtEur(preview?.net_eur)} color={(preview?.net_eur ?? 0) >= 0 ? '#0a8754' : '#b91c1c'} big />
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10, marginTop: 10 }}>
+          <PrintKV label="Booking Δ%" value={`${preview?.booking_delta_pct ?? 0}%`} />
+          <PrintKV label="NPS Δ" value={preview?.nps_delta ?? 0} />
+          <PrintKV label="Star Δ" value={preview?.star_delta ?? 0} />
+        </div>
+      </div>
+
+      {/* Segments + complaints */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 18 }}>
+        <div style={{ border: '1px solid #e5e7eb', borderRadius: 6, padding: 12 }}>
+          <div style={{ fontSize: 10, letterSpacing: 1.2, textTransform: 'uppercase', color: '#6b7888', fontWeight: 700, marginBottom: 8 }}>
+            Top segments by booking shift
+          </div>
+          {topSegments.length === 0 ? (
+            <div style={{ fontSize: 11, color: '#9ca3af' }}>(no segment data)</div>
+          ) : topSegments.map((s, i) => (
+            <div key={i} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, padding: '4px 0', borderTop: i > 0 ? '1px solid #f3f4f6' : 'none' }}>
+              <span>{s.segment} <span style={{ color: '#9ca3af' }}>({s.weight_pct}%)</span></span>
+              <span style={{ fontWeight: 700, color: s.delta_pct < 0 ? '#b91c1c' : '#0a8754' }}>{s.delta_pct > 0 ? '+' : ''}{s.delta_pct}%</span>
+            </div>
+          ))}
+        </div>
+        <div style={{ border: '1px solid #e5e7eb', borderRadius: 6, padding: 12 }}>
+          <div style={{ fontSize: 10, letterSpacing: 1.2, textTransform: 'uppercase', color: '#6b7888', fontWeight: 700, marginBottom: 8 }}>
+            Anticipated complaints
+          </div>
+          {topComplaints.length === 0 ? (
+            <div style={{ fontSize: 11, color: '#9ca3af' }}>(no complaints forecasted)</div>
+          ) : (
+            <ul style={{ margin: 0, paddingLeft: 14, fontSize: 11, lineHeight: 1.5 }}>
+              {topComplaints.map((c, i) => <li key={i}>{c}</li>)}
+            </ul>
+          )}
+        </div>
+      </div>
+
+      {/* Audience snapshot */}
+      <div style={{ border: '1px solid #e5e7eb', borderRadius: 6, padding: 12, marginBottom: 18 }}>
+        <div style={{ fontSize: 10, letterSpacing: 1.2, textTransform: 'uppercase', color: '#6b7888', fontWeight: 700, marginBottom: 8 }}>
+          Audience composition
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, fontSize: 11 }}>
+          <div>
+            <div style={{ fontWeight: 700, marginBottom: 4, color: '#374151' }}>Archetypes</div>
+            {Object.entries(scenario.audience?.archetype_mix || {}).filter(([, v]) => v > 0).map(([id, v]) => (
+              <div key={id} style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span>{ARCHETYPE_LABELS[id] || id}</span>
+                <span>{v}%</span>
+              </div>
+            ))}
+          </div>
+          <div>
+            <div style={{ fontWeight: 700, marginBottom: 4, color: '#374151' }}>Cultural clusters</div>
+            {Object.entries(scenario.audience?.cultural_mix || {}).filter(([, v]) => v > 0).map(([id, v]) => (
+              <div key={id} style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span>{CLUSTER_LABELS[id] || id}</span>
+                <span>{v}%</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div style={{ fontSize: 9, color: '#9ca3af', borderTop: '1px solid #e5e7eb', paddingTop: 8 }}>
+        Generated by Dignus Pre-decision Workbench ({typeof window !== 'undefined' ? window.location.hostname : ''}).
+        Coefficients anchored to Cornell HQ elasticity, INE EGATUR 2024, Vives & Jacob 2023.
+        Overrides applied: {Object.keys(scenario.calibration?.archetype_comparison_sensitivity || {}).length + Object.keys(scenario.calibration?.cluster_book_delta || {}).length}.
+      </div>
+    </div>
+  );
+}
+
+function PrintKV({ label, value, color = '#1a1d23', big }) {
+  return (
+    <div>
+      <div style={{ fontSize: 9, color: '#6b7888', fontWeight: 600, textTransform: 'uppercase', letterSpacing: 0.8 }}>{label}</div>
+      <div style={{ fontSize: big ? 22 : 16, fontWeight: 800, color, marginTop: 2 }}>{value}</div>
+    </div>
+  );
+}
+
+// ══════════════════ CompareBPanel (A/B mode) ══════════════════════════
+//
+// When the user toggles Compare A/B, this inline panel renders a second
+// scenario ("variant B") whose decision the consultant can edit in parallel.
+// Fetches its own preview every time scenarioB changes and shows a delta
+// vs the main scenario. Shares property + audience + calibration with A.
+
+function CompareBPanel({ scenarioB, setScenarioB, scenarioA, previewA, onClose }) {
+  const [previewB, setPreviewB] = useState(null);
+  const [loadingB, setLoadingB] = useState(false);
+  const timerB = useRef(null);
+
+  // When A's property/audience/calibration change, B inherits them. The
+  // consultant explicitly edits only B's decision (that's the point of A/B).
+  useEffect(() => {
+    setScenarioB((b) => b ? ({
+      ...b,
+      property: scenarioA.property,
+      audience: scenarioA.audience,
+      calibration: scenarioA.calibration,
+    }) : b);
+  }, [scenarioA.property, scenarioA.audience, scenarioA.calibration, setScenarioB]);
+
+  useEffect(() => {
+    if (!scenarioB) return;
+    clearTimeout(timerB.current);
+    timerB.current = setTimeout(async () => {
+      setLoadingB(true);
+      try {
+        const res = await fetch(`${API_URL}/api/scenario-preview`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            property: scenarioB.property, audience: scenarioB.audience,
+            decision: scenarioB.decision, calibration: scenarioB.calibration,
+          }),
+        });
+        const data = await res.json();
+        setPreviewB(data);
+      } catch {
+        setPreviewB(null);
+      } finally {
+        setLoadingB(false);
+      }
+    }, 320);
+    return () => clearTimeout(timerB.current);
+  }, [scenarioB]);
+
+  const fmtEur = (n) => {
+    if (n == null) return '—';
+    const sign = n >= 0 ? '+' : '−';
+    const abs = Math.abs(n);
+    if (abs >= 1_000_000) return `${sign}€${(abs / 1_000_000).toFixed(2)}M`;
+    if (abs >= 1_000) return `${sign}€${(abs / 1_000).toFixed(0)}K`;
+    return `${sign}€${abs}`;
+  };
+
+  const netA = previewA?.net_eur ?? 0;
+  const netB = previewB?.net_eur ?? 0;
+  const diff = netB - netA;
+  const winner = diff === 0 ? 'tie' : diff > 0 ? 'B' : 'A';
+
+  const updateDecisionB = (patch) => setScenarioB((b) => ({ ...b, decision: { ...b.decision, ...patch } }));
+  const setDecisionB = (decision) => setScenarioB((b) => ({ ...b, decision }));
+
+  return (
+    <div style={{
+      background: 'white',
+      border: '2px solid #0F4C75',
+      borderRadius: 10,
+      marginBottom: 16,
+      boxShadow: '0 4px 12px rgba(15, 76, 117, 0.12)',
+    }}>
+      <div style={{
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        padding: '10px 16px', background: '#0F4C75', color: 'white', borderRadius: '8px 8px 0 0',
+      }}>
+        <div>
+          <div style={{ fontSize: 10, letterSpacing: 1.4, textTransform: 'uppercase', fontWeight: 700, opacity: 0.85 }}>
+            Variant B · same audience &amp; calibration, different decision
+          </div>
+          <input
+            type="text"
+            value={scenarioB.scenario_name || ''}
+            onChange={(e) => setScenarioB((b) => ({ ...b, scenario_name: e.target.value }))}
+            style={{ marginTop: 4, border: 0, background: 'rgba(255,255,255,0.12)', color: 'white', fontSize: 14, fontWeight: 700, padding: '4px 8px', borderRadius: 4 }}
+          />
+        </div>
+        <button onClick={onClose} style={{ background: 'rgba(255,255,255,0.15)', color: 'white', border: 0, padding: '6px 12px', borderRadius: 6, fontSize: 11, fontWeight: 600, cursor: 'pointer' }}>
+          ✕ Close compare
+        </button>
+      </div>
+
+      <div style={{ padding: '14px 16px' }}>
+        {/* Decision editor for B — reuses DecisionBox */}
+        <DecisionBox decision={scenarioB.decision} setDecision={setDecisionB} updateDecision={updateDecisionB} />
+
+        {/* Side-by-side result table */}
+        <div style={{ marginTop: 14, border: '1px solid #e5e7eb', borderRadius: 8, overflow: 'hidden' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', background: '#f6f7f9', padding: '10px 14px', fontSize: 10, letterSpacing: 1.2, textTransform: 'uppercase', color: '#6b7888', fontWeight: 700 }}>
+            <span>Metric</span>
+            <span>A — {scenarioA.scenario_name}</span>
+            <span>B — {scenarioB.scenario_name}</span>
+          </div>
+          <CompareRow label="Verdict" a={previewA?.verdict} b={previewB?.verdict} />
+          <CompareRow label="Short-term" a={fmtEur(previewA?.short_term_eur)} b={fmtEur(previewB?.short_term_eur)} />
+          <CompareRow label="Long-term LTV" a={fmtEur(previewA?.long_term_eur)} b={fmtEur(previewB?.long_term_eur)} />
+          <CompareRow label="Net LTV" a={fmtEur(previewA?.net_eur)} b={fmtEur(previewB?.net_eur)} highlight />
+          <CompareRow label="Booking Δ%" a={`${previewA?.booking_delta_pct ?? 0}%`} b={`${previewB?.booking_delta_pct ?? 0}%`} />
+          <CompareRow label="NPS Δ" a={previewA?.nps_delta ?? '—'} b={previewB?.nps_delta ?? '—'} />
+          <CompareRow label="Star Δ" a={previewA?.star_delta ?? '—'} b={previewB?.star_delta ?? '—'} last />
+        </div>
+
+        <div style={{
+          marginTop: 14, padding: '12px 14px',
+          background: winner === 'tie' ? '#f6f7f9' : '#eff6ff',
+          border: `1px solid ${winner === 'tie' ? '#e5e7eb' : '#93c5fd'}`,
+          borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        }}>
+          <div>
+            <div style={{ fontSize: 10, letterSpacing: 1.2, textTransform: 'uppercase', color: '#6b7888', fontWeight: 700 }}>
+              Winner
+            </div>
+            <div style={{ fontSize: 16, fontWeight: 800, color: winner === 'tie' ? '#6b7888' : '#0F4C75', marginTop: 2 }}>
+              {winner === 'tie' ? 'Tie — both have equal net LTV' : winner === 'A' ? `A wins by ${fmtEur(Math.abs(diff))}` : `B wins by ${fmtEur(Math.abs(diff))}`}
+            </div>
+          </div>
+          {loadingB && <div style={{ fontSize: 11, color: '#6b7888' }}>recomputing B…</div>}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CompareRow({ label, a, b, highlight, last }) {
+  return (
+    <div style={{
+      display: 'grid', gridTemplateColumns: '1fr 1fr 1fr',
+      padding: '10px 14px',
+      borderTop: '1px solid #f0f1f4',
+      borderBottom: last ? 'none' : 'none',
+      background: highlight ? '#fef9c3' : 'white',
+      fontSize: 13,
+    }}>
+      <span style={{ color: '#6b7888', fontWeight: 600, fontSize: 12 }}>{label}</span>
+      <span style={{ fontWeight: highlight ? 800 : 600, color: '#0A3558' }}>{a ?? '—'}</span>
+      <span style={{ fontWeight: highlight ? 800 : 600, color: '#0A3558' }}>{b ?? '—'}</span>
+    </div>
   );
 }
 
@@ -503,49 +1001,341 @@ function describeDecision(d) {
 
 // ══════════════════ TopBar ════════════════════════════════════════════
 
-function TopBar({ scenario, setScenario, runFullSim, running }) {
+function TopBar({
+  scenario, setScenario, runFullSim, running,
+  activeScenarioId, savedList, lastSavedAt,
+  onSave, onSaveAs, onLoad, onDelete, onDuplicate, onRename, onNewBlank,
+  onExportJson, onImportFile, onImportPropertyCsv,
+  compareMode, toggleCompareMode,
+}) {
+  const [libraryOpen, setLibraryOpen] = useState(false);
+  const [csvOpen, setCsvOpen] = useState(false);
+  const jsonInputRef = useRef(null);
+
+  const handleExportPdf = () => {
+    // Uses @media print rules defined globally. The PrintReport block is
+    // hidden on screen (.print-only → display:none) and shown only in print.
+    window.print();
+  };
+
+  const savedLabel = activeScenarioId
+    ? `Saved · ${lastSavedAt ? new Date(lastSavedAt).toLocaleString() : ''}`
+    : 'Unsaved draft';
+
   return (
-    <header style={{
-      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-      background: 'white', border: '1px solid #e5e7eb', borderRadius: 10,
-      padding: '14px 20px', boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
-    }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 14, flex: 1 }}>
-        <div>
-          <div style={{ fontSize: 11, letterSpacing: 1.4, textTransform: 'uppercase', color: '#6b7888', fontWeight: 600 }}>
-            Dignus · Pre-decision workbench
+    <>
+      <header className="no-print" style={{
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        background: 'white', border: '1px solid #e5e7eb', borderRadius: 10,
+        padding: '14px 20px', boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+        flexWrap: 'wrap', gap: 10,
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14, flex: 1, minWidth: 320 }}>
+          <div>
+            <div style={{ fontSize: 11, letterSpacing: 1.4, textTransform: 'uppercase', color: '#6b7888', fontWeight: 600 }}>
+              Dignus · Pre-decision workbench
+            </div>
+            <div style={{ fontSize: 18, fontWeight: 700, color: '#0A3558', marginTop: 2 }}>
+              Scenario editor
+            </div>
+            <div style={{ fontSize: 10, color: activeScenarioId ? '#0a8754' : '#9ca3af', marginTop: 3, fontWeight: 600 }}>
+              {savedLabel}
+            </div>
           </div>
-          <div style={{ fontSize: 18, fontWeight: 700, color: '#0A3558', marginTop: 2 }}>
-            Scenario editor
+
+          <div style={{ display: 'flex', gap: 10, flex: 1, marginLeft: 14, minWidth: 280 }}>
+            <div style={{ flex: 1 }}>
+              <label>Client</label>
+              <input type="text" value={scenario.client} onChange={(e) => setScenario((s) => ({ ...s, client: e.target.value }))} />
+            </div>
+            <div style={{ flex: 1 }}>
+              <label>Scenario</label>
+              <input type="text" value={scenario.scenario_name} onChange={(e) => setScenario((s) => ({ ...s, scenario_name: e.target.value }))} />
+            </div>
           </div>
         </div>
 
-        <div style={{ display: 'flex', gap: 10, flex: 1, marginLeft: 24 }}>
-          <div style={{ flex: 1 }}>
-            <label>Client</label>
-            <input type="text" value={scenario.client} onChange={(e) => setScenario((s) => ({ ...s, client: e.target.value }))} />
-          </div>
-          <div style={{ flex: 1 }}>
-            <label>Scenario</label>
-            <input type="text" value={scenario.scenario_name} onChange={(e) => setScenario((s) => ({ ...s, scenario_name: e.target.value }))} />
-          </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+          <ToolbarBtn onClick={onSave}          title="Save current scenario (Ctrl+S)">💾 Save</ToolbarBtn>
+          <ToolbarBtn onClick={() => {
+            const n = prompt('New name for this scenario?', `${scenario.scenario_name} (copy)`);
+            if (n) onSaveAs(n);
+          }} title="Save as new">Save as…</ToolbarBtn>
+          <ToolbarBtn onClick={() => setLibraryOpen(true)} badge={savedList.length || null}>📚 Library</ToolbarBtn>
+          <ToolbarBtn onClick={onNewBlank}>＋ New</ToolbarBtn>
+          <ToolbarBtn onClick={() => setCsvOpen(true)}>📥 Import CSV</ToolbarBtn>
+          <ToolbarBtn onClick={onExportJson}>📤 Export JSON</ToolbarBtn>
+          <ToolbarBtn onClick={() => jsonInputRef.current?.click()}>📁 Load file</ToolbarBtn>
+          <input
+            ref={jsonInputRef} type="file" accept=".json,application/json" style={{ display: 'none' }}
+            onChange={async (e) => {
+              const f = e.target.files?.[0];
+              if (f) await onImportFile(f);
+              e.target.value = '';
+            }}
+          />
+          <ToolbarBtn onClick={handleExportPdf}>🖨️ Export PDF</ToolbarBtn>
+          <ToolbarBtn
+            onClick={toggleCompareMode}
+            active={compareMode}
+          >{compareMode ? '🔀 Exit compare' : '🔀 Compare A/B'}</ToolbarBtn>
+
+          <button
+            onClick={runFullSim}
+            disabled={running}
+            style={{
+              marginLeft: 6,
+              background: running ? '#6b7888' : '#0F4C75',
+              color: 'white', border: 0, padding: '10px 18px',
+              borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: running ? 'wait' : 'pointer',
+              letterSpacing: 0.5,
+            }}
+          >
+            {running ? 'Generating report…' : 'Run full sim + report →'}
+          </button>
+        </div>
+      </header>
+
+      {libraryOpen && (
+        <ScenarioLibraryModal
+          list={savedList}
+          activeId={activeScenarioId}
+          onClose={() => setLibraryOpen(false)}
+          onLoad={(id) => { onLoad(id); setLibraryOpen(false); }}
+          onDelete={onDelete}
+          onDuplicate={onDuplicate}
+          onRename={onRename}
+        />
+      )}
+
+      {csvOpen && (
+        <ImportPropertyCsvModal
+          onClose={() => setCsvOpen(false)}
+          onImport={async (csvText) => {
+            const r = await onImportPropertyCsv(csvText);
+            if (r?.error) return r;
+            setCsvOpen(false);
+            return r;
+          }}
+        />
+      )}
+    </>
+  );
+}
+
+function ToolbarBtn({ children, onClick, title, active, badge }) {
+  return (
+    <button
+      onClick={onClick}
+      title={title}
+      style={{
+        background: active ? '#0F4C75' : 'white',
+        color: active ? 'white' : '#1a1d23',
+        border: `1px solid ${active ? '#0F4C75' : '#e5e7eb'}`,
+        padding: '7px 12px',
+        borderRadius: 6,
+        fontSize: 12,
+        fontWeight: 600,
+        cursor: 'pointer',
+        display: 'inline-flex', alignItems: 'center', gap: 5,
+      }}
+    >
+      <span>{children}</span>
+      {badge != null && badge > 0 && (
+        <span style={{
+          background: active ? 'rgba(255,255,255,0.3)' : '#ede9fe',
+          color: active ? 'white' : '#6d28d9',
+          fontSize: 10, fontWeight: 700, padding: '1px 6px', borderRadius: 9,
+        }}>{badge}</span>
+      )}
+    </button>
+  );
+}
+
+// ══════════════════ Scenario library modal ════════════════════════════
+
+function ScenarioLibraryModal({ list, activeId, onClose, onLoad, onDelete, onDuplicate, onRename }) {
+  const [filter, setFilter] = useState('');
+  const filtered = list.filter((s) =>
+    !filter ||
+    (s.name || '').toLowerCase().includes(filter.toLowerCase()) ||
+    (s.client || '').toLowerCase().includes(filter.toLowerCase())
+  );
+  return (
+    <ModalShell title="Scenario library" subtitle={`${list.length} saved scenario${list.length === 1 ? '' : 's'} in this browser`} onClose={onClose}>
+      <input
+        type="text"
+        placeholder="Filter by name or client…"
+        value={filter}
+        onChange={(e) => setFilter(e.target.value)}
+        style={{ marginBottom: 12 }}
+      />
+      {filtered.length === 0 ? (
+        <div style={{ padding: 40, textAlign: 'center', color: '#9ca3af', fontSize: 13 }}>
+          {list.length === 0 ? 'Todavía no has guardado ningún escenario. Usa 💾 Save en la barra superior.' : 'Ningún escenario coincide con el filtro.'}
+        </div>
+      ) : (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 6, maxHeight: 440, overflowY: 'auto' }}>
+          {filtered.map((s) => (
+            <div key={s.id} style={{
+              display: 'flex', alignItems: 'center', gap: 10, padding: '10px 12px',
+              border: `1px solid ${s.id === activeId ? '#0F4C75' : '#e5e7eb'}`,
+              background: s.id === activeId ? '#eff6ff' : 'white',
+              borderRadius: 7,
+            }}>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontSize: 13, fontWeight: 600, color: '#0A3558' }}>{s.name}</div>
+                <div style={{ fontSize: 11, color: '#6b7888', marginTop: 2 }}>
+                  {s.client || '—'} · {s.updatedAt ? new Date(s.updatedAt).toLocaleString() : ''}
+                  {s.id === activeId && <span style={{ marginLeft: 8, color: '#0F4C75', fontWeight: 700 }}>· active</span>}
+                </div>
+              </div>
+              <button onClick={() => onLoad(s.id)} style={btnPrimary}>Load</button>
+              <button onClick={() => onDuplicate(s.id)} style={btnGhost} title="Duplicate">⎘</button>
+              <button onClick={() => {
+                const n = prompt('New name', s.name);
+                if (n && n !== s.name) onRename(s.id, n);
+              }} style={btnGhost} title="Rename">✏️</button>
+              <button onClick={() => {
+                if (confirm(`Delete "${s.name}"? This cannot be undone.`)) onDelete(s.id);
+              }} style={btnGhostDanger} title="Delete">🗑</button>
+            </div>
+          ))}
+        </div>
+      )}
+    </ModalShell>
+  );
+}
+
+// ══════════════════ CSV property import modal ═════════════════════════
+
+function ImportPropertyCsvModal({ onClose, onImport }) {
+  const [csvText, setCsvText] = useState(
+    'metric,jan,feb,mar,apr,may,jun,jul,aug,sep,oct,nov,dec\n' +
+    'adr,0,0,0,520,680,890,1420,1680,1180,720,0,0\n' +
+    'occupancy,0,0,0,62,74,82,91,93,84,68,0,0\n'
+  );
+  const [result, setResult] = useState(null);
+  const fileRef = useRef(null);
+
+  const doImport = async () => {
+    const r = await onImport(csvText);
+    setResult(r);
+  };
+
+  return (
+    <ModalShell
+      title="Import property from CSV"
+      subtitle="Paste or upload a CSV with monthly ADR and occupancy. Auto-detects delimiter (comma, semicolon, tab) and Spanish/English month names."
+      onClose={onClose}
+    >
+      <div style={{ display: 'flex', gap: 10, marginBottom: 10 }}>
+        <button onClick={() => fileRef.current?.click()} style={btnGhost}>📁 Upload file…</button>
+        <input
+          ref={fileRef}
+          type="file"
+          accept=".csv,text/csv,text/plain"
+          style={{ display: 'none' }}
+          onChange={async (e) => {
+            const f = e.target.files?.[0];
+            if (!f) return;
+            const text = await f.text();
+            setCsvText(text);
+            e.target.value = '';
+          }}
+        />
+        <div style={{ flex: 1, fontSize: 11, color: '#6b7888', alignSelf: 'center' }}>
+          Or paste the CSV below ↓
         </div>
       </div>
+      <textarea
+        value={csvText}
+        onChange={(e) => setCsvText(e.target.value)}
+        rows={10}
+        style={{ fontFamily: 'Menlo, monospace', fontSize: 11 }}
+      />
+      <div style={{ marginTop: 10, display: 'flex', gap: 8 }}>
+        <button onClick={doImport} style={btnPrimary}>Import into scenario</button>
+        <button onClick={onClose} style={btnGhost}>Cancel</button>
+      </div>
+      {result?.error && (
+        <div style={{ marginTop: 10, padding: 10, background: '#fef2f2', color: '#991b1b', fontSize: 12, borderRadius: 6 }}>
+          ⚠ {result.error}
+        </div>
+      )}
+      {result?.ok && (
+        <div style={{ marginTop: 10, padding: 10, background: '#ecfdf5', color: '#14532d', fontSize: 12, borderRadius: 6 }}>
+          ✓ Propiedad importada. Cierra este modal para ver los meses actualizados.
+          {result.warnings?.length > 0 && (
+            <ul style={{ margin: '6px 0 0 18px' }}>
+              {result.warnings.map((w, i) => <li key={i}>{w}</li>)}
+            </ul>
+          )}
+        </div>
+      )}
+      <details style={{ marginTop: 14, fontSize: 11, color: '#6b7888' }}>
+        <summary style={{ cursor: 'pointer', fontWeight: 600 }}>Formatos aceptados</summary>
+        <div style={{ marginTop: 6, lineHeight: 1.6 }}>
+          <strong>A. Métrica por fila</strong> (la que viste al abrir):
+          <pre style={{ background: '#f6f7f9', padding: 8, borderRadius: 4, fontSize: 10 }}>
+metric,jan,feb,...,dec
+adr,0,0,...
+occupancy,0,0,...
+rooms,159
+baseline_nps,77</pre>
+          <strong>B. Mes por fila</strong>:
+          <pre style={{ background: '#f6f7f9', padding: 8, borderRadius: 4, fontSize: 10 }}>
+month,adr,occupancy
+jan,0,0
+feb,0,0
+...</pre>
+          Acepta decimales con coma o punto, ocupación en 0-1 o 0-100, y meses en ES (enero, feb, jul…) o EN (january, feb, jul…).
+        </div>
+      </details>
+    </ModalShell>
+  );
+}
 
-      <button
-        onClick={runFullSim}
-        disabled={running}
+// ══════════════════ Shared modal shell + button styles ════════════════
+
+const btnPrimary = {
+  background: '#0F4C75', color: 'white', border: 0, padding: '8px 14px',
+  borderRadius: 6, fontSize: 12, fontWeight: 600, cursor: 'pointer',
+};
+const btnGhost = {
+  background: 'white', color: '#1a1d23', border: '1px solid #e5e7eb', padding: '7px 12px',
+  borderRadius: 6, fontSize: 12, fontWeight: 600, cursor: 'pointer',
+};
+const btnGhostDanger = {
+  background: 'white', color: '#b91c1c', border: '1px solid #fecaca', padding: '7px 10px',
+  borderRadius: 6, fontSize: 12, fontWeight: 600, cursor: 'pointer',
+};
+
+function ModalShell({ title, subtitle, onClose, children }) {
+  return (
+    <div className="no-print" style={{
+      position: 'fixed', inset: 0, background: 'rgba(10, 13, 20, 0.55)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      zIndex: 1000, backdropFilter: 'blur(3px)', padding: 20,
+    }} onClick={onClose}>
+      <div
+        onClick={(e) => e.stopPropagation()}
         style={{
-          marginLeft: 18,
-          background: running ? '#6b7888' : '#0F4C75',
-          color: 'white', border: 0, padding: '12px 22px',
-          borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: running ? 'wait' : 'pointer',
-          letterSpacing: 0.5,
+          background: 'white', borderRadius: 10, padding: '22px 24px',
+          width: '100%', maxWidth: 680, boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
+          maxHeight: '90vh', overflowY: 'auto',
         }}
       >
-        {running ? 'Generating report…' : 'Run full sim + report →'}
-      </button>
-    </header>
+        <div style={{ display: 'flex', alignItems: 'start', justifyContent: 'space-between', marginBottom: 14 }}>
+          <div>
+            <div style={{ fontSize: 18, fontWeight: 700, color: '#0A3558' }}>{title}</div>
+            {subtitle && <div style={{ fontSize: 12, color: '#6b7888', marginTop: 4 }}>{subtitle}</div>}
+          </div>
+          <button onClick={onClose} style={{ background: 'none', border: 0, fontSize: 22, cursor: 'pointer', color: '#6b7888' }}>×</button>
+        </div>
+        {children}
+      </div>
+    </div>
   );
 }
 
