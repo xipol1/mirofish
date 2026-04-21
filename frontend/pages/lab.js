@@ -1282,6 +1282,7 @@ function ExecutiveView({
 
         <div style={{ marginTop: 24, padding: '0 10px 6px', fontSize: 10, letterSpacing: 1.4, color: BRAND.subtle, textTransform: 'uppercase' }}>Tools</div>
         <nav style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <SidebarLink icon="🎬" label="Product presentation" onClick={() => { if (typeof window !== 'undefined') window.location.href = '/presentation'; }} />
           <SidebarLink icon="🛠" label="Scenario Editor" onClick={() => { if (typeof window !== 'undefined') window.location.href = '/scenario'; }} />
           <SidebarLink icon="📑" label="Validation Report" onClick={() => { if (typeof window !== 'undefined') window.location.href = '/validation'; }} />
           <SidebarLink icon="📰" label="One-pager (ES)" onClick={() => { if (typeof window !== 'undefined') window.location.href = '/onepager-es'; }} />
