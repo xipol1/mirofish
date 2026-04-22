@@ -503,7 +503,7 @@ router.post('/insights-v2-preview', async (req, res) => {
  */
 router.post('/revenue-scenario', (req, res) => {
   try {
-    const { scenario_id, baseline_simulation_id, baseline, cohort_size, custom } = req.body;
+    const { scenario_id, baseline_simulation_id, baseline, cohort_size, custom, archetype_mix_pct, culture } = req.body;
     if (!scenario_id) return res.status(400).json({ error: 'scenario_id required' });
     let baselineSummary = baseline;
     if (!baselineSummary && baseline_simulation_id) {
@@ -512,7 +512,12 @@ router.post('/revenue-scenario', (req, res) => {
       if (!baselineSummary) return res.status(404).json({ error: 'baseline simulation not found or not completed' });
     }
     const { runScenario } = require('../services/enterprise/revenue-engine');
-    const result = runScenario({ scenario_id, custom, baseline: baselineSummary, cohort_size: cohort_size || 50 });
+    const result = runScenario({
+      scenario_id, custom, baseline: baselineSummary,
+      cohort_size: cohort_size || 50,
+      archetype_mix_pct: archetype_mix_pct || baselineSummary?.archetype_mix_pct || null,
+      culture: culture || null,
+    });
     res.json(result);
   } catch (err) {
     res.status(500).json({ error: err.message });

@@ -1,0 +1,448 @@
+{
+  "_label": "check-1776848481323",
+  "_note": "auto-capture by api",
+  "_captured_at": "2026-04-22T09:01:21.327Z",
+  "_source_generated_at": "2026-04-22T08:26:38.943Z",
+  "_source_signals_version": "1.0.0",
+  "_corpus": {
+    "total_reviews_in": 6076,
+    "cluster_count": 132
+  },
+  "archetypes": {
+    "honeymooner": {
+      "price_sensitivity": 0.15872659176029963,
+      "service_expectation": 0.2652808988764045,
+      "cleanliness_threshold": 0.1662921348314607,
+      "loyalty_sensitivity": 0.06966292134831462,
+      "luxury_benchmark_score": 0,
+      "family_orientation": 0,
+      "emotional_intensity": 0.2906367041198502,
+      "decision_latency_proxy": 0.5,
+      "n_reviews_behind": 267,
+      "top_complaint_triggers": [
+        {
+          "trigger": "cleanliness",
+          "weight": 40
+        }
+      ],
+      "top_amenity_focus": [
+        {
+          "amenity": "location",
+          "weight": 262
+        },
+        {
+          "amenity": "business",
+          "weight": 137
+        },
+        {
+          "amenity": "dining",
+          "weight": 119
+        },
+        {
+          "amenity": "wifi",
+          "weight": 47
+        },
+        {
+          "amenity": "pool",
+          "weight": 46
+        }
+      ]
+    },
+    "loyalty_maximizer": {
+      "price_sensitivity": 0.153568281938326,
+      "service_expectation": 0.3175066079295154,
+      "cleanliness_threshold": 0.18696035242290748,
+      "loyalty_sensitivity": 0.16052863436123346,
+      "luxury_benchmark_score": 0.04251101321585903,
+      "family_orientation": 0.029779735682819386,
+      "emotional_intensity": 0.323806167400881,
+      "decision_latency_proxy": 0.48325991189427314,
+      "n_reviews_behind": 1135,
+      "top_complaint_triggers": [
+        {
+          "trigger": "rude_staff",
+          "weight": 210
+        },
+        {
+          "trigger": "cleanliness",
+          "weight": 203
+        }
+      ],
+      "top_amenity_focus": [
+        {
+          "amenity": "loyalty",
+          "weight": 864
+        },
+        {
+          "amenity": "location",
+          "weight": 841
+        },
+        {
+          "amenity": "bed",
+          "weight": 712
+        },
+        {
+          "amenity": "business",
+          "weight": 372
+        },
+        {
+          "amenity": "dining",
+          "weight": 132
+        }
+      ]
+    },
+    "family_vacationer": {
+      "price_sensitivity": 0.08491803278688524,
+      "service_expectation": 0.3087704918032787,
+      "cleanliness_threshold": 0.1377049180327869,
+      "loyalty_sensitivity": 0.029508196721311476,
+      "luxury_benchmark_score": 0.05327868852459016,
+      "family_orientation": 0.4655737704918033,
+      "emotional_intensity": 0.39614754098360655,
+      "decision_latency_proxy": 0.5,
+      "n_reviews_behind": 122,
+      "top_complaint_triggers": [
+        {
+          "trigger": "rude_staff",
+          "weight": 18
+        },
+        {
+          "trigger": "cleanliness",
+          "weight": 18
+        }
+      ],
+      "top_amenity_focus": [
+        {
+          "amenity": "location",
+          "weight": 79
+        },
+        {
+          "amenity": "kids_club",
+          "weight": 75
+        },
+        {
+          "amenity": "business",
+          "weight": 62
+        },
+        {
+          "amenity": "dining",
+          "weight": 38
+        },
+        {
+          "amenity": "loyalty",
+          "weight": 18
+        }
+      ]
+    },
+    "budget_optimizer": {
+      "price_sensitivity": 0.657437673130194,
+      "service_expectation": 0.18973684210526318,
+      "cleanliness_threshold": 0.11357340720221605,
+      "loyalty_sensitivity": 0.03573407202216067,
+      "luxury_benchmark_score": 0,
+      "family_orientation": 0.10831024930747923,
+      "emotional_intensity": 0.19371191135734073,
+      "decision_latency_proxy": 0.4757617728531856,
+      "n_reviews_behind": 722,
+      "top_complaint_triggers": [
+        {
+          "trigger": "cleanliness",
+          "weight": 134
+        },
+        {
+          "trigger": "smell",
+          "weight": 56
+        }
+      ],
+      "top_amenity_focus": [
+        {
+          "amenity": "location",
+          "weight": 588
+        },
+        {
+          "amenity": "dining",
+          "weight": 443
+        },
+        {
+          "amenity": "business",
+          "weight": 407
+        },
+        {
+          "amenity": "bed",
+          "weight": 298
+        },
+        {
+          "amenity": "loyalty",
+          "weight": 129
+        }
+      ]
+    },
+    "luxury_seeker": {
+      "price_sensitivity": 0.1589119170984456,
+      "service_expectation": 0.4596373056994819,
+      "cleanliness_threshold": 0.10569948186528498,
+      "loyalty_sensitivity": 0.18652849740932642,
+      "luxury_benchmark_score": 0.18134715025906736,
+      "family_orientation": 0.16373056994818655,
+      "emotional_intensity": 0.3323316062176166,
+      "decision_latency_proxy": 0.5,
+      "n_reviews_behind": 193,
+      "top_complaint_triggers": [
+        {
+          "trigger": "noise",
+          "weight": 26
+        },
+        {
+          "trigger": "cleanliness",
+          "weight": 26
+        },
+        {
+          "trigger": "rude_staff",
+          "weight": 8
+        }
+      ],
+      "top_amenity_focus": [
+        {
+          "amenity": "location",
+          "weight": 176
+        },
+        {
+          "amenity": "concierge",
+          "weight": 154
+        },
+        {
+          "amenity": "business",
+          "weight": 123
+        },
+        {
+          "amenity": "dining",
+          "weight": 58
+        },
+        {
+          "amenity": "loyalty",
+          "weight": 45
+        }
+      ]
+    },
+    "business_traveler": {
+      "price_sensitivity": 0.11854785478547855,
+      "service_expectation": 0.2847854785478548,
+      "cleanliness_threshold": 0,
+      "loyalty_sensitivity": 0.0976897689768977,
+      "luxury_benchmark_score": 0,
+      "family_orientation": 0.07524752475247524,
+      "emotional_intensity": 0.34102310231023103,
+      "decision_latency_proxy": 0.17986798679867988,
+      "n_reviews_behind": 303,
+      "top_complaint_triggers": [
+        {
+          "trigger": "rude_staff",
+          "weight": 46
+        }
+      ],
+      "top_amenity_focus": [
+        {
+          "amenity": "location",
+          "weight": 300
+        },
+        {
+          "amenity": "business",
+          "weight": 288
+        },
+        {
+          "amenity": "bed",
+          "weight": 135
+        },
+        {
+          "amenity": "loyalty",
+          "weight": 74
+        },
+        {
+          "amenity": "dining",
+          "weight": 53
+        }
+      ]
+    },
+    "accessibility_needs": {
+      "price_sensitivity": 0.1111111111111111,
+      "service_expectation": 0.23333333333333336,
+      "cleanliness_threshold": 0.04444444444444445,
+      "loyalty_sensitivity": 0,
+      "luxury_benchmark_score": 0,
+      "family_orientation": 0,
+      "emotional_intensity": 0.34481481481481485,
+      "decision_latency_proxy": 0.5,
+      "n_reviews_behind": 27,
+      "top_complaint_triggers": [
+        {
+          "trigger": "smell",
+          "weight": 6
+        }
+      ],
+      "top_amenity_focus": [
+        {
+          "amenity": "location",
+          "weight": 21
+        },
+        {
+          "amenity": "business",
+          "weight": 12
+        },
+        {
+          "amenity": "bed",
+          "weight": 11
+        },
+        {
+          "amenity": "dining",
+          "weight": 6
+        },
+        {
+          "amenity": "wifi",
+          "weight": 5
+        }
+      ]
+    },
+    "event_attendee": {
+      "price_sensitivity": 0.025500000000000002,
+      "service_expectation": 0.2379375,
+      "cleanliness_threshold": 0.12250000000000001,
+      "loyalty_sensitivity": 0.028750000000000005,
+      "luxury_benchmark_score": 0,
+      "family_orientation": 0.01875,
+      "emotional_intensity": 0.264875,
+      "decision_latency_proxy": 0.5,
+      "n_reviews_behind": 160,
+      "top_complaint_triggers": [
+        {
+          "trigger": "rude_staff",
+          "weight": 15
+        }
+      ],
+      "top_amenity_focus": [
+        {
+          "amenity": "location",
+          "weight": 145
+        },
+        {
+          "amenity": "business",
+          "weight": 99
+        },
+        {
+          "amenity": "bed",
+          "weight": 24
+        },
+        {
+          "amenity": "spa",
+          "weight": 15
+        },
+        {
+          "amenity": "dining",
+          "weight": 15
+        }
+      ]
+    },
+    "lgbtq_couple": {
+      "price_sensitivity": 0,
+      "service_expectation": 0.17,
+      "cleanliness_threshold": 0,
+      "loyalty_sensitivity": 0,
+      "luxury_benchmark_score": 0,
+      "family_orientation": 0,
+      "emotional_intensity": 0.6,
+      "decision_latency_proxy": 0.5,
+      "n_reviews_behind": 4,
+      "top_complaint_triggers": [],
+      "top_amenity_focus": []
+    },
+    "digital_nomad": {
+      "price_sensitivity": 0.32999999999999996,
+      "service_expectation": 0.266,
+      "cleanliness_threshold": 0,
+      "loyalty_sensitivity": 0,
+      "luxury_benchmark_score": 0,
+      "family_orientation": 0,
+      "emotional_intensity": 0.364,
+      "decision_latency_proxy": 0.5,
+      "n_reviews_behind": 10,
+      "top_complaint_triggers": [],
+      "top_amenity_focus": [
+        {
+          "amenity": "dining",
+          "weight": 6
+        },
+        {
+          "amenity": "business",
+          "weight": 6
+        },
+        {
+          "amenity": "bed",
+          "weight": 6
+        },
+        {
+          "amenity": "wifi",
+          "weight": 4
+        }
+      ]
+    },
+    "solo_female_traveler": {
+      "price_sensitivity": 0.085,
+      "service_expectation": 0.14875000000000002,
+      "cleanliness_threshold": 0.1416666666666667,
+      "loyalty_sensitivity": 0,
+      "luxury_benchmark_score": 0,
+      "family_orientation": 0.06666666666666667,
+      "emotional_intensity": 0.35333333333333333,
+      "decision_latency_proxy": 0.5,
+      "n_reviews_behind": 24,
+      "top_complaint_triggers": [],
+      "top_amenity_focus": [
+        {
+          "amenity": "dining",
+          "weight": 21
+        },
+        {
+          "amenity": "location",
+          "weight": 21
+        },
+        {
+          "amenity": "business",
+          "weight": 11
+        },
+        {
+          "amenity": "bed",
+          "weight": 4
+        }
+      ]
+    },
+    "wellness_retreat_seeker": {
+      "price_sensitivity": 0.23857142857142857,
+      "service_expectation": 0.26142857142857145,
+      "cleanliness_threshold": 0,
+      "loyalty_sensitivity": 0,
+      "luxury_benchmark_score": 0,
+      "family_orientation": 0,
+      "emotional_intensity": 0.3628571428571429,
+      "decision_latency_proxy": 0.5,
+      "n_reviews_behind": 14,
+      "top_complaint_triggers": [],
+      "top_amenity_focus": [
+        {
+          "amenity": "spa",
+          "weight": 8
+        },
+        {
+          "amenity": "location",
+          "weight": 8
+        },
+        {
+          "amenity": "business",
+          "weight": 6
+        },
+        {
+          "amenity": "dining",
+          "weight": 6
+        }
+      ]
+    }
+  }
+}

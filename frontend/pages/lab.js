@@ -1296,10 +1296,10 @@ function ExecutiveView({
         </nav>
 
         <div style={{ marginTop: 'auto', padding: '16px 8px', display: 'flex', alignItems: 'center', gap: 10, borderTop: `1px solid ${BRAND.border}` }}>
-          <div style={{ width: 34, height: 34, borderRadius: '50%', background: '#1F2937', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 600 }}>M</div>
+          <div style={{ width: 34, height: 34, borderRadius: '50%', background: '#1F2937', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 600 }}>SU</div>
           <div style={{ minWidth: 0, flex: 1 }}>
-            <div style={{ fontSize: 12, fontWeight: 600, color: BRAND.navy }}>Meliá demo</div>
-            <div style={{ fontSize: 10, color: BRAND.subtle, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>villa-le-blanc.synthetic.ai</div>
+            <div style={{ fontSize: 12, fontWeight: 600, color: BRAND.navy }}>Synthetic Users</div>
+            <div style={{ fontSize: 10, color: BRAND.subtle, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>8 properties · 6,076 reviews</div>
           </div>
         </div>
       </aside>
@@ -1347,9 +1347,9 @@ function ExecutiveView({
             value={slug}
             onChange={(v) => { onSlugChange(v); onSelectReview(null); }}
             options={[
-              { value: 'villa_le_blanc_claude_authored_n30', label: 'Claude-authored · n=31 (rich)' },
-              { value: 'villa_le_blanc_n1000', label: 'Stat backtest · n=1 000' },
-              { value: 'gran_melia_palacio_duques_n50', label: 'Palacio de los Duques · n=50' },
+              { value: 'villa_le_blanc_claude_authored_n30', label: 'Villa Le Blanc · Claude-authored n=31 (rich)' },
+              { value: 'villa_le_blanc_n1000', label: 'Villa Le Blanc · stat backtest n=1 000' },
+              { value: 'gran_melia_palacio_duques_n50', label: 'Gran Meliá Palacio de los Duques · n=50' },
             ]}
           />
           <FilterPill label="Timeframe" value="All-time" />
@@ -1365,6 +1365,9 @@ function ExecutiveView({
 
         {!loading && !data?.error && (
           <>
+            {/* ROW 0: Empirical intelligence banner — drift status + calibration corpus counts */}
+            <EmpiricalIntelligenceBanner summary={summary} onOpenSignals={() => onSectionChange('library')} />
+
             {/* ROW 1: KPI tiles + activity chart */}
             <div style={{ display: 'grid', gridTemplateColumns: '220px 220px 220px 1fr', gap: 14, marginBottom: 14 }}>
               <KPITile label="Synth Stays" value={summary.total_stays ?? '—'} sub={`${stays.length} featured`} />
@@ -1511,11 +1514,26 @@ function ExecutiveView({
                         <div style={{ fontSize: 16, fontWeight: 700, color: (scenarioResult.annualized_estimate?.total_annual_delta_eur || 0) >= 0 ? BRAND.good : BRAND.bad, marginTop: 2 }}>€{Math.round((scenarioResult.annualized_estimate?.total_annual_delta_eur || 0) / 1000)}K</div>
                       </div>
                     </div>
+                    {scenarioResult.empirical_signal_adjustments?.reasons?.length > 0 && (
+                      <div style={{ marginTop: 10, padding: '10px 12px', background: '#EFF6FF', border: `1px solid ${BRAND.accent}33`, borderRadius: 6 }}>
+                        <div style={{ fontSize: 10, textTransform: 'uppercase', color: BRAND.accent, letterSpacing: 1, fontWeight: 600, marginBottom: 6 }}>
+                          Empirical signal adjustments · n={scenarioResult.empirical_signal_adjustments.n_reviews_backing} real reviews backing
+                        </div>
+                        {scenarioResult.empirical_signal_adjustments.reasons.map((r, i) => (
+                          <div key={i} style={{ fontSize: 11, color: BRAND.navy, fontFamily: 'ui-monospace, SFMono-Regular, monospace', marginBottom: 2 }}>
+                            · <strong>{r.signal}</strong> = {r.value} → factor ×{r.factor} <span style={{ color: BRAND.muted }}>({r.directive})</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                     {scenarioResult.explanation && <div style={{ marginTop: 10, fontSize: 12, color: BRAND.muted, lineHeight: 1.55 }}>{scenarioResult.explanation}</div>}
                   </div>
                 )}
               </Card>
             </div>
+
+            {/* ROW 6: Cohort decision fingerprint — top empirical signals weighted across cohort */}
+            <CohortDecisionFingerprint summary={summary} />
           </>
         )}
         </>)}
@@ -2385,6 +2403,7 @@ function LibrarySection({ calibration }) {
     { id: 'adversarial_events', label: 'Adversarial events · 15' },
     { id: 'sensation_dimensions', label: 'Sensation dimensions · 14' },
     { id: 'calibration', label: 'Real calibration · 572 reviews' },
+    { id: 'signals', label: 'Empirical signals · 132 clusters' },
   ];
 
   return (
@@ -2414,6 +2433,428 @@ function LibrarySection({ calibration }) {
       {tab === 'adversarial_events' && data.adversarial_events && <EventsList data={data.adversarial_events} />}
       {tab === 'sensation_dimensions' && data.sensation_dimensions && <DimensionsList data={data.sensation_dimensions} />}
       {tab === 'calibration' && <CalibrationView calibration={calibration} />}
+      {tab === 'signals' && <EmpiricalSignalsView />}
+    </div>
+  );
+}
+
+// ─── Empirical Signals View ─────────────────────────────────────────────────
+// Renders a colour-coded archetype × signal matrix (0 → 1 heat) with a culture
+// selector and a drift status banner at the top. Fully client-fetched from
+// /api/dignus/voice-priors + /api/dignus/drift. Demo-brutal.
+function EmpiricalSignalsView() {
+  const [priors, setPriors] = useState(null);
+  const [drift, setDrift] = useState(null);
+  const [culture, setCulture] = useState('all');
+  const [selectedCluster, setSelectedCluster] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let alive = true;
+    Promise.all([
+      apiFetch('/api/dignus/voice-priors?mode=full').then(r => r.json()).catch(() => null),
+      apiFetch('/api/dignus/drift').then(r => r.json()).catch(() => null),
+    ]).then(([p, d]) => {
+      if (!alive) return;
+      setPriors(p);
+      setDrift(d);
+      setLoading(false);
+    });
+    return () => { alive = false; };
+  }, []);
+
+  if (loading) return <div style={{ padding: 30, textAlign: 'center', color: BRAND.muted, fontSize: 13 }}>loading empirical signals…</div>;
+  if (!priors || !priors.clusters) return <div style={{ padding: 30, color: BRAND.bad }}>voice_priors_from_reviews.json not found — run <code>node scripts/build_voice_priors.js</code></div>;
+
+  const clusters = priors.clusters;
+  const allKeys = Object.keys(clusters);
+
+  // Discover cultures + archetypes + signal list
+  const cultures = new Set(['all']);
+  const archetypesMap = {};  // archetypeId -> { n, rowsByCulture }
+  for (const key of allKeys) {
+    const c = clusters[key];
+    if (!c.signals) continue;
+    if (c.archetype === 'unclassified') continue;
+    if (c.culture) cultures.add(c.culture);
+    if (!archetypesMap[c.archetype]) archetypesMap[c.archetype] = { total_n: 0, rowsByCulture: {} };
+    const ck = c.culture || '_agnostic';
+    if (!archetypesMap[c.archetype].rowsByCulture[ck]) archetypesMap[c.archetype].rowsByCulture[ck] = [];
+    archetypesMap[c.archetype].rowsByCulture[ck].push(c);
+    archetypesMap[c.archetype].total_n += c.n;
+  }
+  const signalKeys = ['price_sensitivity', 'service_expectation', 'cleanliness_threshold', 'loyalty_sensitivity', 'luxury_benchmark_score', 'family_orientation', 'emotional_intensity', 'decision_latency_proxy'];
+  const signalLabels = {
+    price_sensitivity: 'Price sens.', service_expectation: 'Service exp.', cleanliness_threshold: 'Cleanliness',
+    loyalty_sensitivity: 'Loyalty', luxury_benchmark_score: 'Luxury bench.', family_orientation: 'Family',
+    emotional_intensity: 'Emotion', decision_latency_proxy: 'Deliberation',
+  };
+
+  // Aggregate per-archetype signals for the selected culture
+  function aggregateFor(archetypeId) {
+    const entry = archetypesMap[archetypeId];
+    if (!entry) return null;
+    const rows = culture === 'all'
+      ? Object.values(entry.rowsByCulture).flat()
+      : (entry.rowsByCulture[culture] || []);
+    if (rows.length === 0) return null;
+    const totalN = rows.reduce((s, r) => s + r.n, 0);
+    const agg = { n: totalN };
+    for (const sig of signalKeys) agg[sig] = rows.reduce((s, r) => s + r.signals[sig] * r.n, 0) / totalN;
+    // Most common amenity + complaint across rows, weighted
+    const amenCount = {};
+    const compCount = {};
+    for (const r of rows) {
+      for (const a of (r.amenity_focus || [])) amenCount[a] = (amenCount[a] || 0) + r.n;
+      for (const c of (r.complaint_triggers || [])) compCount[c] = (compCount[c] || 0) + r.n;
+    }
+    agg.top_amenities = Object.entries(amenCount).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([a]) => a);
+    agg.top_complaints = Object.entries(compCount).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([c]) => c);
+    agg.example_cluster_keys = rows.slice(0, 4).map(r => {
+      return Object.entries(clusters).find(([k, v]) => v === r)?.[0];
+    }).filter(Boolean);
+    return agg;
+  }
+
+  const archetypeList = Object.keys(archetypesMap).sort((a, b) => archetypesMap[b].total_n - archetypesMap[a].total_n);
+
+  return (
+    <div>
+      <DriftBanner drift={drift} />
+
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14, flexWrap: 'wrap', gap: 12 }}>
+        <div>
+          <div style={{ fontSize: 13, fontWeight: 600, color: BRAND.navy }}>Archetype × signal heatmap</div>
+          <div style={{ fontSize: 11, color: BRAND.muted, marginTop: 2 }}>
+            {priors._cluster_count} clusters · {priors._total_reviews_in} real reviews · each cell 0 → 1, deeper colour = stronger signal.
+          </div>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span style={{ fontSize: 11, color: BRAND.muted, textTransform: 'uppercase', letterSpacing: 0.8 }}>culture:</span>
+          <select value={culture} onChange={(e) => setCulture(e.target.value)} style={{ padding: '6px 10px', border: `1px solid ${BRAND.border}`, borderRadius: 6, fontSize: 12, background: 'white', color: BRAND.navy }}>
+            {[...cultures].map(c => <option key={c} value={c}>{c === 'all' ? 'All cultures (union)' : c}</option>)}
+          </select>
+        </div>
+      </div>
+
+      <div style={{ overflowX: 'auto', border: `1px solid ${BRAND.border}`, borderRadius: 8, background: 'white' }}>
+        <table style={{ borderCollapse: 'collapse', width: '100%', fontSize: 11 }}>
+          <thead>
+            <tr style={{ background: BRAND.bg }}>
+              <th style={{ padding: '10px 12px', textAlign: 'left', fontWeight: 600, color: BRAND.muted, textTransform: 'uppercase', letterSpacing: 0.8, fontSize: 10, borderBottom: `1px solid ${BRAND.border}` }}>Archetype (n reviews)</th>
+              {signalKeys.map(s => (
+                <th key={s} style={{ padding: '10px 8px', textAlign: 'center', fontWeight: 600, color: BRAND.muted, textTransform: 'uppercase', letterSpacing: 0.6, fontSize: 9, borderBottom: `1px solid ${BRAND.border}`, whiteSpace: 'nowrap' }}>{signalLabels[s]}</th>
+              ))}
+              <th style={{ padding: '10px 8px', textAlign: 'left', fontWeight: 600, color: BRAND.muted, textTransform: 'uppercase', letterSpacing: 0.8, fontSize: 10, borderBottom: `1px solid ${BRAND.border}` }}>Amenities</th>
+              <th style={{ padding: '10px 8px', textAlign: 'left', fontWeight: 600, color: BRAND.muted, textTransform: 'uppercase', letterSpacing: 0.8, fontSize: 10, borderBottom: `1px solid ${BRAND.border}` }}>Complaints</th>
+            </tr>
+          </thead>
+          <tbody>
+            {archetypeList.map(arch => {
+              const agg = aggregateFor(arch);
+              if (!agg) return (
+                <tr key={arch}>
+                  <td style={{ padding: '8px 12px', color: BRAND.subtle, fontSize: 11 }}>{arch.replace(/_/g, ' ')} <span style={{ color: BRAND.subtle, fontSize: 10 }}>(no data this culture)</span></td>
+                  {signalKeys.map(s => <td key={s} style={{ padding: '8px', background: '#f9fafb' }}>—</td>)}
+                  <td style={{ padding: '8px', color: BRAND.subtle }}>—</td>
+                  <td style={{ padding: '8px', color: BRAND.subtle }}>—</td>
+                </tr>
+              );
+              return (
+                <tr key={arch} style={{ borderTop: `1px solid ${BRAND.border}` }}>
+                  <td style={{ padding: '8px 12px', fontWeight: 600, color: BRAND.navy, whiteSpace: 'nowrap' }}>
+                    {arch.replace(/_/g, ' ')}
+                    <span style={{ color: BRAND.subtle, fontSize: 10, marginLeft: 6 }}>n={agg.n}</span>
+                  </td>
+                  {signalKeys.map(s => {
+                    const v = agg[s];
+                    const bg = signalCellColor(v);
+                    const fg = v > 0.5 ? 'white' : BRAND.navy;
+                    return (
+                      <td key={s} style={{ padding: 0, textAlign: 'center', background: bg, color: fg, fontWeight: 600, cursor: 'pointer' }}
+                          onClick={() => setSelectedCluster({ archetypeId: arch, culture, agg })}>
+                        <div style={{ padding: '10px 4px' }}>{v.toFixed(2)}</div>
+                      </td>
+                    );
+                  })}
+                  <td style={{ padding: '8px', color: BRAND.navy, whiteSpace: 'nowrap' }}>
+                    {agg.top_amenities.length > 0 ? agg.top_amenities.join(', ') : <span style={{ color: BRAND.subtle }}>—</span>}
+                  </td>
+                  <td style={{ padding: '8px', color: BRAND.navy, whiteSpace: 'nowrap' }}>
+                    {agg.top_complaints.length > 0 ? agg.top_complaints.join(', ') : <span style={{ color: BRAND.subtle }}>—</span>}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+
+      <div style={{ marginTop: 12, fontSize: 11, color: BRAND.muted, lineHeight: 1.6 }}>
+        <strong>Reading this:</strong> every cell is a weighted-average signal value across all clusters matching <em>archetype × culture</em>. Higher values drive harder decisions downstream: high <em>price_sensitivity</em> ⟶ sharper elasticity in <code>scenario-preview</code>; high <em>service_expectation</em> ⟶ tighter staff ratios in <code>staffing-engine</code>; top complaint triggers ⟶ adversarial event weights. Click any cell for the underlying cluster keys.
+      </div>
+
+      {selectedCluster && <ClusterDetailModal {...selectedCluster} onClose={() => setSelectedCluster(null)} allClusters={clusters} signalLabels={signalLabels} signalKeys={signalKeys} />}
+    </div>
+  );
+}
+
+function signalCellColor(v) {
+  // Colour ramp: 0 → light grey, 0.5 → amber, 1 → deep purple (brand accent)
+  if (v == null || Number.isNaN(v)) return '#f3f4f6';
+  const clamped = Math.max(0, Math.min(1, v));
+  // Interpolate between two anchors
+  if (clamped < 0.4) {
+    const t = clamped / 0.4;
+    return `rgba(99, 102, 241, ${0.08 + t * 0.22})`; // indigo with alpha
+  }
+  if (clamped < 0.7) {
+    const t = (clamped - 0.4) / 0.3;
+    return `rgba(99, 102, 241, ${0.30 + t * 0.30})`;
+  }
+  const t = (clamped - 0.7) / 0.3;
+  return `rgba(67, 56, 202, ${0.60 + t * 0.35})`; // deeper indigo
+}
+
+function DriftBanner({ drift }) {
+  if (!drift) return null;
+  if (drift.error || !drift.verdict) return (
+    <div style={{ padding: '10px 14px', background: '#fef3c7', border: '1px solid #fcd34d', borderRadius: 6, fontSize: 12, color: '#92400e', marginBottom: 14 }}>
+      ⚠ Drift check unavailable: {drift.error || 'no response from /api/dignus/drift'}
+    </div>
+  );
+  const styleByVerdict = {
+    OK:    { bg: '#ecfdf5', border: '#86efac', text: '#065f46', icon: '✓', label: 'Drift check: OK' },
+    WATCH: { bg: '#fffbeb', border: '#fcd34d', text: '#92400e', icon: '⚠', label: 'Drift check: WATCH' },
+    ALERT: { bg: '#fef2f2', border: '#fca5a5', text: '#991b1b', icon: '✗', label: 'Drift check: ALERT' },
+  }[drift.verdict] || { bg: BRAND.bg, border: BRAND.border, text: BRAND.navy, icon: '·', label: drift.verdict };
+  return (
+    <div style={{ padding: '12px 16px', background: styleByVerdict.bg, border: `1px solid ${styleByVerdict.border}`, borderRadius: 8, fontSize: 12, color: styleByVerdict.text, marginBottom: 14 }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8 }}>
+        <div>
+          <strong style={{ fontSize: 13 }}>{styleByVerdict.icon} {styleByVerdict.label}</strong>
+          <span style={{ marginLeft: 12, opacity: 0.85 }}>
+            {drift.summary?.findings_count || 0} findings ({drift.summary?.alert_count || 0} ALERT, {drift.summary?.watch_count || 0} WATCH)
+            {drift.baseline_file ? ` · baseline: ${drift.baseline_file}` : ' · no baseline yet'}
+          </span>
+        </div>
+        <div style={{ fontSize: 10, opacity: 0.7 }}>audit: {drift.audit_file}</div>
+      </div>
+      {(drift.findings || []).filter(f => f.severity === 'ALERT').slice(0, 3).map((f, i) => (
+        <div key={i} style={{ marginTop: 6, fontSize: 11, fontFamily: 'monospace' }}>
+          {f.kind === 'signal_drift'
+            ? `• ${f.archetype}.${f.signal}: ${Number(f.baseline).toFixed(3)} → ${Number(f.candidate).toFixed(3)} (Δ=${f.delta_pp}pp, th=${f.threshold_pp}pp)`
+            : `• ${f.kind}: ${JSON.stringify(f).slice(0, 130)}`}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function ClusterDetailModal({ archetypeId, culture, agg, onClose, allClusters, signalLabels, signalKeys }) {
+  const rows = (agg?.example_cluster_keys || []).map(k => ({ key: k, ...allClusters[k] }));
+  return (
+    <div style={{ position: 'fixed', inset: 0, background: 'rgba(15,23,42,0.55)', zIndex: 80, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }} onClick={onClose}>
+      <div style={{ background: 'white', borderRadius: 10, maxWidth: 760, width: '100%', maxHeight: '86vh', overflow: 'auto', padding: 22 }} onClick={(e) => e.stopPropagation()}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+          <div>
+            <div style={{ fontSize: 10, color: BRAND.muted, textTransform: 'uppercase', letterSpacing: 1 }}>cluster drill-down</div>
+            <div style={{ fontSize: 17, fontWeight: 700, color: BRAND.navy, marginTop: 2 }}>
+              {archetypeId.replace(/_/g, ' ')} <span style={{ fontSize: 12, color: BRAND.muted, fontWeight: 500 }}>· culture={culture}</span>
+            </div>
+          </div>
+          <button onClick={onClose} style={{ padding: '4px 10px', background: 'transparent', border: `1px solid ${BRAND.border}`, borderRadius: 6, cursor: 'pointer', fontSize: 12 }}>close</button>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8, marginBottom: 14 }}>
+          {signalKeys.map(s => (
+            <div key={s} style={{ padding: 10, background: BRAND.bg, border: `1px solid ${BRAND.border}`, borderRadius: 6 }}>
+              <div style={{ fontSize: 9, textTransform: 'uppercase', color: BRAND.muted, letterSpacing: 0.8 }}>{signalLabels[s]}</div>
+              <div style={{ fontSize: 16, fontWeight: 700, color: BRAND.navy, marginTop: 2 }}>{agg[s].toFixed(2)}</div>
+            </div>
+          ))}
+        </div>
+        <div style={{ fontSize: 12, color: BRAND.muted, marginBottom: 8 }}>
+          <strong style={{ color: BRAND.navy }}>Top amenities:</strong> {agg.top_amenities.join(', ') || '—'} · <strong style={{ color: BRAND.navy }}>Top complaints:</strong> {agg.top_complaints.join(', ') || '—'}
+        </div>
+        <div style={{ fontSize: 11, fontWeight: 600, color: BRAND.muted, textTransform: 'uppercase', letterSpacing: 1, marginTop: 14, marginBottom: 6 }}>Backing clusters ({rows.length})</div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          {rows.map(r => (
+            <div key={r.key} style={{ padding: 10, background: BRAND.bg, borderRadius: 6, border: `1px solid ${BRAND.border}` }}>
+              <div style={{ fontSize: 11, fontFamily: 'monospace', color: BRAND.navy, marginBottom: 4 }}>{r.key} <span style={{ color: BRAND.subtle, fontWeight: 500 }}>· n={r.n}</span></div>
+              <div style={{ fontSize: 11, color: BRAND.muted, lineHeight: 1.5 }}>
+                <strong>Vocab:</strong> {(r.top_unigrams || []).slice(0, 8).map(u => u[0]).join(', ')}
+              </div>
+              {(r.example_quotes || []).slice(0, 1).map((q, i) => (
+                <div key={i} style={{ fontSize: 11, fontStyle: 'italic', color: BRAND.navy, marginTop: 4 }}>“{q.slice(0, 220)}”</div>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Empirical Intelligence Banner (Reports · Row 0) ────────────────────────
+// Live drift + calibration summary loaded from /api/dignus/drift + voice-priors.
+// Click routes to Library > Signals tab for deep-dive.
+function EmpiricalIntelligenceBanner({ summary, onOpenSignals }) {
+  const [state, setState] = useState({ loading: true, drift: null, priors: null });
+  useEffect(() => {
+    let alive = true;
+    Promise.all([
+      apiFetch('/api/dignus/drift').then(r => r.json()).catch(() => null),
+      apiFetch('/api/dignus/voice-priors').then(r => r.json()).catch(() => null),
+    ]).then(([drift, priors]) => {
+      if (!alive) return;
+      setState({ loading: false, drift, priors });
+    });
+    return () => { alive = false; };
+  }, []);
+  if (state.loading) return (
+    <div style={{ padding: '10px 14px', background: BRAND.card, border: `1px solid ${BRAND.border}`, borderRadius: 10, marginBottom: 14, fontSize: 12, color: BRAND.muted }}>loading empirical intelligence…</div>
+  );
+
+  const drift = state.drift;
+  const priors = state.priors;
+  const verdictStyle = !drift ? { bg: '#f3f4f6', border: BRAND.border, text: BRAND.muted, icon: '·', label: 'unavailable' }
+    : drift.verdict === 'ALERT' ? { bg: '#fef2f2', border: '#fca5a5', text: '#991b1b', icon: '✗', label: 'ALERT' }
+    : drift.verdict === 'WATCH' ? { bg: '#fffbeb', border: '#fcd34d', text: '#92400e', icon: '⚠', label: 'WATCH' }
+    : { bg: '#ecfdf5', border: '#86efac', text: '#065f46', icon: '✓', label: 'OK' };
+
+  const clusters = priors?._cluster_count || 0;
+  const reviews = priors?._total_reviews_in || 0;
+  const cultureCount = priors?.summary ? new Set(priors.summary.map(c => c.language).filter(Boolean)).size + 1 : 0;
+
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: '260px 1fr auto', gap: 12, marginBottom: 14, alignItems: 'stretch' }}>
+      {/* Drift status */}
+      <div style={{ padding: '12px 14px', background: verdictStyle.bg, border: `1px solid ${verdictStyle.border}`, borderRadius: 10, display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <div style={{ fontSize: 10, letterSpacing: 1.2, textTransform: 'uppercase', color: verdictStyle.text, fontWeight: 700, opacity: 0.85 }}>Signal drift (ENISA-grade)</div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span style={{ fontSize: 20 }}>{verdictStyle.icon}</span>
+          <span style={{ fontSize: 18, fontWeight: 700, color: verdictStyle.text }}>{verdictStyle.label}</span>
+        </div>
+        <div style={{ fontSize: 10, color: verdictStyle.text, opacity: 0.75 }}>
+          {drift ? `${drift.summary?.findings_count || 0} findings · ${drift.summary?.archetypes_compared || 0} archetypes compared` : 'drift monitor not available'}
+        </div>
+      </div>
+
+      {/* Calibration corpus counts */}
+      <div style={{ padding: '12px 14px', background: BRAND.card, border: `1px solid ${BRAND.border}`, borderRadius: 10, display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 14 }}>
+        <StatMini label="Real reviews" value={reviews ? reviews.toLocaleString() : '—'} sub="across 8 properties" />
+        <StatMini label="Signal clusters" value={clusters || '—'} sub="archetype × sent × lang × culture" />
+        <StatMini label="Archetypes" value="18" sub="+11 new: wellness, LGBTQ+, bleisure…" />
+        <StatMini label="Cultures" value="11" sub="UK · ES · DE · FR · Nordic · GCC …" />
+      </div>
+
+      {/* Open Signals tab CTA */}
+      <button onClick={onOpenSignals} style={{
+        padding: '12px 16px', background: BRAND.accent, color: 'white', border: 'none',
+        borderRadius: 10, fontSize: 12, fontWeight: 600, cursor: 'pointer', letterSpacing: 0.3,
+        minWidth: 140,
+      }}>
+        <div style={{ fontSize: 10, letterSpacing: 1, textTransform: 'uppercase', opacity: 0.85, marginBottom: 4 }}>Deep dive</div>
+        Empirical<br />signals →
+      </button>
+    </div>
+  );
+}
+
+function StatMini({ label, value, sub }) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+      <div style={{ fontSize: 10, letterSpacing: 1, textTransform: 'uppercase', color: BRAND.muted, fontWeight: 600 }}>{label}</div>
+      <div style={{ fontSize: 18, fontWeight: 700, color: BRAND.navy, lineHeight: 1.1 }}>{value}</div>
+      <div style={{ fontSize: 10, color: BRAND.subtle }}>{sub}</div>
+    </div>
+  );
+}
+
+// ─── Cohort Decision Fingerprint (Reports · Row 6) ──────────────────────────
+// Weighted-average empirical signals for THIS cohort's archetype mix, read
+// from /api/dignus/voice-priors. Each signal explains which decision engine
+// consumes it (scenario-preview, staffing, adversarial, revenue).
+function CohortDecisionFingerprint({ summary }) {
+  const [state, setState] = useState({ loading: true, byArch: null });
+  useEffect(() => {
+    let alive = true;
+    apiFetch('/api/dignus/voice-priors?mode=full').then(r => r.json()).then(p => {
+      if (!alive || !p || !p.clusters) { setState({ loading: false, byArch: null }); return; }
+      // Aggregate signals per archetype
+      const agg = {};
+      for (const [k, c] of Object.entries(p.clusters)) {
+        if (!c.signals || c.archetype === 'unclassified') continue;
+        const a = c.archetype;
+        if (!agg[a]) { agg[a] = { n: 0, signals: {} }; }
+        agg[a].n += c.n;
+        for (const [sig, val] of Object.entries(c.signals)) {
+          agg[a].signals[sig] = (agg[a].signals[sig] || 0) + val * c.n;
+        }
+        agg[a].topAmenity = c.amenity_focus?.[0] || agg[a].topAmenity;
+        agg[a].topComplaint = c.complaint_triggers?.[0] || agg[a].topComplaint;
+      }
+      for (const a of Object.keys(agg)) {
+        for (const sig of Object.keys(agg[a].signals)) agg[a].signals[sig] /= agg[a].n;
+      }
+      setState({ loading: false, byArch: agg });
+    }).catch(() => setState({ loading: false, byArch: null }));
+    return () => { alive = false; };
+  }, []);
+
+  if (state.loading || !state.byArch) return null;
+
+  // Pull cohort mix from summary — fallback to the hardcoded ARCHETYPES mix if not available
+  const cohortMix = summary?.archetype_mix_pct || Object.fromEntries(ARCHETYPES.map(a => [a.id, a.cohortPct]));
+  const totalW = Object.values(cohortMix).reduce((s, v) => s + v, 0) || 1;
+
+  // Weighted signals across cohort
+  const sigKeys = ['price_sensitivity', 'service_expectation', 'cleanliness_threshold', 'loyalty_sensitivity', 'luxury_benchmark_score', 'family_orientation', 'emotional_intensity', 'decision_latency_proxy'];
+  const weighted = Object.fromEntries(sigKeys.map(k => [k, 0]));
+  let nReviews = 0;
+  for (const [arch, w] of Object.entries(cohortMix)) {
+    const row = state.byArch[arch];
+    if (!row) continue;
+    const share = w / totalW;
+    for (const k of sigKeys) weighted[k] += share * (row.signals[k] || 0);
+    nReviews += row.n * share;
+  }
+
+  const signalMeta = {
+    price_sensitivity: { label: 'Price sens.', impact: 'scenario-preview · elasticity' },
+    service_expectation: { label: 'Service exp.', impact: 'staffing-engine · FTE ratio' },
+    cleanliness_threshold: { label: 'Cleanliness', impact: 'adversarial · bathroom / housekeeping' },
+    loyalty_sensitivity: { label: 'Loyalty', impact: 'revenue-engine · upgrade ROI' },
+    luxury_benchmark_score: { label: 'Luxury bench.', impact: 'revenue-engine · spa / concierge upsell' },
+    family_orientation: { label: 'Family', impact: 'revenue-engine · kids-club / family rooms' },
+    emotional_intensity: { label: 'Emotion', impact: 'review-predictor · exclamation / superlatives' },
+    decision_latency_proxy: { label: 'Deliberation', impact: 'booking-engine · research depth' },
+  };
+  const sortedSignals = sigKeys.map(k => ({ key: k, val: weighted[k], ...signalMeta[k] })).sort((a, b) => b.val - a.val);
+
+  return (
+    <div style={{ marginTop: 14 }}>
+      <Card padding={16}>
+        <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 4 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: BRAND.navy }}>Cohort decision fingerprint</div>
+          <div style={{ fontSize: 11, color: BRAND.muted }}>~{Math.round(nReviews)} real reviews backing · weighted across cohort archetype mix</div>
+        </div>
+        <div style={{ fontSize: 11, color: BRAND.muted, lineHeight: 1.55, marginBottom: 12 }}>
+          Each number is the empirical signal weighted across this cohort's archetype mix. Signals feed directly into the decision engines shown on the right — so the same cohort yields <em>different</em> staffing needs, upsell ROI and price elasticity than a generic one.
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 10 }}>
+          {sortedSignals.map(s => (
+            <div key={s.key} style={{ padding: 10, background: BRAND.bg, border: `1px solid ${BRAND.border}`, borderRadius: 8 }}>
+              <div style={{ fontSize: 10, textTransform: 'uppercase', color: BRAND.muted, letterSpacing: 0.8, fontWeight: 600 }}>{s.label}</div>
+              <div style={{ fontSize: 20, fontWeight: 700, color: BRAND.navy, marginTop: 2 }}>{s.val.toFixed(2)}</div>
+              <div style={{ height: 5, background: BRAND.border, borderRadius: 3, marginTop: 6, overflow: 'hidden' }}>
+                <div style={{ width: `${Math.round(Math.min(1, s.val) * 100)}%`, height: '100%', background: s.val > 0.5 ? BRAND.accent : '#A5B4FC' }} />
+              </div>
+              <div style={{ fontSize: 9, color: BRAND.subtle, marginTop: 5, lineHeight: 1.4 }}>→ {s.impact}</div>
+            </div>
+          ))}
+        </div>
+      </Card>
     </div>
   );
 }

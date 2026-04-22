@@ -23,7 +23,28 @@ async function reasoningPass({ persona, scenario, taskType, goal }) {
 
   const sceneDescription = formatScenario(scenario);
 
-  const system = `You are a behavioral simulation engine. You must fully inhabit the persona described below and narrate their experience evaluating the content. Write in first-person, present tense. Do NOT produce JSON. Do NOT break character. Be honest — including thoughts that contradict the product's marketing.`;
+  // Voice prior block — empirical vocabulary + sentence-length + emotional
+  // intensity drawn from real reviews matching this persona's cluster.
+  // Injected so output sounds like a real reviewer, not a generic archetype.
+  const vp = persona.voice_prior;
+  const sig = vp?.signals || null;
+  const signalsLine = sig ? `
+Decision signals empirically observed for my kind of reviewer (0 = low, 1 = high):
+  · price_sensitivity=${sig.price_sensitivity} · service_expectation=${sig.service_expectation}
+  · cleanliness_threshold=${sig.cleanliness_threshold} · loyalty_sensitivity=${sig.loyalty_sensitivity}
+  · luxury_benchmark_score=${sig.luxury_benchmark_score} · family_orientation=${sig.family_orientation}
+  · emotional_intensity=${sig.emotional_intensity} · decision_latency=${sig.decision_latency_proxy}
+Things I compulsively notice (amenity focus): ${(vp.amenity_focus || []).join(', ') || '—'}
+Triggers that would ruin my stay (if applicable): ${(vp.complaint_triggers || []).join(', ') || '—'}` : '';
+  const voicePriorBlock = vp ? `\n=== EMPIRICAL VOICE PRIOR (from ${vp.n_real_reviews} real reviews in cluster "${vp.cluster_key}") ===
+Vocabulary I naturally use: ${(vp.vocabulary_hints || []).slice(0, 15).join(', ')}
+Phrases common in my voice: ${(vp.phrase_hints || []).slice(0, 6).join(' | ')}
+Typical sentence length: mean ${vp.sentence_length_target?.mean ?? '?'} words (p25 ${vp.sentence_length_target?.p25 ?? '?'}, p75 ${vp.sentence_length_target?.p75 ?? '?'}).
+Emotional intensity baseline: ${vp.emotional_intensity?.exclaim_mean ?? 0} exclaims, ${vp.emotional_intensity?.superlative_mean ?? 0} superlatives per review.${signalsLine}
+Real quotes from people like me (for voice only — do NOT copy verbatim): ${(vp.example_real_quotes || []).slice(0, 3).map(q => `"${q}"`).join(' || ')}
+` : '';
+
+  const system = `You are a behavioral simulation engine. You must fully inhabit the persona described below and narrate their experience evaluating the content. Write in first-person, present tense. Do NOT produce JSON. Do NOT break character. Be honest — including thoughts that contradict the product's marketing.${vp ? '\nMatch the voice prior: channel its vocabulary register and typical sentence length. Do not parrot the example quotes; treat them as inspiration, not script.' : ''}`;
 
   const prompt = `I am ${persona.name}, ${persona.age}, ${persona.role}.
 My company: ${persona.company_description}.
@@ -39,7 +60,7 @@ Language and voice of my pain: ${painQuotes}
 Objections that will stop me: ${objections}
 Deal breakers: ${dealBreakers}
 Hot buttons that would excite me: ${hotButtons}
-
+${voicePriorBlock}
 I have just arrived at this ${describeTaskType(taskType)}:
 
 ${sceneDescription}

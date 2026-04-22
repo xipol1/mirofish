@@ -1,8 +1,8 @@
 /**
- * Synthetic Users × Dignus — product suite landing page.
+ * Synthetic Users — product suite landing page.
  *
- * The entry point to the entire suite. Dignus visits this page, sees the value
- * in 15 seconds, and clicks through to either:
+ * The entry point to the entire suite. A visitor sees the value in 15 seconds
+ * and clicks through to either:
  *   - /presentation (12-slide walkthrough)
  *   - /lab (live calibrated dashboard · Villa Le Blanc case study)
  *   - /scenario (consultant workbench)
@@ -34,8 +34,8 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Synthetic Users × Dignus · Pre-decision validation suite</title>
-        <meta name="description" content="The invisible engine behind every Dignus recommendation. Four tools that let consultants validate any client decision against a calibrated synthetic guest cohort — before recommending." />
+        <title>Synthetic Users · Pre-decision validation suite for hospitality consultants</title>
+        <meta name="description" content="The invisible engine behind every consulting recommendation. Four tools + 6,076 real reviews across 8 calibrated properties let consultants validate any client decision against a synthetic guest cohort — before recommending." />
         <style dangerouslySetInnerHTML={{ __html: `body{margin:0;background:${BRAND.bg};}a{text-decoration:none;}*,*::before,*::after{box-sizing:border-box;}` }} />
       </Head>
 
@@ -47,7 +47,7 @@ export default function Home() {
               <div style={{ width: 30, height: 30, borderRadius: 8, background: `linear-gradient(135deg, ${BRAND.accent}, #7C3AED)`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 800, fontSize: 14 }}>S</div>
               <span style={{ fontSize: 15, fontWeight: 700, letterSpacing: 0.3 }}>Synthetic Users</span>
               <span style={{ color: BRAND.subtle, fontSize: 12 }}>×</span>
-              <span style={{ fontSize: 13, color: BRAND.muted, fontWeight: 500 }}>Dignus</span>
+              <span style={{ fontSize: 13, color: BRAND.muted, fontWeight: 500 }}>for boutique advisory</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <NavLink href="/presentation">Deck</NavLink>
@@ -70,7 +70,7 @@ export default function Home() {
           </div>
           <h1 style={{ margin: 0, fontSize: 72, lineHeight: 1.02, fontWeight: 800, letterSpacing: -1.5, color: BRAND.text }}>
             The invisible engine<br />
-            <span style={{ background: `linear-gradient(90deg, ${BRAND.accent}, ${BRAND.purple})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>behind every Dignus recommendation.</span>
+            <span style={{ background: `linear-gradient(90deg, ${BRAND.accent}, ${BRAND.purple})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>behind every consulting recommendation.</span>
           </h1>
           <p style={{ margin: '32px auto 0', maxWidth: 760, fontSize: 20, lineHeight: 1.5, color: BRAND.muted }}>
             Four tools that let consultants validate any client decision against a calibrated synthetic guest cohort — <strong style={{ color: BRAND.text }}>before recommending</strong>. No guesswork. No 6-month post-mortem.
@@ -144,7 +144,7 @@ export default function Home() {
           <div style={{ textAlign: 'center', marginBottom: 50 }}>
             <div style={{ fontSize: 11, letterSpacing: 2, textTransform: 'uppercase', color: BRAND.accent, marginBottom: 14 }}>Four products in the suite</div>
             <h2 style={{ margin: 0, fontSize: 44, fontWeight: 700, color: BRAND.text, letterSpacing: -0.5 }}>
-              Everything a Dignus consultant needs, end-to-end.
+              Everything a hospitality consultant needs, end-to-end.
             </h2>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 20 }}>
@@ -181,10 +181,10 @@ export default function Home() {
               href="/lab"
               bullets={[
                 'Six navigable sections: Reports, Agents, Scenarios, Library, Properties, Get Started.',
-                'Calibrated on 572 real reviews (Gran Meliá Villa Le Blanc, Menorca).',
-                '31 synthetic guests with persona + 6-stage journey + first-person review.',
-                'Click any agent → chat + 13-dim sensation radar + collapsible journey.',
-                '"Ask this agent about this moment" — seeds chat from score breakdown.',
+                'Calibrated on 6,076 real reviews across 8 mixed-brand properties (Meliá, Four Seasons, Six Senses, NoMad, Aman, Marriott, Soho House).',
+                '18 guest archetypes × 11 cultures → 132 empirical signal clusters feeding 3 decision engines.',
+                'Drift monitoring ENISA-grade: every signal snapshot audited, alerts on >±18pp deviation.',
+                'Click any agent → chat + 13-dim sensation radar + real-review voice prior.',
               ]}
             />
             <ProductCard
@@ -197,7 +197,7 @@ export default function Home() {
                 'Executive report — 18-page DOCX, 7 sections, Word-editable.',
                 'Methodology · calibration proof · case-study numbers · pitch timeline.',
                 'Regenerable via one Node script.',
-                'Dignus-editable source, branded palette.',
+                'White-label editable source, consultant-branded palette.',
               ]}
             />
           </div>
@@ -284,7 +284,7 @@ export default function Home() {
           <div style={{ maxWidth: 1200, margin: '0 auto' }}>
             <div style={{ textAlign: 'center', marginBottom: 50 }}>
               <div style={{ fontSize: 11, letterSpacing: 2, textTransform: 'uppercase', color: BRAND.accent, marginBottom: 14 }}>Engagement model</div>
-              <h2 style={{ margin: 0, fontSize: 40, fontWeight: 700, color: BRAND.text, letterSpacing: -0.5 }}>Pick how Dignus deploys it.</h2>
+              <h2 style={{ margin: 0, fontSize: 40, fontWeight: 700, color: BRAND.text, letterSpacing: -0.5 }}>Pick how your firm deploys it.</h2>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
               {[
@@ -342,7 +342,7 @@ export default function Home() {
               border: `1px solid ${BRAND.border}`, borderRadius: 12, fontSize: 15, fontWeight: 500,
             }}>🎬 Watch the deck</a>
           </div>
-          <a href="mailto:rafaferrer43@gmail.com?subject=Synthetic%20Users%20%C3%97%20Dignus%20%E2%80%94%20pilot%20request" style={{
+          <a href="mailto:rafaferrer43@gmail.com?subject=Synthetic%20Users%20%E2%80%94%20pilot%20request" style={{
             display: 'inline-flex', alignItems: 'center', gap: 10, padding: '12px 22px',
             background: BRAND.card, color: BRAND.text, border: `1px solid ${BRAND.border}`,
             borderRadius: 10, fontSize: 13, fontWeight: 500,
@@ -355,7 +355,7 @@ export default function Home() {
         {/* FOOTER */}
         <footer style={{ borderTop: `1px solid ${BRAND.border}55`, padding: '30px 32px', background: BRAND.bgSoft }}>
           <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 14, fontSize: 11, color: BRAND.subtle }}>
-            <div>© 2026 Synthetic Users. For Dignus consultancy. All product demos are live.</div>
+            <div>© 2026 Synthetic Users. For boutique hospitality advisory firms. All product demos are live.</div>
             <div style={{ display: 'flex', gap: 18 }}>
               <a href="/lab" style={{ color: BRAND.muted }}>Dashboard</a>
               <a href="/presentation" style={{ color: BRAND.muted }}>Deck</a>

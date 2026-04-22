@@ -28,6 +28,79 @@ function loadBenchmarks() {
   return _benchCache;
 }
 
+// Lazy-load voice priors (empirical per-archetype signals from real reviews).
+// Used to adjust hardcoded archetype coefficients with observed data.
+let _voicePriorsCache = null;
+let _empiricalByArchCache = null;
+function loadEmpiricalArchetypeSignals() {
+  if (_empiricalByArchCache) return _empiricalByArchCache;
+  try {
+    const vpPath = path.join(__dirname, '..', '..', 'data', 'industries', 'hospitality', 'voice_priors_from_reviews.json');
+    if (!fs.existsSync(vpPath)) { _empiricalByArchCache = {}; return _empiricalByArchCache; }
+    _voicePriorsCache = JSON.parse(fs.readFileSync(vpPath, 'utf8'));
+    const acc = {};
+    for (const [key, cluster] of Object.entries(_voicePriorsCache.clusters || {})) {
+      if (!cluster.signals) continue;
+      const arch = cluster.archetype || key.split('.')[0];
+      if (arch === 'unclassified') continue;
+      if (!acc[arch]) acc[arch] = { n_total: 0, price_sum: 0, service_sum: 0, clean_sum: 0, loyalty_sum: 0, lux_sum: 0, family_sum: 0, emo_sum: 0, latency_sum: 0, samples: 0 };
+      const w = cluster.n || 1;
+      acc[arch].n_total += w;
+      acc[arch].price_sum += w * (cluster.signals.price_sensitivity || 0);
+      acc[arch].service_sum += w * (cluster.signals.service_expectation || 0);
+      acc[arch].clean_sum += w * (cluster.signals.cleanliness_threshold || 0);
+      acc[arch].loyalty_sum += w * (cluster.signals.loyalty_sensitivity || 0);
+      acc[arch].lux_sum += w * (cluster.signals.luxury_benchmark_score || 0);
+      acc[arch].family_sum += w * (cluster.signals.family_orientation || 0);
+      acc[arch].emo_sum += w * (cluster.signals.emotional_intensity || 0);
+      acc[arch].latency_sum += w * (cluster.signals.decision_latency_proxy || 0);
+      acc[arch].samples++;
+    }
+    _empiricalByArchCache = {};
+    for (const [arch, a] of Object.entries(acc)) {
+      if (a.n_total === 0) continue;
+      _empiricalByArchCache[arch] = {
+        price_sensitivity: a.price_sum / a.n_total,
+        service_expectation: a.service_sum / a.n_total,
+        cleanliness_threshold: a.clean_sum / a.n_total,
+        loyalty_sensitivity: a.loyalty_sum / a.n_total,
+        luxury_benchmark_score: a.lux_sum / a.n_total,
+        family_orientation: a.family_sum / a.n_total,
+        emotional_intensity: a.emo_sum / a.n_total,
+        decision_latency_proxy: a.latency_sum / a.n_total,
+        n_reviews_behind: a.n_total,
+      };
+    }
+  } catch (err) {
+    _empiricalByArchCache = {};
+  }
+  return _empiricalByArchCache;
+}
+
+// Blend the hardcoded elasticity with the empirical price_sensitivity for
+// an archetype. Empirical signals pull the elasticity toward a harsher or
+// softer value depending on how strongly that archetype complained about
+// price in the real corpus. Math:
+//   factor = 1 + (price_sensitivity - 0.5) × 0.8    // range [0.6, 1.4]
+//   effective_elasticity = base_elasticity × factor
+//
+// Example: budget_optimizer with empirical price_sensitivity 0.75 →
+//   factor=1.2 → elasticity goes from -1.57 to -1.88 (20% sharper).
+// Luxury_seeker with empirical 0.1 → factor=0.68 → -0.45 becomes -0.31.
+function empiricalElasticity(archId, baseElasticity) {
+  const emp = loadEmpiricalArchetypeSignals();
+  const row = emp[archId];
+  if (!row) return { elasticity: baseElasticity, empirical: false };
+  const factor = Math.max(0.5, Math.min(1.5, 1 + (row.price_sensitivity - 0.5) * 0.8));
+  return {
+    elasticity: baseElasticity * factor,
+    empirical: true,
+    empirical_price_sensitivity: Math.round(row.price_sensitivity * 100) / 100,
+    adjustment_factor: Math.round(factor * 100) / 100,
+    n_reviews_behind: row.n_reviews_behind,
+  };
+}
+
 // Per-archetype coefficients used by the formula engine. Mirror the
 // deterministic synth in ai_claude_synth.js so preview ≈ full-sim output.
 const ARCHETYPE_COEFS = {
@@ -144,8 +217,12 @@ function computeRateChange({ magnitude_pct = 0, timing = 'peak', scope = { type:
 
     // booking delta = elasticity × relative_price_change. Cultural cushion is a
     // dampener proportional to price change magnitude — no price change → 0 impact.
+    // Elasticity is now empirically adjusted from the review corpus price_sensitivity
+    // signal: budget_optimizers whose reviews are dense with price complaints get
+    // sharper elasticity; luxury_seekers whose reviews rarely mention price get softer.
     const priceDelta = magnitude_pct / 100;
-    const elasticityEffect = coef.elasticity * priceDelta;
+    const empEl = empiricalElasticity(archId, coef.elasticity);
+    const elasticityEffect = empEl.elasticity * priceDelta;
     const culturalCushion = culturalBookDelta * Math.abs(priceDelta) * 2;
     const bookingDelta = elasticityEffect + culturalCushion;
     aggregateBookingDelta += archW * bookingDelta;
@@ -161,6 +238,7 @@ function computeRateChange({ magnitude_pct = 0, timing = 'peak', scope = { type:
       segment: archId,
       delta_pct: Math.round(bookingDelta * 1000) / 10,
       review_delta: Math.round(effectiveReviewDelta * 100) / 100,
+      empirical_adjustment: empEl.empirical ? { price_sensitivity: empEl.empirical_price_sensitivity, factor: empEl.adjustment_factor, n_reviews: empEl.n_reviews_behind } : null,
     });
   }
 

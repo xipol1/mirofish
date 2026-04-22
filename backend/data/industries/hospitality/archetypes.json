@@ -230,6 +230,315 @@
         "Unclear shuttle or transport options",
         "Inflexible check-in/out times"
       ]
+    },
+    {
+      "id": "wellness_retreat_seeker",
+      "label": "The Wellness Retreat Seeker",
+      "role_archetype": "books primarily for the spa, yoga, detox, or sleep programme; secondary motive is rest",
+      "coverage_purpose": "Tests wellness depth — treatment menu credibility, hydrothermal circuits, silence, bio food",
+      "decision_style": "deliberate",
+      "base_traits": {
+        "patience": 0.75,
+        "trust_baseline": 0.55,
+        "price_sensitivity": 0.35,
+        "tech_savviness": 0.55,
+        "risk_tolerance": 0.4
+      },
+      "behavioral_markers": [
+        "Starts on the spa page, not the rooms page",
+        "Wants credentialed therapists, not generic 'Swedish massage' lists",
+        "Evaluates thermal circuits, treatment rooms, couples cabins, outdoor options",
+        "Reads menu for anti-inflammatory / vegan / sugar-free language",
+        "Sensitive to pool noise and kid presence in wellness areas",
+        "Books 90–120 min treatments, not 50 min"
+      ],
+      "failure_modes_revealed": [
+        "Spa page thin — no therapist profiles, no thermal circuit explanation",
+        "Wellness and family pool share the same deck",
+        "Menu has no genuinely wellness-aligned options",
+        "Treatment prices hidden — 'from €XX' only"
+      ]
+    },
+    {
+      "id": "multigenerational_family",
+      "label": "The Multigenerational Family",
+      "role_archetype": "3 generations under one booking (grandparents + parents + kids), paying together",
+      "coverage_purpose": "Tests mixed-need accommodation: accessibility + kids amenities + quiet dining",
+      "decision_style": "deliberate",
+      "base_traits": {
+        "patience": 0.75,
+        "trust_baseline": 0.55,
+        "price_sensitivity": 0.6,
+        "tech_savviness": 0.5,
+        "risk_tolerance": 0.25
+      },
+      "behavioral_markers": [
+        "Books 2–3 connecting or adjacent rooms with varied bed configurations",
+        "Requires at least one accessible / low-floor room for grandparents",
+        "Wants early dinner options and quiet tables for elderly",
+        "Kids amenities non-negotiable but noise tolerance is low",
+        "Shared-budget decisions — multiple opinions slow everything",
+        "Weight on cancellation flexibility (someone always gets sick)"
+      ],
+      "failure_modes_revealed": [
+        "No group / family booking flow with mixed room types",
+        "Accessibility options buried or unlisted",
+        "No quiet dining room or early seating option",
+        "Strict cancellation policy on long lead bookings"
+      ]
+    },
+    {
+      "id": "solo_female_traveler",
+      "label": "The Solo Female Traveler",
+      "role_archetype": "travelling alone for leisure, curiosity, or post-milestone; safety and atmosphere non-negotiable",
+      "coverage_purpose": "Tests perceived safety, single-traveler welcome, and female-traveller community signals",
+      "decision_style": "deliberate",
+      "base_traits": {
+        "patience": 0.6,
+        "trust_baseline": 0.5,
+        "price_sensitivity": 0.55,
+        "tech_savviness": 0.75,
+        "risk_tolerance": 0.4
+      },
+      "behavioral_markers": [
+        "Reads reviews specifically filtered by 'solo' or 'female traveller'",
+        "Scans neighbourhood safety, transport after dark, lobby staffing at night",
+        "Prefers well-lit corridors, deadbolts, single-guest check-in discretion",
+        "Values lounge / bar areas where dining alone feels normal",
+        "Sensitive to couple-centric or family-centric imagery on the website",
+        "Highly responsive to women-owned spa / tour partners"
+      ],
+      "failure_modes_revealed": [
+        "No safety / neighbourhood info for solo travellers",
+        "24h reception not explicitly stated",
+        "Single occupancy rates penalised vs double",
+        "Imagery makes solo travel feel out of place"
+      ]
+    },
+    {
+      "id": "lgbtq_couple",
+      "label": "The LGBTQ+ Couple",
+      "role_archetype": "same-sex or queer couple booking a romantic or milestone stay",
+      "coverage_purpose": "Tests inclusive signals — staff training, imagery, non-assumed pronouns, bed configurations",
+      "decision_style": "balanced",
+      "base_traits": {
+        "patience": 0.65,
+        "trust_baseline": 0.5,
+        "price_sensitivity": 0.45,
+        "tech_savviness": 0.75,
+        "risk_tolerance": 0.5
+      },
+      "behavioral_markers": [
+        "Looks for IGLTA / Travel Advocacy / rainbow signals, not as demand but as presence",
+        "Sensitive to 'Mr & Mrs' booking defaults",
+        "Reads same-sex couple reviews specifically — the one review that went bad weighs heavily",
+        "Wants confirmed king bed (not twin push-together)",
+        "Values destination local context (is the country / region safe?)",
+        "Highly loyal when welcomed well — repeat + refer"
+      ],
+      "failure_modes_revealed": [
+        "Gendered salutations hard-coded in booking forms",
+        "Zero imagery showing same-sex couples",
+        "No honeymoon / anniversary package recognises non-hetero couples",
+        "Staff training gap — awkward moments at check-in"
+      ]
+    },
+    {
+      "id": "bleisure_extender",
+      "label": "The Bleisure Extender",
+      "role_archetype": "extends a business trip into a 2–3 day leisure tail, sometimes bringing partner",
+      "coverage_purpose": "Tests flexible extension path — rate preservation, partner welcome, desk-to-beach transition",
+      "decision_style": "balanced",
+      "base_traits": {
+        "patience": 0.55,
+        "trust_baseline": 0.55,
+        "price_sensitivity": 0.5,
+        "tech_savviness": 0.85,
+        "risk_tolerance": 0.55
+      },
+      "behavioral_markers": [
+        "Starts with a corporate rate booking, extends last-minute",
+        "Wants the extended nights at a comparable (not punitive) rate",
+        "Brings partner for the leisure tail — room needs upgrade from single",
+        "Needs a desk + fast wifi on work days, pool + dinner on leisure days",
+        "Uses the 'add a night' flow compulsively",
+        "Books experiences / tours directly through the concierge if offered"
+      ],
+      "failure_modes_revealed": [
+        "Extension nights priced punitively vs leisure booking",
+        "No easy 'add a partner' workflow",
+        "Room type auto-locks and can't upgrade mid-stay",
+        "Corporate rate voided when extending beyond contract dates"
+      ]
+    },
+    {
+      "id": "accessibility_needs",
+      "label": "The Accessibility-First Guest",
+      "role_archetype": "guest with mobility, visual, hearing, or cognitive accommodation needs (self or companion)",
+      "coverage_purpose": "Tests ADA/EU accessibility compliance and genuine care vs checkbox",
+      "decision_style": "deliberate",
+      "base_traits": {
+        "patience": 0.65,
+        "trust_baseline": 0.45,
+        "price_sensitivity": 0.5,
+        "tech_savviness": 0.55,
+        "risk_tolerance": 0.25
+      },
+      "behavioral_markers": [
+        "Calls before booking to confirm specific measurements (door widths, roll-in shower)",
+        "Wants ADA / EU accessibility statement visible, not hidden in FAQ",
+        "Needs confirmed room type — 'accessible on request' is not acceptable",
+        "Evaluates routes: lobby → elevator → room, dining, spa, pool",
+        "Sensitive to staff training on service animals, hearing assistance, visual aids",
+        "A single bad experience becomes a permanent brand veto"
+      ],
+      "failure_modes_revealed": [
+        "No accessibility statement on property page",
+        "Accessible rooms not bookable online",
+        "Door width / grab bar / turning radius measurements unavailable",
+        "Route from entrance to room has stairs, no lift",
+        "Staff unprepared for service animals"
+      ]
+    },
+    {
+      "id": "sustainability_conscious",
+      "label": "The Sustainability-Conscious Traveler",
+      "role_archetype": "chooses property based on authentic environmental/social credentials, not greenwash",
+      "coverage_purpose": "Tests depth of sustainability narrative — certifications, measured outcomes, local sourcing",
+      "decision_style": "deliberate",
+      "base_traits": {
+        "patience": 0.7,
+        "trust_baseline": 0.4,
+        "price_sensitivity": 0.45,
+        "tech_savviness": 0.7,
+        "risk_tolerance": 0.4
+      },
+      "behavioral_markers": [
+        "Reads the sustainability page before the rooms page",
+        "Wants measurable claims — kWh, %, tonnes, not adjectives",
+        "Recognises EarthCheck / LEED / B-Corp / Biosphere certifications",
+        "Cross-references supplier partnerships with real NGOs",
+        "Sensitive to plastic bottles, single-use toiletries, buffet waste",
+        "Shares positive experiences widely (social multiplier)"
+      ],
+      "failure_modes_revealed": [
+        "'Eco-friendly' claims with zero numbers",
+        "No certification logos or verifiable third-party audit",
+        "Plastic amenities visible in room photos",
+        "Supplier stories generic — 'we support local' with no names"
+      ]
+    },
+    {
+      "id": "influencer_content_creator",
+      "label": "The Content Creator / Influencer",
+      "role_archetype": "guest whose stay doubles as content production — photo shoots, vlogs, PR visits",
+      "coverage_purpose": "Tests shareability, light, backdrops, and PR / press-trip workflow",
+      "decision_style": "impulsive",
+      "base_traits": {
+        "patience": 0.3,
+        "trust_baseline": 0.5,
+        "price_sensitivity": 0.55,
+        "tech_savviness": 0.95,
+        "risk_tolerance": 0.7
+      },
+      "behavioral_markers": [
+        "Scans for Instagram-worthy spots — architecture, balconies, rooftop, pools at golden hour",
+        "Books specific rooms for the view / layout",
+        "Wants fast wifi for upload + natural window light in rooms",
+        "Reaches out for press rate or comped stay in exchange for content",
+        "Will badmouth a property that mishandles the PR ask",
+        "Tags brand accounts compulsively; high amplification if happy"
+      ],
+      "failure_modes_revealed": [
+        "No press / PR contact or workflow on the site",
+        "Rooms with no natural light, bad angles, blocked views",
+        "Staff unprepared for shoots in public areas",
+        "Wifi upload speed too low for 4K video"
+      ]
+    },
+    {
+      "id": "culinary_tourist",
+      "label": "The Culinary Tourist",
+      "role_archetype": "chooses the property for the restaurant, the chef, or the wine programme",
+      "coverage_purpose": "Tests dining depth — chef pedigree, tasting menu flow, sommelier presence, local sourcing",
+      "decision_style": "deliberate",
+      "base_traits": {
+        "patience": 0.8,
+        "trust_baseline": 0.5,
+        "price_sensitivity": 0.25,
+        "tech_savviness": 0.65,
+        "risk_tolerance": 0.5
+      },
+      "behavioral_markers": [
+        "Books based on the restaurant before the room",
+        "Reads chef bios, press, prior Michelin / 50 Best history",
+        "Requests tasting menu, wine pairing, chef's table on day 1",
+        "Tolerates lesser rooms for great food",
+        "Dietary preferences communicated pre-arrival and expected honoured",
+        "Will reschedule a full trip if the restaurant is closed that week"
+      ],
+      "failure_modes_revealed": [
+        "Restaurant page thin — no chef story, no sample menu, no wine list",
+        "Opening hours and closure calendar hard to find",
+        "Tasting menu / chef's table not bookable online",
+        "Dietary restrictions flow is a manual email"
+      ]
+    },
+    {
+      "id": "silver_nomad",
+      "label": "The Silver Nomad",
+      "role_archetype": "retired long-stay guest (2–8 weeks), often snowbird pattern, low tech but high expectation",
+      "coverage_purpose": "Tests long-stay product at non-digital-nomad tier — serviced feel, human concierge, quiet atmosphere",
+      "decision_style": "deliberate",
+      "base_traits": {
+        "patience": 0.85,
+        "trust_baseline": 0.5,
+        "price_sensitivity": 0.6,
+        "tech_savviness": 0.3,
+        "risk_tolerance": 0.2
+      },
+      "behavioral_markers": [
+        "Books by phone or travel agent, not directly online",
+        "Wants weekly / monthly rate clarity without hunting",
+        "Values same-room consistency, no mid-stay moves",
+        "Expects same staff faces — relationship matters",
+        "Quiet atmosphere mandatory, avoids properties with loud bars",
+        "Repeat loyalty without formal programmes — returns yearly"
+      ],
+      "failure_modes_revealed": [
+        "No phone booking or travel agent workflow",
+        "Long-stay rates require chat / bot interaction",
+        "High staff turnover breaks the return-guest feeling",
+        "Loud DJ / bar scene visible on social media"
+      ]
+    },
+    {
+      "id": "all_inclusive_optimizer",
+      "label": "The All-Inclusive Optimizer",
+      "role_archetype": "leisure guest at an AI property trying to extract maximum value from the package",
+      "coverage_purpose": "Tests AI scope clarity, premium upgrades, and boundary management at buffet / bar",
+      "decision_style": "balanced",
+      "base_traits": {
+        "patience": 0.55,
+        "trust_baseline": 0.5,
+        "price_sensitivity": 0.75,
+        "tech_savviness": 0.55,
+        "risk_tolerance": 0.45
+      },
+      "behavioral_markers": [
+        "Asks what IS and is NOT included in the first 10 minutes on arrival",
+        "Hunts à la carte restaurants unlocked by AI tier",
+        "Asks about premium alcohol brands, room service inclusion, spa credit",
+        "Tests the limits — extra towels, room moves, restaurant changes",
+        "Extremely sensitive to 'not included' surprises at checkout",
+        "Will compare scope to Sandals / Club Med / Iberostar next time"
+      ],
+      "failure_modes_revealed": [
+        "AI scope unclear on website or arrival sheet",
+        "Premium alcohol / à la carte surcharge not disclosed",
+        "Room service / minibar excluded without notice",
+        "Staff default to 'no' instead of explaining tier benefits"
+      ]
     }
   ],
   "pricing": [

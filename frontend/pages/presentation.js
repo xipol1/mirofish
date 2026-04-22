@@ -1,7 +1,7 @@
 /**
- * Presentación Synthetic Users × Dignus — interactive slide deck.
+ * Presentación Synthetic Users — interactive slide deck.
  *
- * Target audience: Dignus consultancy evaluating whether to adopt
+ * Target audience: hospitality advisory firms evaluating whether to adopt
  * Synthetic Users as the invisible engine behind every recommendation.
  *
  * Navigation: ←/→ or j/k, numbers 1-9/0, click dots, Esc to exit.
@@ -61,8 +61,8 @@ const SLIDES = [
       'Review forecaster — predicted platform mix and predicted review tone',
       'Competitor game-theory matrix — how rivals likely respond',
       'Narrative simulation — 6-8 synthetic guests reviewed in their own voice',
-      'Interview deep-dive — Dignus consultant can chat with any simulated guest',
-      'PDF export — white-label ready with Dignus branding',
+      'Interview deep-dive — the consultant can chat with any simulated guest',
+      'PDF export — white-label ready with your firm branding',
     ],
     tryText: 'View a live report →',
   },
@@ -93,7 +93,7 @@ const SLIDES = [
       'Executive report — 18-page DOCX, 7 sections, tables, ready for Word/PDF export',
       'Both cover: methodology, calibration proof, case study numbers, pitch timeline',
       'Update once — regenerate via a single Node script (`node scripts/build_melia_exec_v4.js`)',
-      'Branded palette, consistent typography, Dignus-editable source',
+      'Branded palette, consistent typography, white-label editable source',
     ],
     tryText: 'Open one-pager (ES) →',
   },
@@ -141,7 +141,7 @@ export default function PresentationPage() {
   return (
     <>
       <Head>
-        <title>Synthetic Users × Dignus · Product Suite</title>
+        <title>Synthetic Users · Product Suite for hospitality consultants</title>
         <style dangerouslySetInnerHTML={{ __html: 'body { display: block !important; margin: 0; overflow: hidden; }' }} />
       </Head>
       <div style={{ position: 'fixed', inset: 0, background: BRAND.bg, color: BRAND.text, fontFamily: 'system-ui, -apple-system, "Segoe UI", sans-serif', overflow: 'hidden' }}>
@@ -158,7 +158,7 @@ export default function PresentationPage() {
         {/* Footer nav */}
         <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '20px 40px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: `linear-gradient(to top, ${BRAND.bg}, transparent)`, zIndex: 5 }}>
           <div style={{ fontSize: 11, color: BRAND.subtle, letterSpacing: 1.2, textTransform: 'uppercase' }}>
-            Synthetic Users × Dignus · {idx + 1} / {total}
+            Synthetic Users · {idx + 1} / {total}
           </div>
           <div style={{ display: 'flex', gap: 6 }}>
             {SLIDES.map((_, i) => (
@@ -210,12 +210,12 @@ function CoverSlide() {
     <div style={{ maxWidth: 1100, width: '100%', textAlign: 'center' }}>
       <div style={{ display: 'inline-flex', alignItems: 'center', gap: 14, padding: '8px 18px', background: BRAND.accentSoft, border: `1px solid ${BRAND.accent}`, borderRadius: 999, marginBottom: 32, fontSize: 12, letterSpacing: 1.6, textTransform: 'uppercase', color: BRAND.accent, fontWeight: 600 }}>
         <span>SYNTHETIC USERS</span>
-        <span style={{ opacity: 0.5 }}>×</span>
-        <span>DIGNUS</span>
+        <span style={{ opacity: 0.5 }}>·</span>
+        <span>PRE-DECISION VALIDATION SUITE</span>
       </div>
       <h1 style={{ margin: 0, fontSize: 64, lineHeight: 1.05, fontWeight: 800, letterSpacing: -1, color: BRAND.text }}>
         The invisible engine<br />
-        <span style={{ background: `linear-gradient(90deg, ${BRAND.accent}, #A78BFA)`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>behind every Dignus recommendation.</span>
+        <span style={{ background: `linear-gradient(90deg, ${BRAND.accent}, #A78BFA)`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>behind every consulting recommendation.</span>
       </h1>
       <p style={{ margin: '28px auto 0', maxWidth: 700, fontSize: 18, lineHeight: 1.55, color: BRAND.muted }}>
         Four products that turn your consulting workflow into a pre-decision validation engine. One source of truth for every client recommendation — from first scenario to final board memo.
@@ -232,7 +232,7 @@ function PitchSlide() {
     <div style={{ maxWidth: 1000, width: '100%' }}>
       <div style={{ fontSize: 11, letterSpacing: 2, textTransform: 'uppercase', color: BRAND.gold, marginBottom: 18 }}>The pitch, in one sentence</div>
       <p style={{ margin: 0, fontSize: 48, lineHeight: 1.25, fontWeight: 600, color: BRAND.text }}>
-        Every Dignus consultant validates every client decision against a <span style={{ color: BRAND.accent }}>calibrated synthetic cohort</span> — before recommending.
+        Every consultant validates every client decision against a <span style={{ color: BRAND.accent }}>calibrated synthetic cohort</span> — before recommending.
       </p>
       <div style={{ marginTop: 40, display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
         {[
@@ -261,7 +261,7 @@ function SuiteSlide() {
     <div style={{ maxWidth: 1100, width: '100%' }}>
       <div style={{ fontSize: 11, letterSpacing: 2, textTransform: 'uppercase', color: BRAND.accent, marginBottom: 12 }}>Four products in the suite</div>
       <h2 style={{ margin: 0, fontSize: 42, fontWeight: 700, color: BRAND.text, marginBottom: 40 }}>
-        Everything a Dignus consultant needs, end-to-end.
+        Everything a hospitality consultant needs, end-to-end.
       </h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 20 }}>
         {items.map((it, i) => (
@@ -424,7 +424,7 @@ function EngagementSlide() {
     <div style={{ maxWidth: 1200, width: '100%' }}>
       <div style={{ fontSize: 11, letterSpacing: 2, textTransform: 'uppercase', color: BRAND.accent, marginBottom: 12 }}>Engagement model</div>
       <h2 style={{ margin: 0, fontSize: 42, fontWeight: 700, color: BRAND.text, marginBottom: 40 }}>
-        Pick how Dignus deploys it.
+        Pick how your firm deploys it.
       </h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
         {tiers.map((t) => (
@@ -485,7 +485,7 @@ function CtaSlide() {
           </a>
         ))}
       </div>
-      <a href="mailto:rafaferrer43@gmail.com?subject=Synthetic%20Users%20%C3%97%20Dignus%20%E2%80%94%20pilot%20request" style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '12px 24px', background: BRAND.accent, color: 'white', borderRadius: 10, fontSize: 14, fontWeight: 600, boxShadow: `0 8px 32px ${BRAND.accent}44`, textDecoration: 'none' }}>
+      <a href="mailto:rafaferrer43@gmail.com?subject=Synthetic%20Users%20%E2%80%94%20pilot%20request" style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '12px 24px', background: BRAND.accent, color: 'white', borderRadius: 10, fontSize: 14, fontWeight: 600, boxShadow: `0 8px 32px ${BRAND.accent}44`, textDecoration: 'none' }}>
         <span>📅</span>
         <span>Book a pilot · rafaferrer43@gmail.com</span>
       </a>

@@ -1,0 +1,55 @@
+{
+  "_audit_version": "1.0.0",
+  "_written_at": "2026-04-22T08:37:33.591Z",
+  "_triggered_by": "smoke_test",
+  "_actor": "engineer",
+  "verdict": "ALERT",
+  "findings": [
+    {
+      "kind": "reviews_count_drop",
+      "severity": "ALERT",
+      "baseline": 6076,
+      "candidate": 3646,
+      "drop_pct": 40
+    },
+    {
+      "kind": "archetypes_missing",
+      "severity": "WATCH",
+      "missing": [
+        "honeymooner"
+      ]
+    },
+    {
+      "kind": "signal_drift",
+      "severity": "ALERT",
+      "archetype": "budget_optimizer",
+      "signal": "price_sensitivity",
+      "baseline": 0.657437673130194,
+      "candidate": 0.40743767313019397,
+      "delta_pp": 25,
+      "threshold_pp": 18
+    },
+    {
+      "kind": "signal_drift",
+      "severity": "ALERT",
+      "archetype": "luxury_seeker",
+      "signal": "service_expectation",
+      "baseline": 0.4596373056994819,
+      "candidate": 0.15963730569948192,
+      "delta_pp": 30,
+      "threshold_pp": 18
+    }
+  ],
+  "summary": {
+    "baseline_captured_at": "2026-04-22T08:37:03.117Z",
+    "candidate_captured_at": "2026-04-22T08:37:33.587Z",
+    "baseline_reviews": 6076,
+    "candidate_reviews": 3646,
+    "baseline_clusters": 132,
+    "candidate_clusters": 132,
+    "archetypes_compared": 12,
+    "findings_count": 4,
+    "watch_count": 1,
+    "alert_count": 3
+  }
+}

@@ -1,3 +1,34 @@
+const fs = require('fs');
+const path = require('path');
+
+// Lazy-loaded voice priors (extracted from real TripAdvisor/Booking reviews).
+// See backend/services/data/voice-priors-extractor.js and
+// scripts/build_voice_priors.js for how this file is produced.
+let _VOICE_PRIORS_CACHE = null;
+function loadVoicePriors() {
+  if (_VOICE_PRIORS_CACHE !== null) return _VOICE_PRIORS_CACHE;
+  try {
+    const p = path.join(__dirname, '..', '..', 'data', 'industries', 'hospitality', 'voice_priors_from_reviews.json');
+    if (fs.existsSync(p)) _VOICE_PRIORS_CACHE = JSON.parse(fs.readFileSync(p, 'utf8'));
+    else _VOICE_PRIORS_CACHE = { clusters: {} };
+  } catch (err) { _VOICE_PRIORS_CACHE = { clusters: {} }; }
+  return _VOICE_PRIORS_CACHE;
+}
+
+let _voicePriorsLookup = null;
+function lookupVoicePrior(...args) {
+  if (!_voicePriorsLookup) _voicePriorsLookup = require('../data/voice-priors-extractor').lookupVoicePrior;
+  return _voicePriorsLookup(...args);
+}
+
+// Map a culture cluster → a primary language code used for voice-prior lookup.
+const CLUSTER_TO_LANG = {
+  anglo_uk_ireland: 'en', anglo_us_canada: 'en', nordic: 'en', middle_east_gcc: 'en', east_asian: 'en',
+  german_dach: 'de',
+  latin_spain_italy: 'es', latin_american: 'es',
+  french: 'fr',
+};
+
 /**
  * Persona Enricher — fills a generated persona with ~25 richer traits that
  * move it from "archetype + name + age" to a three-dimensional human.
@@ -338,6 +369,25 @@ function enrich({ persona, culturalContext, bookingContext }) {
     reviewBehavior,
   });
 
+  // Voice prior lookup — attach real-person vocabulary + sentence-length +
+  // emotional intensity signatures drawn from the review corpus (HF + scraped).
+  // We pick the cluster by (archetype, sentiment_lean, language, target_star).
+  // The resulting block is merged into the persona so both agents.js (system
+  // prompt) and review-predictor (output tuning) can read it.
+  const voicePriorsData = loadVoicePriors();
+  const lang = CLUSTER_TO_LANG[cluster] || 'en';
+  const sentimentLean = persona.sentiment_lean
+    || (psychographics.trait_optimism > 60 ? 'positive' : psychographics.trait_optimism < 40 ? 'negative' : 'mixed');
+  const targetStar = persona.target_star_rating
+    || (sentimentLean === 'positive' ? 5 : sentimentLean === 'negative' ? 2 : 3);
+  const voicePrior = lookupVoicePrior(voicePriorsData, {
+    archetype: archetypeId,
+    sentiment: sentimentLean,
+    language: lang,
+    star: targetStar,
+    culture: cluster,  // pull culture-specific cluster first when available
+  });
+
   const enriched = {
     ...persona,
     enriched: true,
@@ -350,6 +400,34 @@ function enrich({ persona, culturalContext, bookingContext }) {
     life_context: lifeContext,
     financial_behavior: financial,
     identity_signaling_style: identitySignalingStyle,
+    voice_prior: voicePrior ? {
+      cluster_key: voicePrior.key,
+      n_real_reviews: voicePrior.n,
+      vocabulary_hints: (voicePrior.top_unigrams || []).slice(0, 15).map(([w]) => w),
+      phrase_hints: (voicePrior.top_bigrams || []).slice(0, 10).map(([w]) => w),
+      sentence_length_target: voicePrior.sentence_length || null,
+      emotional_intensity: voicePrior.emotional_intensity || null,
+      example_real_quotes: voicePrior.example_quotes || [],
+      // Structured signals derived from the cluster's text corpus. These
+      // are decision-level inputs — scenario-preview + review-predictor +
+      // agents.js all read these to adjust their numeric behaviour.
+      signals: voicePrior.signals || null,
+      amenity_focus: voicePrior.amenity_focus || [],
+      complaint_triggers: voicePrior.complaint_triggers || [],
+      bands: voicePrior.bands || null,
+    } : null,
+    // Also merge the key signals directly onto the persona so downstream code
+    // that already reads persona.traits can see empirical overrides.
+    trait_overrides_from_reviews: voicePrior?.signals ? {
+      price_sensitivity_empirical: voicePrior.signals.price_sensitivity,
+      service_expectation_empirical: voicePrior.signals.service_expectation,
+      cleanliness_threshold_empirical: voicePrior.signals.cleanliness_threshold,
+      loyalty_sensitivity_empirical: voicePrior.signals.loyalty_sensitivity,
+      luxury_benchmark_score: voicePrior.signals.luxury_benchmark_score,
+      family_orientation_empirical: voicePrior.signals.family_orientation,
+      emotional_intensity_empirical: voicePrior.signals.emotional_intensity,
+      decision_latency_proxy: voicePrior.signals.decision_latency_proxy,
+    } : null,
   };
   return enriched;
 }

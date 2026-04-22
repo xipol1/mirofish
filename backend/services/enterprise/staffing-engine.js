@@ -15,6 +15,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const empirical = require('../data/empirical-signals');
 
 // ─── Staff:guest ratios (STR Global + AHLA 2024 benchmarks) ───────────────
 // Luxury tier ratios — ratios of staff per guest per day.
@@ -67,9 +68,25 @@ function planStaffing({
   property_tier = 'luxury',
   custom_ratios = null,
   understaff_pct = 0,
+  cultural_cluster = null,  // optional: drives culture-aware empirical signals
 }) {
   const ratios = custom_ratios || STAFF_RATIOS_LUXURY;
   const guestsPerDay = Math.round(rooms * (occupancy_pct / 100) * 1.8); // ~1.8 guests per occupied room (doubles + singles mix)
+
+  // Empirical service expectation weighted across the cohort's archetype mix.
+  // Higher expectation → tighter staff:guest ratio demanded (more staff) AND
+  // sharper NPS penalty when understaffing bites.
+  //
+  // staffingFactor is a MULTIPLIER on spec.ratio. Lower ratio = fewer guests
+  // per staff = MORE staff. So for high svcExp we want a factor BELOW 1.
+  //   svcExp=0.5 → 1.00 (neutral)
+  //   svcExp=1.0 → 0.80 (20% lower ratio = 25% more staff needed)
+  //   svcExp=0.0 → 1.20 (20% higher ratio = 17% fewer staff needed)
+  const empSignals = empirical.weightedAcrossMix(archetype_mix_pct, { culture: cultural_cluster });
+  const svcExp = empSignals.service_expectation || 0.5;
+  const staffingFactor = Math.max(0.75, Math.min(1.25, 1 - (svcExp - 0.5) * 0.4));
+  // NPS penalty multiplier: 0.5 → 1.0, 1.0 → 1.5 (50% harder), 0.0 → 0.5.
+  const npsPenaltyMult = Math.max(0.5, Math.min(1.8, 1 + (svcExp - 0.5) * 1.0));
 
   // Compute per-role FTEs (daily)
   const departments = {};
@@ -84,7 +101,10 @@ function planStaffing({
       const share = spec.archetype_demand.reduce((sum, a) => sum + (archetype_mix_pct[a] || 0), 0);
       effectiveGuests = Math.round(guestsPerDay * (share / 100));
     }
-    const baseFte = effectiveGuests * spec.ratio;
+    // Apply empirical tightness: high service_expectation → staffingFactor < 1
+    // → lower effective ratio → fewer guests per staff → more FTEs needed.
+    const effectiveRatio = spec.ratio * staffingFactor;
+    const baseFte = effectiveGuests * effectiveRatio;
     const fteNeeded = Math.max(spec.always_min || 0, Math.ceil(baseFte));
     const fteScheduled = Math.max(1, Math.floor(fteNeeded * (1 - understaff_pct / 100)));
     const hoursPerDay = fteScheduled * spec.fte_hours_per_shift * spec.shifts_per_day;
@@ -95,7 +115,10 @@ function planStaffing({
 
     const understaffActual = fteNeeded - fteScheduled;
     const understaffPctActual = fteNeeded > 0 ? (understaffActual / fteNeeded) * 100 : 0;
-    const npsRiskPoints = understaffPctActual * (NPS_RISK_PER_UNDERSTAFF_PCT[role] || 0.1);
+    // NPS risk is multiplied by empirical npsPenaltyMult — luxury cohorts
+    // whose reviews show high service_expectation punish understaffing harder.
+    const baseNpsRisk = understaffPctActual * (NPS_RISK_PER_UNDERSTAFF_PCT[role] || 0.1);
+    const npsRiskPoints = baseNpsRisk * npsPenaltyMult;
 
     if (understaffPctActual >= 15) bottlenecks.push({ role, understaff_pct: Math.round(understaffPctActual), nps_risk_points: Math.round(npsRiskPoints * 10) / 10 });
 
@@ -107,6 +130,7 @@ function planStaffing({
       daily_cost_eur: Math.round(dailyCostEur),
       nps_risk_points: Math.round(npsRiskPoints * 10) / 10,
       hourly_rate_eur: spec.hourly_rate_eur,
+      empirical_ratio_factor: Math.round(staffingFactor * 100) / 100,
     };
   }
 
@@ -129,6 +153,18 @@ function planStaffing({
     },
     nps_risk_total_points: totalNpsRisk,
     bottlenecks,
+    empirical_adjustment: {
+      cohort_service_expectation: Math.round(svcExp * 100) / 100,
+      staffing_factor: Math.round(staffingFactor * 100) / 100,
+      nps_penalty_multiplier: Math.round(npsPenaltyMult * 100) / 100,
+      n_reviews_backing: empSignals._n_reviews_backing,
+      cultural_cluster: cultural_cluster,
+      explanation: svcExp > 0.55
+        ? `Cohort service_expectation ${Math.round(svcExp * 100) / 100} is above avg — ratios tightened ${Math.round((1 - staffingFactor) * 100)}% (${Math.round((1 / staffingFactor - 1) * 100)}% more FTEs) and NPS penalty ${Math.round((npsPenaltyMult - 1) * 100)}% sharper.`
+        : svcExp < 0.45
+          ? `Cohort service_expectation ${Math.round(svcExp * 100) / 100} is below avg — ratios relaxed ${Math.round((staffingFactor - 1) * 100)}% (${Math.round((1 - 1 / staffingFactor) * 100)}% fewer FTEs), NPS penalty ${Math.round((1 - npsPenaltyMult) * 100)}% softer.`
+          : `Cohort service_expectation near baseline — negligible empirical adjustment.`,
+    },
     recommendations: buildStaffingRecommendations({ departments, bottlenecks, guestsPerDay, nights, understaff_pct }),
   };
 }

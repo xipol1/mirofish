@@ -151,6 +151,171 @@
       "Shuttle to venue was late — missed the opening keynote.",
       "Walls too thin for quiet call prep before my speech.",
       "Hotel gym closed at 20:00 — impossible for event attendees."
+    ],
+
+    "wellness_retreat_seeker_positive": [
+      "Hydrothermal circuit was exceptional — 90-minute detox flow, not a rushed tick-box.",
+      "Yoga class on the rooftop at sunrise with a credentialed instructor — worth the trip alone.",
+      "Spa treatment menu had real depth; my therapist was intuitive and tailored the session.",
+      "Silent wellness floor delivered what it promised — finally a property that respects the retreat mindset.",
+      "Bio-organic menu at the restaurant supported the detox programme — not an afterthought."
+    ],
+    "wellness_retreat_seeker_negative": [
+      "Spa felt like a tacked-on amenity — standard 50-min massages, no thermal circuit, no wellness programming.",
+      "Yoga class shared the deck with a loud pool bar — impossible to find flow.",
+      "Therapist was scrolling their phone before my treatment started — zero presence.",
+      "Menu claimed 'wellness cuisine' but every dish was heavy and fried.",
+      "Children at the wellness pool — nobody enforces the adults-only rule they advertise."
+    ],
+
+    "influencer_content_creator_positive": [
+      "The rooftop at golden hour is Instagrammable from every angle — content shot itself.",
+      "Wifi upload speed held up for a 4K video dump — rare in a 5-star hotel.",
+      "PR team responded within the day when I reached out about a press trip.",
+      "Staff were unfazed by our photo shoot in the lobby — clearly used to content creators.",
+      "Room had natural morning light that made the b-roll genuinely cinematic."
+    ],
+    "influencer_content_creator_negative": [
+      "Rooms had zero natural light — every photo needed heavy editing.",
+      "No PR contact on the website, got bounced between three generic inboxes.",
+      "Lobby photography was blocked by security — 'policy', despite checking in beforehand.",
+      "Wifi upload was 1Mbps — couldn't sync the shoot for two days.",
+      "Views blocked by scaffolding I wasn't warned about — ruined the shoot plan."
+    ],
+
+    "bleisure_extender_positive": [
+      "Extended two business nights into a five-night trip — rate on the extension matched the corporate tier.",
+      "Seamless to add my partner for the leisure days; staff upgraded the room without fuss.",
+      "Wifi and desk on the work days, pool access immediately on the switch — perfect bleisure flow.",
+      "Concierge pivoted effortlessly from airport-pickup to dinner-reservations on day 3.",
+      "The 'add a night' flow online was instant — I extended twice during the stay."
+    ],
+    "bleisure_extender_negative": [
+      "Leisure nights priced at rack rate — felt punished for extending a corporate booking.",
+      "Could not upgrade from single to double mid-stay; the system locked the room type.",
+      "Desk swapped for a decorative chair on the leisure days — had to work from the lobby.",
+      "Partner welcome was awkward — they kept treating me as a solo business traveller.",
+      "Cancellation policy on the extension was stricter than the original booking — discovered at checkout."
+    ],
+
+    "culinary_tourist_positive": [
+      "Chef's table delivered an eight-course tasting menu that rivalled any Michelin two-star I've had in Paris.",
+      "Sommelier paired the Menorca Chardonnay with the scallop course perfectly — deep wine list.",
+      "Dietary restrictions communicated pre-arrival were not only honoured but celebrated by the kitchen.",
+      "Breakfast was regional, seasonal, and the house-made charcuterie was genuinely exceptional.",
+      "Farm-to-table narrative was real — the chef walked us through his supplier relationships."
+    ],
+    "culinary_tourist_negative": [
+      "Tasting menu tasted like it was plated by a line cook, not a chef — zero narrative, zero technique.",
+      "Wine list was lazy — no regional depth, overpriced by €40 against retail.",
+      "Dietary notes were ignored; my gluten-free request showed up with bread on the plate.",
+      "Restaurant was closed two of the five nights and no one told us at booking.",
+      "Michelin pedigree on the website was from 2017 — current kitchen is a different team, different output."
+    ],
+
+    "sustainability_conscious_positive": [
+      "Net-zero claim is backed by a third-party audit report downloadable from their site — rare.",
+      "Toiletries were in refillable ceramic dispensers, no single-use plastic anywhere in the room.",
+      "Menu credited local farms by name — I googled two of them, both real and independent.",
+      "Staff proactively explained the greywater recycling system during the property tour.",
+      "Offsetting was transparent — my carbon footprint of the stay was itemised on checkout."
+    ],
+    "sustainability_conscious_negative": [
+      "Website claims 'carbon neutral' with zero figures — just adjectives, no audit trail. Classic greenwash.",
+      "Plastic bottles in minibar despite the 'plastic-free' marketing on the about page.",
+      "Buffet waste was enormous — trays thrown away mid-service, no donation or compost signal.",
+      "Local sourcing was a story about olive oil from three miles away — the rest was imported.",
+      "Asked about B-Corp or EarthCheck certification — front desk had no idea what I was referring to."
+    ],
+
+    "lgbtq_couple_positive": [
+      "Staff welcomed my husband and me with zero hesitation — the 'Mr & Mrs' default wasn't even there to correct.",
+      "King bed was confirmed as requested — no awkward 'let me check' moment at check-in.",
+      "Anniversary package was automatically applied when we mentioned it was our 10th — felt seen.",
+      "Couples spa treatment had clear language throughout the booking — no gendered assumptions.",
+      "Noticed the property's IGLTA mention on the website before booking and it made the choice easy."
+    ],
+    "lgbtq_couple_negative": [
+      "Booking form defaulted to 'Mr & Mrs' with no option to change — set the tone before arrival.",
+      "Staff referred to my wife as my 'friend' three times before I corrected them — small, cumulative.",
+      "Honeymoon package imagery on the website was exclusively hetero — felt pointedly excluded.",
+      "Two single beds 'pushed together' instead of the king we booked — housekeeping shrugged when we asked.",
+      "One staff member was visibly uncomfortable when we asked for a couples dinner setup — ruined the mood."
+    ],
+
+    "solo_female_traveler_positive": [
+      "Felt safe walking back to the hotel at midnight — lobby was staffed and well-lit.",
+      "Concierge proactively recommended women-friendly neighbourhoods and tours.",
+      "Dining alone at the bar felt comfortable — staff were warm without being intrusive.",
+      "Room had a proper deadbolt and a peephole — small things that matter when you're travelling solo.",
+      "The gym was open 24/7 with a staff presence — rare for a solo female traveller."
+    ],
+    "solo_female_traveler_negative": [
+      "Lobby was unstaffed after 22:00 — felt exposed coming back from dinner.",
+      "Concierge assumed I was meeting someone when I asked about dinner alone — condescending.",
+      "Door chain was broken and maintenance took 36 hours to fix.",
+      "Bar was aggressive about 'company' — had to leave after two interruptions.",
+      "Single occupancy rate was 95% of double — pure penalty for travelling alone."
+    ],
+
+    "silver_nomad_positive": [
+      "Booked by phone with a real person — no website maze.",
+      "Same room for all six weeks, same staff faces, no mid-stay disruption.",
+      "Quiet atmosphere throughout — exactly what my husband and I needed post-retirement.",
+      "Weekly rate was clear, printed on the confirmation, matched the invoice at checkout.",
+      "Returning guest programme is informal but real — they remembered our preferences from last winter."
+    ],
+    "silver_nomad_negative": [
+      "Weekly rate required chatting with a bot — I do not use those.",
+      "Bar downstairs had loud DJ every night, ruined our sleep for a week.",
+      "Staff turnover meant nobody recognised us despite being our fourth season.",
+      "Wifi password changed three times in a month with no notification — maddening.",
+      "Room moved twice for 'maintenance' without warning — disruptive at our age."
+    ],
+
+    "multigenerational_family_positive": [
+      "Grandparents' accessible room was a five-minute walk from our connecting suite — close enough, quiet enough.",
+      "Chef prepared an early dinner at 18:30 so the kids could eat and grandma could retire.",
+      "Kids club and quiet lounge both on-site — nobody had to compromise.",
+      "Group booking flow handled three rooms and three generations without friction.",
+      "Cancellation flexibility saved us when my father-in-law got ill two weeks out."
+    ],
+    "multigenerational_family_negative": [
+      "Accessible room was a ten-minute walk from ours, through a loud bar — not workable for grandma.",
+      "Early dinner unavailable — kitchen opened at 20:00, kids were exhausted.",
+      "Pool and kids area shared one deck — no refuge for the elderly.",
+      "Three rooms booked separately because the site could not handle a multi-room family booking.",
+      "Strict no-refund policy bit us when my father-in-law's cardiologist cancelled the trip."
+    ],
+
+    "accessibility_needs_positive": [
+      "Roll-in shower was genuinely step-free, grab bars were solid, turning radius in the bathroom matched the spec.",
+      "Elevators were wide, braille was present, the route from lobby to room was obstacle-free.",
+      "Staff were trained — my service animal was welcomed without the usual 20-question interrogation.",
+      "Dining room had a clear accessible route and adjustable-height tables on request.",
+      "Website accessibility statement matched reality — rare and refreshing."
+    ],
+    "accessibility_needs_negative": [
+      "'Accessible room' had a threshold step at the bathroom door — useless for a wheelchair.",
+      "Elevators were out of service for two days with no backup — stranded on the third floor.",
+      "Service animal questioned twice a day by different staff — exhausting.",
+      "Dining room route involved three stairs nobody warned us about.",
+      "Accessibility statement on the website was from 2019 — property renovated since, nothing updated."
+    ],
+
+    "all_inclusive_optimizer_positive": [
+      "The all-inclusive scope was explained in three minutes on arrival, no 'hidden tiers' surprise.",
+      "Premium alcohol was included without upsell — genuinely top-shelf.",
+      "Á la carte restaurants were unlocked in the base AI package, not the 'plus' upsell.",
+      "Room service and minibar were included, no asterisk at checkout.",
+      "Staff said 'yes' to room moves and restaurant changes — scarcity-free AI experience."
+    ],
+    "all_inclusive_optimizer_negative": [
+      "Premium alcohol was a surcharge they didn't mention at check-in — added €340 at checkout.",
+      "Á la carte restaurants were 'on request' and always 'fully booked' — effectively excluded.",
+      "Minibar was 'not included' with no signage — €28 for two waters on my bill.",
+      "Staff defaulted to 'no' on every request — clearly incentivised to upsell out of the base package.",
+      "Buffet repeated the same dishes every day for seven days — 'unlimited' did not mean 'varied'."
     ]
   },
 

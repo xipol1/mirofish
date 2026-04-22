@@ -16,9 +16,31 @@
 
 const path = require('path');
 const fs = require('fs');
+const empirical = require('../data/empirical-signals');
 
 const EVENTS_PATH = path.join(__dirname, '..', '..', 'data', 'industries', 'hospitality', 'adversarial_events.json');
 const REAL_RATES_PATH = path.join(__dirname, '..', '..', 'data', 'sources', 'ops_incident_rates.json');
+
+// Maps an adversarial event id to the complaint_trigger category it belongs to,
+// so we can look up empirical sensitivity for each archetype from the review
+// corpus and boost the firing weight when a match is strong.
+const EVENT_TO_COMPLAINT_TRIGGER = {
+  luggage_delay:            'slow_service',
+  room_not_ready:           'slow_service',
+  overbooking_downgrade:    'rude_staff',
+  wifi_intermittent:        'wifi',
+  noisy_neighbors:          'noise',
+  construction_noise_daytime: 'noise',
+  hvac_malfunction:         'broken',
+  dietary_mistake:          'slow_service',
+  pool_closed_unexpected:   'broken',
+  breakfast_quality_slip:   'cleanliness',
+  surprise_fee_at_checkout: 'hidden_fee',
+  service_indifference_moment: 'rude_staff',
+  spa_booking_problem:      'slow_service',
+  bathroom_issue:           'cleanliness',
+  check_in_queue:           'slow_service',
+};
 
 let _cfg = null;
 let _realRates = null;
@@ -45,6 +67,28 @@ function realFrequencyMultiplier(eventId, tier) {
   if (!tierRates || typeof tierRates[eventId] !== 'number') return 1.0;
   // Scale: baseline at 5% rate = 1.0 multiplier. Higher rates boost the weight.
   return Math.max(0.2, Math.min(3.0, tierRates[eventId] / 0.05));
+}
+
+// Empirical sensitivity multiplier: does this archetype's review corpus
+// flag this event's complaint_trigger category as a top concern? If yes,
+// the event is more likely to actually ruin their stay — so its firing
+// weight goes up 1.5–2.5×. If it's not in their top concerns at all, we
+// soften it to 0.6–0.9×.
+//
+// Example: budget_optimizer reviews complain about `hidden_fee` and
+// `slow_service` heavily, so surprise_fee_at_checkout weight ×2.0,
+// check_in_queue ×1.8, while noisy_neighbors stays 1.0.
+function empiricalSensitivityMultiplier(eventId, archetypeId, cultureCluster) {
+  const trigger = EVENT_TO_COMPLAINT_TRIGGER[eventId];
+  if (!trigger || !archetypeId) return 1.0;
+  const row = empirical.forArchetype(archetypeId, { culture: cultureCluster });
+  if (!row || !Array.isArray(row.top_complaint_triggers)) return 1.0;
+  const topTriggers = row.top_complaint_triggers;
+  const idx = topTriggers.findIndex(t => t.trigger === trigger);
+  if (idx === -1) return 0.7;   // not in this archetype's empirical concerns — softer
+  // Top-3 positions: strong boost; rank 4-5: medium boost
+  const boost = idx === 0 ? 2.2 : idx === 1 ? 1.8 : idx === 2 ? 1.5 : 1.2;
+  return boost;
 }
 
 function weightedPick(items, weightFn) {
@@ -77,7 +121,7 @@ function pickResolution(propertyTier = null) {
  *
  * @returns {{events: Array<{stage: string, event: Object, resolution_quality: string}>}}
  */
-function planInjections({ archetypeId, stages, forceProbabilityAtLeastOne = null, propertyTier = null }) {
+function planInjections({ archetypeId, stages, forceProbabilityAtLeastOne = null, propertyTier = null, cultureCluster = null }) {
   const cfg = getConfig();
   const basePOne = forceProbabilityAtLeastOne ?? cfg.injection_config.probability_at_least_one_event_per_stay;
   const tierMult = propertyTier
@@ -101,20 +145,29 @@ function planInjections({ archetypeId, stages, forceProbabilityAtLeastOne = null
   if (candidateEvents.length === 0) return { events: [] };
 
   // Bias toward events this archetype is most sensitive to AND events that
-  // actually happen more often per research (Cornell HQ / STR) at this tier.
+  // actually happen more often per research (Cornell HQ / STR) at this tier,
+  // AND — now — events whose complaint_trigger is empirically top-of-mind
+  // for this archetype according to the review corpus.
   const picked = [];
   const usedIds = new Set();
   for (let i = 0; i < eventCount; i++) {
     const pool = candidateEvents.filter(e => !usedIds.has(e.id));
     if (pool.length === 0) break;
-    const ev = weightedPick(pool, e =>
-      (e.archetype_sensitivity_multiplier?.[archetypeId] || 1.0)
-      * realFrequencyMultiplier(e.id, propertyTier || 'luxury')
-    );
+    const ev = weightedPick(pool, e => {
+      const archMult = (e.archetype_sensitivity_multiplier?.[archetypeId] || 1.0);
+      const realMult = realFrequencyMultiplier(e.id, propertyTier || 'luxury');
+      const empMult = empiricalSensitivityMultiplier(e.id, archetypeId, cultureCluster);
+      return archMult * realMult * empMult;
+    });
     const validStages = ev.stages_where_relevant.filter(s => stageSet.has(s));
     const stage = validStages[Math.floor(Math.random() * validStages.length)];
     const resolution_quality = pickResolution(propertyTier);
-    picked.push({ stage, event: ev, resolution_quality });
+    picked.push({
+      stage,
+      event: ev,
+      resolution_quality,
+      empirical_weight_applied: empiricalSensitivityMultiplier(ev.id, archetypeId, cultureCluster),
+    });
     usedIds.add(ev.id);
   }
 

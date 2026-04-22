@@ -4,7 +4,7 @@
  * Persists saved scenarios + the current working draft so a consultant can
  * close the tab on Monday, reopen it on Wednesday, and still have their
  * half-built cohort / decision / calibration intact. No server, no auth —
- * just the browser. Good enough for piloto; add a real DB later if Dignus
+ * just the browser. Good enough for pilot; add a real DB later if the firm
  * wants cross-device sync.
  *
  * Schema:

@@ -1,13 +1,13 @@
 /**
- * Rate Decision Validation Report — Dignus white-label page.
+ * Rate Decision Validation Report — consultant white-label page.
  *
  * A pitch-ready, consultant-friendly view of the 4 validation backtests we
- * ran on Villa Le Blanc's 2024 season. Designed to be shown during a Dignus
- * pitch, printed as a PDF, or embedded behind a Dignus-branded wrapper.
+ * ran on Villa Le Blanc's 2024 season. Designed to be shown during a
+ * consulting pitch, printed as a PDF, or embedded behind a firm-branded wrapper.
  *
  * URL params:
- *   ?brand=dignus        — uses Dignus branding palette
- *   ?brand=generic       — unbranded (default)
+ *   ?brand=consult       — uses the consulting-report palette (default)
+ *   ?brand=generic       — unbranded
  *   ?client=Melia        — client-name shown in header
  *   ?engagement=...      — engagement label shown under client
  *   ?decision=...        — the specific rate decision being validated
@@ -30,7 +30,7 @@ export async function getServerSideProps(ctx) {
   try { spend = require('../lib/backtest_runs/spend_latest.json'); } catch (_) {}
   try { holdout = require('../lib/backtest_runs/holdout_latest.json'); } catch (_) {}
 
-  const brand = (ctx.query.brand || 'dignus').toString().toLowerCase();
+  const brand = (ctx.query.brand || 'consult').toString().toLowerCase();
   const client = (ctx.query.client || 'Gran Meliá Villa Le Blanc').toString();
   const engagement = (ctx.query.engagement || 'Summer 2024 rate strategy').toString();
   const decision = (ctx.query.decision || 'Seasonal ADR curve €520 → €1,680 across Apr–Oct').toString();
@@ -68,14 +68,14 @@ export async function getServerSideProps(ctx) {
 }
 
 const BRAND_THEMES = {
-  dignus: {
-    name: 'Dignus',
+  consult: {
+    name: 'Validation Report',
     primary: '#0F4C75',
     primaryDark: '#0A3558',
     accent: '#E94560',
     muted: '#6B7888',
     tagline: 'Revenue management consultancy',
-    subFooter: 'Prepared by Dignus',
+    subFooter: 'Synthetic Users — 6,076 real reviews · 8 mixed-brand properties · ENISA-grade drift monitoring',
   },
   generic: {
     name: 'Validation Report',

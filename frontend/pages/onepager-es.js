@@ -1,17 +1,17 @@
 /**
- * One-pager ES — Dignus pitch handout en español.
+ * One-pager ES — handout de consultoría en español.
  *
  * Imprime a A4. Configurable vía query params:
- *   /onepager-es                              default (tema Dignus)
+ *   /onepager-es                              default (tema consult)
  *   /onepager-es?client=Meliá                 cliente en cabecera
  *   /onepager-es?consultant=Xavi              consultor en pie
- *   /onepager-es?brand=generic                sin branding Dignus
+ *   /onepager-es?brand=generic                sin branding
  */
 
 import Head from 'next/head';
 
 export async function getServerSideProps(ctx) {
-  const brand = (ctx.query.brand || 'dignus').toString().toLowerCase();
+  const brand = (ctx.query.brand || 'consult').toString().toLowerCase();
   const client = (ctx.query.client || '').toString();
   const engagement = (ctx.query.engagement || '').toString();
   const consultant = (ctx.query.consultant || '').toString();
@@ -19,14 +19,14 @@ export async function getServerSideProps(ctx) {
 }
 
 const THEMES = {
-  dignus: {
-    name: 'Dignus',
+  consult: {
+    name: 'Validación Pre-decisión',
     primary: '#0F4C75',
     primaryDark: '#0A3558',
     accent: '#E94560',
     muted: '#6B7888',
     tagline: 'Consultoría de revenue management',
-    footer: 'Preparado por Dignus',
+    footer: 'Synthetic Users — calibrado en 6.076 reseñas reales · 8 propiedades multi-marca',
   },
   generic: {
     name: 'Validación de decisiones',
@@ -112,7 +112,7 @@ export default function OnePagerES({ brand, client, engagement, consultant }) {
               Valida cada decisión de revenue antes de que tu cliente la ejecute.
             </h1>
             <p style={{ fontSize: 12, lineHeight: 1.5, color: '#2a313d', margin: 0 }}>
-              Una capa de validación para consultores {theme.name === 'Dignus' ? 'Dignus' : 'de revenue management'}.
+              Una capa de validación para consultores de revenue management.
               Simula cómo reaccionarían <strong>1.000 viajeros sintéticos</strong> a un cambio de tarifa,
               packaging, intervención de servicio o ajuste de loyalty — <strong>antes</strong> de implementarlo,
               calibrado contra benchmarks académicos peer-reviewed y estadísticas oficiales de turismo.

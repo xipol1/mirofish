@@ -1,0 +1,377 @@
+{
+  "corpus_id": "dignus_portfolio_q2_2026",
+  "generated_at": "2026-04-22T06:43:21.167Z",
+  "properties": [
+    {
+      "slug": "four-seasons-george-v-paris",
+      "verdict": "OK",
+      "review_count_in": 60,
+      "review_count_accepted": 60,
+      "review_count_rejected": 0,
+      "reject_reason_counts": {},
+      "archetype_coverage_counts": {
+        "luxury_seeker": 60,
+        "culinary_tourist": 15,
+        "honeymooner": 11,
+        "wellness_retreat_seeker": 15,
+        "business_traveler": 4,
+        "digital_nomad": 3,
+        "loyalty_maximizer": 10,
+        "influencer_content_creator": 3,
+        "budget_optimizer": 1,
+        "solo_female_traveler": 1,
+        "family_vacationer": 1
+      },
+      "language_counts": {
+        "en": 38,
+        "es": 5,
+        "fr": 12,
+        "de": 5
+      },
+      "avg_rating": 4.5,
+      "star_distribution_pct": {
+        "1": 0,
+        "2": 1.7,
+        "3": 3.3,
+        "4": 15,
+        "5": 80
+      },
+      "source_report": [
+        {
+          "type": "aggregate_public",
+          "url": null,
+          "loaded": 1,
+          "elapsed_ms": 0,
+          "note": "aggregate_signals_only"
+        },
+        {
+          "type": "inline",
+          "url": null,
+          "loaded": 60,
+          "elapsed_ms": 0
+        }
+      ],
+      "drift_gate": {
+        "verdict": "OK",
+        "reasons": [],
+        "warnings": [],
+        "summary": {
+          "review_count": 60,
+          "archetype_coverage_pct": 100,
+          "language_count": 4,
+          "top_language": "en",
+          "top_language_pct": 63,
+          "baseline_compared": false
+        }
+      }
+    },
+    {
+      "slug": "six-senses-ibiza",
+      "verdict": "OK",
+      "review_count_in": 60,
+      "review_count_accepted": 60,
+      "review_count_rejected": 0,
+      "reject_reason_counts": {},
+      "archetype_coverage_counts": {
+        "luxury_seeker": 60,
+        "wellness_retreat_seeker": 22,
+        "influencer_content_creator": 6,
+        "honeymooner": 8,
+        "culinary_tourist": 7,
+        "loyalty_maximizer": 2,
+        "family_vacationer": 1
+      },
+      "language_counts": {
+        "fr": 6,
+        "es": 10,
+        "en": 34,
+        "de": 10
+      },
+      "avg_rating": 4.5,
+      "star_distribution_pct": {
+        "1": 0,
+        "2": 0,
+        "3": 8.3,
+        "4": 8.3,
+        "5": 83.3
+      },
+      "source_report": [
+        {
+          "type": "aggregate_public",
+          "url": null,
+          "loaded": 1,
+          "elapsed_ms": 0,
+          "note": "aggregate_signals_only"
+        },
+        {
+          "type": "inline",
+          "url": null,
+          "loaded": 60,
+          "elapsed_ms": 0
+        }
+      ],
+      "drift_gate": {
+        "verdict": "OK",
+        "reasons": [],
+        "warnings": [],
+        "summary": {
+          "review_count": 60,
+          "archetype_coverage_pct": 75,
+          "language_count": 4,
+          "top_language": "en",
+          "top_language_pct": 57,
+          "baseline_compared": false
+        }
+      }
+    },
+    {
+      "slug": "the-nomad-london",
+      "verdict": "OK",
+      "review_count_in": 60,
+      "review_count_accepted": 60,
+      "review_count_rejected": 0,
+      "reject_reason_counts": {},
+      "archetype_coverage_counts": {
+        "honeymooner": 7,
+        "loyalty_maximizer": 1,
+        "luxury_seeker": 14,
+        "culinary_tourist": 12,
+        "wellness_retreat_seeker": 7,
+        "solo_female_traveler": 3,
+        "influencer_content_creator": 8,
+        "business_traveler": 2,
+        "digital_nomad": 1,
+        "bleisure_extender": 3
+      },
+      "language_counts": {
+        "es": 8,
+        "en": 38,
+        "fr": 6,
+        "de": 8
+      },
+      "avg_rating": 4.6,
+      "star_distribution_pct": {
+        "1": 0,
+        "2": 0,
+        "3": 1.7,
+        "4": 10,
+        "5": 88.3
+      },
+      "source_report": [
+        {
+          "type": "aggregate_public",
+          "url": null,
+          "loaded": 1,
+          "elapsed_ms": 0,
+          "note": "aggregate_signals_only"
+        },
+        {
+          "type": "inline",
+          "url": null,
+          "loaded": 60,
+          "elapsed_ms": 0
+        }
+      ],
+      "drift_gate": {
+        "verdict": "OK",
+        "reasons": [],
+        "warnings": [],
+        "summary": {
+          "review_count": 60,
+          "archetype_coverage_pct": 100,
+          "language_count": 4,
+          "top_language": "en",
+          "top_language_pct": 63,
+          "baseline_compared": false
+        }
+      }
+    },
+    {
+      "slug": "marriott-marquis-times-square",
+      "verdict": "OK",
+      "review_count_in": 60,
+      "review_count_accepted": 57,
+      "review_count_rejected": 3,
+      "reject_reason_counts": {
+        "duplicate": 3
+      },
+      "archetype_coverage_counts": {
+        "business_traveler": 10,
+        "event_attendee": 7,
+        "budget_optimizer": 1,
+        "digital_nomad": 4,
+        "accessibility_needs": 3,
+        "loyalty_maximizer": 9,
+        "multigenerational_family": 3,
+        "luxury_seeker": 2,
+        "bleisure_extender": 1,
+        "family_vacationer": 1
+      },
+      "language_counts": {
+        "es": 10,
+        "en": 42,
+        "fr": 2,
+        "de": 6
+      },
+      "avg_rating": 4.02,
+      "star_distribution_pct": {
+        "1": 0,
+        "2": 1.8,
+        "3": 19.3,
+        "4": 49.1,
+        "5": 29.8
+      },
+      "source_report": [
+        {
+          "type": "aggregate_public",
+          "url": null,
+          "loaded": 1,
+          "elapsed_ms": 0,
+          "note": "aggregate_signals_only"
+        },
+        {
+          "type": "inline",
+          "url": null,
+          "loaded": 60,
+          "elapsed_ms": 0
+        }
+      ],
+      "drift_gate": {
+        "verdict": "OK",
+        "reasons": [],
+        "warnings": [],
+        "summary": {
+          "review_count": 57,
+          "archetype_coverage_pct": 100,
+          "language_count": 4,
+          "top_language": "en",
+          "top_language_pct": 70,
+          "baseline_compared": false
+        }
+      }
+    },
+    {
+      "slug": "aman-new-york",
+      "verdict": "OK",
+      "review_count_in": 60,
+      "review_count_accepted": 60,
+      "review_count_rejected": 0,
+      "reject_reason_counts": {},
+      "archetype_coverage_counts": {
+        "luxury_seeker": 60,
+        "honeymooner": 6,
+        "wellness_retreat_seeker": 16,
+        "influencer_content_creator": 4,
+        "loyalty_maximizer": 1,
+        "culinary_tourist": 11,
+        "business_traveler": 1,
+        "digital_nomad": 1,
+        "solo_female_traveler": 1
+      },
+      "language_counts": {
+        "en": 48,
+        "fr": 3,
+        "es": 7,
+        "de": 2
+      },
+      "avg_rating": 4.45,
+      "star_distribution_pct": {
+        "1": 0,
+        "2": 1.7,
+        "3": 3.3,
+        "4": 16.7,
+        "5": 78.3
+      },
+      "source_report": [
+        {
+          "type": "aggregate_public",
+          "url": null,
+          "loaded": 1,
+          "elapsed_ms": 0,
+          "note": "aggregate_signals_only"
+        },
+        {
+          "type": "inline",
+          "url": null,
+          "loaded": 60,
+          "elapsed_ms": 0
+        }
+      ],
+      "drift_gate": {
+        "verdict": "OK",
+        "reasons": [],
+        "warnings": [],
+        "summary": {
+          "review_count": 60,
+          "archetype_coverage_pct": 100,
+          "language_count": 4,
+          "top_language": "en",
+          "top_language_pct": 80,
+          "baseline_compared": false
+        }
+      }
+    },
+    {
+      "slug": "soho-house-barcelona",
+      "verdict": "OK",
+      "review_count_in": 60,
+      "review_count_accepted": 60,
+      "review_count_rejected": 0,
+      "reject_reason_counts": {},
+      "archetype_coverage_counts": {
+        "luxury_seeker": 19,
+        "influencer_content_creator": 5,
+        "culinary_tourist": 7,
+        "wellness_retreat_seeker": 10,
+        "digital_nomad": 1,
+        "family_vacationer": 1,
+        "honeymooner": 6,
+        "loyalty_maximizer": 1,
+        "solo_female_traveler": 3,
+        "bleisure_extender": 1
+      },
+      "language_counts": {
+        "en": 41,
+        "es": 10,
+        "fr": 3,
+        "de": 6
+      },
+      "avg_rating": 4.21,
+      "star_distribution_pct": {
+        "1": 0,
+        "2": 6.7,
+        "3": 6.7,
+        "4": 28.3,
+        "5": 58.3
+      },
+      "source_report": [
+        {
+          "type": "aggregate_public",
+          "url": null,
+          "loaded": 1,
+          "elapsed_ms": 0,
+          "note": "aggregate_signals_only"
+        },
+        {
+          "type": "inline",
+          "url": null,
+          "loaded": 60,
+          "elapsed_ms": 0
+        }
+      ],
+      "drift_gate": {
+        "verdict": "OK",
+        "reasons": [],
+        "warnings": [],
+        "summary": {
+          "review_count": 60,
+          "archetype_coverage_pct": 100,
+          "language_count": 4,
+          "top_language": "en",
+          "top_language_pct": 68,
+          "baseline_compared": false
+        }
+      }
+    }
+  ]
+}

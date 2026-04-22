@@ -18,6 +18,7 @@ app.use('/api', calibrationRoutes);
 app.use('/api', enterpriseRoutes);
 app.use('/api', cybersecurityRoutes);
 app.use('/api', require('./routes/properties'));
+app.use('/api/dignus', require('./routes/dignus'));
 
 // Run PG migrations on boot (no-op if DATABASE_URL unset)
 db.migrate().catch(err => console.error('[pg] migration error:', err.message));

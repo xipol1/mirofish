@@ -1,12 +1,12 @@
 /**
- * One-pager — Dignus pitch deliverable.
+ * One-pager — consulting pitch deliverable.
  *
- * Imprime a A4. Entregable físico que el consultor Dignus deja encima de la
- * mesa o adjunta en su email al cliente. Todo configurable vía query params
+ * Imprime a A4. Entregable físico que el consultor deja encima de la mesa
+ * o adjunta en su email al cliente. Todo configurable vía query params
  * para poder imprimirlo personalizado por engagement.
  *
  * URLs:
- *   /onepager                              default (Dignus preset)
+ *   /onepager                              default (consulting preset)
  *   /onepager?client=Meliá&engagement=...  custom client
  *   /onepager?brand=generic                unbranded
  *   /onepager?consultant=Xavi              with consultant name
@@ -15,7 +15,7 @@
 import Head from 'next/head';
 
 export async function getServerSideProps(ctx) {
-  const brand = (ctx.query.brand || 'dignus').toString().toLowerCase();
+  const brand = (ctx.query.brand || 'consult').toString().toLowerCase();
   const client = (ctx.query.client || '').toString();
   const engagement = (ctx.query.engagement || '').toString();
   const consultant = (ctx.query.consultant || '').toString();
@@ -23,14 +23,14 @@ export async function getServerSideProps(ctx) {
 }
 
 const THEMES = {
-  dignus: {
-    name: 'Dignus',
+  consult: {
+    name: 'Pre-decision Validation',
     primary: '#0F4C75',
     primaryDark: '#0A3558',
     accent: '#E94560',
     muted: '#6B7888',
     tagline: 'Revenue management consultancy',
-    footer: 'Prepared by Dignus',
+    footer: 'Synthetic Users — calibrated on 6,076 real reviews · 8 mixed-brand properties',
   },
   generic: {
     name: 'Decision Validation',
@@ -116,7 +116,7 @@ export default function OnePager({ brand, client, engagement, consultant }) {
               Test every revenue decision before your client executes it.
             </h1>
             <p style={{ fontSize: 12, lineHeight: 1.5, color: '#2a313d', margin: 0 }}>
-              A validation layer for {theme.name === 'Dignus' ? 'Dignus consultants' : 'revenue management consultants'}.
+              A validation layer for revenue management consultants.
               Simulate how <strong>1,000 synthetic travelers</strong> react to a proposed rate change,
               packaging shift, service intervention, or loyalty move — <strong>before</strong> it ships,
               calibrated against peer-reviewed academic benchmarks and public tourism statistics.
